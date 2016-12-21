@@ -3,7 +3,7 @@
 
 	<!-- Properties set by DevEnv before writing script to file -->
 	<!-- POINT THE WORKSPACE TO YOUR SOURCE DIRECTORY -->
-	<property name="workspace" value="C:/openmaxims_workspace/" />
+	<property name="workspace" value="D:\IdeaProjects\openMAXIMS\Source Library\openmaxims_workspace\" />
 	<property name="project.name" value="openMAXIMS" />
 	<property name="dbtype" value="MSQ05" />
 	<property name="hib.version" value="3" />
@@ -11,11 +11,11 @@
 	<!-- ***************************************** -->
 	<!-- Only these 5 properties need to be changed -->
 	<!-- POINT TO YOUR SQL DB and ADMIN ACCOUNT -->
-	<property name="dbHost" value="xxxxx" />
-	<property name="dbPort" value="xxxxx" />
-	<property name="dbName" value="xxxxx" />
-	<property name="userid" value="xxxxx"  />
-	<property name="password" value="xxxxx" />
+	<property name="dbHost" value="localhost" />
+	<property name="dbPort" value="1433" />
+	<property name="dbName" value="openmaxims_train" />
+	<property name="userid" value="openmaxims"  />
+	<property name="password" value="openmaxims" />
 	<!-- ***************************************** -->
 
 	<import file="build_common.xml"/>
@@ -312,7 +312,7 @@
 ims.warfile.version=${project.name}_${build.number}
 ims.warfile.timestamp=${timestamp}
 		</echo>
-		<war destfile="${workspace}WebApp/${project.name}.war" webxml="${workspace}WebApp/WEB-INF/web.xml">
+		<war destfile="${workspace}WebApp/${project.name}.war" webxml="${workspace}WebApp/WEB-INF/web.xml" zip64mode="always">
 			<fileset refid="WebApp.static.content" />
 			<lib refid="WebApp.lib.content" />
 			<lib dir="${libdir}">

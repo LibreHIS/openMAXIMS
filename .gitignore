@@ -1,10 +1,19 @@
 *.class
 
+# Ignore classes folder
+/Source Library/openmaxims_workspace/WebApp/WEB-INF/classes
+
+# Ignore Intellij IDEA configuration files
+.idea
+*.iml
+
+# Ignore DevBuildNumber file
+/Source Library/openmaxims_workspace/DevBuildNumber
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
 # Package Files #
-# *.jar #
 *.war
 *.ear
 

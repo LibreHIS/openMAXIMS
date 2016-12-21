@@ -515,10 +515,10 @@ public class Logic extends BaseLogic
 	private void initaliseAuthoringControls() 
 {
 	//Responsible HCP
-//	If the logged on user is configured as a medic with medic grade of ‘Consultant’ and is a Responsible HCP, 
+//	If the logged on user is configured as a medic with medic grade of `Consultant` and is a Responsible HCP,
 //	this field will default to the logged in user. If we cannot default based on logged in user, 
 //	this will be blank and will search only those members of staff who are medics, 
-//	with medic grade of ‘Consultant’ and are a Responsible HCP
+//	with medic grade of `Consultant` and are a Responsible HCP
 	form.ccResponsibleHcp().initialize(null, MedicGrade.CONS);
 	form.ccResponsibleHcp().initializeResponsibleHcp(MosType.MEDIC, true);
 	form.ccResponsibleHcp().isRequired(true);
