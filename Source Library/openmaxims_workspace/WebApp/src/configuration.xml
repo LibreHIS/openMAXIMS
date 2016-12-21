@@ -1,5 +1,5 @@
 ﻿<configuration>
-<buildinfo name="MAXIMS" version="10.5.3.17" datetime="08/10/2015 17:26" by="Barbara Worwood"/>
+	<buildinfo name="MAXIMS" version="10.5.3.17" datetime="08/10/2015 17:26" by="Barbara Worwood"/>
 	<namespaces>
 		<namespace id="102" maxims="WC" name="Core" />
 		<namespace id="103" maxims="WA" name="Admin" />

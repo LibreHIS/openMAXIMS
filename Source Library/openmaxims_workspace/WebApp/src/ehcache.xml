@@ -29,10 +29,9 @@
 
         -->
     <defaultCache
-        maxElementsInMemory="10000"
-        eternal="true"
-        overflowToDisk="false"
-        />
+            maxElementsInMemory="10000"
+            eternal="true"
+            overflowToDisk="false"/>
 
     <!--Predefined caches.  Add your cache configuration settings here.
         If you do not have a configuration for your cache a WARNING will be issued when the
@@ -84,338 +83,338 @@
     -->
 
     <!-- Place configuration for your caches following -->
-	
-	<!-- Classes mapped in domain.jar -->
-     <cache name="ims.domain.lookups.Lookup"
-        maxElementsInMemory="5000"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+
+    <!-- Classes mapped in domain.jar -->
+    <cache name="ims.domain.lookups.Lookup"
+           maxElementsInMemory="5000"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.domain.lookups.Lookup.instances"
-        maxElementsInMemory="5000"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="5000"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.domain.lookups.LookupInstance"
-        maxElementsInMemory="10000"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="10000"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.domain.lookups.LookupInstance.mappings"
-        maxElementsInMemory="10000"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="10000"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
-	<!-- 0000000000000000000000000000 -->
+    <!-- 0000000000000000000000000000 -->
 
-	<!-- core.configuration -->
-     <cache name="ims.core.configuration.domain.objects.AppUser"
-        maxElementsInMemory="300"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+    <!-- core.configuration -->
+    <cache name="ims.core.configuration.domain.objects.AppUser"
+           maxElementsInMemory="300"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
-      <cache name="ims.core.configuration.domain.objects.AppUser.roles"
-        maxElementsInMemory="300"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+    <cache name="ims.core.configuration.domain.objects.AppUser.roles"
+           maxElementsInMemory="300"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
-     <cache name="ims.core.configuration.domain.objects.AppImage"
-        maxElementsInMemory="500"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+    <cache name="ims.core.configuration.domain.objects.AppImage"
+           maxElementsInMemory="500"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
-     <cache name="ims.core.configuration.domain.objects.AppForm"
-        maxElementsInMemory="500"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+    <cache name="ims.core.configuration.domain.objects.AppForm"
+           maxElementsInMemory="500"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
-     <cache name="ims.core.configuration.domain.objects.AppNameSpace"
-        maxElementsInMemory="500"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+    <cache name="ims.core.configuration.domain.objects.AppNameSpace"
+           maxElementsInMemory="500"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
-     <cache name="ims.core.configuration.domain.objects.AppNavigation"
-        maxElementsInMemory="500"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+    <cache name="ims.core.configuration.domain.objects.AppNavigation"
+           maxElementsInMemory="500"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
-     <cache name="ims.core.configuration.domain.objects.AppNavSecondGroup"
-        maxElementsInMemory="500"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+    <cache name="ims.core.configuration.domain.objects.AppNavSecondGroup"
+           maxElementsInMemory="500"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
-     <cache name="ims.core.configuration.domain.objects.AppNavForm"
-        maxElementsInMemory="500"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+    <cache name="ims.core.configuration.domain.objects.AppNavForm"
+           maxElementsInMemory="500"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
-     <cache name="ims.core.configuration.domain.objects.AppRole"
-        maxElementsInMemory="500"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+    <cache name="ims.core.configuration.domain.objects.AppRole"
+           maxElementsInMemory="500"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
-     <cache name="ims.core.configuration.domain.objects.AppContextVariable"
-        maxElementsInMemory="500"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+    <cache name="ims.core.configuration.domain.objects.AppContextVariable"
+           maxElementsInMemory="500"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
-     <cache name="ims.core.configuration.domain.objects.AppNavRootGroup"
-        maxElementsInMemory="500"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+    <cache name="ims.core.configuration.domain.objects.AppNavRootGroup"
+           maxElementsInMemory="500"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
-	<!-- core.resource -->
+    <!-- core.resource -->
     <cache name="ims.core.resource.domain.objects.ServiceActivity"
-        maxElementsInMemory="500"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="500"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.domain.objects.GpToPractice"
-        maxElementsInMemory="500"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="500"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.domain.objects.HcpLocation"
-        maxElementsInMemory="1000"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="1000"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.domain.objects.HcpLocationService"
-        maxElementsInMemory="1000"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="1000"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
-	<!-- core.resource.people -->
+    <!-- core.resource.people -->
     <cache name="ims.core.resource.people.domain.objects.Hcp"
-        maxElementsInMemory="500"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="500"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.people.domain.objects.Gp"
-        maxElementsInMemory="1000"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="1000"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.people.domain.objects.Gp.practices"
-        maxElementsInMemory="1000"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="1000"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.people.domain.objects.Medic"
-        maxElementsInMemory="200"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="200"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.people.domain.objects.Therapist"
-        maxElementsInMemory="200"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="200"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.people.domain.objects.MemberOfStaff"
-        maxElementsInMemory="200"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="200"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.people.domain.objects.MemberOfStaff.locations"
-        maxElementsInMemory="200"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="200"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.people.domain.objects.Nurse"
-        maxElementsInMemory="200"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="200"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
 
-	<!-- core.resource.place -->
+    <!-- core.resource.place -->
     <cache name="ims.core.resource.place.domain.objects.LocationService"
-        maxElementsInMemory="200"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="200"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.place.domain.objects.LocSite"
-        maxElementsInMemory="100"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="100"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.place.domain.objects.LocSite.locations"
-        maxElementsInMemory="100"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="100"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
-     <cache name="ims.core.resource.place.domain.objects.LocSite.services"
-        maxElementsInMemory="100"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
- 
+    <cache name="ims.core.resource.place.domain.objects.LocSite.services"
+           maxElementsInMemory="100"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
+
     <cache name="ims.core.resource.place.domain.objects.Organisation"
-        maxElementsInMemory="20"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="20"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.place.domain.objects.Organisation.locationSites"
-        maxElementsInMemory="20"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="20"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.place.domain.objects.Organisation.relatedOrganisations"
-        maxElementsInMemory="20"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="20"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.place.domain.objects.Activity"
-        maxElementsInMemory="500"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="500"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.place.domain.objects.Location"
-        maxElementsInMemory="100"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="100"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.place.domain.objects.Location.locations"
-        maxElementsInMemory="100"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="100"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.core.resource.place.domain.objects.Location.services"
-        maxElementsInMemory="100"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="100"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
-     <cache name="ims.core.resource.place.domain.objects.Location.printers"
-        maxElementsInMemory="100"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
- 
-	 <cache name="ims.core.resource.place.domain.objects.Clinic"
-        maxElementsInMemory="300"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+    <cache name="ims.core.resource.place.domain.objects.Location.printers"
+           maxElementsInMemory="100"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
-		
-	<!-- core.clinical -->
+    <cache name="ims.core.resource.place.domain.objects.Clinic"
+           maxElementsInMemory="300"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
+
+
+    <!-- core.clinical -->
     <cache name="ims.core.clinical.domain.objects.Service"
-        maxElementsInMemory="200"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
-		
-	<!-- ocrr.configuration -->
+           maxElementsInMemory="200"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
+
+    <!-- ocrr.configuration -->
     <cache name="ims.ocrr.configuration.domain.objects.Investigation"
-        maxElementsInMemory="2000"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="2000"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.ocrr.configuration.domain.objects.InvestigationIndex"
-        maxElementsInMemory="2000"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="2000"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.ocrr.configuration.domain.objects.ProviderSystem"
-        maxElementsInMemory="2000"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="2000"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.ocrr.configuration.domain.objects.Analyte"
-        maxElementsInMemory="2000"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="2000"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
     <cache name="ims.ocrr.configuration.domain.objects.LocSvcProviderSys"
-        maxElementsInMemory="2000"
-        eternal="true"
-        timeToIdleSeconds="0"
-        timeToLiveSeconds="0"
-        overflowToDisk="false" />
+           maxElementsInMemory="2000"
+           eternal="true"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           overflowToDisk="false" />
 
 </ehcache>
