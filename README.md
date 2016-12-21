@@ -1,20 +1,22 @@
-openMAXIMS - home of the openMAXIMS PAS/EPR
+LibreHIS - home of the LibreHIS PAS/EPR
 ===========================================
+
+This project is a fork of the openMAXIMS software as published by IMS MAXIMS under the Affero GPL license.
 
 ---
 ##Clinical Safety
 
-IMS MAXIMS provides absolutely no guarantee of the Clinical Safety of this software program.  Users of this software do so entirely at their own risk. IMS MAXIMS only ensures the Clinical Safety of unaltered run-time software that it builds, deploys and maintains.
-
-If any Clinical Safety issue is discovered IMS MAXIMS will issue a Clinical Safety Notice.  It is therefore a requirement of your use of this source code that you send your contact details to openmaxims-user@imsmaxims.com so that you may receive Clinical Safety Notices.
-
+LibreHIS provides absolutely no guarantee of the Clinical Safety of this
+software program.  Users of this software do so entirely at their own risk. 
+See the licensefile for your rights with regard to using the software.
 ---
 
-##openMAXIMS functionality
+##LibreHIS functionality
 
-The latest generation of our full MAXIMS suite has become openMAXIMS, our first open source software product. It has the same rich functionality and currently includes:
+This project currently contains the following functionality:
 
-A full Patient Administration System designed for the NHS, including support for:
+A full Patient Administration System designed for the NHS, including support
+for:
 
 *  NHS e-Referral Service (Full rollout approval from HSCIC)
 *  Commissioning Data Sets
@@ -35,11 +37,12 @@ An Electronic Patient Record including:
 *  eDischarge process
 
 
-HL7 interfaces (bi-directional) and open APIs for comprehensive integration with third-party systems
+HL7 interfaces (bi-directional) and open APIs for comprehensive integration
+with third-party systems
 
-##openMAXIMS release 10.5
+##LibreHis release 0.1
 
-This is the version that is live at Taunton and Somerset NHS Trust.  It adds a number of new features including:
+This is derived from the version that is live at Taunton and Somerset NHS Trust.  It contians a number of features including:
 
 *  Clinical Triage of Referrals - Patients directed to the appropriate service and care according to clinical priority
 *  Elective List Management - Inpatient Waiting List and TCI management integrate with e-Referral Service, RTT management and enterprise-wide scheduling
@@ -47,8 +50,12 @@ This is the version that is live at Taunton and Somerset NHS Trust.  It adds a n
 *  Appointment Outcome - Workflows and actions based on appointment status and RTT
 *  Clinical Coding - Worklists based on various coding status points – In-Progress, For Review, Coded, Uncoded, etc
 
-...as well as many other enhancements to Casenote Tracking, Waiting Lists, Scheduling, Inpatients, TCI, Auto-cancellation, SOAP, Discharge, Theatres, Therapies, Ward View, Deceased, Demographics, Worklists, Emergency Department, Outpatients, Medical worklist, Contracts, RTT, Elective lists, Bed Management, Configuration, Pre-assessments, Dementia, HL7 messaging, Ward transfers, Referrals, Secure LDAP, Observations, Ambulance Handover, etc.
+...as well as Casenote Tracking, Waiting Lists,
+Scheduling, Inpatients, TCI, Auto-cancellation, SOAP, Discharge, Theatres,
+Therapies, Ward View, Deceased, Demographics, Worklists, Emergency Department,
+Outpatients, Medical worklist, Contracts, RTT, Elective lists, Bed Management,
+Configuration, Pre-assessments, Dementia, HL7 messaging, Ward transfers,
+Referrals, Secure LDAP, Observations, Ambulance Handover, etc.
 
 
-Our wide-range of products are fully integrated and have been built from the ground up in partnership with our NHS customers. This means that healthcare providers can now access years of expertise and investment at no cost. IMS MAXIMS strongly encourage the end-user organisation to take up our support contract, there is no one better placed to support, implement, train, develop, deliver change management, project management and programme management services for the openMAXIMS product suite.
 

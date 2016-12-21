@@ -1,4 +1,6 @@
-openMAXIMS source code project is located in the 'Source Library' folder
+17th December 2016 - Project forked to LibreHIS
+
+LibreHIS source code project is located in the 'Source Library' folder.
 
 -----------------------------------------------------------------------------------------------------------------------------------
 17th December 2015 - Major new updated (release 10.5)
