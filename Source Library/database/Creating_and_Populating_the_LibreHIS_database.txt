@@ -1,0 +1,39 @@
+Hello,
+
+Please take the following steps to create an initial LibreHis database.
+For this you need a PostgreSQL database server.
+
+If you have the PostgreSQL database server running on Linux these are the steps you should take:
+
+First create a user that will later own the database:
+
+$ sudo su - postgres
+$ createuser -P librehis
+Enter password for new role: <Enter a password>
+Enter it again: <Enter the same password>
+$ createdb -O librehis librehis
+$
+
+Now you have an emtpy database and need to create the initial contents.
+
+$ cat librehis-schema.psql | psql -h localhost -U librehis -W
+Password for user piet: <Enter the same password>
+
+You now see a lot of output like "CREATE TABLE", "CREATE INDEX", etc.
+This will take some time.
+
+Now it is time to fill the database with its initial contents.
+
+
+$ cat librehis-data.psql | psql -h localhost -U librehis -W
+Password for user piet: <Enter the same password>
+
+Again you will see output about the progress.
+
+After this your are done with the setup of the database
+
+
+Have fun!
+
+Jeroen Baten
+2017-01-15
