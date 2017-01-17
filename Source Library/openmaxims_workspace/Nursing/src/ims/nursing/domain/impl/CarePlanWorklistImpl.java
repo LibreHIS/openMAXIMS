@@ -56,7 +56,8 @@ public class CarePlanWorklistImpl extends BaseCarePlanWorklistImpl
 	
 	public LocationLiteVoCollection getWards() 
 	{
-		String hql = "from Location loc where loc.type = " + LocationType.WARD.getId() + " and loc.isActive = 1 and loc.isVirtual = 0 order by loc.upperName asc"; //WDEV-19532		WDEV-20219
+		/* TODO MSSQL case - String hql = "from Location loc where loc.type = " + LocationType.WARD.getId() + " and loc.isActive = 1 and loc.isVirtual = 0 order by loc.upperName asc"; */
+		String hql = "from Location loc where loc.type = " + LocationType.WARD.getId() + " and loc.isActive = TRUE and loc.isVirtual = FALSE order by loc.upperName asc";
 		return LocationLiteVoAssembler.createLocationLiteVoCollectionFromLocation(getDomainFactory().find(hql));
 	}
 
@@ -70,7 +71,6 @@ public class CarePlanWorklistImpl extends BaseCarePlanWorklistImpl
 		}
 			
 		String hql="select carePlan,patient from CarePlan as carePlan left join carePlan.confirmedBy as confirmedBy left join carePlan.careContext as careContext left join careContext.episodeOfCare as episodeOfCare left join episodeOfCare.careSpell as careSpell left join careSpell.patient as patient ";
-		//StringBuilder hqlConditions = new StringBuilder(" where ( ");
 		
 		StringBuffer hqlConditions = new StringBuffer();
 		

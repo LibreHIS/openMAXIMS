@@ -1779,12 +1779,16 @@ public class OrganisationAndLocationImpl extends DomainImpl implements ims.admin
 		String hql = "";
 		if(includePathRad != null && includePathRad)
 		{
-			hql = "select childLoc from Location as loc left join loc.locations as childLoc where (childLoc.isActive = 1 and childLoc.isVirtual <> 1 and childLoc.type is not null  and childLoc.type.id <> :surgery and loc.id = :id) ";
+		    /* TODO MSSQL case - hql = "select childLoc from Location as loc left join loc.locations as childLoc where (childLoc.isActive = 1 and childLoc.isVirtual <> 1 and childLoc.type is not null  and childLoc.type.id <> :surgery and loc.id = :id) "; */
+			hql = "select childLoc from Location as loc left join loc.locations as childLoc where (childLoc.isActive = true and childLoc.isVirtual <> true and childLoc.type is not null  and childLoc.type.id <> :surgery and loc.id = :id) ";
+
 			return getDomainFactory().find(hql,new String[]{"id","surgery"}, new Object[]{node.getId(),LocationType.SURGERY.getID()});
 		}
 		else
 		{
-			hql = "select childLoc from Location as loc left join loc.locations as childLoc where (childLoc.isActive = 1 and childLoc.isVirtual <> 1 and childLoc.type is not null  and childLoc.type.id not in (:path,:rad,:surgery) and loc.id = :id) ";
+		    /* TODO MSSQL case - hql = "select childLoc from Location as loc left join loc.locations as childLoc where (childLoc.isActive = 1 and childLoc.isVirtual <> 1 and childLoc.type is not null  and childLoc.type.id not in (:path,:rad,:surgery) and loc.id = :id) "; */
+			hql = "select childLoc from Location as loc left join loc.locations as childLoc where (childLoc.isActive = true and childLoc.isVirtual <> true and childLoc.type is not null  and childLoc.type.id not in (:path,:rad,:surgery) and loc.id = :id) ";
+
 			return getDomainFactory().find(hql,new String[]{"id","path","rad","surgery"}, new Object[]{node.getId(),LocationType.PATHOLOGYLABORATORY.getID(),LocationType.CLINICALIMAGINGDEPARTMENT.getID(),LocationType.SURGERY.getID()});
 		}
 	}
@@ -1795,19 +1799,25 @@ public class OrganisationAndLocationImpl extends DomainImpl implements ims.admin
 		String hql = "";
 		if(includePathRad != null && includePathRad)
 		{
-			hql = "select locSite from Organisation as org left join org.locationSites as locSite where (org.id = :id and locSite.isActive = 1 and locSite.isVirtual <> 1)";
+		    /* TODO MSSQL case - hql = "select locSite from Organisation as org left join org.locationSites as locSite where (org.id = :id and locSite.isActive = 1 and locSite.isVirtual <> 1)"; */
+			hql = "select locSite from Organisation as org left join org.locationSites as locSite where (org.id = :id and locSite.isActive = true and locSite.isVirtual <> true)";
+
 			return getDomainFactory().find(hql,"id",node);
 		}
 		else
 		{
-			hql = "select locSite from Organisation as org left join org.locationSites as locSite where (org.id = :id and locSite.isActive = 1 and locSite.isVirtual <> 1 and locSite.type is not null  and locSite.type.id not in (:path,:rad,:surgery)) ";
+		    /* TODO MSSQL case - hql = "select locSite from Organisation as org left join org.locationSites as locSite where (org.id = :id and locSite.isActive = 1 and locSite.isVirtual <> 1 and locSite.type is not null  and locSite.type.id not in (:path,:rad,:surgery)) "; */
+			hql = "select locSite from Organisation as org left join org.locationSites as locSite where (org.id = :id and locSite.isActive = true and locSite.isVirtual <> true and locSite.type is not null  and locSite.type.id not in (:path,:rad,:surgery)) ";
+
 			return getDomainFactory().find(hql,new String[]{"id","path","rad","surgery"}, new Object[]{node,LocationType.PATHOLOGYLABORATORY.getID(),LocationType.CLINICALIMAGINGDEPARTMENT.getID(),LocationType.SURGERY.getID()});
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private List<Integer> listOrganisationByOrganisation(Integer node) {
-		String getOrgHql ="select org.id from Organisation as org where (org.parentOrganisation.id = :parentId  and org.isActive = 1 and org.type.id not in (:supp,:gpp,:nhs_pct) and org.type is not null)";
+	    /* TODO MSSQL case - String getOrgHql ="select org.id from Organisation as org where (org.parentOrganisation.id = :parentId  and org.isActive = 1 and org.type.id not in (:supp,:gpp,:nhs_pct) and org.type is not null)"; */
+		String getOrgHql ="select org.id from Organisation as org where (org.parentOrganisation.id = :parentId  and org.isActive = true and org.type.id not in (:supp,:gpp,:nhs_pct) and org.type is not null)";
+
 		return getDomainFactory().find(getOrgHql,new String[]{"parentId","supp","gpp","nhs_pct"},new Object[]{node,OrganisationType.SUPPLIER.getID(),OrganisationType.GPP.getID(),OrganisationType.NHS_PCT.getID()});
 	}
 
@@ -2012,53 +2022,72 @@ public class OrganisationAndLocationImpl extends DomainImpl implements ims.admin
 	
 	String getIsActiveStr(Boolean isActive)
 	{
-		if (isActive==null)
-			return"";
-		else if(Boolean.TRUE.equals(isActive))
-				return" isactive = 1 ";
-		else 
-			return" (isactive = 0 or isactive is null) ";
+		if (isActive == null) {
+            return "";
+		}
+		else if (Boolean.TRUE.equals(isActive)) {
+		    /* TODO MSSQL case - return" isactive = 1 "; */
+            return" isactive = true ";
+        }
+		else {
+		    /* TODO MSSQL case - return" (isactive = 0 or isactive is null) "; */
+            return" (isactive = false or isactive is null) ";
+        }
 	}
 
 	String getIsTreatingHospitalStr(Boolean isTreatingHospital)
 	{
-		if (isTreatingHospital==null)
-			return"";
-		else if(Boolean.TRUE.equals(isTreatingHospital))
-				return"  treatingho = 1 ";
-		else 
-			return" (treatingho = 0 or treatingho is null) ";
+		if (isTreatingHospital == null) {
+            return "";
+        } else if (Boolean.TRUE.equals(isTreatingHospital)) {
+		    /* TODO MSSQL case - return "  treatingho = 1 "; */
+            return "  treatingho = true ";
+        } else {
+		    /* TODO MSSQL case - return " (treatingho = 0 or treatingho is null) "; */
+            return " (treatingho = false or treatingho is null) ";
+        }
 	}
 	
 	String getIsVirtualStr(Boolean isVirtual)
 	{
-		if (isVirtual==null)
-			return"";
-		else if(Boolean.TRUE.equals(isVirtual))
-				return"  isvirtual = 1 ";
-		else 
-			return" (isvirtual = 0 or isvirtual is null) ";
+		if (isVirtual == null) {
+            return "";
+        } else if (Boolean.TRUE.equals(isVirtual)) {
+		    /* TODO MSSQL case -  return "  isvirtual = 1 "; */
+            return "  isvirtual = true ";
+        } else {
+		    /* TODO MSSQL case - return " (isvirtual = 0 or isvirtual is null) "; */
+            return " (isvirtual = false or isvirtual is null) ";
+        }
 	}
 	
 
 	String getIsReferringHospitalStr(Boolean isReferringHospital)
 	{
-		if (isReferringHospital==null)
-			return"";
-		else if(Boolean.TRUE.equals(isReferringHospital))
-				return"  referringh = 1 ";
-		else 
-			return" (referringh = 0 or referringh is null) ";
+		if (isReferringHospital==null) {
+            return "";
+        } else if (Boolean.TRUE.equals(isReferringHospital)) {
+		    /* TODO MSSQL case -  return "  referringh = 1 "; */
+            return "  referringh = true ";
+        } else {
+		    /* TODO MSSQL case -  return " (referringh = 0 or referringh is null) "; */
+            return " (referringh = false or referringh is null) ";
+        }
 	}
 	
 	String getIsCaseNoteFolderLocationStr(Boolean isCaseNoteFolderLocation)
 	{
-		if (isCaseNoteFolderLocation==null)
-			return"";
-		else if(Boolean.TRUE.equals(isCaseNoteFolderLocation))
-				return"  casenotefo = 1 ";
-		else 
-			return" (casenotefo = 0 or casenotefo is null) ";
+		if (isCaseNoteFolderLocation==null) {
+            return "";
+        }
+		else if (Boolean.TRUE.equals(isCaseNoteFolderLocation)) {
+		    /* TODO MSSQL case - return"  casenotefo = 1 "; */
+            return"  casenotefo = true ";
+        }
+		else {
+		    /* TODO MSSQL case - return " (casenotefo = 0 or casenotefo is null) "; */
+            return " (casenotefo = false or casenotefo is null) ";
+        }
 	}
 	
 	

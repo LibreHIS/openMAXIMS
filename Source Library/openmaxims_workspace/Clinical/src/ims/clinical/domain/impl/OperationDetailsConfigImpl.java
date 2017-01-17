@@ -72,9 +72,12 @@ public class OperationDetailsConfigImpl extends BaseOperationDetailsConfigImpl
 	{
 		if (hcp == null || !hcp.getID_HcpIsNotNull())
 			throw new CodingRuntimeException("Provided hcp is null or doesn't have an id");
-		
+
+		/* TODO MSSQL case - String hql = "select distinct proc from ConsultantProcedureCategory as cpc left join cpc.categoryProcedures " +
+				"as cp left join cp.procedures as proc where (proc.isActive = 1 and proc.id is not null  and cpc.performingHCP.id = :Hcp_Id "; */
 		String hql = "select distinct proc from ConsultantProcedureCategory as cpc left join cpc.categoryProcedures " +
-				"as cp left join cp.procedures as proc where (proc.isActive = 1 and proc.id is not null  and cpc.performingHCP.id = :Hcp_Id ";
+				"as cp left join cp.procedures as proc where (proc.isActive = true and proc.id is not null  and cpc.performingHCP.id = :Hcp_Id ";
+
 		ArrayList<String> pN =new ArrayList<String>();
 		ArrayList<Object> pV = new ArrayList<Object>();
 		pN.add("Hcp_Id");
@@ -166,7 +169,9 @@ public class OperationDetailsConfigImpl extends BaseOperationDetailsConfigImpl
 
 	public ProcedureLiteVoCollection listAllProcedures(String text)
 	{
-		String hql = "from Procedure as proc where (upper(proc.procedureName) like :name and proc.isActive = 1) order by upper(proc.procedureName) asc";
+		/* TODO MSSQL case - String hql = "from Procedure as proc where (upper(proc.procedureName) like :name and proc.isActive = 1) order by upper(proc.procedureName) asc"; */
+		String hql = "from Procedure as proc where (upper(proc.procedureName) like :name and proc.isActive = true) order by upper(proc.procedureName) asc";
+
 		List<?> find = getDomainFactory().find(hql,"name",text==null?"%":"%"+text.toUpperCase()+"%");
 		if (find == null || find.size() == 0)
 			return null;

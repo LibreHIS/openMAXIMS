@@ -35,64 +35,41 @@ import ims.core.patient.domain.objects.Patient;
 import ims.core.patient.vo.PatientRefVo;
 import ims.core.resource.people.domain.objects.Gp;
 import ims.core.resource.people.vo.GpRefVo;
-import ims.core.vo.GpLiteWithNameVo;
 import ims.core.vo.GpLiteWithNameVoCollection;
 import ims.core.vo.GpShortVo;
 import ims.core.vo.HcpLiteVoCollection;
 import ims.core.vo.MemberOfStaffLiteVo;
-import ims.core.vo.MemberOfStaffLiteVoCollection;
 import ims.core.vo.VaccineLiteVo;
 import ims.core.vo.VaccineManufacturerBatchVo;
 import ims.core.vo.VaccineManufacturerBatchVoCollection;
 import ims.core.vo.domain.GpLiteWithNameVoAssembler;
 import ims.core.vo.domain.GpShortVoAssembler;
 import ims.core.vo.domain.HcpLiteVoAssembler;
-import ims.core.vo.domain.MemberOfStaffLiteVoAssembler;
 import ims.core.vo.domain.VaccineManufacturerBatchVoAssembler;
 import ims.core.vo.lookups.HcpDisType;
-import ims.core.vo.lookups.MedicGrade;
 import ims.domain.DomainFactory;
 import ims.domain.exceptions.DomainInterfaceException;
-import ims.domain.exceptions.DomainRuntimeException;
 import ims.domain.exceptions.ForeignKeyViolationException;
 import ims.domain.exceptions.StaleObjectException;
 import ims.domain.exceptions.UniqueKeyViolationException;
-import ims.framework.exceptions.CodingRuntimeException;
 import ims.framework.utils.Date;
 import ims.framework.utils.DateTime;
 import ims.pci.domain.base.impl.BaseRecordingSchedulingImpl;
 import ims.pci.domain.objects.ClientImmunisationSchedule;
-import ims.pci.domain.objects.GpContract;
 import ims.pci.domain.objects.ScheduleConfiguration;
 import ims.pci.vo.ClientImmunisationScheduleVo;
 import ims.pci.vo.ClientLiteVo;
-import ims.pci.vo.ClientPCIScheduleProfileVo;
-import ims.pci.vo.ClientPCIScheduleProfileVoCollection;
-import ims.pci.vo.ClientScheduleStageVaccineVo;
-import ims.pci.vo.ClientScheduleStageVaccineVoCollection;
-import ims.pci.vo.ClientScheduleStageVo;
-import ims.pci.vo.ClientScheduleStageVoCollection;
-import ims.pci.vo.ClientVaccineSummaryVo;
-import ims.pci.vo.ClientVaccineSummaryVoCollection;
 import ims.pci.vo.GpContractVo;
 import ims.pci.vo.GpContractVoCollection;
 import ims.pci.vo.ScheduleConfigurationLiteVo;
 import ims.pci.vo.ScheduleConfigurationLiteVoCollection;
 import ims.pci.vo.ScheduleConfigurationRefVo;
-import ims.pci.vo.ScheduleConfigurationRefVoCollection;
 import ims.pci.vo.ScheduleConfigurationVo;
-import ims.pci.vo.StageConfigurationVo;
-import ims.pci.vo.StageConfigurationVoCollection;
-import ims.pci.vo.StageVaccineVo;
-import ims.pci.vo.StageVaccineVoCollection;
-import ims.pci.vo.VaccineStatusLiteVo;
-import ims.pci.vo.VaccineStatusLiteVoCollection;
 import ims.pci.vo.domain.ClientImmunisationScheduleVoAssembler;
 import ims.pci.vo.domain.ClientLiteVoAssembler;
 import ims.pci.vo.domain.GpContractVoAssembler;
 import ims.pci.vo.domain.ScheduleConfigurationLiteVoAssembler;
 import ims.pci.vo.domain.ScheduleConfigurationVoAssembler;
-import ims.pci.vo.lookups.VaccineStatus;
 
 public class RecordingSchedulingImpl extends BaseRecordingSchedulingImpl
 {
@@ -158,7 +135,9 @@ public class RecordingSchedulingImpl extends BaseRecordingSchedulingImpl
 		}
 
 		DomainFactory factory = getDomainFactory();
-		String query = "from ScheduleConfiguration as sc where sc.isDefaultSchedule = 1";
+
+		/* TODO MSSQL case - String query = "from ScheduleConfiguration as sc where sc.isDefaultSchedule = 1"; */
+		String query = "from ScheduleConfiguration as sc where sc.isDefaultSchedule = true";
 
 		List results = factory.find(query);
 		

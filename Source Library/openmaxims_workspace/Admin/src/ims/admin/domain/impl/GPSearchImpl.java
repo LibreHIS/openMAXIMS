@@ -76,11 +76,13 @@ public class GPSearchImpl extends BaseGPSearchImpl
     			//WDEV-18377  - GP Select for Patients changes
     			if (filter.getAreDistinctRecToBeRetrievedIsNotNull() && Boolean.TRUE.equals(filter.getAreDistinctRecToBeRetrieved()))
     			{
-    				hql.append("select distinct gp from Gp gp left join gp.codeMappings as mappings left join gp.practices as Pract where mappings.taxonomyName = :taxonomyType and mappings.taxonomyCode = :taxonomyCode and Pract.practice.isActive = 1 and Pract.practice.id = :practiceId"); 
+    				/* TODO MSSQL case - hql.append("select distinct gp from Gp gp left join gp.codeMappings as mappings left join gp.practices as Pract where mappings.taxonomyName = :taxonomyType and mappings.taxonomyCode = :taxonomyCode and Pract.practice.isActive = 1 and Pract.practice.id = :practiceId"); */
+    				hql.append("select distinct gp from Gp gp left join gp.codeMappings as mappings left join gp.practices as Pract where mappings.taxonomyName = :taxonomyType and mappings.taxonomyCode = :taxonomyCode and Pract.practice.isActive = true and Pract.practice.id = :practiceId");
     			}
     			else
-    			{	
-    				hql.append("select gp from Gp gp join gp.codeMappings as mappings left join gp.practices as Pract where mappings.taxonomyName = :taxonomyType and mappings.taxonomyCode = :taxonomyCode and Pract.practice.isActive = 1 and Pract.practice.id = :practiceId");
+    			{
+    			    /* TODO MSSQL case - hql.append("select gp from Gp gp join gp.codeMappings as mappings left join gp.practices as Pract where mappings.taxonomyName = :taxonomyType and mappings.taxonomyCode = :taxonomyCode and Pract.practice.isActive = 1 and Pract.practice.id = :practiceId"); */
+    				hql.append("select gp from Gp gp join gp.codeMappings as mappings left join gp.practices as Pract where mappings.taxonomyName = :taxonomyType and mappings.taxonomyCode = :taxonomyCode and Pract.practice.isActive = true and Pract.practice.id = :practiceId");
     			}
 
 				names.add("practiceId");
@@ -173,9 +175,11 @@ public class GPSearchImpl extends BaseGPSearchImpl
 			if (ConfigFlag.DOM.GP_USE_SURGERIES.getValue())
 			{
 				mainHql.append ("left join Pract.practice as pract left join pract.locationSites as surgeries");
-				
-				clause.append(andStr + " gp.id = Pract.gp.id and Pract.practice.isActive = 1 and (surgeries.isActive = 1 and (surgeries.upperName like :partialAddress ");  //WDEV-18828  WDEV-20219
-				clause.append(" or (upper(surgeries.address.line1) like :partialAddress ");
+
+				/* TODO MSSQL case - clause.append(andStr + " gp.id = Pract.gp.id and Pract.practice.isActive = 1 and (surgeries.isActive = 1 and (surgeries.upperName like :partialAddress "); */
+				clause.append(andStr + " gp.id = Pract.gp.id and Pract.practice.isActive = true and (surgeries.isActive = true and (surgeries.upperName like :partialAddress ");  //WDEV-18828  WDEV-20219
+
+                clause.append(" or (upper(surgeries.address.line1) like :partialAddress ");
 				clause.append(" or upper(surgeries.address.line2) like :partialAddress");
 				clause.append(" or upper(surgeries.address.line3) like :partialAddress");
 				clause.append(" or upper(surgeries.address.line4) like :partialAddress");
@@ -184,9 +188,11 @@ public class GPSearchImpl extends BaseGPSearchImpl
 				andStr = " and ";
 			}
 			else
-			{	
-				clause.append(andStr + " gp.id = Pract.gp.id and (Pract.practice.isActive = 1 and (Pract.practice.upperName like :partialAddress "); //WDEV-20219(upper(Pract.practice.name) //WDEV-18828
-				clause.append(" or (upper(Pract.practice.address.line1) like :partialAddress ");
+			{
+			    /* TODO MSSQL case - clause.append(andStr + " gp.id = Pract.gp.id and (Pract.practice.isActive = 1 and (Pract.practice.upperName like :partialAddress "); //WDEV-20219(upper(Pract.practice.name) //WDEV-18828 */
+				clause.append(andStr + " gp.id = Pract.gp.id and (Pract.practice.isActive = true and (Pract.practice.upperName like :partialAddress "); //WDEV-20219(upper(Pract.practice.name) //WDEV-18828
+
+                clause.append(" or (upper(Pract.practice.address.line1) like :partialAddress ");
 				clause.append(" or upper(Pract.practice.address.line2) like :partialAddress");
 				clause.append(" or upper(Pract.practice.address.line3) like :partialAddress");
 				clause.append(" or upper(Pract.practice.address.line4) like :partialAddress");
@@ -205,7 +211,9 @@ public class GPSearchImpl extends BaseGPSearchImpl
 			//WDEV-19443
 			if(filter.getPracticeIsNotNull()) //WDEV-19443
 			{
-    			clause.append(andStr + " Pract.practice.isActive = 1 and Pract.practice.id = :practiceId "); 
+			    /* TODO MSSQL case - clause.append(andStr + " Pract.practice.isActive = 1 and Pract.practice.id = :practiceId "); */
+    			clause.append(andStr + " Pract.practice.isActive = true and Pract.practice.id = :practiceId ");
+
     			names.add("practiceId");
     			values.add(filter.getPractice().getID_Organisation());
     			andStr = " and ";
@@ -214,8 +222,10 @@ public class GPSearchImpl extends BaseGPSearchImpl
 		else if(filter.getPracticeIsNotNull()) //WDEV-19443
 		{
 			mainHql.append (" left join gp.practices as Pract ");
-			
-			clause.append(andStr + " Pract.practice.isActive = 1 and Pract.practice.id = :practiceId "); 
+
+			/* TODO MSSQL case - clause.append(andStr + " Pract.practice.isActive = 1 and Pract.practice.id = :practiceId "); */
+			clause.append(andStr + " Pract.practice.isActive = true and Pract.practice.id = :practiceId ");
+
 			names.add("practiceId");
 			values.add(filter.getPractice().getID_Organisation());
 			andStr = " and ";

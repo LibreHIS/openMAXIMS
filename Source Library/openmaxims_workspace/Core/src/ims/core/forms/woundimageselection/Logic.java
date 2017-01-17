@@ -341,8 +341,7 @@ public class Logic extends BaseLogic
 		{
 			uploadFileName = EnvironmentConfig.getImageServerURL() + getBaseName(getBaseName(fileName));
 		}
-		//form.lyrWoundImage().tabUpload().htmPreview().setHTML("<IFRAME id=\"PostFrame\" name=\"PostFrame\" width=\"100%\" height=\"100%\" frameborder=0 src='" + uploadFileName + "'></IFRAME>");
-		
+
 		StringBuffer sb = new StringBuffer();
 		sb.append("<table>");
 		

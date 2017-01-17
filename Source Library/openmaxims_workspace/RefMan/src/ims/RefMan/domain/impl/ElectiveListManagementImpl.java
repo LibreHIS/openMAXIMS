@@ -93,7 +93,6 @@ import ims.core.vo.domain.HcpLiteVoAssembler;
 import ims.core.vo.domain.LocationLiteVoAssembler;
 import ims.core.vo.domain.PatientShortAssembler;
 import ims.core.vo.domain.ProcedureLiteVoAssembler;
-import ims.core.vo.domain.ProcedureVoAssembler;
 import ims.core.vo.domain.ServiceLiteVoAssembler;
 import ims.core.vo.lookups.MedicGrade;
 import ims.core.vo.lookups.SourceOfReferral;
@@ -360,14 +359,17 @@ public class ElectiveListManagementImpl extends BaseElectiveListManagementImpl
 				}
 				else if (ims.RefMan.forms.electivelistmanagement.Logic.ELECTIVE_LIST_REQUIRES_TCI_28_DAYS_RULE_PATIENTS.equals(searchCriteria.getElectiveListStatusRequiresTCISubOption()))
 				{
-					conditionQueryPart.append(" AND patientElectiveList.subjectTo28DayRule = 1 ");
+					/* TODO MSSQL case - conditionQueryPart.append(" AND patientElectiveList.subjectTo28DayRule = 1 "); */
+					conditionQueryPart.append(" AND patientElectiveList.subjectTo28DayRule = true ");
 				}
 
 				conditionString = " AND ";
 			}
 			else if (ims.RefMan.forms.electivelistmanagement.Logic.ELECTIVE_LIST_STATUS_PREASSESSMENT_OUTCOME_REQUIRED.equals(searchCriteria.getElectiveListStatus()))
 			{
-				conditionQueryPart.append(" (patientElectiveList.preAssessmentRequired = 1 AND patientElectiveList.preAssessmentOutcome is null ");
+				/* TODO MSSQL case - conditionQueryPart.append(" (patientElectiveList.preAssessmentRequired = 1 AND patientElectiveList.preAssessmentOutcome is null "); */
+				conditionQueryPart.append(" (patientElectiveList.preAssessmentRequired = true AND patientElectiveList.preAssessmentOutcome is null ");
+
 				conditionQueryPart.append(" AND status.id <> :REMOVED_ELECTIVE_STATUS) ");
 				
 				paramNames.add("REMOVED_ELECTIVE_STATUS");
@@ -409,11 +411,13 @@ public class ElectiveListManagementImpl extends BaseElectiveListManagementImpl
 		// Search criteria for 'Short Notice'
 		if (Boolean.TRUE.equals(searchCriteria.getShortNotice()))
 		{
-			joinQueryPart.append(" LEFT JOIN patientElectiveList.preAssessmentOutcome AS preassessOutcome ");	//wdev-22217
+			joinQueryPart.append(" LEFT JOIN patientElectiveList.preAssessmentOutcome AS preassessOutcome ");
 			
 			
 			conditionQueryPart.append(conditionString);
-			conditionQueryPart.append(" ( ( patientElectiveList.availableAtShortNotice = 1");
+
+			/* TODO MSSQL case - conditionQueryPart.append(" ( ( patientElectiveList.availableAtShortNotice = 1"); */
+			conditionQueryPart.append(" ( ( patientElectiveList.availableAtShortNotice = true");
 			
 			if (searchCriteria.getDaysNoticeRequired() != null)
 			{
@@ -423,9 +427,10 @@ public class ElectiveListManagementImpl extends BaseElectiveListManagementImpl
 			}
 			
 			conditionQueryPart.append(" )");
-			//------ wdev-22217
 			conditionQueryPart.append(" OR ");
-			conditionQueryPart.append(" ( preassessOutcome.shortNotice = 1");
+
+			/* TODO MSSQL case - conditionQueryPart.append(" ( preassessOutcome.shortNotice = 1"); */
+			conditionQueryPart.append(" ( preassessOutcome.shortNotice = true");
 			
 			if (searchCriteria.getDaysNoticeRequired() != null)
 			{
@@ -435,8 +440,7 @@ public class ElectiveListManagementImpl extends BaseElectiveListManagementImpl
 			}
 			
 			conditionQueryPart.append(" ) )");
-			//---------------
-			
+
 			
 			
 			conditionString = " AND ";
@@ -523,8 +527,9 @@ public class ElectiveListManagementImpl extends BaseElectiveListManagementImpl
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
-		
-		query.append(" WHERE service.upperName LIKE :NAME AND service.isActive = 1 ");
+
+		/* TODO MSSQL case - query.append(" WHERE service.upperName LIKE :NAME AND service.isActive = 1 "); */
+		query.append(" WHERE service.upperName LIKE :NAME AND service.isActive = true ");
 		
 		paramNames.add("NAME");
 		paramValues.add(name.toUpperCase() + "%");
@@ -534,7 +539,6 @@ public class ElectiveListManagementImpl extends BaseElectiveListManagementImpl
 		return ServiceForElectiveListConfigVoAssembler.createServiceForElectiveListConfigVoCollectionFromService(getDomainFactory().find(query.toString(), paramNames, paramValues)); 
 	}
 
-	//WDEV-23318
 	public ProcedureLiteVoCollection listProcedures(String name, WaitingCardAdmissionType admissionType) throws DomainInterfaceException
 	{
 		if (name == null || name.length() == 0)
@@ -553,21 +557,23 @@ public class ElectiveListManagementImpl extends BaseElectiveListManagementImpl
 		
 		if (WaitingCardAdmissionType.SURGICAL.equals(admissionType))
 		{
-			query.append(" AND (proc.isEndoscopy is null OR proc.isEndoscopy = 0) AND (proc.medicalWL is null OR proc.medicalWL = 0) ");
+			/* TODO MSSQL case - query.append(" AND (proc.isEndoscopy is null OR proc.isEndoscopy = 0) AND (proc.medicalWL is null OR proc.medicalWL = 0) "); */
+			query.append(" AND (proc.isEndoscopy is null OR proc.isEndoscopy = false) AND (proc.medicalWL is null OR proc.medicalWL = false) ");
 		}
 		else if (WaitingCardAdmissionType.MEDICAL.equals(admissionType))
 		{
-			query.append(" AND (proc.medicalWL = 1)");
+			/* TODO MSSQL case - query.append(" AND (proc.medicalWL = 1)"); */
+			query.append(" AND (proc.medicalWL = true)");
 		}
 		else if (WaitingCardAdmissionType.ENDOSCOPY.equals(admissionType))
 		{
-			query.append(" AND (proc.isEndoscopy = 1)");
+			/* TODO MSSQL case - query.append(" AND (proc.isEndoscopy = 1)"); */
+			query.append(" AND (proc.isEndoscopy = true)");
 		}
 		
 		return ProcedureLiteVoAssembler.createProcedureLiteVoCollectionFromProcedure(Keywords.searchByKeywords(factory, name, query.toString(), paramNames, paramValues));	
 	}
-	//WDEV-23318 ends here
-	
+
 	
 	public ElectiveListConfigLiteVoCollection listElectiveListConfigurations(String electiveListName)
 	{
@@ -585,8 +591,10 @@ public class ElectiveListManagementImpl extends BaseElectiveListManagementImpl
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
-		
-		query.append(" WHERE UPPER(electiveList.waitingListName) LIKE :ELECTIVE_LIST_NAME AND electiveList.isActive = 1 ");
+
+		/* TODO MSSQL case - query.append(" WHERE UPPER(electiveList.waitingListName) LIKE :ELECTIVE_LIST_NAME AND electiveList.isActive = 1 "); */
+		query.append(" WHERE UPPER(electiveList.waitingListName) LIKE :ELECTIVE_LIST_NAME AND electiveList.isActive = true ");
+
 		paramNames.add("ELECTIVE_LIST_NAME");
 		paramValues.add(electiveListName.toUpperCase() + "%");
 		
@@ -631,329 +639,6 @@ public class ElectiveListManagementImpl extends BaseElectiveListManagementImpl
 		return new Date();
 	}
 
-
-
-
-
-
-//	public ims.RefMan.vo.PatientElevectiveListManagementVoCollection getElectiveListEntries(ims.admin.vo.ServiceForElectiveListConfigVo service, String electivelistname, String electivelistcode, ims.core.vo.HcpLiteVo consultant, ims.framework.utils.Date datefrom, ims.framework.utils.Date dateto, ims.core.vo.lookups.WaitingListStatus status, Boolean showAdmitted, Boolean showSuspended, Boolean show28Day, ProcedureLiteVo procedure, LocationRefVo hospital, LocationRefVo ward, ReferralUrgency urgency, ElectiveAdmissionType electiveType) //wdev-18596, wdev-18662 //WDEV-19348, wdev-19535 //WDEV-19699
-//	{
-//		if (service == null && electivelistname == null && electivelistcode == null && consultant == null && datefrom == null && dateto == null && status == null && procedure == null && hospital==null && ward==null && electiveType==null) //WDEV-19348 //WDEV-19699
-//			throw new CodingRuntimeException("At least one search criteria must be provided");
-//
-//		DomainFactory factory = getDomainFactory();
-//
-//		StringBuffer hqlConditions = new StringBuffer();
-//		
-//		StringBuffer hql = new StringBuffer("select p1_1 from PatientElectiveList as p1_1 left join p1_1.electiveList as w1_1 left join p1_1.electiveListStatus as e1_1 left join e1_1.electiveListStatus as l1_1 left join p1_1.tCIDetails as p2_1 left join p2_1.currentOutcome as t2_1 left join t2_1.outcome as l2_1");
-//		
-//		ArrayList<String> markers = new ArrayList<String>();
-//		ArrayList<Object> values = new ArrayList<Object>();
-//
-//		String andStr = "";
-//		if( service != null)
-//		{
-//			hqlConditions.append(andStr);
-//			hqlConditions.append(" w1_1.service.id = :Service ");
-//			markers.add("Service");
-//			values.add(service.getID_Service());
-//			andStr = " and ";
-//		}
-//		if( electivelistname != null )
-//		{
-//			hqlConditions.append(andStr);
-//			hqlConditions.append(" UPPER(w1_1.waitingListName) like :WaitingListName ");
-//			markers.add("WaitingListName");
-//			values.add(electivelistname.toUpperCase()+"%");
-//			andStr = " and ";
-//		}
-//		if( electivelistcode != null )
-//		{
-//			hqlConditions.append(andStr);
-//			hqlConditions.append(" UPPER(w1_1.waitingListCode) like :WaitingListCode ");
-//			markers.add("WaitingListCode");
-//			values.add(electivelistcode.toUpperCase()+"%");
-//			andStr = " and ";
-//		}
-//		//wdev-19535
-//		if( urgency != null)
-//		{
-//			hqlConditions.append(andStr);
-//			hqlConditions.append(" p1_1.priority.id = :urgency ");
-//			markers.add("urgency");
-//			values.add(getDomLookup(urgency).getId());
-//			andStr = " and ";
-//		}
-//		//--------------
-//		if( consultant != null )
-//		{
-//			hql.append(" left join p1_1.consultant as consultants ");
-//			hqlConditions.append(andStr);
-//			hqlConditions.append(" consultants.id = :consultantId");
-//			markers.add("consultantId");
-//			values.add(consultant.getID_Hcp());
-//			andStr = " and ";
-//		}
-//		//wdev-18662
-//		if( procedure != null )
-//		{
-//			hql.append(" left join p1_1.primaryProcedure as proc_1 ");
-//			hqlConditions.append(andStr);
-//			hqlConditions.append(" proc_1.id = :ProcedureId");
-//			markers.add("ProcedureId");
-//			values.add(procedure.getID_Procedure());
-//			andStr = " and ";
-//		}
-//		
-//		//WDEV-19348
-//		if( hospital != null )
-//		{
-//			hql.append(" left join p1_1.tCIDetails as tciDet left join tciDet.tCIHospital as hospital ");
-//			hqlConditions.append(andStr);
-//			hqlConditions.append(" hospital.id = :hospitalID ");
-//			markers.add("hospitalID");
-//			values.add(hospital.getID_Location());
-//			andStr = " and ";
-//		}
-//		
-//		if( ward != null )
-//		{
-//			hql.append(" left join p1_1.tCIDetails as tciDet left join tciDet.tCIWard as ward ");
-//			hqlConditions.append(andStr);
-//			hqlConditions.append(" ward.id = :wardID ");
-//			markers.add("wardID");
-//			values.add(ward.getID_Location());
-//			andStr = " and ";
-//		}
-//		
-//		
-//		
-//		if( status != null )
-//		{
-//			if( WaitingListStatus.REQUIRES_TCI.equals(status) && !ElectiveAdmissionType.PLANNED_TYPE13.equals(electiveType) ) //WDEV-19107 //WDEV-19699
-//			{
-//				if( datefrom != null )
-//				{
-//					hqlConditions.append(andStr);
-//					hqlConditions.append(" p1_1.dateOnList >= :dateFrom ");
-//					markers.add("dateFrom");
-//					DateTime fromDateTime = new DateTime(datefrom, new Time(0, 0));
-//					values.add(fromDateTime.getJavaDate());
-//					andStr = " and ";
-//				}
-//
-//				if( dateto != null)
-//				{
-//					hqlConditions.append(andStr);
-//					hqlConditions.append(" p1_1.dateOnList <= :dateTo ");
-//					markers.add("dateTo");
-//					DateTime toDateTime = new DateTime( dateto, new Time(0, 0));
-//					values.add(toDateTime.getJavaDate());
-//					andStr = " and ";
-//				}
-//
-//				hqlConditions.append(andStr);
-//				hqlConditions.append(" (e1_1.electiveListStatus.id = :Status or e1_1.electiveListStatus.id = :Status1) ");
-//				markers.add("Status");
-//				markers.add("Status1");
-//				values.add(getDomLookup(WaitingListStatus.CREATED).getId());
-//				values.add(getDomLookup(WaitingListStatus.REQUIRES_TCI).getId());
-//				andStr = " and ";
-//			}
-//			else if( WaitingListStatus.REQUIRES_TCI.equals(status) && ElectiveAdmissionType.PLANNED_TYPE13.equals(electiveType) ) //WDEV-19699
-//			{
-//				if( datefrom != null )
-//				{
-//					hqlConditions.append(andStr);
-//					hqlConditions.append(" p2_1.plannedTCIDate >= :dateFrom ");
-//					markers.add("dateFrom");
-//					DateTime fromDateTime = new DateTime(datefrom, new Time(0, 0));
-//					values.add(fromDateTime.getJavaDate());
-//					andStr = " and ";
-//				}
-//
-//				if( dateto != null)
-//				{
-//					hqlConditions.append(andStr);
-//					hqlConditions.append(" p2_1.plannedTCIDate <= :dateTo ");
-//					markers.add("dateTo");
-//					DateTime toDateTime = new DateTime( dateto, new Time(0, 0));
-//					values.add(toDateTime.getJavaDate());
-//					andStr = " and ";
-//				}
-//
-//				hqlConditions.append(andStr);
-//				hqlConditions.append(" (e1_1.electiveListStatus.id = :Status ) ");
-//				markers.add("Status");
-//				values.add(getDomLookup(WaitingListStatus.REQUIRES_TCI).getId());
-//				andStr = " and ";
-//			}
-//			
-//			else 
-//			{	
-//				if ( WaitingListStatus.TCI_GIVEN.equals(status))
-//				{
-//					if( datefrom != null )
-//					{
-//						hqlConditions.append(andStr);
-//						hqlConditions.append(" p2_1.tCIDate >= :dateFrom ");
-//						markers.add("dateFrom");
-//						DateTime fromDateTime = new DateTime(datefrom, new Time(0, 0));
-//						values.add(fromDateTime.getJavaDate());
-//						andStr = " and ";
-//					}
-//
-//					if( dateto != null)
-//					{
-//						hqlConditions.append(andStr);
-//						hqlConditions.append(" p2_1.tCIDate <= :dateTo ");
-//						markers.add("dateTo");
-//						DateTime toDateTime = new DateTime( dateto, new Time(0, 0));
-//						values.add(toDateTime.getJavaDate());
-//						andStr = " and ";
-//					}
-//				}
-//				else
-//				{
-//					if( datefrom != null )
-//					{
-//						hqlConditions.append(andStr);
-//						hqlConditions.append(" p1_1.dateOnList >= :dateFrom ");
-//						markers.add("dateFrom");
-//						DateTime fromDateTime = new DateTime(datefrom, new Time(0, 0));
-//						values.add(fromDateTime.getJavaDate());
-//						andStr = " and ";
-//					}
-//
-//					if( dateto != null)
-//					{
-//						hqlConditions.append(andStr);
-//						hqlConditions.append(" p1_1.dateOnList <= :dateTo ");
-//						markers.add("dateTo");
-//						DateTime toDateTime = new DateTime( dateto, new Time(0, 0));
-//						values.add(toDateTime.getJavaDate());
-//						andStr = " and ";
-//					}
-//				}
-//				
-//				hqlConditions.append(andStr); 
-//				hqlConditions.append(" e1_1.electiveListStatus.id = :Status ");
-//				markers.add("Status");
-//				values.add(status.getID());
-//				andStr = " and ";
-//			}	
-//		}
-//		else
-//		{
-//			if( datefrom != null )
-//			{
-//				hqlConditions.append(andStr);
-//				if (ElectiveAdmissionType.PLANNED_TYPE13.equals(electiveType)) //WDEV-19940
-//				{
-//					hqlConditions.append(" p2_1.plannedTCIDate >= :dateFrom ");
-//				}
-//				else
-//				{
-//					hqlConditions.append(" p1_1.dateOnList >= :dateFrom ");
-//				}
-//				markers.add("dateFrom");
-//				DateTime fromDateTime = new DateTime(datefrom, new Time(0, 0));
-//				values.add(fromDateTime.getJavaDate());
-//				andStr = " and ";
-//			}
-//
-//			if( dateto != null)
-//			{
-//				hqlConditions.append(andStr);
-//				if (ElectiveAdmissionType.PLANNED_TYPE13.equals(electiveType)) //WDEV-19940
-//				{
-//					hqlConditions.append(" p2_1.plannedTCIDate <= :dateTo ");
-//				}
-//				else
-//				{
-//					hqlConditions.append(" p1_1.dateOnList <= :dateTo ");
-//				}
-//				
-//				markers.add("dateTo");
-//				DateTime toDateTime = new DateTime( dateto, new Time(0, 0));
-//				values.add(toDateTime.getJavaDate());
-//				andStr = " and ";
-//			}
-//			
-//			hqlConditions.append(andStr);
-//			hqlConditions.append(" (e1_1.electiveListStatus.id = :Status or e1_1.electiveListStatus.id = :Status1) ");
-//			markers.add("Status");
-//			markers.add("Status1");
-//			values.add(getDomLookup(WaitingListStatus.CREATED).getId());
-//			values.add(getDomLookup(WaitingListStatus.REQUIRES_TCI).getId());
-//			andStr = " and ";
-//		}
-//		if( Boolean.TRUE.equals(showAdmitted))
-//		{
-//			hqlConditions.append(andStr);
-//			hqlConditions.append(" (l2_1.id = :Status) ");
-//			markers.add("Status");
-//			values.add(getDomLookup(AdmissionOfferOutcome.PATIENT_ADMITTED_TREATMENT_DEFERRED_5).getId());
-//			andStr = " and ";
-//		}
-//		if( Boolean.TRUE.equals(showSuspended))
-//		{
-//			hqlConditions.append(andStr);
-//			//wdev-18361
-//			hqlConditions.append(" (p1_1.currentSuspensionEndDate is not null  and p1_1.currentSuspensionEndDate <= :enddate) ");   
-//			markers.add("enddate");
-//			DateTime toDateTime = new DateTime();
-//			values.add(toDateTime.getJavaDate());
-//			andStr = " and ";
-//		}
-//		
-//		//WDEV-19699
-//		if (electiveType!=null)
-//		{
-//			hqlConditions.append(andStr);
-//			hqlConditions.append(" p1_1.electiveAdmissionType.id = :electiveAdmType ");
-//			markers.add("electiveAdmType");
-//			values.add(electiveType.getId());
-//			andStr = " and ";
-//		}
-//		
-//		//wdev-18596
-//		if( Boolean.TRUE.equals(show28Day))
-//		{
-//			hqlConditions.append(andStr);
-//			hqlConditions.append(" (p1_1.was28DayRuleApplied = 1) ");			// Temporary fix for WDEV-20587 - this form will be reviewed
-////			hqlConditions.append(" (p1_1.tCIDetails is null and p1_1.requiresTCIBy <= :add28Days) ");   
-////			markers.add("add28Days");
-////			DateTime add28Day = (new DateTime()).addDays(28);
-////			values.add(add28Day.getJavaDate());
-//			andStr = " and ";
-//		}
-//		String strOrder = "";
-//		
-//		if (Boolean.TRUE.equals(show28Day))
-//		{
-//			strOrder="order by p1_1.requiresTCIBy asc";
-//		}
-//		else
-//		{
-//			strOrder="order by p1_1.dateOnList desc";
-//		}
-//		
-//		if (hqlConditions.length() > 0)
-//		{
-//			hqlConditions.insert(0, " where (");
-//			hqlConditions.append(" ) ");
-//		}
-//
-//		List<?> list = factory.find(hql.toString() + hqlConditions.toString() + strOrder, markers, values, 2000);//wdev-18596
-//
-//		if (list == null || list.size() == 0)
-//			return null;
-//		
-//		
-//		return PatientElevectiveListManagementVoAssembler.createPatientElevectiveListManagementVoCollectionFromPatientElectiveList(list);
-//	}
-
 	public ims.core.vo.HcpLiteVoCollection listConsultants(String name)
 	{
 		if(name == null || (name != null && name.length() == 0))
@@ -964,7 +649,9 @@ public class ElectiveListManagementImpl extends BaseElectiveListManagementImpl
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
 		
-		String hql = "select medic.mos.hcp from Medic as medic where medic.isActive = 1 and (medic.mos.name.upperSurname like :hcpSname or medic.mos.name.upperForename like :hcpFname) and medic.grade.id =:idMedicGrade";
+		/* TODO MSSQL case - String hql = "select medic.mos.hcp from Medic as medic where medic.isActive = 1 and (medic.mos.name.upperSurname like :hcpSname or medic.mos.name.upperForename like :hcpFname) and medic.grade.id =:idMedicGrade"; */
+		String hql = "select medic.mos.hcp from Medic as medic where medic.isActive = true and (medic.mos.name.upperSurname like :hcpSname or medic.mos.name.upperForename like :hcpFname) and medic.grade.id =:idMedicGrade";
+
 		markers.add("hcpSname");
 		values.add(name.toUpperCase() + "%");
 		

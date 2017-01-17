@@ -99,7 +99,8 @@ public class CCGContractForPostCodeHelper extends DomainImpl implements ICCGCont
 		if (cCGCode == null || cCGCode.length() == 0)
 			return null;
 
-		String contractQuery = "SELECT contract FROM ContractConfig AS contract LEFT JOIN contract.cCGsForContract AS ccgContract WHERE contract.status = :ACTIVE AND ccgContract.cCGCode = :CCG_CONTRACT AND ccgContract.isActive = 1";
+		/* TODO MSSQL case - String contractQuery = "SELECT contract FROM ContractConfig AS contract LEFT JOIN contract.cCGsForContract AS ccgContract WHERE contract.status = :ACTIVE AND ccgContract.cCGCode = :CCG_CONTRACT AND ccgContract.isActive = 1"; */
+		String contractQuery = "SELECT contract FROM ContractConfig AS contract LEFT JOIN contract.cCGsForContract AS ccgContract WHERE contract.status = :ACTIVE AND ccgContract.cCGCode = :CCG_CONTRACT AND ccgContract.isActive = true";
 
 		ContractConfigShortVo contractVO = ContractConfigShortVoAssembler.create((ContractConfig) getDomainFactory().findFirst(contractQuery, new String[]{"ACTIVE","CCG_CONTRACT"}, new Object[]{getDomLookup(PreActiveActiveInactiveStatus.ACTIVE), codeCCG}));
 		return contractVO;
@@ -111,7 +112,7 @@ public class CCGContractForPostCodeHelper extends DomainImpl implements ICCGCont
 		if (postCode == null || postCode.length() == 0)
 			return null;
 
-		postCode = postCode.replace(" ","");	//wdev-18655
+		postCode = postCode.replace(" ","");
 		String ccgQuery = "SELECT ccg FROM CCGPCTPCCodes AS ccg WHERE REPLACE(ccg.postcode, ' ','') = :POST_CODE";
 		CCGPCTPCCodes ccgCode = (CCGPCTPCCodes) getDomainFactory().findFirst(ccgQuery, "POST_CODE", postCode);
 

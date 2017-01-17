@@ -1054,7 +1054,7 @@ public class Logic extends BaseLogic
 			}
 		}
 
-		//for 60 days past KPI date, add a different colour
+		// For 60 days past KPI date, add a different colour
 		Date dateFrom = arrDates[arrDates.length - 1].copy();
 		Date dateTo = dateFrom.copy();
 		dateTo.addDay(60);
@@ -1064,70 +1064,21 @@ public class Logic extends BaseLogic
 			dateFrom.addDay(1);
 			form.bookingCalendarAppts().setDateColor(dateFrom.copy(), Color.Red, Color.White);
 		}
-
-		// WDEV-11761 End
-
-		/*
-		 * //WDEV-11761 //WDEV-11713 Start //Get no of weeks int noOfWeeks =
-		 * (int) Math.ceil((float)arrDates.length/5);
-		 * 
-		 * int colorInterval = 18; if (noOfWeeks > 1) colorInterval = (int)
-		 * Math.floor(18/(noOfWeeks-1));
-		 * 
-		 * if (colorInterval <= 0) colorInterval = 1;
-		 * 
-		 * 
-		 * for (int i = 0 ; i < arrDates.length ; i++) { int week = (int)
-		 * Math.floor(i/5);
-		 * 
-		 * int colorIndex = week*colorInterval; if (colorIndex > 17 || week ==
-		 * noOfWeeks-1) { colorIndex = 17; }
-		 * 
-		 * form.bookingCalendarAppts().setBackColor(arrDates[i],
-		 * Color.fromRGB(colors
-		 * [colorIndex][0],colors[colorIndex][1],colors[colorIndex][2])); }
-		 */
-		// WDEV-11713 Stop
-		/*
-		 * WDEV-11713 if (arrDates.length > 0) {
-		 * form.bookingCalendarAppts().setBackColor(arrDates[0],
-		 * Color.fromRGB(0, 128, 0)); if (arrDates.length > 1) {
-		 * form.bookingCalendarAppts().setBackColor(arrDates[1],
-		 * Color.fromRGB(0, 125, 0)); if (arrDates.length > 2) {
-		 * form.bookingCalendarAppts().setBackColor(arrDates[2],
-		 * Color.fromRGB(255, 255, 0)); if (arrDates.length > 3) {
-		 * form.bookingCalendarAppts().setBackColor(arrDates[3],
-		 * Color.fromRGB(206, 206, 0)); if (arrDates.length > 4) {
-		 * form.bookingCalendarAppts().setBackColor(arrDates[4],
-		 * Color.fromRGB(255, 181, 145)); if (arrDates.length > 5) {
-		 * form.bookingCalendarAppts().setBackColor(arrDates[5],
-		 * Color.fromRGB(255, 128, 66)); if (arrDates.length > 6) {
-		 * form.bookingCalendarAppts().setBackColor(arrDates[6],
-		 * Color.fromRGB(255, 99, 23)); if (arrDates.length > 7) {
-		 * form.bookingCalendarAppts().setBackColor(arrDates[7],
-		 * Color.fromRGB(255, 147, 147)); if (arrDates.length > 8) {
-		 * form.bookingCalendarAppts().setBackColor(arrDates[8],
-		 * Color.fromRGB(255, 53, 53)); if (arrDates.length > 9) {
-		 * form.bookingCalendarAppts().setBackColor(arrDates[9],
-		 * Color.fromRGB(217, 0, 0)); } } } } } } } } } }
-		 */
 	}
 
 	private int calculatePercentage(Date dateSession)
 	{
 		SessionShortVoCollection selectedSessions = new SessionShortVoCollection();
 
-		// go through Sessions Collection get matching ones for this day
+		// Go through Sessions Collection get matching ones for this day
 		for (SessionShortVo session : form.getLocalContext().getSessions())
 		{
 			if (session.getSessionDate().equals(dateSession))
 				selectedSessions.add(session);
 		}
 
-		// When calculating percentage use the Calendar Slots (unmapped
-		// collection) from VO - as this contains only the slots
-		// the activity that was queried by, not the indiscriminately total /
-		// remaining slots variables from BO
+		// When calculating percentage use the Calendar Slots (unmapped collection) from VO - as this contains only the slots
+		// the activity that was queried by, not the indiscriminately total / remaining slots variables from BO
 		int totalSlotsForActivity = 0;
 		int remainingSlotsForActivity = 0;
 

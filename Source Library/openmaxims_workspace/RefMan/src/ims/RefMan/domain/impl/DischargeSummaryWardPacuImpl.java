@@ -118,13 +118,14 @@ public class DischargeSummaryWardPacuImpl extends BaseDischargeSummaryWardPacuIm
 
 	private static final long serialVersionUID = 1L;
 
-	// WDEV-12134 We need to retrieve all records for current referral + the current record
+	// We need to retrieve all records for current referral + the current record
 	public DischargeSummaryPacuAndWardLiteVoCollection listDischargeSummaryWardAndPacu(CatsReferralRefVo referral)
 	{
 		if (referral == null || !referral.getID_CatsReferralIsNotNull())
 			return null;
-		
-		String query = "select discharge from DischargeSummaryPacuAndWard as discharge left join discharge.catsReferral as referral where referral.id = :REF_ID or (referral.patient.id = (select pat.id from CatsReferral as cats left join cats.patient as pat where cats.id = :REF_ID) and discharge.isCurrent = 1) order by discharge.systemInformation.creationDateTime desc";
+
+		/* TODO MSSQL case - String query = "select discharge from DischargeSummaryPacuAndWard as discharge left join discharge.catsReferral as referral where referral.id = :REF_ID or (referral.patient.id = (select pat.id from CatsReferral as cats left join cats.patient as pat where cats.id = :REF_ID) and discharge.isCurrent = 1) order by discharge.systemInformation.creationDateTime desc"; */
+		String query = "select discharge from DischargeSummaryPacuAndWard as discharge left join discharge.catsReferral as referral where referral.id = :REF_ID or (referral.patient.id = (select pat.id from CatsReferral as cats left join cats.patient as pat where cats.id = :REF_ID) and discharge.isCurrent = true) order by discharge.systemInformation.creationDateTime desc";
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();

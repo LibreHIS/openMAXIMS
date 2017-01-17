@@ -111,8 +111,10 @@ public class PrintersProvider extends DomainImpl implements IPrintersProvider
 	 
 		ArrayList<String> names = new ArrayList<String>();
 		ArrayList<Integer> values = new ArrayList<Integer>();
-			
-		StringBuffer hql = new StringBuffer(" select printers.id from Location as loc join loc.printers as printers where loc.id = :locationID and printers.active = 1" );			
+
+		/* TODO MSSQL case - StringBuffer hql = new StringBuffer(" select printers.id from Location as loc join loc.printers as printers where loc.id = :locationID and printers.active = 1" ); */
+		StringBuffer hql = new StringBuffer(" select printers.id from Location as loc join loc.printers as printers where loc.id = :locationID and printers.active = true" );
+
 		names.add("locationID");				
 		values.add(location.getID());
 			

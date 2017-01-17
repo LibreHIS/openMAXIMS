@@ -68,12 +68,6 @@ public class Logic extends BaseLogic
 			engine.showMessage("No Appointments found");
 			return;
 		}
-
-		//Sort the results
-//		ArrayList apptArray = new ArrayList();
-//		for(int i=0; i<appts.size(); i++)
-//			apptArray.add(appts.get(i));
-//	 	Collections.sort(apptArray, new ApptComparer());
 	 	
 		for (int i = 0; i < appts.size(); i++)
 		{
@@ -87,7 +81,8 @@ public class Logic extends BaseLogic
 				row.setFrom(record.getStartTime().toString());
 			if (record.getEndTimeIsNotNull())
 				row.setTo(record.getEndTime().toString());
-			//ICCO672 - Clinic Name 
+
+			// ICCO672 - Clinic Name
 			row.setMachineLocation(record.getClinicName());
 			row.setTooltipForMachineLocation(record.getClinicName());
 			row.setSource(record.getSource());

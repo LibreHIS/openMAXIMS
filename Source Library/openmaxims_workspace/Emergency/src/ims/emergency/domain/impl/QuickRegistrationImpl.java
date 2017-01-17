@@ -253,9 +253,9 @@ public class QuickRegistrationImpl extends BaseQuickRegistrationImpl
 
 		DomainFactory factory = getDomainFactory();
 		StringBuffer hql = new StringBuffer();
-		hql.append(" select count (c1_1.id) from EmergencyAttendance as e1_1 right join e1_1.careContext as c1_1 left join c1_1.episodeOfCare as e2_1 left join e2_1.careSpell as c2_1 left join c2_1.patient as p1_1 where (p1_1.id = :patId and e1_1.isRIE is null  and c1_1.endDateTime is null  and c1_1.context.id <> :contextTypeID ) "); //wdev-17569 //WDEV-20992
+		hql.append(" select count (c1_1.id) from EmergencyAttendance as e1_1 right join e1_1.careContext as c1_1 left join c1_1.episodeOfCare as e2_1 left join e2_1.careSpell as c2_1 left join c2_1.patient as p1_1 where (p1_1.id = :patId and e1_1.isRIE is null  and c1_1.endDateTime is null  and c1_1.context.id <> :contextTypeID ) ");
 				
-		Object[] count = factory.find(hql.toString(), new String[] { "patId","contextTypeID" }, new Object[] {patientId, ContextType.REFERRAL.getID()}).toArray(); //WDEV-20992
+		Object[] count = factory.find(hql.toString(), new String[] { "patId","contextTypeID" }, new Object[] {patientId, ContextType.REFERRAL.getID()}).toArray();
 		
 		if(count != null && count.length > 0)
 			 if (((Long) count[0]).intValue() > 0) 
@@ -275,113 +275,4 @@ public class QuickRegistrationImpl extends BaseQuickRegistrationImpl
 		PatientCaseNotes impl = (PatientCaseNotes) getDomainImpl(PatientCaseNotesImpl.class);
 		return impl.createAutomatedCaseNote(patient, null, null);
 	}
-	
-//	private CatsReferral createNewCatsReferral(Patient patient,CareContext careContext,CareSpell careSpell, AdmissionDetailVo admission, ContractConfigShortVo contract)
-//	//private CatsReferralEmergencyAdmissionVo createNewCatsReferralForAdmission(PatientShort patientShort, PatientWithGPForCCGVo patient, CareSpellVo careSpell, AdmissionDetailVo admission, ContractConfigShortVo contract)
-//	{
-//		CatsReferral  referral = new CatsReferral();
-//		
-//		referral.setPatient(patient);
-//		referral.setCareContext(careContext);
-//		if(careContext!=null)
-//			referral.setEpisodeOfCare(careContext.getEpisodeOfCare());
-//		CATSReferralStatus referralStatus = new CATSReferralStatus();
-//		referralStatus.setReferralStatus(getDomLookup(ReferralApptStatus.REFERRAL_ACCEPTED));
-//		referralStatus.setStatusDateTime(new java.util.Date());
-//		referralStatus.setAuthoringUser((MemberOfStaff)getMosUser());
-//		referral.setCurrentStatus(referralStatus);
-//		referral.setStatusHistory(new HashSet<>());
-//		referral.getStatusHistory().add(referralStatus);
-//
-//		String codeCCG = getCCGCode(patient);
-//		referral.setContract(getContractByCCG(codeCCG));
-//		referral.setHasAppointments(false);
-//		
-//
-////		ReferralLetterDetails referralDetails = new ReferralLetterDetails();
-////		referralDetails.setService(form.cmbService().getValue());
-////		referralDetails.setConsultant(domain.getHcpFromIMos(form.ccConsultant().getValue()));
-////		referralDetails.setAuthoringUser((MemberOfStaffRefVo) domain.getMosUser());
-////		referralDetails.setAuthoringDateTime(new DateTime());
-////		referralDetails.setDateReferralReceived(new Date());
-////		referralDetails.setDateOfReferral(new Date());
-////		referralDetails.setEnd18WW(calculateEnd18WW(contract, form.cmbService().getValue()));
-////		referralDetails.setPCT(codeCCG);
-////		referralDetails.setGPName(patient.getGp());
-////		referralDetails.setPractice(getPatientGpDefaultPractice(patient));
-////		
-////		referral.setReferralDetails(referralDetails);
-////		
-//		return referral;
-//	}
-//	
-//	public ContractConfig getContractByCCG(String codeCCG)
-//	{
-//		if (codeCCG == null || codeCCG.length() == 0)
-//			return null;
-//		
-//		String query = "SELECT contract FROM ContractConfig AS contract LEFT JOIN contract.cCGsForContract AS ccgContract WHERE ccgContract.cCGCode = :CCG_CONTRACT AND ccgContract.isActive = 1";
-//		
-//		return (ContractConfig) getDomainFactory().findFirst(query, "CCG_CONTRACT", codeCCG);
-//	}
-//	
-//	
-//	private String getCCGCode(Patient patient)
-//	{
-//		if (patient == null)
-//			return null;
-//		
-//		if (!Boolean.TRUE.equals(ConfigFlag.DOM.GP_USE_SURGERIES.getValue()))
-//		{
-//			// 1 - Patient.Gp.practices.practice (with isDefault).PCTCode (this is a CCG so no lookup of CCGPCTPCCodes needed) 
-//			// 2 - Patient.Gp.practices.practice (with isDefault).Address.Postcode
-//			if (patient.getGp() != null && patient.getGp().getPractices() != null)
-//			{
-//				for (Object obj : patient.getGp().getPractices())
-//				{
-//					GpToPractice gpToPractice =(GpToPractice) obj;
-//					if (Boolean.TRUE.equals(gpToPractice.isIsPrimaryPractice()))
-//					{
-//						// Case 1
-//						if (gpToPractice.getPractice() != null && gpToPractice.getPractice().getPctCode() != null)
-//							return gpToPractice.getPractice().getPctCode();
-//						
-//						// Case 2
-//						if (gpToPractice.getPractice() != null && gpToPractice.getPractice().getAddress() != null)
-//						{
-//							String codeCCG = getCodeCCGFromPostalCode(gpToPractice.getPractice().getAddress().getPostCode());
-//							if (codeCCG != null) return codeCCG;
-//						}
-//					}
-//						
-//				}
-//			}
-//		}
-//			
-//		// 3 - Patient.gpSurgery.address.postcode
-//		if (patient.getGpSurgery() != null && patient.getGpSurgery().getAddress() != null)
-//		{
-//			String codeCCG = getCodeCCGFromPostalCode(patient.getGpSurgery().getAddress().getPostCode());
-//			if (codeCCG != null) return codeCCG;
-//		}
-//		
-//		// 4 -  Patient.Address.Postcode 
-//		if (patient.getAddress() != null)
-//		{
-//			String codeCCG = getCodeCCGFromPostalCode(patient.getAddress().getPostCode());
-//			if (codeCCG != null) return codeCCG;
-//		}
-//		
-//		return null;
-//	}
-//	
-//	String getCodeCCGFromPostalCode(String postCode)
-//	{
-//		BedAdmissionComponent impl =(BedAdmissionComponent) getDomainImpl(BedAdmissionComponentImpl.class);
-//		return impl.getCodeCCGFromPostalCode(postCode);
-//	}
-	
-	
-	
-	
 }

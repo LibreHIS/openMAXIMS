@@ -218,7 +218,8 @@ public class PDSPatientSearchImpl extends BasePDSPatientSearchImpl
 
 			if (!bShowInactivePatients)
 			{
-				hql.append(condition + " (p.isActive = :isActive OR (p.isActive=0 AND p.associatedPatient IS NOT NULL))" );	//WDEV-21588	
+				/* TODO MSSQL case - hql.append(condition + " (p.isActive = :isActive OR (p.isActive=0 AND p.associatedPatient IS NOT NULL))" ); */
+				hql.append(condition + " (p.isActive = :isActive OR (p.isActive = FALSE AND p.associatedPatient IS NOT NULL))" );
 				condition = " AND ";
 			}
 			
@@ -234,42 +235,6 @@ public class PDSPatientSearchImpl extends BasePDSPatientSearchImpl
 		}
 		else
 		{
-			/*
-			if ((filter.getPersId() != null && filter.getPersId().getValue() != null && filter.getPersId().getType().equals(PatIdType.NHSN)) || filter.getNHSNumber() != null)
-			{
-				filterString = new StringBuffer(" FROM Patient p ");
-				
-				if(includeAlias)
-				{
-					filterString.append(" LEFT JOIN p.otherNames AS oths ");
-				}
-
-				filterString.append(" JOIN p.identifiers AS ids WHERE ids.type = :idType ");
-				
-				String idVal = null;
-				
-				if(filter.getNHSNumber() != null)
-					idVal = filter.getNHSNumber().trim();
-				
-				if(idVal == null)
-					idVal = filter.getPersId().getValue().trim();
-				
-				idVal = idVal.replace(" ", "");
-				if(!isCaseSensitivePatIdSearch)
-				{
-					idVal = idVal.toUpperCase();
-				}
-				filterString.append(" AND" + (!isCaseSensitivePatIdSearch ? " UPPER(ids.value)" : " ids.value") + " LIKE :idValue"); 
-				idVal += "%";
-				
-				paramName.add("idType");
-				paramValue.add(getDomLookup(PatIdType.NHSN));	
-				paramName.add("idValue");
-				paramValue.add(idVal);	
-				
-				condition=" AND ";
-			}
-			*/
 			
 			String strSearchSurname = "";
 			String strSearchForename = "";
@@ -292,12 +257,7 @@ public class PDSPatientSearchImpl extends BasePDSPatientSearchImpl
 					filter.setSurname(filter.getSurname().replaceAll("\\d", "")); 
 								
 				strSearchSurname = filter.getSurname().toUpperCase().trim();
-				
-				//WDEV-22602 - Note: Need to retain these characters for PDS searches, so have substituted only in what is being sent in the query
-				//WDEV-21529
-				//WDEV-21937
-//				filter.setSurname(filter.getSurname().replaceAll("'", ""));
-//				filter.setSurname(filter.getSurname().replaceAll("-", ""));				
+
 				strSearchSurname = strSearchSurname.replaceAll("'", "");
 				strSearchSurname = strSearchSurname.replaceAll("-", "");
 
@@ -447,12 +407,13 @@ public class PDSPatientSearchImpl extends BasePDSPatientSearchImpl
 			if(!bReturnMergedPatients == true)
 			{
 				filterString.append(condition + " (p.associatedPatient IS NULL) ");
-				condition = " AND "; //WDEV-22346
+				condition = " AND ";
 			}
 
 			if (!bShowInactivePatients)
 			{
-				filterString.append(condition + " (p.isActive = :isActive OR (p.isActive=0 AND p.associatedPatient IS NOT NULL)) " ); //WDEV-21588
+				/* TODO MSSQL case - filterString.append(condition + " (p.isActive = :isActive OR (p.isActive=0 AND p.associatedPatient IS NOT NULL)) " ); */
+				filterString.append(condition + " (p.isActive = :isActive OR (p.isActive = FALSE AND p.associatedPatient IS NOT NULL)) " );
 				paramName.add("isActive");
 				paramValue.add(Boolean.TRUE);		
 				condition = " AND ";
@@ -467,8 +428,7 @@ public class PDSPatientSearchImpl extends BasePDSPatientSearchImpl
 				filterString.append(ConfigFlag.GEN.PATIENT_SEARCH_RETRIEVE_QUICKREGISTRATION_PATIENTS.getValue() ? "" : (condition + " ((p.isQuickRegistrationPatient is null) OR (p.isQuickRegistrationPatient = 0)) ")); //WDEV-21171
 			}
 			
-			//filterString.append(condition + " p.sex IS NOT NULL AND (p.sCN IS NOT NULL OR (p.identifiers.type.id IN (-9)) AND p.dob IS NOT NULL ");
-			
+
 			if ((filter.getPersId() != null && filter.getPersId().getValue() != null && filter.getPersId().getType().equals(PatIdType.NHSN)) || filter.getNHSNumber() != null)
 				patients = factory.find(filterString.toString(), paramName, paramValue, maxPatientNo);
 			else if (includeAlias && filter.getSurname() != null) 

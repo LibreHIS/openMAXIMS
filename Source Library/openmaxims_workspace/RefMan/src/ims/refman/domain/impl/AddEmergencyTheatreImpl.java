@@ -138,7 +138,8 @@ public class AddEmergencyTheatreImpl extends BaseAddEmergencyTheatreImpl
 
 	public ServiceLiteVoCollection listServices(String name)
 	{
-		List<?> services = getDomainFactory().find("select srv from Service as srv left join srv.serviceCategory as servCateg where srv.isActive = 1 and servCateg.id = :serviceCategoryID and srv.upperName like :servName", new String[]{"servName", "serviceCategoryID"}, new Object[]{name.toUpperCase() + "%", ServiceCategory.CLINICAL.getID()});
+		/* TODO MSSQL case - List<?> services = getDomainFactory().find("select srv from Service as srv left join srv.serviceCategory as servCateg where srv.isActive = 1 and servCateg.id = :serviceCategoryID and srv.upperName like :servName", new String[]{"servName", "serviceCategoryID"}, new Object[]{name.toUpperCase() + "%", ServiceCategory.CLINICAL.getID()}); */
+		List<?> services = getDomainFactory().find("select srv from Service as srv left join srv.serviceCategory as servCateg where srv.isActive = true and servCateg.id = :serviceCategoryID and srv.upperName like :servName", new String[]{"servName", "serviceCategoryID"}, new Object[]{name.toUpperCase() + "%", ServiceCategory.CLINICAL.getID()});
 		
 		if (services == null || services.isEmpty())
 			return null;

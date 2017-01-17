@@ -215,7 +215,9 @@ public class TumourDetailsImpl extends BaseTumourDetailsImpl
 		
 		query.append("select grp from TumourCategoryVersionGroups as version left join version.groups as grp left join grp.associatedSpecialties as groupSpecialty");
 		query.append(" left join groupSpecialty.associatedSpecialty as specialty ");
-		query.append(" where version.tNMVersion.id = :VERSION_ID and specialty.id = :SPECIALTY_ID and groupSpecialty.isActive = 1 and grp.isActive = 1 order by grp.groupName asc");
+
+		/* TODO MSSQL case - query.append(" where version.tNMVersion.id = :VERSION_ID and specialty.id = :SPECIALTY_ID and groupSpecialty.isActive = 1 and grp.isActive = 1 order by grp.groupName asc"); */
+		query.append(" where version.tNMVersion.id = :VERSION_ID and specialty.id = :SPECIALTY_ID and groupSpecialty.isActive = TRUE and grp.isActive = TRUE order by grp.groupName asc");
 		
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
@@ -424,8 +426,10 @@ public class TumourDetailsImpl extends BaseTumourDetailsImpl
 			markers.add("idGroup");
 			values.add(group.getID_TumourGroup());
 		}
-		
-		condStr.append(andStr + "t1_1.isActive = 1 and stageDesc.id <> :STAGE_TOBE_CONF and t3_1.id = :idTypeT and t4_1.id = :idTypeN and t5_1.id = :idTypeM");
+
+		/* TODO MSSQL case - condStr.append(andStr + "t1_1.isActive = 1 and stageDesc.id <> :STAGE_TOBE_CONF and t3_1.id = :idTypeT and t4_1.id = :idTypeN and t5_1.id = :idTypeM"); */
+		condStr.append(andStr + "t1_1.isActive = TRUE and stageDesc.id <> :STAGE_TOBE_CONF and t3_1.id = :idTypeT and t4_1.id = :idTypeN and t5_1.id = :idTypeM");
+
 		markers.add("STAGE_TOBE_CONF");
 		values.add(TumourOverallStage.TOBECONFIGURED.getID());
 		markers.add("idTypeT");
@@ -489,7 +493,9 @@ public class TumourDetailsImpl extends BaseTumourDetailsImpl
 		query.append(" WHERE ");
 		
 		// Check for record to be active, not "To Be Configured", configured for this TumourSite
-		query.append(" staging.isActive = 1 AND overall.id <> :TOBECONFIGURED AND site.id = :SITE_ID ");
+		/* TODO MSSQL case - query.append(" staging.isActive = 1 AND overall.id <> :TOBECONFIGURED AND site.id = :SITE_ID "); */
+		query.append(" staging.isActive = TRUE AND overall.id <> :TOBECONFIGURED AND site.id = :SITE_ID ");
+
 		// Check for T, N, M values
 		query.append(" AND TVal.id = :T_ID AND NVal.id = :N_ID AND MVal.id = :M_ID");
 		
@@ -606,7 +612,9 @@ public class TumourDetailsImpl extends BaseTumourDetailsImpl
 		ArrayList<Object> paramValues = new ArrayList<Object>();
 		
 		query.append("select overProg from PrognosticGrouping as overProg left join overProg.prognosticGroup as progGroup left join overProg.tGroup as grp ");
-		conditionString.append(" where overProg.isActive = 1 and progGroup.id <> :PROG_TOBE_CONF and grp.id = :GRP_ID");
+
+		/* TODO MSSQL case - conditionString.append(" where overProg.isActive = 1 and progGroup.id <> :PROG_TOBE_CONF and grp.id = :GRP_ID"); */
+		conditionString.append(" where overProg.isActive = TRUE and progGroup.id <> :PROG_TOBE_CONF and grp.id = :GRP_ID");
 		
 		paramNames.add("PROG_TOBE_CONF"); paramValues.add(PrognosticGroup.TOBECONFIGURED.getID());
 		paramNames.add("GRP_ID"); paramValues.add(group.getID_TumourGroup());

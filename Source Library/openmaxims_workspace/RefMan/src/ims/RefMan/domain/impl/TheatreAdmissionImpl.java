@@ -418,8 +418,10 @@ public class TheatreAdmissionImpl extends BaseTheatreAdmissionDialogImpl
 	{
 		if(rttStatusPoint == null)
 			return null;
-		
-		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = 1 and rttMap.encounterType is null";
+
+		/* TODO MSSQL case - String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = 1 and rttMap.encounterType is null"; */
+		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = true and rttMap.encounterType is null";
+
 		List<?> listRTTMap = getDomainFactory().find(query, new String[] {"RTTStatusPoint"}, new Object[] {rttStatusPoint.getId()});
 		
 		if(listRTTMap != null && listRTTMap.size() > 0 && listRTTMap.get(0) instanceof RTTStatusEventMap)
@@ -431,7 +433,7 @@ public class TheatreAdmissionImpl extends BaseTheatreAdmissionDialogImpl
 	}
 
 	
-	// WDEV-23646 - Ensure the correct event Date Time is used when creating a new RTT Status
+	// Ensure the correct event Date Time is used when creating a new RTT Status
 	private PathwayRTTStatus createPathwayRTTStatus(CatsReferral domCats, ElectiveListReason electiveListReason, Date eventDateTime)
 	{
 		if(!ConfigFlag.DOM.RTT_STATUS_POINT_FUNCTIONALITY.getValue())
@@ -608,8 +610,10 @@ public class TheatreAdmissionImpl extends BaseTheatreAdmissionDialogImpl
 		values.add(apptId);	
 		marques.add("locTypeWardID");
 		values.add(LocationType.WARD.getID());
-		
-		String query = " select sessionLocation from Booking_Appointment as apptDetails left join apptDetails.session as sessionDetails left join sessionDetails.schLocation as sessionLocation left join sessionLocation.type as locationType where ( apptDetails.id = :id and sessionLocation.isActive = 1 and locationType.id = :locTypeWardID ) ";
+
+		/* TODO MSSQL case - String query = " select sessionLocation from Booking_Appointment as apptDetails left join apptDetails.session as sessionDetails left join sessionDetails.schLocation as sessionLocation left join sessionLocation.type as locationType where ( apptDetails.id = :id and sessionLocation.isActive = 1 and locationType.id = :locTypeWardID ) "; */
+		String query = " select sessionLocation from Booking_Appointment as apptDetails left join apptDetails.session as sessionDetails left join sessionDetails.schLocation as sessionLocation left join sessionLocation.type as locationType where ( apptDetails.id = :id and sessionLocation.isActive = true and locationType.id = :locTypeWardID ) ";
+
 		List<?> sessionLoc = factory.find(query, marques, values);
 		
 		if(sessionLoc != null && sessionLoc.size() > 0 && sessionLoc.get(0) instanceof Location)

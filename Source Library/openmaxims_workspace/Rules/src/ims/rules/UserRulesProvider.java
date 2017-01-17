@@ -43,7 +43,8 @@ public class UserRulesProvider extends DomainImpl implements IRulesProvider
 	public IRule[] getUserRules() 
 	{				
 		DomainFactory factory = getDomainFactory();
-		StringBuffer hql = new StringBuffer(" from BusinessRule br where br.active = 1");
+		/* TODO MSSQL case - StringBuffer hql = new StringBuffer(" from BusinessRule br where br.active = 1"); */
+		StringBuffer hql = new StringBuffer(" FROM BusinessRule br WHERE br.active = true");
 		List lst = factory.find(hql.toString());
 		 
 		if (lst != null)

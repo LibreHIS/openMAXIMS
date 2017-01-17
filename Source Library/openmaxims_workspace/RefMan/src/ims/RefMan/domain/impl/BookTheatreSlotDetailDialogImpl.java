@@ -1029,7 +1029,9 @@ public class BookTheatreSlotDetailDialogImpl extends BaseBookTheatreSlotDetailDi
 			return false;
 
 		DomainFactory factory = getDomainFactory();
-		Object[] count = factory.find("select count(theaErod.id) from CatsReferral as cats left join cats.electiveEROD as theaErod where cats.id = :CatsReferralId and theaErod.isActive = 1 and (theaErod.isRIE is null or theaErod.isRIE = 0)", new String[] { "CatsReferralId" }, new Object[] { catsReferral.getID_CatsReferral() }).toArray();
+
+		/* TODO MSSQL case - Object[] count = factory.find("select count(theaErod.id) from CatsReferral as cats left join cats.electiveEROD as theaErod where cats.id = :CatsReferralId and theaErod.isActive = 1 and (theaErod.isRIE is null or theaErod.isRIE = 0)", new String[] { "CatsReferralId" }, new Object[] { catsReferral.getID_CatsReferral() }).toArray(); */
+		Object[] count = factory.find("select count(theaErod.id) from CatsReferral as cats left join cats.electiveEROD as theaErod where cats.id = :CatsReferralId and theaErod.isActive = true and (theaErod.isRIE is null or theaErod.isRIE = false)", new String[] { "CatsReferralId" }, new Object[] { catsReferral.getID_CatsReferral() }).toArray();
 
 		if (count != null && count.length > 0)
 			return ((Long) count[0]).intValue() > 0;
@@ -1325,7 +1327,10 @@ public class BookTheatreSlotDetailDialogImpl extends BaseBookTheatreSlotDetailDi
 		if (listIdHcp != null && listIdHcp.length() > 0)
 		{
 			hqlConditions.append(andStr);
-			hqlConditions.append("  hcp.id in " + listIdHcp + " and hcps.defaultForHCP=1");
+
+			/* TODO MSSQL case - hqlConditions.append("  hcp.id in " + listIdHcp + " and hcps.defaultForHCP=1"); */
+			hqlConditions.append("  hcp.id in " + listIdHcp + " and hcps.defaultForHCP = TRUE");
+
 			andStr = " and ";
 		}
 

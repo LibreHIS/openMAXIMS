@@ -40,7 +40,8 @@ public class SelectSerumMarkerImpl extends BaseSelectSerumMarkerImpl
 
 	public ims.clinicaladmin.vo.TumourSerumMarkersLiteVoCollection listSerumMarkers()
 	{
-		String query = " from TumourSerumMarker as serum where serum.isActive = 1";
+		/* TODO MSSQL case - String query = " from TumourSerumMarker as serum where serum.isActive = 1"; */
+		String query = " from TumourSerumMarker as serum where serum.isActive = true";
 
 		return TumourSerumMarkersLiteVoAssembler.createTumourSerumMarkersLiteVoCollectionFromTumourSerumMarker(getDomainFactory().find(query));
 	}

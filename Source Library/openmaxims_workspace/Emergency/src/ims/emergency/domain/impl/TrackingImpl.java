@@ -204,32 +204,35 @@ public class TrackingImpl extends BaseTrackingImpl
 		DIAGNOSIS (TrackingAreaColumn.DIAGNOSIS, " (select MAX(patDiagnosis.id) from CsPrimaryDiagnosis as primaryDiag left join primaryDiag.diagnosis as patDiagnosis left join primaryDiag.careContext as primaryDiagCareContext  where primaryDiagCareContext.id = careContext.id ) ", new String[] {" left join tr.attendance as at left join at.careContext as careContext "}),//WDEV-16987
 		DIAGNOSIS_REQUIRED (TrackingAreaColumn.DIAGNOSIS_REQUIRED, " (select MAX(patDiagnosis.id) from CsPrimaryDiagnosis as primaryDiag left join primaryDiag.diagnosis as patDiagnosis left join primaryDiag.careContext as primaryDiagCareContext  where primaryDiagCareContext.id = careContext.id ) ", new String[] {" left join tr.attendance as at left join at.careContext as careContext "}),//WDEV-16987
 		DISCHARGE_DATE_AND_TIME (TrackingAreaColumn.DISCHARGE_DATE_AND_TIME, " at.dischargeDateTime ", new String[] {" left join tr.attendance as at "}),
-		DISCHARGE_OUTCOME (TrackingAreaColumn.DISCHARGE_OUTCOME, " atOutcome ", new String[] {" left join tr.attendance as at ", " left join at.outcome as atOutcome "}), //WDEV-19293
+		DISCHARGE_OUTCOME (TrackingAreaColumn.DISCHARGE_OUTCOME, " atOutcome ", new String[] {" left join tr.attendance as at ", " left join at.outcome as atOutcome "}),
 		DNW (TrackingAreaColumn.DNA, " dnwStatus.calledAmount ", null),
 		ED_SITE (TrackingAreaColumn.ED_SITE, " edLoc.name ", null),
 		EPISODE_ID (TrackingAreaColumn.EPISODE_ID, " episode.id ", new String[] {" left join tr.episode as episode "}),
-		HOSPITAL_NUMBER (TrackingAreaColumn.HOSPITAL_NUMBER, " (select max(iHospNumber.value) from Patient as pHospNumber left join pHospNumber.identifiers as iHospNumber left join iHospNumber.type as typeHospNumber where typeHospNumber.id = -150 and pHospNumber.id = p.id and iHospNumber.merged is null), (select count(iHospNumber.value) from Patient as pHospNumber left join pHospNumber.identifiers as iHospNumber left join iHospNumber.type as typeHospNumber where typeHospNumber.id = -150 and pHospNumber.id = p.id and iHospNumber.merged is null)  ", new String[] {" left join tr.patient as p "}),//wdev-17280
+		HOSPITAL_NUMBER (TrackingAreaColumn.HOSPITAL_NUMBER, " (select max(iHospNumber.value) from Patient as pHospNumber left join pHospNumber.identifiers as iHospNumber left join iHospNumber.type as typeHospNumber where typeHospNumber.id = -150 and pHospNumber.id = p.id and iHospNumber.merged is null), (select count(iHospNumber.value) from Patient as pHospNumber left join pHospNumber.identifiers as iHospNumber left join iHospNumber.type as typeHospNumber where typeHospNumber.id = -150 and pHospNumber.id = p.id and iHospNumber.merged is null)  ", new String[] {" left join tr.patient as p "}),
 		INJURY_DATE_TIME (TrackingAreaColumn.INJURY_DATE_TIME, " episode.injuryDateTime ", new String[] {" left join tr.episode as episode "}),
 		LAST_MOVEMENT_DATE_AND_TIME (TrackingAreaColumn.LAST_MOVEMENT_DATE_AND_TIME, " tr.lastMovementDateTime ", null),
-		LENGTH_OF_STAY (TrackingAreaColumn.LENGTH_OF_STAY, ConfigFlag.DOM.STARTTIME_FOR_LOS_AND_BREACH_CALCULATIONS.getValue().equals("RegistrationDateTime") ? "at.registrationDateTime" : "at.arrivalDateTime ", null),																//wdev-18299,wdev-18327																								
+		LENGTH_OF_STAY (TrackingAreaColumn.LENGTH_OF_STAY, ConfigFlag.DOM.STARTTIME_FOR_LOS_AND_BREACH_CALCULATIONS.getValue().equals("RegistrationDateTime") ? "at.registrationDateTime" : "at.arrivalDateTime ", null),
 		LODGED_DATE_AND_TIME (TrackingAreaColumn.LODGED_DATE_AND_TIME, " at.id ", new String[] {" left join tr.attendance as at "}),
 		LODGED_TYPE (TrackingAreaColumn.LODGED_TYPE, " at.id ", new String[] {" left join tr.attendance as at "}),
-		NEW_RESULTS (TrackingAreaColumn.NEW_RESULTS, " patOcsNotification ", new String[] {" left join tr.patient as p ", " left join p.oCSNotification as patOcsNotification "}),	//WDEV-16987
-		NHS_NUMBER (TrackingAreaColumn.NHS_NUMBER, " (select max(iNHSNumber.value) from Patient as pNHSNumber left join pNHSNumber.identifiers as iNHSNumber left join iNHSNumber.type as typeNHSNumber where typeNHSNumber.id = -9 and pNHSNumber.id = p.id and iNHSNumber.merged is null), (select max(iNHSNumber.value) from Patient as pNHSNumber left join pNHSNumber.identifiers as iNHSNumber left join iNHSNumber.type as typeNHSNumber where typeNHSNumber.id = -9 and pNHSNumber.id = p.id and iNHSNumber.merged is null and iNHSNumber.verified = 1), (select count(iNHSNumber.value) from Patient as pNHSNumber left join pNHSNumber.identifiers as iNHSNumber left join iNHSNumber.type as typeNHSNumber where typeNHSNumber.id = -9 and pNHSNumber.id = p.id and iNHSNumber.merged is null) ", new String[] {" left join tr.patient as p "}),
-		OUTSTANDING_ORDERS (TrackingAreaColumn.OUTSTANDING_ORDERS, " at.id ", new String[] {" left join tr.attendance as at "}),
+		NEW_RESULTS (TrackingAreaColumn.NEW_RESULTS, " patOcsNotification ", new String[] {" left join tr.patient as p ", " left join p.oCSNotification as patOcsNotification "}),
+
+        /* TODO MSSQL case - NHS_NUMBER (TrackingAreaColumn.NHS_NUMBER, " (select max(iNHSNumber.value) from Patient as pNHSNumber left join pNHSNumber.identifiers as iNHSNumber left join iNHSNumber.type as typeNHSNumber where typeNHSNumber.id = -9 and pNHSNumber.id = p.id and iNHSNumber.merged is null), (select max(iNHSNumber.value) from Patient as pNHSNumber left join pNHSNumber.identifiers as iNHSNumber left join iNHSNumber.type as typeNHSNumber where typeNHSNumber.id = -9 and pNHSNumber.id = p.id and iNHSNumber.merged is null and iNHSNumber.verified = 1), (select count(iNHSNumber.value) from Patient as pNHSNumber left join pNHSNumber.identifiers as iNHSNumber left join iNHSNumber.type as typeNHSNumber where typeNHSNumber.id = -9 and pNHSNumber.id = p.id and iNHSNumber.merged is null) ", new String[] {" left join tr.patient as p "}), */
+        NHS_NUMBER (TrackingAreaColumn.NHS_NUMBER, " (select max(iNHSNumber.value) from Patient as pNHSNumber left join pNHSNumber.identifiers as iNHSNumber left join iNHSNumber.type as typeNHSNumber where typeNHSNumber.id = -9 and pNHSNumber.id = p.id and iNHSNumber.merged is null), (select max(iNHSNumber.value) from Patient as pNHSNumber left join pNHSNumber.identifiers as iNHSNumber left join iNHSNumber.type as typeNHSNumber where typeNHSNumber.id = -9 and pNHSNumber.id = p.id and iNHSNumber.merged is null and iNHSNumber.verified = true), (select count(iNHSNumber.value) from Patient as pNHSNumber left join pNHSNumber.identifiers as iNHSNumber left join iNHSNumber.type as typeNHSNumber where typeNHSNumber.id = -9 and pNHSNumber.id = p.id and iNHSNumber.merged is null) ", new String[] {" left join tr.patient as p "}),
+
+        OUTSTANDING_ORDERS (TrackingAreaColumn.OUTSTANDING_ORDERS, " at.id ", new String[] {" left join tr.attendance as at "}),
 		PATHOLOGY_RESULTS (TrackingAreaColumn.PATHOLOGY_RESULTS, " at.id ", new String[] {" left join tr.attendance as at "}),
 		
 		
 		PATIENT_ADDRESS_LINE_1 (TrackingAreaColumn.PATIENT_ADDRESS_LINE_1, " p.address.line1 ", new String[] {" left join tr.patient as p "}),
-		PATIENT_AGE (TrackingAreaColumn.PATIENT_AGE, " p.dob , pSex ", new String[] {" left join tr.patient as p " , " left join p.sex as pSex "}), //WDEV-20418
+		PATIENT_AGE (TrackingAreaColumn.PATIENT_AGE, " p.dob , pSex ", new String[] {" left join tr.patient as p " , " left join p.sex as pSex "}),
 		PATIENT_CURRENT_STATUS (TrackingAreaColumn.PATIENT_CURRENT_STATUS, " trStatus ", new String[] {" left join tr.currentStatus as trCurrentStatus ", " left join trCurrentStatus.status as trStatus "}),
 		PATIENT_DOB (TrackingAreaColumn.PATIENT_DOB, " p.dob ", new String[] {" left join tr.patient as p "}), 
 		PATIENT_DOD (TrackingAreaColumn.PATIENT_DOD, " p.dod ", new String[] {" left join tr.patient as p "}),
 		PATIENT_FORENAME(TrackingAreaColumn.PATIENT_FORENAME, " p.name.forename ", new String[] {" left join tr.patient as p "}),
-		PATIENT_GENDER (TrackingAreaColumn.PATIENT_GENDER, "p.dob , pSex ", new String[] {" left join tr.patient as p ", " left join p.sex as pSex "}),//WDEV-20418
+		PATIENT_GENDER (TrackingAreaColumn.PATIENT_GENDER, "p.dob , pSex ", new String[] {" left join tr.patient as p ", " left join p.sex as pSex "}),
 		PATIENT_SURNAME(TrackingAreaColumn.PATIENT_SURNAME, " p.name.surname ", new String[] {" left join tr.patient as p "}),
 		PATIENT_TITLE (TrackingAreaColumn.PATIENT_TITLE, " pTitle ", new String[] {" left join tr.patient as p ", " left join p.name.title as pTitle "}),
-		ADMISSION_WARD (TrackingAreaColumn.ADMISSION_WARD, " pWard ", new String[] {" left join tr.patient as p ", " left join p.ward as pWard "}),//WDEV-16987
+		ADMISSION_WARD (TrackingAreaColumn.ADMISSION_WARD, " pWard ", new String[] {" left join tr.patient as p ", " left join p.ward as pWard "}),
 		
 		PATIENT_PREVIOUS_STATUS(TrackingAreaColumn.PATIENT_PREVIOUS_STATUS, " p.name.surname ", new String[] {" left join tr.patient as p "}),
 		PRESENTING_COMPLAINT(TrackingAreaColumn.PRESENTING_COMPLAINT, " presentingComp ", new String[] {" left join tr.episode as episode ", " left join episode.presentingComplaint as presentingComp "}),
@@ -369,11 +372,11 @@ public class TrackingImpl extends BaseTrackingImpl
 			int hoursConfigFlag = ims.configuration.gen.ConfigFlag.UI.ED_SHOW_DISCHARGED_TRACKING_RECORDS_PERIOD.getValue() * -1;
 			
 			DateTime dateTimeTemp = (new DateTime()).addHours(hoursConfigFlag);
-//			hqlConditions.append(" and (tr.isDischarged = 1 and " +
-	//			"( at.dischargeDateTime >= :DischargeDateTime or (trStatus.id=:DischargedStatus and pWard.displayInEDTracking = 1)))");`
-			
-			hqlConditions.append(" and ( (tr.isDischarged = 1 and at.dischargeDateTime >= :DischargeDateTime ) or " +
-				"( at.dischargeDateTime >= :DischargeDateTime and trStatus.id=:DischargedStatus and pWard.displayInEDTracking = 1))");
+
+			/* TODO MSSQL case - hqlConditions.append(" and ( (tr.isDischarged = 1 and at.dischargeDateTime >= :DischargeDateTime ) or " +
+				"( at.dischargeDateTime >= :DischargeDateTime and trStatus.id=:DischargedStatus and pWard.displayInEDTracking = 1))"); */
+			hqlConditions.append(" and ( (tr.isDischarged = true and at.dischargeDateTime >= :DischargeDateTime ) or " +
+				"( at.dischargeDateTime >= :DischargeDateTime and trStatus.id=:DischargedStatus and pWard.displayInEDTracking = true))");
 			
 			paramNames.add("DischargeDateTime");
 			paramValues.add(dateTimeTemp.getJavaDate());
@@ -386,10 +389,12 @@ public class TrackingImpl extends BaseTrackingImpl
 			int hoursConfigFlag = ims.configuration.gen.ConfigFlag.UI.ED_SHOW_DISCHARGED_TRACKING_RECORDS_PERIOD.getValue() * -1;
 			
 			DateTime dateTimeTemp = (new DateTime()).addHours(hoursConfigFlag);
-//			hqlConditions.append(" and ( ta.id is not null or at.dischargeDateTime >= :DischargeDateTime " +
-	//		"or (tr.isDischarged =1 and trStatus.id=:DischargedStatus and pWard.displayInEDTracking = 1) ) ");
+
+			/* TODO MSSQL case - hqlConditions.append(" and ( ta.id is not null or at.dischargeDateTime >= :DischargeDateTime " +
+				"or (at.dischargeDateTime >= :DischargeDateTime and tr.isDischarged =1 and trStatus.id=:DischargedStatus and pWard.displayInEDTracking = 1) ) "); */
 			hqlConditions.append(" and ( ta.id is not null or at.dischargeDateTime >= :DischargeDateTime " +
-				"or (at.dischargeDateTime >= :DischargeDateTime and tr.isDischarged =1 and trStatus.id=:DischargedStatus and pWard.displayInEDTracking = 1) ) ");
+				"or (at.dischargeDateTime >= :DischargeDateTime and tr.isDischarged = TRUE and trStatus.id=:DischargedStatus and pWard.displayInEDTracking = TRUE) ) ");
+
 			paramNames.add("DischargeDateTime");
 			paramValues.add(dateTimeTemp.getJavaDate());paramNames.add("DischargedStatus");
 			paramValues.add(TrackingStatus.DISCHARGED.getID());			
@@ -398,7 +403,6 @@ public class TrackingImpl extends BaseTrackingImpl
 		paramNames.add("EDLocId");
 		paramValues.add(trackingArea.getEDLocation().getID_Location());
 		
-		//WDEV-16816
 		if(allocatedHcp != null && allocatedHcp.getID_Hcp() != null)
 		{
 			DomainFactory factory = getDomainFactory();
@@ -2181,7 +2185,10 @@ public class TrackingImpl extends BaseTrackingImpl
 			throw new CodingRuntimeException("Cannot get Tracking configuration for a null EDLocation Id.");
 		
 		DomainFactory factory = getDomainFactory();
-		String query = "select tr from TrackingConfiguration as tr left join tr.eDLocation as loc where loc.id = :Loc and tr.isActive = 1";
+
+		/* TODO MSSQL case - String query = "select tr from TrackingConfiguration as tr left join tr.eDLocation as loc where loc.id = :Loc and tr.isActive = 1"; */
+		String query = "select tr from TrackingConfiguration as tr left join tr.eDLocation as loc where loc.id = :Loc and tr.isActive = true";
+
 		List<?> listConfig = factory.find(query, new String[] {"Loc"}, new Object[] {edLocation.getID()});
 		
 		if(listConfig != null && listConfig.size() > 0)

@@ -391,14 +391,6 @@ public class Logic extends BaseLogicDTO
 			
 							
 		}
-//		for(int x=0; x<vo.DataCollection.get(0).SeqnoCollection.count(); x++)
-//		{
-//			//Check the active
-//			if(vo.DataCollection.get(0).SeqnoCollection.get(0).Act_stat.equals("-10100"))
-//				treatmentSiteStr += vo.DataCollection.get(0).SeqnoCollection.get(0).Tsitetxt;
-//			if(!treatmentSiteStr.equals("") && x < (vo.DataCollection.get(0).SeqnoCollection.count()-1))
-//				treatmentSiteStr+= ", ";
-//		}
 
 		String headerTooltip = "<center><b>"+ "Treatment Plan" + "</b></center>"+
 		"Date Seen: "	+ tmpStr + newline+
@@ -417,64 +409,18 @@ public class Logic extends BaseLogicDTO
 		
 		headerTooltip += "Histology: "	+ (vo.getPrimaryTumourHistologyIsNotNull()?vo.getPrimaryTumourHistology().getHistologyDescription():"") + newline+
 					     "Comment: " + (vo.getTreatmentplanCommentIsNotNull()?vo.getTreatmentplanComment():"");
-		
-		//10/01/2003 - AU - Kevin's improvements
-		////row.ToolTip
-//		String headerTooltip = "<center><b>"+ "Treatment Plan" + "</b></center>"+
-//		"Date Seen: "	+ tmpStr + newline+ 
-//		"ECAD Date: "	+ GetDate(vo.DataCollection.get(0).Ecad_date) + newline+ 
-//		"Treatment Intent: " + vo.DataCollection.get(0).Tr_intenttxt+ newline+
-//		"Treatment Site: " + treatmentSiteStr + newline+
-//		"Tumour Group: "	+ vo.DataCollection.get(0).Tumgrouptxt + newline+
-//		"Tumour Site: "	+ vo.DataCollection.get(0).Tumsitetxt  + newline+
-//		"Histology: "	+ vo.DataCollection.get(0).Cshisttxt + newline+
-//		"Comment: " + vo.DataCollection.get(0).Tp_cmnt;
-		
-		//TPTooltip.Add(Activity, Tooltip);
-		//TPTooltip.add(new TreatmentPlanGridData(headerActivity, headerTooltip));
+
 		GenForm.TreatmentPlanRow row = form.TreatmentPlan().getRows().newRow();
 		row.setActivity(headerActivity);
 		row.setTooltip(headerTooltip);
-		//The colour is the same as the grid header - please modify it in the case the header colour changes
+
+		// The colour is the same as the grid header - please modify it in the case the header colour changes
 		row.setBackColor(Color.AliceBlue);
 	}
 
 	private void loadLookups()
 	{
 
-		//Anaesthetic
-//		Lkup anaesthetic = form.getGlobalContext().CcoSched.TreatmentPlan.getAnaesthetic();
-//		if (anaesthetic == null)
-//		{
-//			anaesthetic = (Lkup)domain.getDTOInstance(Lkup.class);
-//			anaesthetic.Filter.clear();
-//			anaesthetic.Filter.Lkup_typ = new String("3541");
-//			Result result = anaesthetic.list();
-//			if (result != null)
-//			{
-//				engine.showMessage(result.getMessage());
-//				return;
-//			}
-//			
-//			form.getGlobalContext().CcoSched.TreatmentPlan.setAnaesthetic(anaesthetic);
-//		}
-//
-//		//Technique
-//		Lkup technique = form.getGlobalContext().CcoSched.TreatmentPlan.getTechnique();
-//		if (technique == null)
-//		{
-//			technique = (Lkup)domain.getDTOInstance(Lkup.class);
-//			technique.Filter.clear();
-//			technique.Filter.Lkup_typ = new String("3415");
-//			Result result = technique.list();
-//			if (result != null)
-//			{
-//				engine.showMessage(result.getMessage());
-//				return;
-//			}
-//			
-//			form.getGlobalContext().CcoSched.TreatmentPlan.setTechnique(technique);
-//		}
 	}
 
 	private String GetAnaestheticText(String lkup_id)
@@ -497,50 +443,10 @@ public class Logic extends BaseLogicDTO
 
 	private String GetActionTreatmentSite(PatTreatPlanActionVo element)
 	{
-		//TODO
-//		if(element.get)
-//		{
-//			int nCount = actions.DataCollection.get(0).SeqnoCollection.count();
-//			for(int x=0; x<nCount;x++)
-//			{
-//				//Active ones
-//				if(actions.DataCollection.get(0).SeqnoCollection.get(x).Sntact_stat.equals("-10100"))
-//				{
-//					trSite += "Treatment Site: "+actions.DataCollection.get(0).SeqnoCollection.get(x).Txsitetxt+" "+ newline + 
-//					"Technique: "+GetTechniqueText(actions.DataCollection.get(0).SeqnoCollection.get(x).Techniq) + newline;
-//				}
-//			}
-//		}
-		
-//		String trSite = new String();
-//		Go_ptplact actions = (Go_ptplact)domain.getDTOInstance(Go_ptplact.class);
-//		actions.Filter.clear();
-//		actions.Filter.Pt_act_id = element;
-//		Result result = actions.get();
-//		if (result != null)
-//		{
-//			engine.showMessage(result.getMessage());
-//			return trSite;
-//		}
-//		
-//		if(actions.DataCollection.count()> 0)
-//		{
-//			int nCount = actions.DataCollection.get(0).SeqnoCollection.count();
-//			for(int x=0; x<nCount;x++)
-//			{
-//				//Active ones
-//				if(actions.DataCollection.get(0).SeqnoCollection.get(x).Sntact_stat.equals("-10100"))
-//				{
-//					trSite += "Treatment Site: "+actions.DataCollection.get(0).SeqnoCollection.get(x).Txsitetxt+" "+ newline + 
-//					"Technique: "+GetTechniqueText(actions.DataCollection.get(0).SeqnoCollection.get(x).Techniq) + newline;
-//				}
-//			}
-//		}
-		
 		return "";
 	}
 
-	//Technique
+	// Technique
 	private String GetTechniqueText(String lkup_id)
 	{
 		Lkup lkup = form.getGlobalContext().CcoSched.TreatmentPlan.getTechnique();

@@ -180,7 +180,7 @@ public class WardAttenderImpl extends BaseWardAttenderImpl
 	{
 		if (hospital == null)
 			return null;
-		//http://jira/browse/WDEV-21222 
+
 		OrganisationAndLocation impl = (OrganisationAndLocation)getDomainImpl(OrganisationAndLocationImpl.class);
 		List<?> locations =  impl.listLocationsByParentLocation(LocationType.WARD,hospital, Boolean.TRUE, Boolean.FALSE,null);
 		LocationLiteVoCollection locs = LocationLiteVoAssembler.createLocationLiteVoCollectionFromLocation(locations);
@@ -189,8 +189,8 @@ public class WardAttenderImpl extends BaseWardAttenderImpl
 
 	public ServiceLiteVoCollection listServices(String value)
 	{
-		
-		List<?> services = getDomainFactory().find("select srv from Service as srv where srv.isActive = 1 and srv.upperName like :servName", new String[]{"servName"}, new Object[]{value.toUpperCase() + "%"});
+		/* TODO MSSQL case - List<?> services = getDomainFactory().find("select srv from Service as srv where srv.isActive = 1 and srv.upperName like :servName", new String[]{"servName"}, new Object[]{value.toUpperCase() + "%"}); */
+		List<?> services = getDomainFactory().find("select srv from Service as srv where srv.isActive = true and srv.upperName like :servName", new String[]{"servName"}, new Object[]{value.toUpperCase() + "%"});
 		
 		if (services == null || services.isEmpty())
 			return null;
@@ -985,18 +985,19 @@ public class WardAttenderImpl extends BaseWardAttenderImpl
 		}
 		catch (ClassNotFoundException e)
 		{
-			// log the exception in system log - but it should be fine
+			// Log the exception in system log - but it should be fine
 			createSystemLogEntry(SystemLogType.APPLICATION, SystemLogLevel.ERROR, "Class Not Found exception has occured.Please check log file for: " + new DateTime().toString(DateTimeFormat.STANDARD, true) + " timestamp.");
 		}
 		
 	}
 
-	private RTTStatusEventMapVo getRTTStatusEventMap(RTTStatusPoint rttStatusPoint) //WDEV-18325 
+	private RTTStatusEventMapVo getRTTStatusEventMap(RTTStatusPoint rttStatusPoint)
 	{
 		if (rttStatusPoint == null || rttStatusPoint.getId() == null)	
 			return null;
 
-		String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = 1 and rttstat.nationalCode = :natCode and event.encounterType is null ";
+		/* TODO MSSQL case - String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = 1 and rttstat.nationalCode = :natCode and event.encounterType is null "; */
+		String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = true and rttstat.nationalCode = :natCode and event.encounterType is null ";
 
 		DomainFactory factory = getDomainFactory();
 
@@ -1009,8 +1010,8 @@ public class WardAttenderImpl extends BaseWardAttenderImpl
 		return null;		
 	}
 	
-	// WDEV-23646 - Ensure the correct event Date Time is used when creating a new RTT Status
-	private PathwayRTTStatus createPatientRTTStatus(int nationalCode, java.util.Date eventDateTime) //WDEV-18325
+	// Ensure the correct event Date Time is used when creating a new RTT Status
+	private PathwayRTTStatus createPatientRTTStatus(int nationalCode, java.util.Date eventDateTime)
 	{
 		PathwayRTTStatus rttSTatusDO = new PathwayRTTStatus();
 		

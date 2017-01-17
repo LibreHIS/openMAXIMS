@@ -496,10 +496,7 @@ public class Logic extends BaseLogic
 		if (form.layerControl1().tab2().gridFunctional().getRows().size() == 0)
 		{
 			form.layerControl1().tab2().gridFunctional().populateTree(LookupHelper.getDischargeFunctional(domain.getLookupService()));
-			// for(int i=0;
-			// i<form.layerControl1().tab2().gridFunctional().getAllRows().length;
-			// i++)
-			// form.layerControl1().tab2().gridFunctional().getAllRows()[i].setColByValue(null);
+
 			form.layerControl1().tab2().gridFunctional().expandAll();
 		}
 		// Change the colour of the roots

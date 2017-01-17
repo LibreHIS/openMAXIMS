@@ -1116,14 +1116,14 @@ public class ICPConfigImpl extends BaseICPConfigImpl
 		// Create parameters string
 		if (name != null && name.length() > 0)
 		{
-			hqlQuery.append(" where mos.name.upperSurname like :NAME or mos.name.upperForename like :NAME"); //WDEV-20219
+			hqlQuery.append(" where mos.name.upperSurname like :NAME or mos.name.upperForename like :NAME");
 
 			paramNames.add("NAME");
 			paramValues.add("%" + name.toUpperCase() + "%");
 		}
 
 		// Set order mode
-		hqlQuery.append(" order by mos.name.upperSurname asc"); //WDEV-20219
+		hqlQuery.append(" order by mos.name.upperSurname asc");
 
 		return MemberOfStaffLiteVoAssembler.createMemberOfStaffLiteVoCollectionFromMemberOfStaff(getDomainFactory().find(hqlQuery.toString(), paramNames, paramValues));
 	}
@@ -1166,7 +1166,9 @@ public class ICPConfigImpl extends BaseICPConfigImpl
 		if (name != null && name.length() > 0)
 		{
 			hqlQuery.append(" WHERE (UPPER(problem.pCName) LIKE :NAME");
-			hqlQuery.append(" OR UPPER(keyw.keyword) LIKE :NAME) AND problem.isActive = 1 ");
+
+			/* TODO MSSQL case - hqlQuery.append(" OR UPPER(keyw.keyword) LIKE :NAME) AND problem.isActive = 1 "); */
+			hqlQuery.append(" OR UPPER(keyw.keyword) LIKE :NAME) AND problem.isActive = true ");
 			
 			paramNames.add("NAME");
 			paramValues.add("%" + name.toUpperCase() + "%");

@@ -125,7 +125,8 @@ public class ClinicalOutcomeConfigImpl extends BaseClinicalOutcomeConfigImpl
 		// Add condition for active only
 		if (Boolean.TRUE.equals(activeOnly))
 		{
-			conditions.add("outcome.isActive = 1");
+			/* TODO MSSQL case - conditions.add("outcome.isActive = 1"); */
+			conditions.add("outcome.isActive = true");
 		}
 		
 		

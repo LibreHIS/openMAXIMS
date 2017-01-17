@@ -116,8 +116,9 @@ public class FollowUpVisitRecordImpl extends BaseFollowUpVisitRecordImpl
 	{
 		if (value == null || value.length() == 0)
 			throw new DomainRuntimeException("Can not search HCPs after null name");
-		
-		String query = "from Hcp as hcp where hcp.isActive = 1 and hcp.isHCPaResponsibleHCP = 1 and hcp.isALocalConsultant = 1 and (hcp.mos.name.upperSurname like '%" + value.toUpperCase() + "%' or hcp.mos.name.upperForename like '%" + value.toUpperCase() + "%') order by hcp.mos.name.upperSurname, hcp.mos.name.upperForename asc ";
+
+		/* TODO MSSQL case - String query = "from Hcp as hcp where hcp.isActive = 1 and hcp.isHCPaResponsibleHCP = 1 and hcp.isALocalConsultant = 1 and (hcp.mos.name.upperSurname like '%" + value.toUpperCase() + "%' or hcp.mos.name.upperForename like '%" + value.toUpperCase() + "%') order by hcp.mos.name.upperSurname, hcp.mos.name.upperForename asc "; */
+		String query = "from Hcp as hcp where hcp.isActive = TRUE and hcp.isHCPaResponsibleHCP = TRUE and hcp.isALocalConsultant = TRUE and (hcp.mos.name.upperSurname like '%" + value.toUpperCase() + "%' or hcp.mos.name.upperForename like '%" + value.toUpperCase() + "%') order by hcp.mos.name.upperSurname, hcp.mos.name.upperForename asc ";
 		
 		return HcpLiteVoAssembler.createHcpLiteVoCollectionFromHcp(getDomainFactory().find(query));
 	}

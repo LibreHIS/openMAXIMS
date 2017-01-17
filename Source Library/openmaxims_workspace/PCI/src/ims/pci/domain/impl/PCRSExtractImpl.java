@@ -229,7 +229,8 @@ public class PCRSExtractImpl extends BasePCRSExtractImpl
 				// Execute the Update
 				if(sbImmId.length() > 0)
 				{
-					rows = stmt.executeUpdate("UPDATE pci_clientschestva SET isextracte = 1 WHERE id in(" + sbImmId + ")");
+					/* TODO MSSQL case - rows = stmt.executeUpdate("UPDATE pci_clientschestva SET isextracte = 1 WHERE id in(" + sbImmId + ")"); */
+					rows = stmt.executeUpdate("UPDATE pci_clientschestva SET isextracte = TRUE WHERE id in(" + sbImmId + ")");
 	
 					// Print how many rows were modified
 					System.out.println(rows + " Rows modified in 'pci_clientschestva' table");
@@ -237,7 +238,8 @@ public class PCRSExtractImpl extends BasePCRSExtractImpl
 
 				if(sbRegId.length() > 0)
 				{
-					rows = stmt.executeUpdate("UPDATE core_commcaredet SET isextracte = 1 WHERE id in ( SELECT communityc from core_patient where id in (" + sbRegId + "))");
+					/* TODO MSSQL case - rows = stmt.executeUpdate("UPDATE core_commcaredet SET isextracte = 1 WHERE id in ( SELECT communityc from core_patient where id in (" + sbRegId + "))"); */
+					rows = stmt.executeUpdate("UPDATE core_commcaredet SET isextracte = TRUE WHERE id in ( SELECT communityc from core_patient where id in (" + sbRegId + "))");
 		
 					// Print how many rows were modified
 					System.out.println(rows + " Rows modified in 'core_commcaredet' table");

@@ -352,7 +352,9 @@ public class PatientSummaryImpl extends BasePatientSummaryImpl
 			markers.add("problemId");
 			values.add(((PatientProblemRefVo)filter).getID_PatientProblem());			
 		}
-		hql += " and assoc.isActive = 1";//WDEV-12407
+		/* TODO MSSQL case - hql += " and assoc.isActive = 1"; */
+		hql += " and assoc.isActive = true";
+
 		DomainFactory factory = getDomainFactory();
 		List associations =  factory.find(hql, markers, values);
 		if(associations != null)
@@ -760,7 +762,9 @@ public class PatientSummaryImpl extends BasePatientSummaryImpl
 		
 		query.append("select service from Service as service left join service.specialty as specialty where specialty in ");
 		query.append(" (select spec from EpisodeOfCare as eoc left join eoc.specialty as spec where eoc.id = :EOC_ID)");
-		query.append("  and service.isRIE is null and service.isActive = 1");
+
+		/* TODO MSSQL case - query.append("  and service.isRIE is null and service.isActive = 1"); */
+		query.append("  and service.isRIE is null and service.isActive = true");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();

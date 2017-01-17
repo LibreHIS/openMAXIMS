@@ -565,21 +565,6 @@ public class UserAssessmentInstHelper
 		if(answers == null)
 			answers = new PatientGraphicAssessmentQuestionAnswerVoCollection();
 		
-//		//WDEV-11366
-//		//Remove answers that are not valid anymore for current patient
-//		for (int i = answers.size()-1 ; i >=0 ; i--)
-//		{
-//			PatientGraphicAssessmentQuestionAnswerVo question = answers.get(i);
-//			if (question == null)
-//				continue;
-//			if (!question.getGraphicQuestionIsNotNull())
-//				continue;
-//			if (!question.getGraphicQuestion().getQuestionIsNotNull())
-//				continue;
-//			if (isQuestionInvalidForPatient(question.getGraphicQuestion().getQuestion()))
-//				answers.remove(i);
-//		}
-		
 		for(int x = 0; x < this.grid.getRows().size(); x++)
 		{
 			answers = updateGraphicQuestion(answers, this.grid.getRows().get(x));
@@ -6166,21 +6151,6 @@ public class UserAssessmentInstHelper
 	{
 		if(answers == null)
 			answers = new Patient_GraphicAssessmentQuestionAnswerVoCollection();
-		
-//		//WDEV-11366
-//		//Remove answers that are not valid anymore for current patient
-//		for (int i = answers.size()-1 ; i >=0 ; i--)
-//		{
-//			PatientGraphicAssessmentQuestionAnswerVo question = answers.get(i);
-//			if (question == null)
-//				continue;
-//			if (!question.getGraphicQuestionIsNotNull())
-//				continue;
-//			if (!question.getGraphicQuestion().getQuestionIsNotNull())
-//				continue;
-//			if (isQuestionInvalidForPatient(question.getGraphicQuestion().getQuestion()))
-//				answers.remove(i);
-//		}
 		
 		for(int x = 0; x < this.grid.getRows().size(); x++)
 		{

@@ -124,7 +124,7 @@ public class SchoolAdminImpl extends BaseSchoolAdminImpl
 	}
 
 	/**
-	 * WDEV-12668 - Updated function: added parameter to control whether inactive records should be listed
+	 * Added parameter to control whether inactive records should be listed
 	 */
 	public LocationLiteVoCollection listSectors(String text, Boolean listInactive) 
 	{
@@ -137,10 +137,12 @@ public class SchoolAdminImpl extends BaseSchoolAdminImpl
 		hql.append(" from Location loc");
 		hql.append(" where loc.upperName like :secName and loc.type.id = :typeValue");
 		
-		// WDEV-12668 - Update query to list only active records
-		if (!listInactive)
-			hql.append(" and loc.isActive = 1");
-		
+		// Update query to list only active records
+		if (!listInactive) {
+			/* TODO MSSQL case - hql.append(" and loc.isActive = 1"); */
+			hql.append(" and loc.isActive = true");
+		}
+
 		return LocationLiteVoAssembler.createLocationLiteVoCollectionFromLocation(getDomainFactory().find(hql.toString(), new String []{"secName", "typeValue"}, new Object []{sectorLite, LocationType.SECTOR.getID()}));
 	}
 }

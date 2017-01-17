@@ -107,15 +107,15 @@ public class TransferOfCareImpl extends BaseTransferOfCareImpl
 		return CareSpellForRequestServiceShortVoAssembler.create((CareSpell) getDomainFactory().findFirst(query.toString(), paramNames, paramValues));
 	}
 
-	//WDEV-22950
 	public ServiceLiteVoCollection getReferralService(ContractConfigRefVo contractRef, String serviceName)
 	{
 		if(contractRef == null || contractRef.getID_ContractConfig() == null)
 			return null;
 		
 		DomainFactory factory = getDomainFactory();
-		
-		String query = "select s from ContractConfig as cc left join cc.serviceLocations as sl left join sl.service as s where ( cc.id = :ContractConfig and s.isActive=1 and s.upperName like :ServiceName)  order by s.serviceName asc  "; //WDEV-21195 //WDEV-22950
+
+		/* TODO MSSQL case - String query = "select s from ContractConfig as cc left join cc.serviceLocations as sl left join sl.service as s where ( cc.id = :ContractConfig and s.isActive=1 and s.upperName like :ServiceName)  order by s.serviceName asc  "; */
+		String query = "select s from ContractConfig as cc left join cc.serviceLocations as sl left join sl.service as s where ( cc.id = :ContractConfig and s.isActive = TRUE and s.upperName like :ServiceName)  order by s.serviceName asc  ";
 		
 		List doServices = factory.find(query, new String[] {"ContractConfig", "ServiceName"}, new Object[] {contractRef.getID_ContractConfig(), serviceName.toUpperCase() + "%"});
 

@@ -42,9 +42,11 @@ public class SearchDisciplinesImpl extends BaseSearchDisciplinesImpl
 		StringBuilder query = new StringBuilder();
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
-		
-		query.append("select srv from Service as srv left join srv.serviceCategory as srvCat where srv.isActive = 1 and srv.serviceCategory.id in ( " + getIdStringForPathRad() + " ) ");
-		query.append(" order by UPPER(srvCat.text) asc, srv.upperName asc"); //WDEV-20219 UPPER(srv.serviceName)
+
+		/* TODO MSSQL case - query.append("select srv from Service as srv left join srv.serviceCategory as srvCat where srv.isActive = 1 and srv.serviceCategory.id in ( " + getIdStringForPathRad() + " ) "); */
+		query.append("select srv from Service as srv left join srv.serviceCategory as srvCat where srv.isActive = TRUE and srv.serviceCategory.id in ( " + getIdStringForPathRad() + " ) ");
+
+		query.append(" order by UPPER(srvCat.text) asc, srv.upperName asc");
 		
 		return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(getDomainFactory().find(query.toString(), paramNames, paramValues)); 
 	}

@@ -80,8 +80,9 @@ public class ReferralServiceSelectionDialogImpl extends BaseReferralServiceSelec
 	public ServiceShortVoCollection getServicesForCategory(String serviceName, Specialty specialty, ServiceCategory category)
 	{
 		DomainFactory factory = getDomainFactory();
-		
-		StringBuffer hql = new StringBuffer("select serv from Service as serv left join serv.serviceCategory as servCateg left join serv.specialty as spec where serv.isActive = 1 ");
+
+		/* TODO MSSQL case - StringBuffer hql = new StringBuffer("select serv from Service as serv left join serv.serviceCategory as servCateg left join serv.specialty as spec where serv.isActive = 1 "); */
+		StringBuffer hql = new StringBuffer("select serv from Service as serv left join serv.serviceCategory as servCateg left join serv.specialty as spec where serv.isActive = true ");
 	
 		ArrayList markers = new ArrayList();
 		ArrayList values = new ArrayList();

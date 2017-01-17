@@ -199,7 +199,9 @@ public class TumourCategoryGroupSitesImpl extends BaseTumourCategoryGroupSitesIm
 
 	public TumourSiteListVoCollection getSiteWhoHasTNM(TumourGroupRefVo voRef)
 	{
-		String hql = "select t2_1 from TumourGroup as t1_1 join t1_1.sites as t2_1 where t1_1.id = :id and t2_1.hasSiteSpecificTNM = 1";
+		/* TODO MSSQL case - String hql = "select t2_1 from TumourGroup as t1_1 join t1_1.sites as t2_1 where t1_1.id = :id and t2_1.hasSiteSpecificTNM = 1"; */
+		String hql = "select t2_1 from TumourGroup as t1_1 join t1_1.sites as t2_1 where t1_1.id = :id and t2_1.hasSiteSpecificTNM = true";
+
 		return TumourSiteListVoAssembler.createTumourSiteListVoCollectionFromTumourSite(getDomainFactory().find(hql, new String[]{"id"}, new Object[]{voRef.getID_TumourGroup()}));
 	}
 
@@ -555,7 +557,8 @@ public class TumourCategoryGroupSitesImpl extends BaseTumourCategoryGroupSitesIm
 
 	public HistopathologicGradeVoCollection listDefaultDifferentiations()
 	{
-		String query = " from HistopathologicGrade as tDiff where (tDiff.isDefault = 1) ";
+	    /* TODO MSSQL case - String query = " from HistopathologicGrade as tDiff where (tDiff.isDefault = 1) "; */
+		String query = " from HistopathologicGrade as tDiff where (tDiff.isDefault = true) ";
 		
 		return HistopathologicGradeVoAssembler.createHistopathologicGradeVoCollectionFromHistopathologicGrade(getDomainFactory().find(query)).sort();
 	}

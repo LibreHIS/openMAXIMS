@@ -449,7 +449,9 @@ public class NotificationsImpl extends BaseNotificationsImpl
 			throw new CodingRuntimeException("Invalid patient Id.");
 		
 		DomainFactory factory = getDomainFactory();
-		List list = factory.find("from PatientAllergy patAlrg where patAlrg.patient.id = :patient and patAlrg.isCurrentlyActiveAllergy = 1", new String[] {"patient"},new Object[] {patientId});
+
+		/* TODO MSSQL case - List list = factory.find("from PatientAllergy patAlrg where patAlrg.patient.id = :patient and patAlrg.isCurrentlyActiveAllergy = 1", new String[] {"patient"},new Object[] {patientId}); */
+		List list = factory.find("from PatientAllergy patAlrg where patAlrg.patient.id = :patient and patAlrg.isCurrentlyActiveAllergy = true", new String[] {"patient"},new Object[] {patientId});
 		
 		return PatientAllergyAssembler.createPatientAllergyCollectionFromPatientAllergy(list).sort();
 	}
@@ -679,14 +681,21 @@ public class NotificationsImpl extends BaseNotificationsImpl
 		PatientGroupWebServiceVoCollection result = new PatientGroupWebServiceVoCollection();
 		if (!(mosUser instanceof MemberOfStaffRefVo))
 			return result;
+
+		/* TODO MSSQL case - String hql = "select pcl.id,cl.listName from PatientCustomList as pcl left join pcl.customList as cl where" +
+				" (cl.isActive = 1 and cl.listOwner.id = :MemberOfStaff_id) order by cl.listName asc"; */
 		String hql = "select pcl.id,cl.listName from PatientCustomList as pcl left join pcl.customList as cl where" +
-				" (cl.isActive = 1 and cl.listOwner.id = :MemberOfStaff_id) order by cl.listName asc";
+				" (cl.isActive = true and cl.listOwner.id = :MemberOfStaff_id) order by cl.listName asc";
+
 		List<?> domObjs = getDomainFactory().find(hql,new String[]{"MemberOfStaff_id"},new Object[]{((MemberOfStaffRefVo)mosUser).getID_MemberOfStaff()});
 		if (domObjs == null || domObjs.size() == 0)
 			return result;
-		
+
+		/* TODO MSSQL case - String hql2 = "select pat from PatientCustomList as pcl left join pcl.listEntry as le left join le.patient as pat where " +
+				"(pat.isActive = 1 and pat.isRIE is null and pcl.id = :lid and pcl.isRIE is null) "; */
 		String hql2 = "select pat from PatientCustomList as pcl left join pcl.listEntry as le left join le.patient as pat where " +
-				"(pat.isActive = 1 and pat.isRIE is null and pcl.id = :lid and pcl.isRIE is null) ";
+				"(pat.isActive = true and pat.isRIE is null and pcl.id = :lid and pcl.isRIE is null) ";
+
 		Object[] elem;
 		PatientGroupWebServiceVo record;
 		for (int i = 0 ; i < domObjs.size() ; i++)

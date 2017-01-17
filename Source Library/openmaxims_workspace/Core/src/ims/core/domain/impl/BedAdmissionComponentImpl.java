@@ -301,7 +301,7 @@ public class BedAdmissionComponentImpl extends DTODomainImplementation implement
 
 
 
-	private enum ConfigChange //WDEV-20224
+	private enum ConfigChange
 	{
 		WARD_BLOCKED (-3110),
 		WARD_CLOSED (-3109),
@@ -1265,7 +1265,9 @@ public class BedAdmissionComponentImpl extends DTODomainImplementation implement
 		if(rttStatusPoint == null)
 			return null;
 
-		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = 1 and rttMap.encounterType is null ";
+		/* TODO MSSQL case - String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = 1 and rttMap.encounterType is null "; */
+		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = true and rttMap.encounterType is null ";
+
 		List<?> listRTTMap = getDomainFactory().find(query, new String[] {"RTTStatusPoint"}, new Object[] {rttStatusPoint.getId()});
 
 		if(listRTTMap != null && listRTTMap.size() > 0 && listRTTMap.get(0) instanceof RTTStatusEventMap)
@@ -1277,7 +1279,7 @@ public class BedAdmissionComponentImpl extends DTODomainImplementation implement
 	}
 
 	// WDEV-23646 - Ensure the correct event Date Time is used when creating a new RTT Status
-	private PathwayRTTStatus createPathwayRTTStatus(CatsReferral domCats, int rttStatusCode, java.util.Date eventDateTime) // WDEV-18617
+	private PathwayRTTStatus createPathwayRTTStatus(CatsReferral domCats, int rttStatusCode, java.util.Date eventDateTime)
 	{
 		if(!ConfigFlag.DOM.RTT_STATUS_POINT_FUNCTIONALITY.getValue())
 			return null;
@@ -3119,12 +3121,12 @@ public class BedAdmissionComponentImpl extends DTODomainImplementation implement
 		query.append("LEFT JOIN pel.tCIDetails AS tci LEFT JOIN tci.tCIWard AS ward ");
 		query.append("LEFT JOIN pel.patient AS patient ");
 
-		query.append("WHERE elStatus.id = :TCI_GIVEN AND tci.isActive = 1 AND tci.currentOutcome is null ");
-		//paramNames.add("WARD");
-		//paramValues.add(ward.getID_Location());
+		/* TODO MSSQL case - query.append("WHERE elStatus.id = :TCI_GIVEN AND tci.isActive = 1 AND tci.currentOutcome is null "); */
+		query.append("WHERE elStatus.id = :TCI_GIVEN AND tci.isActive = true AND tci.currentOutcome is null ");
+
 		paramNames.add("TCI_GIVEN");
 		paramValues.add(WaitingListStatus.TCI_GIVEN.getId());
-		//wdev-19361
+
 		if( hospital != null )
 		{
 			query.append(" AND tci.tCIHospital.id = :hospitalID");
@@ -3260,7 +3262,8 @@ public class BedAdmissionComponentImpl extends DTODomainImplementation implement
 		if (codeCCG == null || codeCCG.length() == 0)
 			return null;
 
-		String query = "SELECT contract FROM ContractConfig AS contract LEFT JOIN contract.cCGsForContract AS ccgContract WHERE ccgContract.cCGCode = :CCG_CONTRACT AND ccgContract.isActive = 1";
+		/* TODO MSSQL case - String query = "SELECT contract FROM ContractConfig AS contract LEFT JOIN contract.cCGsForContract AS ccgContract WHERE ccgContract.cCGCode = :CCG_CONTRACT AND ccgContract.isActive = 1"; */
+		String query = "SELECT contract FROM ContractConfig AS contract LEFT JOIN contract.cCGsForContract AS ccgContract WHERE ccgContract.cCGCode = :CCG_CONTRACT AND ccgContract.isActive = true";
 
 		return ContractConfigShortVoAssembler.create((ContractConfig) getDomainFactory().findFirst(query, "CCG_CONTRACT", codeCCG));
 	}
@@ -3290,14 +3293,15 @@ public class BedAdmissionComponentImpl extends DTODomainImplementation implement
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
 
-		String query = "SELECT serv FROM Service AS serv LEFT JOIN serv.specialty AS serviceSpecialty WHERE serviceSpecialty.id = :SPECIALTY_ID AND serv.isActive = 1";
+		/* TODO MSSQL case - String query = "SELECT serv FROM Service AS serv LEFT JOIN serv.specialty AS serviceSpecialty WHERE serviceSpecialty.id = :SPECIALTY_ID AND serv.isActive = 1"; */
+		String query = "SELECT serv FROM Service AS serv LEFT JOIN serv.specialty AS serviceSpecialty WHERE serviceSpecialty.id = :SPECIALTY_ID AND serv.isActive = true";
+
 		paramNames.add("SPECIALTY_ID");
 		paramValues.add(specialty.getID());
 
 		return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(getDomainFactory().find(query, paramNames, paramValues));
 	}
 
-	//wdev-19361
 	public LocationRefVo getHospitalLoc(LocationRefVo locRef)
 	{
 		if( locRef == null || locRef.getID_Location() == null )
@@ -3435,7 +3439,6 @@ public class BedAdmissionComponentImpl extends DTODomainImplementation implement
 		return impl.saveAutomaticCaseNoteRequests(patient, mos, location, requiredByDate, null, tci);
 	}
 
-	//WDEV-19507
 	public Boolean hasPatientTCIForSameService(PatientRefVo patientRef, ServiceRefVo serviceRef)
 	{
 
@@ -3446,7 +3449,9 @@ public class BedAdmissionComponentImpl extends DTODomainImplementation implement
 			return Boolean.FALSE;
 
 		StringBuilder query = new StringBuilder("SELECT COUNT(pel.id) FROM PatientElectiveList AS pel LEFT JOIN pel.electiveList AS el LEFT JOIN el.service AS service  LEFT JOIN pel.patient AS patient LEFT JOIN pel.electiveListStatus AS elStatus LEFT JOIN elStatus.electiveListStatus as eleListStatus LEFT JOIN pel.tCIDetails AS tci ");
-		query.append(" WHERE patient.id = :PAT_ID AND service.id = :SERVICE_ID AND eleListStatus.id <> :STATUS_ID AND tci.isActive = 1 ");
+
+		/* TODO MSSQL case - query.append(" WHERE patient.id = :PAT_ID AND service.id = :SERVICE_ID AND eleListStatus.id <> :STATUS_ID AND tci.isActive = 1 "); */
+		query.append(" WHERE patient.id = :PAT_ID AND service.id = :SERVICE_ID AND eleListStatus.id <> :STATUS_ID AND tci.isActive = true ");
 
 		ArrayList<String> paramNames = new ArrayList<String>();	
 		ArrayList<Object> paramValues = new ArrayList<Object>();
@@ -3466,14 +3471,15 @@ public class BedAdmissionComponentImpl extends DTODomainImplementation implement
 		return Boolean.FALSE;
 	}
 
-	//WDEV-20234
 	public Boolean hasPatientTCIWithinNextMonth(PatientRefVo patientRef)
 	{
 		if (patientRef == null || patientRef.getID_Patient() == null)
 			return Boolean.FALSE;
 
 		StringBuilder query = new StringBuilder("SELECT COUNT(pel.id) FROM PatientElectiveList AS pel LEFT JOIN pel.electiveList AS el LEFT JOIN el.service AS service  LEFT JOIN pel.patient AS patient LEFT JOIN pel.electiveListStatus AS elStatus LEFT JOIN elStatus.electiveListStatus as eleListStatus LEFT JOIN pel.tCIDetails AS tci ");
-		query.append(" WHERE patient.id = :PAT_ID AND eleListStatus.id <> :STATUS_ID AND tci.isActive = 1 AND  tci.tCIDate >= :tciDateFrom and tci.tCIDate <= :tciDateTo ");
+
+		/* TODO MSSQL case - query.append(" WHERE patient.id = :PAT_ID AND eleListStatus.id <> :STATUS_ID AND tci.isActive = 1 AND  tci.tCIDate >= :tciDateFrom and tci.tCIDate <= :tciDateTo "); */
+		query.append(" WHERE patient.id = :PAT_ID AND eleListStatus.id <> :STATUS_ID AND tci.isActive = true AND  tci.tCIDate >= :tciDateFrom and tci.tCIDate <= :tciDateTo ");
 
 		ArrayList<String> paramNames = new ArrayList<String>();	
 		ArrayList<Object> paramValues = new ArrayList<Object>();

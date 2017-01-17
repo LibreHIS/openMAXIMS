@@ -1645,12 +1645,13 @@ public class DemographicsImpl extends DTODomainImplementation implements ims.cor
 		return null;
 	}
 
-	private RTTStatusEventMapVo getRTTStatusEventMap(RTTStatusPoint rttStatusPoint) //WDEV-18326
+	private RTTStatusEventMapVo getRTTStatusEventMap(RTTStatusPoint rttStatusPoint)
 	{
 		if (rttStatusPoint == null || rttStatusPoint.getId() == null)	
 			return null;
 
-		String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = 1 and rttstat.nationalCode = :natCode and event.encounterType is null ";
+		/* TODO MSSQL case - String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = 1 and rttstat.nationalCode = :natCode and event.encounterType is null "; */
+		String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = true and rttstat.nationalCode = :natCode and event.encounterType is null ";
 
 		DomainFactory factory = getDomainFactory();
 
@@ -3272,39 +3273,5 @@ public class DemographicsImpl extends DTODomainImplementation implements ims.cor
 		}
 		return null;
 	}
-	
-	
-	//WDEV-20593 - Delete patient record 
-//	public void triggerDeletePatientEvent(ims.core.patient.domain.objects.Patient patient) throws StaleObjectException
-//	{
-//		triggerDemographicEvent(patient, MsgEventType.A29);	
-//	}
-//
-//	
-//	//WDEV-20593 - Added method for future functionality that might need to write different message event types to demographics queue
-//	public void triggerDemographicEvent(ims.core.patient.domain.objects.Patient patient, LookupInstVo messageEventType) throws StaleObjectException
-//	{
-//		DomainFactory factory = getDomainFactory();
-//		String hql = "select ot.providerSystem from OutboundTriggers as ot left join ot.queueType as qt left join qt.instance as i"
-//				+ " where(i.id = "+QueueType.DEMOGRAPHICFEED.getId()+")";
-//
-//		java.util.List<ProviderSystem> list = factory.find(hql);
-//
-//		for (int i=0; i<list.size(); i++)
-//		{
-//		
-//			ProviderSystem provider = (ProviderSystem) list.get(i);
-//
-//			DemographicsMessageQueue queue = new DemographicsMessageQueue();
-//			
-//			queue.setMessageStatus(getDomLookup(OrderMessageStatus.CREATED));
-//			queue.setMsgType(getDomLookup(messageEventType));
-//			queue.setQueueType(getDomLookup(QueueType.DEMOGRAPHICFEED));
-//			queue.setPatient(patient);
-//			queue.setProviderSystem(provider);
-//
-//			factory.save(queue);
-//		}
-//	}
 
 }	

@@ -280,14 +280,16 @@ public class InterventionsDiagnosisInvestigationsCcImpl extends BaseIntervention
 			return null;
 		
 		DomainFactory factory = getDomainFactory();
-		String query = "select ia from InvestigationAttendenceDetail as ia left join ia.attendance as at left join ia.attendenceInvestigation as ai where at.id = :AttendenceId and ia.active = 1 order by UPPER(ai.text) asc";
+
+		/* TODO MSSSQL case - String query = "select ia from InvestigationAttendenceDetail as ia left join ia.attendance as at left join ia.attendenceInvestigation as ai where at.id = :AttendenceId and ia.active = 1 order by UPPER(ai.text) asc"; */
+		String query = "select ia from InvestigationAttendenceDetail as ia left join ia.attendance as at left join ia.attendenceInvestigation as ai where at.id = :AttendenceId and ia.active = true order by UPPER(ai.text) asc";
 		
 		List<?> list = factory.find(query, new String[] {"AttendenceId"}, new Object[] {careContext.getID_CareContext()});
 		
 		return InvestigationAttendenceDetailVoAssembler.createInvestigationAttendenceDetailVoCollectionFromInvestigationAttendenceDetail(list);
 	}
 
-	public Boolean isStaleOnDiagnosis(ValueObject diagnosis)  //WDEV-19239
+	public Boolean isStaleOnDiagnosis(ValueObject diagnosis)
 	{
 		if(diagnosis == null)
 			return false;

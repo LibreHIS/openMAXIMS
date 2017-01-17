@@ -45,7 +45,10 @@ public class CheckedOutDocumentsImpl extends BaseCheckedOutDocumentsImpl
 	public ims.correspondence.vo.CheckedOutDocumentVoCollection listCheckedOutDocuments()
 	{
 		DomainFactory factory = getDomainFactory();
-		String query = "from PatientDocument as pd where pd.isLockedForEditing = 1 order by pd.lockedOnDateTime asc";
+
+		/* TODO MSSQL case - String query = "from PatientDocument as pd where pd.isLockedForEditing = 1 order by pd.lockedOnDateTime asc"; */
+		String query = "from PatientDocument as pd where pd.isLockedForEditing = true order by pd.lockedOnDateTime asc";
+
 		return CheckedOutDocumentVoAssembler.createCheckedOutDocumentVoCollectionFromPatientDocument(factory.find(query));
 	}
 

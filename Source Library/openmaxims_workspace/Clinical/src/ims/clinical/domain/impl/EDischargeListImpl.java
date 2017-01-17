@@ -251,9 +251,14 @@ public class EDischargeListImpl extends BaseEDischargeListImpl
 				queryJoin.append(" , DischargeReportDetail as drd ");
 			}
 			conditions.append(andStr);
-			
-			conditions.append(YesNo.YES.equals(searchCriteria.getClinicaDetailsComplete())?"drd.careContext.id = dd.careContext.id and drd.isClinicalDetailsComplete  = 1":
-				" dd.careContext.id not in (select d1_1.careContext.id  from DischargeReportDetail as d1_1  where   (d1_1.isClinicalDetailsComplete = 1)) ");
+
+			/* TODO MSSQL case - conditions.append(YesNo.YES.equals(searchCriteria.getClinicaDetailsComplete())
+					? "drd.careContext.id = dd.careContext.id and drd.isClinicalDetailsComplete  = 1"
+                    : " dd.careContext.id not in (select d1_1.careContext.id  from DischargeReportDetail as d1_1  where   (d1_1.isClinicalDetailsComplete = 1)) "); */
+			conditions.append(YesNo.YES.equals(searchCriteria.getClinicaDetailsComplete())
+					? "drd.careContext.id = dd.careContext.id and drd.isClinicalDetailsComplete  = true"
+                    : " dd.careContext.id not in (select d1_1.careContext.id  from DischargeReportDetail as d1_1  where   (d1_1.isClinicalDetailsComplete = true)) ");
+
 			andStr = " and ";
 		}
 		if (searchCriteria.getNonCornishIsNotNull() && searchCriteria.getNonCornish())

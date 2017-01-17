@@ -123,12 +123,13 @@ public class MedNeuroMotorPrototypeImpl extends BaseNeurologicalExaminationMotor
 
 	public VertebrallevelVoCollection listVertebralLevels()
 	{
-		String hqlString = "from VertebralLevels as v where v.isActive = 1";
-		return VertebrallevelVoAssembler.createVertebrallevelVoCollectionFromVertebralLevels(getDomainFactory().find(hqlString)).sort(); //wdev-14015
+		/* TODO MSSQL case - String hqlString = "from VertebralLevels as v where v.isActive = 1"; */
+		String hqlString = "from VertebralLevels as v where v.isActive = TRUE";
+
+		return VertebrallevelVoAssembler.createVertebrallevelVoCollectionFromVertebralLevels(getDomainFactory().find(hqlString)).sort();
 	}
 
-	//wdev-12491
-	public NeuroMotorFindingsVo saveFindingAndProblem(NeuroMotorFindingsVo finding, MedicalProbOnAdmisVo problem)	throws DomainInterfaceException, StaleObjectException,ForeignKeyViolationException, UniqueKeyViolationException 
+	public NeuroMotorFindingsVo saveFindingAndProblem(NeuroMotorFindingsVo finding, MedicalProbOnAdmisVo problem)	throws DomainInterfaceException, StaleObjectException,ForeignKeyViolationException, UniqueKeyViolationException
 	{
 		if (finding == null)
 			throw new DomainInterfaceException("Can not save empty finding");

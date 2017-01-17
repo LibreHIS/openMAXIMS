@@ -40,7 +40,8 @@ public class SelectPrognosticLocationImpl extends BaseSelectPrognosticLocationIm
 
 	public ims.oncology.vo.PrognosticLocationConfigVoCollection listLocation()
 	{
-		return PrognosticLocationConfigVoAssembler.createPrognosticLocationConfigVoCollectionFromPrognosticLocationConfig(getDomainFactory().find("from PrognosticLocationConfig as plc where plc.isActive = 1 order by plc.locationName asc"));
+		/* TODO MSSQL case - return PrognosticLocationConfigVoAssembler.createPrognosticLocationConfigVoCollectionFromPrognosticLocationConfig(getDomainFactory().find("from PrognosticLocationConfig as plc where plc.isActive = 1 order by plc.locationName asc")); */
+		return PrognosticLocationConfigVoAssembler.createPrognosticLocationConfigVoCollectionFromPrognosticLocationConfig(getDomainFactory().find("from PrognosticLocationConfig as plc where plc.isActive = true order by plc.locationName asc"));
 	}
 
 	public ims.oncology.vo.PrognosticLocationConfigVo getLocation(ims.oncology.configuration.vo.PrognosticLocationConfigRefVo location)

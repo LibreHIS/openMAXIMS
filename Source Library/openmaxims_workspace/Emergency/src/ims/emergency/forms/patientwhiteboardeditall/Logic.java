@@ -1053,17 +1053,10 @@ public class Logic extends BaseLogic
 							}
 						}
 					}
-					//PatientWhiteboardActionsVoCollection  tempCollN = tempVo.getPatientWhiteBoard().getCurrentActions();
-					/*PatientWhiteboardActionsVoCollection  tempCollNew = new PatientWhiteboardActionsVoCollection();
-					for(int g =0;g<tempCollN.size();g++)
-					{
-						tempCollNew.add(tempCollN.get(g));
-					}*/
-					//tempVo.getPatientWhiteBoard().setCurrentActions(tempCollN);
 					
 					tempColl.add(tempVo.getPatientWhiteBoard());
 				}
-				else if( tempVo.getActionsIsNotNull())				//the case when the patient hasn't a PatientWhiteBoardRecord record
+				else if( tempVo.getActionsIsNotNull()) // The case when the patient hasn't a PatientWhiteBoardRecord record
 				{
 					PatientWhiteboardRecordVo tempNewVo = new PatientWhiteboardRecordVo();
 					tempNewVo.setPatient(tempVo.getTrackingIsNotNull() ? tempVo.getTracking().getPatient():null);
@@ -1077,7 +1070,7 @@ public class Logic extends BaseLogic
 					PatientWhiteboardActionsVoCollection patWhiteBoardActColl = new PatientWhiteboardActionsVoCollection();
 					for( int k = 0; k < tempVo.getActions().size();k++)
 					{
-						if( !tempVo.getActions().get(k).getStatus().equals(WhiteBoardActionStatus.NO_ACTION))	//take those actions that are not NO_ACTION
+						if( !tempVo.getActions().get(k).getStatus().equals(WhiteBoardActionStatus.NO_ACTION))	// Take those actions that are not NO_ACTION
 						{
     						PatientWhiteboardActionsVo actionVo = new PatientWhiteboardActionsVo();
     						actionVo.setActionType(tempVo.getActions().get(k).getAction());

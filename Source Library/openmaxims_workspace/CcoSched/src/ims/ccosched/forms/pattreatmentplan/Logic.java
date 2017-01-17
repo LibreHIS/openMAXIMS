@@ -182,8 +182,7 @@ public class Logic extends BaseLogic
 		}
 	
 		
-//TODO
-// Replace this with Domain BO calls
+// TODO Replace this with Domain BO calls
 //		Go_ptreatpl TrPlanDto = (Go_ptreatpl)domain.getDTOInstance(Go_ptreatpl.class);
 //		Patient.PatientRecord patient = form.getGlobalContext().Cco REPLACE WITH PatientShort GC Sched.PatientSearch.getPatientDetails();//UIEngine.Context.Get("10008:Patient Details") as dto.PatientDTO.PatientClient;
 //		Go_ptreatpl.Go_ptreatplRecord selectedRecord = null;
@@ -890,10 +889,10 @@ public class Logic extends BaseLogic
 	}
 	
 
-//	#region 03/03/2003 - Treatment Group
+//	#region - Treatment Group
 	private void LoadGroupCombo(boolean activeLkup)
 	{
-		//TODO replace with Domain BO calls
+		// TODO replace with Domain BO calls
 //		Sd_gts_cfg Sd_gts_cfgDto = (Sd_gts_cfg)domain.getDTOInstance(Sd_gts_cfg.class);
 //
 //		Result result = Sd_gts_cfgDto.list();
@@ -1174,7 +1173,7 @@ public class Logic extends BaseLogic
 	
 	private void SetActionsGridRowColor(GenForm.grdActionsGridRow row)
 	{
-		row.setBackColor(Color.Salmon);//Color color = Color.FromArgb(247, 130, 132);
+		row.setBackColor(Color.Salmon);
 	}
 //	TODO replace with Domain BO calls	
 //	private String GetApptStatusText(String appt_statId)
@@ -1227,7 +1226,7 @@ public class Logic extends BaseLogic
 		return "";
 	}
 	
-//	checking if the page was loaded
+//	Checking if the page was loaded
 	private boolean isPageLoaded()
 	{
 //		TODO replace with Domain BO calls

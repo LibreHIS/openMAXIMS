@@ -3062,17 +3062,15 @@ public class Logic extends BaseLogic
 		
 		if (form.dyngrdSearch().getValue()!=null && form.dyngrdSearch().getValue() instanceof PatientShort && ((PatientShort)form.dyngrdSearch().getValue()).getID_PatientIsNotNull())
 		{
-			//WDEV-21392
 			PatientShort selectedPatient = (PatientShort)form.dyngrdSearch().getValue();
 			form.getLocalContext().setPatientSelectedOnLocalSearchTab(selectedPatient);
 			PatientId nhsPID = selectedPatient.getNhsn();
 			Integer scn = selectedPatient.getSCN();
 			String nhsNumber = nhsPID!=null ? nhsPID.getIdValue() : null;
-			//WDEV-22321
-			//WDEV-21862 - For BW - If local NHS Number but not synchronised, i.e. no scn , then force a search by nhs number on pds to verify.
-			if (nhsNumber!=null && /*scn!=null && scn!=0 &&*/ !isNHSVerified(selectedPatient))  //WDEV-21414 //WDEV-22290
+
+			// For BW - If local NHS Number but not synchronised, i.e. no scn , then force a search by nhs number on pds to verify.
+			if (nhsNumber!=null && !isNHSVerified(selectedPatient))
 			{
-				//openPDSDemographicsForPatientBasedOnNHS(nhsNumber);
 				Patient patVo = searchInPDSAfterNHS(nhsNumber);
 				if (patVo != null && !isNHSVerified(selectedPatient))
 				{
@@ -3085,18 +3083,15 @@ public class Logic extends BaseLogic
 					openPDSDemographicsForPatientBasedOnNHS(nhsNumber);
 				}
 			}
-			//WDEV-22321
 			else if (nhsNumber!=null && ((scn != null && scn != 0)  &&  isNHSVerified(selectedPatient)))
 			{
 				openPDSDemographicsForPatientBasedOnNHS(nhsNumber);
 			}
-			//WDEV-22321
 			else if (nhsNumber!=null && (scn!=null && scn == 0))
 			{
 				openPDSDemographicsForPatientBasedOnNHS(nhsNumber);
 			}
-			//WDEV-22498
-			//WDEV-21392
+
 			else 
 			{	
 				// PDS AUTHENTICATION

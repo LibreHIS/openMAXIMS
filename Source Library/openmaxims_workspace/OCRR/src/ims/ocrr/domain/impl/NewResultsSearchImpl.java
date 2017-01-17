@@ -259,18 +259,19 @@ public class NewResultsSearchImpl extends BaseNewResultsSearchImpl
 		}
 		query.append(")");
 		
-		// If the result was marked for Review and Updated - it should still be
-		// retrieved when searching for results marked for Review
+		// If the result was marked for Review and Updated - it should still be retrieved when searching for results marked for Review
 		if (requiredStatus.contains(OrderInvStatus.REVIEW))
 		{
-			query.append(" OR oi.forReview = 1");
+			/* TODO MSSQL case - query.append(" OR oi.forReview = 1"); */
+			query.append(" OR oi.forReview = TRUE");
 		}
 		
 		query.append(")");
 		
 		if (Boolean.TRUE.equals(criteria.getAbnormalPathologyResultsOnly()))
 		{
-			query.append(" AND pathologyResultsDetails.isAbnormal = 1 ");
+			/* TODO MSSQL case - query.append(" AND pathologyResultsDetails.isAbnormal = 1 "); */
+			query.append(" AND pathologyResultsDetails.isAbnormal = TRUE ");
 		}	
 
 		String condition = " AND ";
@@ -668,7 +669,8 @@ public class NewResultsSearchImpl extends BaseNewResultsSearchImpl
 		selectQuery.append("oi.resultSortDate, ");
 		selectQuery.append("specimen.id, specimen.version, ");
 
-		selectQuery.append("(SELECT COUNT (spec.id) FROM OrderInvestigation AS ordIn LEFT JOIN ordIn.specimen AS spec WHERE ordIn.id = oi.id AND spec.colTimeFillerSupplied = 1) AS TIMFIL, ");
+		/* TODO MSSQL case - selectQuery.append("(SELECT COUNT (spec.id) FROM OrderInvestigation AS ordIn LEFT JOIN ordIn.specimen AS spec WHERE ordIn.id = oi.id AND spec.colTimeFillerSupplied = 1) AS TIMFIL, "); */
+		selectQuery.append("(SELECT COUNT (spec.id) FROM OrderInvestigation AS ordIn LEFT JOIN ordIn.specimen AS spec WHERE ordIn.id = oi.id AND spec.colTimeFillerSupplied = TRUE) AS TIMFIL, ");
 
 		selectQuery.append("reviewingHcpMos.name.surname, reviewingHcpMos.name.forename, ");
 		selectQuery.append("pat.id, pat.version, pat.name.surname, pat.name.forename, ");
@@ -679,7 +681,10 @@ public class NewResultsSearchImpl extends BaseNewResultsSearchImpl
 		
 		selectQuery.append("invIndex.name, inv.eventType.id, category.id, ");
 		selectQuery.append("oi.resultStatus.id, ");
-		selectQuery.append("(SELECT COUNT (pathRes.id) FROM OrderInvestigation AS ordInv LEFT JOIN ordInv.resultDetails AS resDet LEFT JOIN resDet.pathologyResultDetails AS pathRes WHERE ordInv.id = oi.id AND pathRes.isAbnormal = 1) AS ABN_RES, ");
+
+		/* TODO MSSQL case - selectQuery.append("(SELECT COUNT (pathRes.id) FROM OrderInvestigation AS ordInv LEFT JOIN ordInv.resultDetails AS resDet LEFT JOIN resDet.pathologyResultDetails AS pathRes WHERE ordInv.id = oi.id AND pathRes.isAbnormal = 1) AS ABN_RES, "); */
+		selectQuery.append("(SELECT COUNT (pathRes.id) FROM OrderInvestigation AS ordInv LEFT JOIN ordInv.resultDetails AS resDet LEFT JOIN resDet.pathologyResultDetails AS pathRes WHERE ordInv.id = oi.id AND pathRes.isAbnormal = TRUE) AS ABN_RES, ");
+
 		selectQuery.append("orderInvStatus.id, oi.ordInvCurrentStatus.changeDateTime, oi.ordInvCurrentStatus.statusReason, ");
 		selectQuery.append("service.serviceName, ");
 		selectQuery.append("patLocation.name, patClinic.clinicName, outpatDepartment.name, ");

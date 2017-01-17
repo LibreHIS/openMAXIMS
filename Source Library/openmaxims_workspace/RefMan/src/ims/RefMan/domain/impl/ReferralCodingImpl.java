@@ -307,13 +307,13 @@ public class ReferralCodingImpl extends BaseReferralCodingImpl
 
 	public PatientProcedureShortWithCareIntraOperativeVoCollection listNonSFSProcedures(CareContextRefVo careContextlRefVo)
 	{
-		String hql = "select c1 from PatientProcedure as c1 left join c1.intraOperativeRecord as i1_1 where (c1.plannedProc is not null " + "and c1.careContext.id = :careContextId " + "and i1_1.wasPlannedProcedure = 1 and " + "c1.plannedProc.id not in (select c12.id from SuitableForSurgeryAssessment as c11 left join c11.procedure as c12 " + "where (c11.procedure is not null and c11.careContext.id = :careContextId)))";
+		/* TODO MSSQL case - String hql = "select c1 from PatientProcedure as c1 left join c1.intraOperativeRecord as i1_1 where (c1.plannedProc is not null " + "and c1.careContext.id = :careContextId " + "and i1_1.wasPlannedProcedure = 1 and " + "c1.plannedProc.id not in (select c12.id from SuitableForSurgeryAssessment as c11 left join c11.procedure as c12 " + "where (c11.procedure is not null and c11.careContext.id = :careContextId)))"; */
+		String hql = "select c1 from PatientProcedure as c1 left join c1.intraOperativeRecord as i1_1 where (c1.plannedProc is not null " + "and c1.careContext.id = :careContextId " + "and i1_1.wasPlannedProcedure = true and " + "c1.plannedProc.id not in (select c12.id from SuitableForSurgeryAssessment as c11 left join c11.procedure as c12 " + "where (c11.procedure is not null and c11.careContext.id = :careContextId)))";
 
 		List dos = getDomainFactory().find(hql, new String[] { "careContextId" }, new Object[] { careContextlRefVo.getID_CareContext() });
 		return PatientProcedureShortWithCareIntraOperativeVoAssembler.createPatientProcedureShortWithCareIntraOperativeVoCollectionFromPatientProcedure(dos).sort();
 	}
 
-	// WDEV-18539
 	public PatientListVo getPatientRef(CatsReferralRefVo catsReferralRef)
 	{
 		DomainFactory factory = getDomainFactory();

@@ -111,7 +111,6 @@ public class TherapiesNoteImpl extends BaseTherapiesNoteImpl
 		return impl.getClinicalNotes(clinicalNoteRefVo.getID_ClinicalNotes());
 	}
 	
-	//WDEV-13939
 	public ClinicalNotesVoCollection getAllClinicalNotesForCareContext(CareContextRefVo careContextRefVo)
 	{
 		DomainFactory factory = getDomainFactory();
@@ -121,7 +120,9 @@ public class TherapiesNoteImpl extends BaseTherapiesNoteImpl
 
 		StringBuffer hql = new StringBuffer();
 		
-		hql.append(" select notes from ClinicalNotes as notes left join notes.careContext as cc where (cc.id=:ID and notes.isDerivedNote = 1)");
+		/* TODO MSSQL case - hql.append(" select notes from ClinicalNotes as notes left join notes.careContext as cc where (cc.id=:ID and notes.isDerivedNote = 1)"); */
+		hql.append(" select notes from ClinicalNotes as notes left join notes.careContext as cc where (cc.id=:ID and notes.isDerivedNote = true)");
+
 		hql.append(" order by notes.id desc");
 
 		markers.add("ID");

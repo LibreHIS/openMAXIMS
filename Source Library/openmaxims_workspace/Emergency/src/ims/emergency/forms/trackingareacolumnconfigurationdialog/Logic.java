@@ -307,16 +307,11 @@ public class Logic extends BaseLogic
 		updateContextMenuState();
 	}
 
-	//WDEV-14896
 	private void repopulateGridWithNewValues(ColumnDetailVoCollection trackingColumsCollection)
 	{
 		if (trackingColumsCollection == null)
 			return;
 
-		//for (int i=0;i<form.grdTrackingAreaColum().getRows().size();i++)
-		//{
-		//	form.grdTrackingAreaColum().getRows().get(i).setcolSelect(false);
-		//}
 		
 		for (int i = 0; i < trackingColumsCollection.size(); i++)
 			for (int j = 0; j < form.grdTrackingAreaColum().getRows().size(); j++)

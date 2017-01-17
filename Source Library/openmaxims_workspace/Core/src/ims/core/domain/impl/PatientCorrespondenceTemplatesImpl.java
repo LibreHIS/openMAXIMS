@@ -158,7 +158,9 @@ public class PatientCorrespondenceTemplatesImpl extends BasePatientCorrespondenc
 		}
 			
 		String mainHql = "select d from DocumentCategoryConfig as d left join d.template as t left join t.report as r";
-		String whereHql = " where t.id not in (select t11.id from TemplateBo as t11 left join t11.report as r11 left join r11.seeds as r21 where (r21.canBeNull = 0" + subHql + ")) and r.reportXml is not null and t.templateXml is not null and r.isActive = 1 and t.isActive = 1";//	WDEV-13519
+
+		/* TODO MSSQL case - String whereHql = " where t.id not in (select t11.id from TemplateBo as t11 left join t11.report as r11 left join r11.seeds as r21 where (r21.canBeNull = 0" + subHql + ")) and r.reportXml is not null and t.templateXml is not null and r.isActive = 1 and t.isActive = 1"; */
+		String whereHql = " where t.id not in (select t11.id from TemplateBo as t11 left join t11.report as r11 left join r11.seeds as r21 where (r21.canBeNull = false" + subHql + ")) and r.reportXml is not null and t.templateXml is not null and r.isActive = true and t.isActive = true";
 		
 		if(templateName != null && templateName.length() > 0)
 		{

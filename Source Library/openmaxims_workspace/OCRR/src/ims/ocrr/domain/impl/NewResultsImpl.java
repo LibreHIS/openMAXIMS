@@ -92,21 +92,20 @@ public class NewResultsImpl extends DomainImpl implements ims.ocrr.domain.NewRes
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * WDEV-13876
 	 * List responsible HCP (active & marked as responsible HCP)
 	 */
 	public HcpLiteVoCollection listClinicians(String name)
 	{
 		if (name == null || name.length() == 0)
 			return null;
-		
-		String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE mos.name.upperSurname LIKE :HCP_NAME AND hcp.isActive = 1 AND hcp.isHCPaResponsibleHCP = 1 ORDER BY mos.name.upperSurname";
+
+		/* TODO MSSQL case - String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE mos.name.upperSurname LIKE :HCP_NAME AND hcp.isActive = 1 AND hcp.isHCPaResponsibleHCP = 1 ORDER BY mos.name.upperSurname"; */
+		String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE mos.name.upperSurname LIKE :HCP_NAME AND hcp.isActive = TRUE AND hcp.isHCPaResponsibleHCP = TRUE ORDER BY mos.name.upperSurname";
 
 		return HcpLiteVoAssembler.createHcpLiteVoCollectionFromHcp(getDomainFactory().find(query, "HCP_NAME", name.toUpperCase() + "%"));
 	}
 	
 	/**
-	 * WDEV-13876
 	 * List reviewing HCP (only active HCP marked as responsible HCP)
 	 */
 	public HcpLiteVoCollection listReviewingHCP(String name)
@@ -117,7 +116,8 @@ public class NewResultsImpl extends DomainImpl implements ims.ocrr.domain.NewRes
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
 
-		String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE mos.name.upperSurname LIKE :HCP_NAME AND hcp.isActive = 1 AND hcp.hcpType.id = :MEDIC_TYPE ORDER BY mos.name.upperSurname";
+		/* TODO MSSQL case - String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE mos.name.upperSurname LIKE :HCP_NAME AND hcp.isActive = 1 AND hcp.hcpType.id = :MEDIC_TYPE ORDER BY mos.name.upperSurname"; */
+		String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE mos.name.upperSurname LIKE :HCP_NAME AND hcp.isActive = TRUE AND hcp.hcpType.id = :MEDIC_TYPE ORDER BY mos.name.upperSurname";
 		
 		paramNames.add("HCP_NAME");
 		paramValues.add(name.toUpperCase() + "%");
@@ -544,8 +544,8 @@ public class NewResultsImpl extends DomainImpl implements ims.ocrr.domain.NewRes
 
 	public ServiceLiteVoCollection listDiscipline() 
 	{
-		//WDEV-11246
-		return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(getDomainFactory().find("from Service as srv where srv.isActive = 1 and srv.serviceCategory.id in ( " + getIdStringForPathRad() + " ) order by srv.serviceName")); 
+		/* TODO MSSQL case - return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(getDomainFactory().find("from Service as srv where srv.isActive = 1 and srv.serviceCategory.id in ( " + getIdStringForPathRad() + " ) order by srv.serviceName")); */
+		return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(getDomainFactory().find("from Service as srv where srv.isActive = TRUE and srv.serviceCategory.id in ( " + getIdStringForPathRad() + " ) order by srv.serviceName"));
 	}
 
 	private String getIdStringForPathRad() 

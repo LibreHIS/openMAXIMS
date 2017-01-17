@@ -77,7 +77,9 @@ public class WardSelectionImpl extends BaseWardSelectionImpl
 	{
 		StringBuilder query = new StringBuilder("SELECT location FROM Location AS location LEFT JOIN location.parentLocation AS hospital WHERE ");
 		query.append(" hospital.id = :HOSP_ID ");
-		query.append(" AND location.isActive = 1 AND location.caseNoteFolderLocation = 1 ");
+
+		/* TODO MSSQL case - query.append(" AND location.isActive = 1 AND location.caseNoteFolderLocation = 1 "); */
+		query.append(" AND location.isActive = true AND location.caseNoteFolderLocation = true ");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
@@ -92,7 +94,7 @@ public class WardSelectionImpl extends BaseWardSelectionImpl
 			paramValues.add(searchText.toUpperCase() + "%");
 		}
 		
-		query.append(" order by location.upperName asc ");  //upper(location.name) WDEV-20219
+		query.append(" order by location.upperName asc ");
 		
 		return LocationLiteVoAssembler.createLocationLiteVoCollectionFromLocation(getDomainFactory().find(query.toString(), paramNames, paramValues));
 	}
@@ -135,7 +137,10 @@ public class WardSelectionImpl extends BaseWardSelectionImpl
 			names.add("name");
 			values.add(name.toUpperCase() + "%");
 		}
-		hql += (" and loc.isVirtual = :virtual and loc.isActive = 1) order by loc.upperName asc");
+
+		/* TODO MSSQL case - hql += (" and loc.isVirtual = :virtual and loc.isActive = 1) order by loc.upperName asc"); */
+		hql += (" and loc.isVirtual = :virtual and loc.isActive = true) order by loc.upperName asc");
+
 		names.add("virtual");
 		values.add(Boolean.FALSE);
 		
@@ -143,7 +148,6 @@ public class WardSelectionImpl extends BaseWardSelectionImpl
 		return LocationLiteVoAssembler.createLocationLiteVoCollectionFromLocation(l);
 	}
 	
-	//WDEV-23039
 	public LocationLiteVo getCurrentHospital(ILocation location)
 	{
 		if(location == null)

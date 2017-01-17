@@ -142,8 +142,10 @@ public class ElectiveListDetailsImpl extends BaseElectiveListDetailsImpl
 	public LocationLiteVoCollection listHospitalsByElectiveList(ElectiveListConfigurationRefVo electiveListConfig, String name)
 	{
 		DomainFactory factory = getDomainFactory();
-		
-		String hql = " select loc from ElectiveListConfiguration as electiveListConf left join electiveListConf.listLocations as listLocations left join listLocations.listLocation as loc where electiveListConf.id = :electiveList and loc.isActive = 1 and loc.type = :locType ";
+
+		/* TODO MSSQL case - String hql = " select loc from ElectiveListConfiguration as electiveListConf left join electiveListConf.listLocations as listLocations left join listLocations.listLocation as loc where electiveListConf.id = :electiveList and loc.isActive = 1 and loc.type = :locType "; */
+		String hql = " select loc from ElectiveListConfiguration as electiveListConf left join electiveListConf.listLocations as listLocations left join listLocations.listLocation as loc where electiveListConf.id = :electiveList and loc.isActive = true and loc.type = :locType ";
+
 		StringBuffer condStr = new StringBuffer();
 		String andStr = " and ";
 
@@ -970,8 +972,9 @@ public class ElectiveListDetailsImpl extends BaseElectiveListDetailsImpl
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
-		
-		StringBuilder query = new StringBuilder("select distinct m1_1 from Medic as m1_1 left join m1_1.serviceFunction as h1_1 left join h1_1.service as s1_1 where(m1_1.id = :hcpId and s1_1.id = :serviceId and m1_1.isHCPaResponsibleHCP = 1)");
+
+		/* TODO MSSQL case - StringBuilder query = new StringBuilder("select distinct m1_1 from Medic as m1_1 left join m1_1.serviceFunction as h1_1 left join h1_1.service as s1_1 where(m1_1.id = :hcpId and s1_1.id = :serviceId and m1_1.isHCPaResponsibleHCP = 1)"); */
+		StringBuilder query = new StringBuilder("select distinct m1_1 from Medic as m1_1 left join m1_1.serviceFunction as h1_1 left join h1_1.service as s1_1 where(m1_1.id = :hcpId and s1_1.id = :serviceId and m1_1.isHCPaResponsibleHCP = true)");
 		
 		paramNames.add("hcpId");		
 		paramValues.add(hCpRef.getID_Hcp());
@@ -995,7 +998,8 @@ public class ElectiveListDetailsImpl extends BaseElectiveListDetailsImpl
 		
 		DomainFactory factory = getDomainFactory();
 
-		String hql = "select count(loc.id) from ElectiveListConfiguration as electiveListConf left join electiveListConf.listLocations as listLocations left join listLocations.listLocation as loc where electiveListConf.id = :electiveList and loc.isActive = 1 and loc.type = :locType and loc.isVirtual =:isVirtual";
+		/* TODO MSSQL case - String hql = "select count(loc.id) from ElectiveListConfiguration as electiveListConf left join electiveListConf.listLocations as listLocations left join listLocations.listLocation as loc where electiveListConf.id = :electiveList and loc.isActive = 1 and loc.type = :locType and loc.isVirtual =:isVirtual"; */
+		String hql = "select count(loc.id) from ElectiveListConfiguration as electiveListConf left join electiveListConf.listLocations as listLocations left join listLocations.listLocation as loc where electiveListConf.id = :electiveList and loc.isActive = true and loc.type = :locType and loc.isVirtual =:isVirtual";
 		
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Serializable> values = new ArrayList<Serializable>();

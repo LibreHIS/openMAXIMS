@@ -2621,12 +2621,14 @@ public String getMergedMessage(Patient patient)
 				{
 					msgCount = new Long(rs1.getLong(1));
 				}
-				if (msgCount>0) //more than one unprocessed message already there 
+				if (msgCount>0) // More than one unprocessed message already there
 				{
-					continue; //skip to the next provider system
+					continue; // Skip to the next provider system
 				}
-				
-				String oldPatientSql="select count(id) from adto_demographicsmq where patient=? and providersy=? and wasprocess =1";
+
+				/* TODO MSSQL case - String oldPatientSql="select count(id) from adto_demographicsmq where patient=? and providersy=? and wasprocess =1"; */
+				String oldPatientSql="select count(id) from adto_demographicsmq where patient=? and providersy=? and wasprocess = TRUE";
+
 				java.sql.PreparedStatement oldPtCount = conn.prepareStatement(oldPatientSql);
 				oldPtCount.setInt(1, getId());
 				oldPtCount.setInt(2, providerSystemId);
@@ -2640,7 +2642,7 @@ public String getMergedMessage(Patient patient)
 				msg.setPatient(this);
 				msg.setProviderSystem(psDom);
 				
-				msg.setQueueType(factory.getLookupInstance(QueueType_DEMOGRAPHICFEED) );// QueueType.DEMOGRAPHICFEED));
+				msg.setQueueType(factory.getLookupInstance(QueueType_DEMOGRAPHICFEED) );
 				if (oldMsgCount==0)
 				{
 					msg.setMsgType(factory.getLookupInstance(MsgEventType_A28));

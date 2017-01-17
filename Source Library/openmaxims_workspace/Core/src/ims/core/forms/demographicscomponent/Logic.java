@@ -965,36 +965,7 @@ public class Logic extends BaseLogic
 				}
 			}
 		}
-		
-		// BW 24/10/06 - Do we still want to display all practice addresses as well???
-		// GP gp = domain.getPatientGp(pat.getGp());
-		// if (gp != null)
-		// {
-		// if (gp.getPracticesIsNotNull())
-		// {
-		// GpToPracticesVoCollection coll = gp.getPractices();
-		// // Check size of collection as GP Admin form creates a new OrganisationVoCollection for each GP regardless if any practice exists
-		// if (coll.size() >= 1)
-		// {
-		// if (coll.get(0).getPractice().getAddressIsNotNull())
-		// {
-		// sbGPDetails.append("\n" + Textile.setBold("Address: "));
-		// if (coll.get(0).getPractice().getAddress().getLine1IsNotNull())
-		// sbGPDetails.append("\n" + coll.get(0).getPractice().getAddress().getLine1());
-		// if (coll.get(0).getPractice().getAddress().getLine2IsNotNull())
-		// sbGPDetails.append("\n" + coll.get(0).getPractice().getAddress().getLine2());
-		// if (coll.get(0).getPractice().getAddress().getLine3IsNotNull())
-		// sbGPDetails.append("\n" + coll.get(0).getPractice().getAddress().getLine3());
-		// if (coll.get(0).getPractice().getAddress().getLine4IsNotNull())
-		// sbGPDetails.append("\n" + coll.get(0).getPractice().getAddress().getLine4());
-		// if (coll.get(0).getPractice().getAddress().getLine5IsNotNull())
-		// sbGPDetails.append("\n" + coll.get(0).getPractice().getAddress().getLine5());
-		// if (coll.get(0).getPractice().getAddress().getPhoneIsNotNull())
-		// sbGPDetails.append("\n" + Textile.setBold("Phone: ") + coll.get(0).getPractice().getAddress().getPhone());
-		// }
-		// }
-		// }
-		// }
+
 		return new Textile().process(sbGPDetails.toString());
 	}
 

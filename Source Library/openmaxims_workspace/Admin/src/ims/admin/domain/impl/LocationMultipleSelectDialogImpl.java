@@ -50,9 +50,9 @@ public class LocationMultipleSelectDialogImpl extends BaseLocationMultipleSelect
 
 	public ims.core.vo.OrganisationLiteVoCollection listActiveOrganisations(String name)
 	{
-		
-		
-		StringBuilder hqlBuilder = new StringBuilder("from Organisation as org where org.type.id not in (" +	getInvalidTypes()+	") and org.isActive = 1 and org.isRIE is null  ");
+		/* TODO MSSQL case - StringBuilder hqlBuilder = new StringBuilder("from Organisation as org where org.type.id not in (" +	getInvalidTypes()+	") and org.isActive = 1 and org.isRIE is null  "); */
+		StringBuilder hqlBuilder = new StringBuilder("from Organisation as org where org.type.id not in (" +	getInvalidTypes()+	") and org.isActive = true and org.isRIE is null  ");
+
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
 		

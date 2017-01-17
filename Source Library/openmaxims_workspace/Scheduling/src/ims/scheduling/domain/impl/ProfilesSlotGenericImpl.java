@@ -105,35 +105,35 @@ public class ProfilesSlotGenericImpl extends DomainImpl implements ims.schedulin
 		return idString;
 	}
 
-	//wdev-20074
 	public ActivityVoCollection listActivitiesByService(ServiceRefVo serviceRef, Boolean isFlexible)
 	{
 		if( serviceRef == null )
 			return null;
 		
 		DomainFactory factory = getDomainFactory();
-		// For profile Slot, we want to list
-		// all activities for appointment activity type
+
+		// For profile Slot, we want to list all activities for appointment activity type
 		String hql= null;
 		if( Boolean.TRUE.equals(isFlexible))
 		{
-			hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.activity as a1_1 where (s1_1.isActive = 1 and a1_1.isActive = 1 and s1_1.service.id = :serviceId and s1_1.isFlexible = 1 )";	//wdev-20262
+			/* TODO MSSQL case - hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.activity as a1_1 where (s1_1.isActive = 1 and a1_1.isActive = 1 and s1_1.service.id = :serviceId and s1_1.isFlexible = 1 )"; */
+			hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.activity as a1_1 where (s1_1.isActive = true and a1_1.isActive = true and s1_1.service.id = :serviceId and s1_1.isFlexible = true )";
 		}
 		else
 		{
-			hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.activity as a1_1 where (s1_1.isActive = 1 and a1_1.isActive = 1 and s1_1.service.id = :serviceId and (s1_1.isFlexible = 0 or s1_1.isFlexible is null))"; //wdev-20262
+			/* TODO MSSQL case - hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.activity as a1_1 where (s1_1.isActive = 1 and a1_1.isActive = 1 and s1_1.service.id = :serviceId and (s1_1.isFlexible = 0 or s1_1.isFlexible is null))"; */
+			hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.activity as a1_1 where (s1_1.isActive = true and a1_1.isActive = true and s1_1.service.id = :serviceId and (s1_1.isFlexible = false or s1_1.isFlexible is null))";
 		}
 		
 		List lst = factory.find(hql, new String[]{"serviceId"}, new Object[]{new Integer(serviceRef.getID_Service())});
 		return (ActivityVoAssembler.createActivityVoCollectionFromActivity(lst));
 	}
 
-	//wdev-20262
 	public DirectoryOfServiceVoCollection listDOS(ServiceRefVo serviceRef, ServiceFunctionCollection serviceFuntions, LocationRefVo location)
 	{
 		DomainFactory factory = getDomainFactory();
 
-		if( serviceRef == null) //no filter return all
+		if( serviceRef == null) // No filter return all
 			throw new CodingRuntimeException("service parameter is null or id not provided in method listDOS");
 
 		ArrayList<String> markers = new ArrayList<String>();

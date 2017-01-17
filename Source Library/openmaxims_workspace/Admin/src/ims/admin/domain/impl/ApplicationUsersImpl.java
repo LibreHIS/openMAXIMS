@@ -95,8 +95,10 @@ public class ApplicationUsersImpl extends DTODomainImplementation implements ims
 		ArrayList<Object> values = new ArrayList<Object>();
 
 		query.append("select m from  MemberOfStaff m where m.id not in ( select au.mos.id from AppUser au where au.mos is not null) ");
-		query.append(" and m.isActive = 1");
-		
+
+		/* TODO MSSQL case - query.append(" and m.isActive = 1"); */
+		query.append(" and m.isActive = true");
+
 		if (mosSurname != null && mosSurname.length() > 0)
 		{
 			String[] surnames = mosSurname.split("\\s+");
@@ -424,7 +426,8 @@ public class ApplicationUsersImpl extends DTODomainImplementation implements ims
 	public AppRoleShortVoCollection listRoles() 
 	{
 		StringBuilder hql = new StringBuilder();
-		hql.append(" from AppRole appR where appR.isActive = 1");
+		/* TODO MSSQL case - hql.append(" from AppRole appR where appR.isActive = 1"); */
+		hql.append(" from AppRole appR where appR.isActive = true");
 		
 		return AppRoleShortVoAssembler.createAppRoleShortVoCollectionFromAppRole(getDomainFactory().find(hql.toString())).sort();
 	}

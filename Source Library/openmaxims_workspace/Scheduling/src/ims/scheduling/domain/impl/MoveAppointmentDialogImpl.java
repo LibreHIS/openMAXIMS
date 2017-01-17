@@ -117,20 +117,26 @@ public class MoveAppointmentDialogImpl extends BaseMoveAppointmentDialogImpl
 		
 		if (searchCriteria.getPrimaryProcedure() != null && searchCriteria.getAdditionalProcedure() != null && !Boolean.TRUE.equals(searchCriteria.getMultiServiceCase()))
 		{
-			procedureCriteria += andStr + "(" + searchCriteria.getPrimaryProcedure().getIGenericItemInfoID() +" in (select proc.id from Sch_Session as sess left join sess.sch_Profile as profile left join profile.theatreDetails as theatreDet left join theatreDet.procedure as proc where (sess.id = session.id and proc.isActive = 1) )) ";
-			procedureCriteria +=  "and (" + searchCriteria.getAdditionalProcedure().getIGenericItemInfoID() +" in (select proc.id from Sch_Session as sess left join sess.sch_Profile as profile left join profile.theatreDetails as theatreDet left join theatreDet.procedure as proc where (sess.id = session.id and proc.isActive = 1) )) ";
+			/* TODO MSSQL case - procedureCriteria += andStr + "(" + searchCriteria.getPrimaryProcedure().getIGenericItemInfoID() +" in (select proc.id from Sch_Session as sess left join sess.sch_Profile as profile left join profile.theatreDetails as theatreDet left join theatreDet.procedure as proc where (sess.id = session.id and proc.isActive = 1) )) "; */
+			procedureCriteria += andStr + "(" + searchCriteria.getPrimaryProcedure().getIGenericItemInfoID() +" in (select proc.id from Sch_Session as sess left join sess.sch_Profile as profile left join profile.theatreDetails as theatreDet left join theatreDet.procedure as proc where (sess.id = session.id and proc.isActive = true) )) ";
+
+			/* TODO MSSQL case - procedureCriteria +=  "and (" + searchCriteria.getAdditionalProcedure().getIGenericItemInfoID() +" in (select proc.id from Sch_Session as sess left join sess.sch_Profile as profile left join profile.theatreDetails as theatreDet left join theatreDet.procedure as proc where (sess.id = session.id and proc.isActive = 1) )) "; */
+			procedureCriteria +=  "and (" + searchCriteria.getAdditionalProcedure().getIGenericItemInfoID() +" in (select proc.id from Sch_Session as sess left join sess.sch_Profile as profile left join profile.theatreDetails as theatreDet left join theatreDet.procedure as proc where (sess.id = session.id and proc.isActive = true) )) ";
+
 			andStr = " and ";
 		}
 		else if(searchCriteria.getPrimaryProcedure() != null)
 		{
 			procedureJoin = " left join session.sch_Profile as profile left join profile.theatreDetails as theatreDet left join theatreDet.procedure as proc ";
-			procedureCriteria += andStr + " ( proc.id = :procId and proc.isActive = 1) ";
+
+			/* TODO MSSQL case - procedureCriteria += andStr + " ( proc.id = :procId and proc.isActive = 1) "; */
+			procedureCriteria += andStr + " ( proc.id = :procId and proc.isActive = true) ";
+
 			markers.add("procId");
 			values.add(searchCriteria.getPrimaryProcedure().getIGenericItemInfoID());
 			andStr = " and ";
 		}
 		
-		// WDEV-9946
 		if (searchCriteria.getConsultant() != null && searchCriteria.getConsultant().getIMosHcpId() != null)
 		{
 			listOwnerJoin = " left join session.listOwners as listOwn ";

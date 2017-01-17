@@ -85,7 +85,10 @@ public class WaitingListConfigurationImpl extends BaseElectiveListConfigurationI
 		StringBuffer hql = new StringBuffer();
 
 		hql.append(" select loc from LocSite as loc ");//WDEV-20064
-		hql.append(" where loc.upperName like :LocName and loc.isActive = 1 and loc.isVirtual = 0 and loc.type = :Hospital ");
+
+        /* TODO MSSQL case - hql.append(" where loc.upperName like :LocName and loc.isActive = 1 and loc.isVirtual = 0 and loc.type = :Hospital "); */
+		hql.append(" where loc.upperName like :LocName and loc.isActive = true and loc.isVirtual = false and loc.type = :Hospital ");
+
 		hql.append(" order by loc.upperName asc");
 		
 		markers.add("LocName");
@@ -100,7 +103,8 @@ public class WaitingListConfigurationImpl extends BaseElectiveListConfigurationI
 	public ims.admin.vo.ServiceForElectiveListConfigVoCollection listServices(String name)
 	{
 		//WDEV-20064
-		StringBuilder hqlBuilder = new StringBuilder("select s1_1 from Service as s1_1 where s1_1.upperName like :servName and s1_1.isActive = 1 and s1_1.serviceCategory.id =:clinicalCategoryID order by s1_1.upperName asc");
+        /* TODO MSSQL case - StringBuilder hqlBuilder = new StringBuilder("select s1_1 from Service as s1_1 where s1_1.upperName like :servName and s1_1.isActive = 1 and s1_1.serviceCategory.id =:clinicalCategoryID order by s1_1.upperName asc"); */
+		StringBuilder hqlBuilder = new StringBuilder("select s1_1 from Service as s1_1 where s1_1.upperName like :servName and s1_1.isActive = true and s1_1.serviceCategory.id =:clinicalCategoryID order by s1_1.upperName asc");
 				
 		List <?> dos = getDomainFactory().find(hqlBuilder.toString(),new String[] {"servName","clinicalCategoryID"},new Object[] {name.toUpperCase()+"%",ServiceCategory.CLINICAL.getID()});
 		
@@ -245,8 +249,10 @@ public class WaitingListConfigurationImpl extends BaseElectiveListConfigurationI
 
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
-		
-		String hql = "select hcp from Hcp as hcp where hcp.isActive = 1 and (hcp.mos.name.upperSurname like :hcpSname or hcp.mos.name.upperForename like :hcpFname) ";
+
+		/* TODO MSSQL case - String hql = "select hcp from Hcp as hcp where hcp.isActive = 1 and (hcp.mos.name.upperSurname like :hcpSname or hcp.mos.name.upperForename like :hcpFname) "; */
+		String hql = "select hcp from Hcp as hcp where hcp.isActive = true and (hcp.mos.name.upperSurname like :hcpSname or hcp.mos.name.upperForename like :hcpFname) ";
+
 		markers.add("hcpSname");
 		values.add(name.toUpperCase() + "%");
 		
@@ -266,8 +272,10 @@ public class WaitingListConfigurationImpl extends BaseElectiveListConfigurationI
 	{
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
-		
-		StringBuffer hql = new StringBuffer("select wLC from ElectiveListConfiguration as wLC where wLC.isActive = 1 and wLC.waitingListName = :WaitingListName  ");
+
+		/* TODO MSSQL case - StringBuffer hql = new StringBuffer("select wLC from ElectiveListConfiguration as wLC where wLC.isActive = 1 and wLC.waitingListName = :WaitingListName  "); */
+		StringBuffer hql = new StringBuffer("select wLC from ElectiveListConfiguration as wLC where wLC.isActive = true and wLC.waitingListName = :WaitingListName  ");
+
 		markers.add("WaitingListName");
 		values.add(name);
 		
@@ -291,8 +299,10 @@ public class WaitingListConfigurationImpl extends BaseElectiveListConfigurationI
 	{
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
-	
-		StringBuffer hql = new StringBuffer("select wLC from ElectiveListConfiguration as wLC where wLC.isActive = 1 and wLC.waitingListCode = :WaitingListCode ");
+
+		/* TODO MSSQL case - StringBuffer hql = new StringBuffer("select wLC from ElectiveListConfiguration as wLC where wLC.isActive = 1 and wLC.waitingListCode = :WaitingListCode "); */
+		StringBuffer hql = new StringBuffer("select wLC from ElectiveListConfiguration as wLC where wLC.isActive = true and wLC.waitingListCode = :WaitingListCode ");
+
 		markers.add("WaitingListCode");
 		values.add(code);
 	
@@ -342,24 +352,16 @@ public class WaitingListConfigurationImpl extends BaseElectiveListConfigurationI
 		
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
-	
-		StringBuffer hql = new StringBuffer("select wLC from ElectiveListConfiguration as wLC left join wLC.hCPs as wLCC where wLC.isActive = 1 and wLCC.hCP.id = :hcp and wLCC.defaultForHCP=1 ");
+
+		/* TODO MSSQL case - StringBuffer hql = new StringBuffer("select wLC from ElectiveListConfiguration as wLC left join wLC.hCPs as wLCC where wLC.isActive = 1 and wLCC.hCP.id = :hcp and wLCC.defaultForHCP=1 "); */
+		StringBuffer hql = new StringBuffer("select wLC from ElectiveListConfiguration as wLC left join wLC.hCPs as wLCC where wLC.isActive = TRUE and wLCC.hCP.id = :hcp and wLCC.defaultForHCP = TRUE ");
 		
 		markers.add("hcp");
 		values.add(consultantRef.getID_Hcp());
-		
-		//WDEV-21153 - comment this  code
-//		if (serviceVo.getSpecialty()!=null)
-//		{
-//			hql.append(" and wLC.service.specialty.id=:Specialty ");
-//			markers.add("Specialty");
-//			values.add(serviceVo.getSpecialty().getID());
-//		}
-			hql.append(" and wLC.service.id = :serv "); 
-			markers.add("serv");
-			values.add(serviceVo.getID_Service());
-			//end WDEV-21153
-			
+
+		hql.append(" and wLC.service.id = :serv ");
+		markers.add("serv");
+		values.add(serviceVo.getID_Service());
 		
 		if (waitingListConfigRef!=null && waitingListConfigRef.getID_ElectiveListConfigurationIsNotNull())
 		{

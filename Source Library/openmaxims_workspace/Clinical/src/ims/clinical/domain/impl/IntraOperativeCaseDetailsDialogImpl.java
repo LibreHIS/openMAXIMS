@@ -375,7 +375,10 @@ public class IntraOperativeCaseDetailsDialogImpl extends BaseIntraOperativeCaseD
 	public NurseLiteVoCollection listNurseLiteVo(String name)
 	{
 		DomainFactory factory = getDomainFactory();
-		List nurses = factory.find("select nurseAlias from Nurse as nurseAlias left join nurseAlias.mos as mosAlias " + "where nurseAlias.hcpType.id =:idHcpDisType and nurseAlias.isActive = 1 and mosAlias.name.upperSurname like :nurseName", new String[] { "idHcpDisType", "nurseName" }, new Object[] { HcpDisType.NURSING.getID(), "%" + name.toUpperCase() + "%" });
+
+		/* TODO MSSQL case - List nurses = factory.find("select nurseAlias from Nurse as nurseAlias left join nurseAlias.mos as mosAlias " + "where nurseAlias.hcpType.id =:idHcpDisType and nurseAlias.isActive = 1 and mosAlias.name.upperSurname like :nurseName", new String[] { "idHcpDisType", "nurseName" }, new Object[] { HcpDisType.NURSING.getID(), "%" + name.toUpperCase() + "%" }); */
+		List nurses = factory.find("select nurseAlias from Nurse as nurseAlias left join nurseAlias.mos as mosAlias " + "where nurseAlias.hcpType.id =:idHcpDisType and nurseAlias.isActive = true and mosAlias.name.upperSurname like :nurseName", new String[] { "idHcpDisType", "nurseName" }, new Object[] { HcpDisType.NURSING.getID(), "%" + name.toUpperCase() + "%" });
+
 		// TODO maybe use HcpDisType.CirculatingNurse?
 
 		return NurseLiteVoAssembler.createNurseLiteVoCollectionFromNurse(nurses);
@@ -441,7 +444,8 @@ public class IntraOperativeCaseDetailsDialogImpl extends BaseIntraOperativeCaseD
 		DomainFactory factory = getDomainFactory();
 		StringBuffer hql = new StringBuffer();
 
-		hql.append(" select count(iopp.id) from IntraOpPlannedProcedure as iopp left join iopp.theatreAppointment as appt left join iopp.plannedProcedure as proc where proc.isPrimary = 1 and appt.id = :appointmentID");
+		/* TODO MSSQL case - hql.append(" select count(iopp.id) from IntraOpPlannedProcedure as iopp left join iopp.theatreAppointment as appt left join iopp.plannedProcedure as proc where proc.isPrimary = 1 and appt.id = :appointmentID"); */
+		hql.append(" select count(iopp.id) from IntraOpPlannedProcedure as iopp left join iopp.theatreAppointment as appt left join iopp.plannedProcedure as proc where proc.isPrimary = true and appt.id = :appointmentID");
 
 		Object[] count = factory.find(hql.toString(), new String[] { "appointmentID" }, new Object[] {theatreAppt.getID_Booking_Appointment()}).toArray();
 		
@@ -1106,7 +1110,7 @@ public class IntraOperativeCaseDetailsDialogImpl extends BaseIntraOperativeCaseD
 		return null;
 	}
 
-	public ServiceLiteVoCollection listActiveService(HcpRefVo hcpRef) //WDEV-21788
+	public ServiceLiteVoCollection listActiveService(HcpRefVo hcpRef)
 	{
 		if (hcpRef==null)
 		{
@@ -1114,7 +1118,10 @@ public class IntraOperativeCaseDetailsDialogImpl extends BaseIntraOperativeCaseD
 		}
 		
 		DomainFactory factory = getDomainFactory();
-		List services = factory.find("select service from Hcp as hcp left join hcp.mos as mos left join hcp.serviceFunction as sf left join sf.service as service where hcp.id = :hcpID and service.isActive =1 order by service.serviceName asc", new String[] { "hcpID" }, new Object[] { hcpRef.getID_Hcp() });
+
+		/* TODO MSSQL case - List services = factory.find("select service from Hcp as hcp left join hcp.mos as mos left join hcp.serviceFunction as sf left join sf.service as service where hcp.id = :hcpID and service.isActive =1 order by service.serviceName asc", new String[] { "hcpID" }, new Object[] { hcpRef.getID_Hcp() }); */
+		List services = factory.find("select service from Hcp as hcp left join hcp.mos as mos left join hcp.serviceFunction as sf left join sf.service as service where hcp.id = :hcpID and service.isActive = TRUE order by service.serviceName asc", new String[] { "hcpID" }, new Object[] { hcpRef.getID_Hcp() });
+
 		return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(services);
 	}
 
@@ -1238,14 +1245,15 @@ public class IntraOperativeCaseDetailsDialogImpl extends BaseIntraOperativeCaseD
 		return Sch_SessionShortVoAssembler.create(dobookAppointment.getSession());
 	}
 
-	//WDEV-21857
 	public IntraOpPlannedProcedureVo getPrimaryPlannedProc(Booking_AppointmentRefVo apptRef)
 	{
 		if (apptRef == null)
 			throw new CodingRuntimeException("appt is null in method listIntraOpPlannedProcedureByAppointment");
 
 		DomainFactory factory = getDomainFactory();
-		List procs = factory.find("select iopp from IntraOpPlannedProcedure as iopp left join iopp.plannedProcedure as patProc where (iopp.theatreAppointment.id = :idAppt AND  patProc.isPrimary = 1)order by iopp.plannedProcedure.systemInformation.creationDateTime ", new String[] { "idAppt" }, new Object[] { apptRef.getID_Booking_Appointment() });
+
+		/* TODO MSSQL case - List procs = factory.find("select iopp from IntraOpPlannedProcedure as iopp left join iopp.plannedProcedure as patProc where (iopp.theatreAppointment.id = :idAppt AND  patProc.isPrimary = 1)order by iopp.plannedProcedure.systemInformation.creationDateTime ", new String[] { "idAppt" }, new Object[] { apptRef.getID_Booking_Appointment() }); */
+		List procs = factory.find("select iopp from IntraOpPlannedProcedure as iopp left join iopp.plannedProcedure as patProc where (iopp.theatreAppointment.id = :idAppt AND  patProc.isPrimary = true)order by iopp.plannedProcedure.systemInformation.creationDateTime ", new String[] { "idAppt" }, new Object[] { apptRef.getID_Booking_Appointment() });
 		
 		if (procs==null || procs.size()==0)
 			return null;
@@ -1253,7 +1261,6 @@ public class IntraOperativeCaseDetailsDialogImpl extends BaseIntraOperativeCaseD
 		return IntraOpPlannedProcedureVoAssembler.create((IntraOpPlannedProcedure)procs.get(0));
 	}
 
-	//WDEV-22663
 	public Boolean isPocedurePerformedAlready(Booking_AppointmentRefVo appt, ProcedureRefVo procedureRef)
 	{
 		if (appt == null || procedureRef==null)

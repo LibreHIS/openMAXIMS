@@ -42,7 +42,8 @@ public class SelectPrognosticGleasonImpl extends BaseSelectPrognosticGleasonImpl
 
 	public ims.clinicaladmin.vo.GleasonConfigLiteVoCollection listGleason()
 	{
-		String query = " from GleasonConfig as gleason where gleason.isActive = 1 order by gleason.gleasonName ASC";
+		/* TODO MSSQL case - String query = " from GleasonConfig as gleason where gleason.isActive = 1 order by gleason.gleasonName ASC"; */
+		String query = " from GleasonConfig as gleason where gleason.isActive = true order by gleason.gleasonName ASC";
 		
 		return GleasonConfigLiteVoAssembler.createGleasonConfigLiteVoCollectionFromGleasonConfig(getDomainFactory().find(query));
 	}

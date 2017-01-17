@@ -1719,8 +1719,10 @@ public class BedInfoDialogImpl extends DTODomainImplementation implements BedInf
 	{
 		if(rttStatusPoint == null)
 			return null;
-		
-		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = 1 and rttMap.encounterType is null ";
+
+		/* TODO MSSQL case - String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = 1 and rttMap.encounterType is null "; */
+		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = true and rttMap.encounterType is null ";
+
 		List<?> listRTTMap = getDomainFactory().find(query, new String[] {"RTTStatusPoint"}, new Object[] {rttStatusPoint.getId()});
 		
 		if(listRTTMap != null && listRTTMap.size() > 0 && listRTTMap.get(0) instanceof RTTStatusEventMap)
@@ -3642,14 +3644,15 @@ public class BedInfoDialogImpl extends DTODomainImplementation implements BedInf
 		
 		return doInpatEpis;
 	}
-	//WDEV-21282 only list Provider cancellations, not marked as only outpatient
+
 	public CancellationTypeReasonVoCollection listCancellationTypeReason()
 	{
-		String query = "SELECT reasonConfig FROM CancellationTypeReason AS reasonConfig left join reasonConfig.cancellationType as ctype where ctype.id = :PROVIDER_CANCELLATION and (reasonConfig.tCITheatre = 1  OR reasonConfig.outpatients  <> 1)";
+	    /* TODO MSSQL case - String query = "SELECT reasonConfig FROM CancellationTypeReason AS reasonConfig left join reasonConfig.cancellationType as ctype where ctype.id = :PROVIDER_CANCELLATION and (reasonConfig.tCITheatre = 1  OR reasonConfig.outpatients  <> 1)"; */
+		String query = "SELECT reasonConfig FROM CancellationTypeReason AS reasonConfig left join reasonConfig.cancellationType as ctype where ctype.id = :PROVIDER_CANCELLATION and (reasonConfig.tCITheatre = true  OR reasonConfig.outpatients  <> true)";
 		
 		return CancellationTypeReasonVoAssembler.createCancellationTypeReasonVoCollectionFromCancellationTypeReason(getDomainFactory().find(query,new String[]{"PROVIDER_CANCELLATION"},new Object[] {Status_Reason.HOSPITALCANCELLED.getID()}));
 	}
-	//WDEV-20669 -- start
+
 	public void cancelHomeLeave(BedSpaceStateLiteVo voBedSpaceState,InpatientEpisodeLiteVo voInpat)	throws StaleObjectException, DomainInterfaceException
 	{
 		if (voInpat == null)
@@ -3905,7 +3908,8 @@ public class BedInfoDialogImpl extends DTODomainImplementation implements BedInf
 	
 	private CancellationTypeReasonVo getDeferredReason(CancelAppointmentReason reason)
 	{
-		String query = "SELECT reasonConfig FROM CancellationTypeReason AS reasonConfig left join reasonConfig.cancellationType as ctype where ctype.id = :PROVIDER_CANCELLATION and (reasonConfig.tCITheatre = 1  OR reasonConfig.outpatients  <> 1) and reasonConfig.cancellationReason.id = :REASON";
+		/* TODO MSSQL case - String query = "SELECT reasonConfig FROM CancellationTypeReason AS reasonConfig left join reasonConfig.cancellationType as ctype where ctype.id = :PROVIDER_CANCELLATION and (reasonConfig.tCITheatre = 1  OR reasonConfig.outpatients  <> 1) and reasonConfig.cancellationReason.id = :REASON"; */
+		String query = "SELECT reasonConfig FROM CancellationTypeReason AS reasonConfig left join reasonConfig.cancellationType as ctype where ctype.id = :PROVIDER_CANCELLATION and (reasonConfig.tCITheatre = true  OR reasonConfig.outpatients  <> true) and reasonConfig.cancellationReason.id = :REASON";
 		
 		List<?> results = getDomainFactory().find(query,new String[]{"PROVIDER_CANCELLATION", "REASON"},new Object[] {Status_Reason.HOSPITALCANCELLED.getID(),reason.getID()});
 		if (results == null || results.isEmpty())
@@ -3922,8 +3926,7 @@ public class BedInfoDialogImpl extends DTODomainImplementation implements BedInf
 	InpatientEpisodeMaintenance implIEM = (InpatientEpisodeMaintenance)getDomainImpl(InpatientEpisodeMaintenanceImpl.class);
 	implIEM.cancelCurrentAdmission(patientShort);		
 	}
-	
-	//WDEV-22326
+
 	public void updateAdmissionDetail(InpatientEpisodeRefVo inpatEpisodeRef, AdmissionDetailVo currentAdmission, AdmissionDetailForADTUpdateAdmissionVo admissionUpdatesVo) throws StaleObjectException
 	{		
 		if (currentAdmission == null)

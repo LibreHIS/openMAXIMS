@@ -52,7 +52,8 @@ public class EDDepartmentTypeConfigImpl extends BaseEDDepartmentTypeConfigImpl
 		DomainFactory factory = getDomainFactory();
 		StringBuffer hql = new StringBuffer();
 
-		hql.append(" select l1_1 from Location as l1_1 left join l1_1.type as l2_1 where l2_1.id = :idloctype and l1_1.isActive = 1 and l1_1.isVirtual = 0 order by l1_1.upperName asc "); //WDEV-19532  WDEV-20219
+		/* TODO MSSQL case - hql.append(" select l1_1 from Location as l1_1 left join l1_1.type as l2_1 where l2_1.id = :idloctype and l1_1.isActive = 1 and l1_1.isVirtual = 0 order by l1_1.upperName asc "); */
+		hql.append(" select l1_1 from Location as l1_1 left join l1_1.type as l2_1 where l2_1.id = :idloctype and l1_1.isActive = true and l1_1.isVirtual = false order by l1_1.upperName asc "); //WDEV-19532  WDEV-20219
 
 		List<?> list = factory.find(hql.toString(), new String[] { "idloctype" }, new Object[] { LocationType.ANE.getID() });
 

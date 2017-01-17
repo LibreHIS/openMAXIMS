@@ -41,6 +41,7 @@ public class PatientDiaryImpl extends BasePatientDiaryImpl
 	*/
 	public ims.pathways.vo.PatientEventLiteVoCollection listPatientEventByPatient(ims.core.patient.vo.PatientRefVo patient)
 	{
-		return PatientEventLiteVoAssembler.createPatientEventLiteVoCollectionFromPatientEvent(getDomainFactory().find("from PatientEvent pe where pe.patient.id = " + patient.getID_Patient() + " and pe.eventStatus.id <> " + EventStatus.RIE.getID() + " and pe.event.patientDiaryImpact = 1 "));	//WDEV-13008
+		/* TODO MSSQL case - return PatientEventLiteVoAssembler.createPatientEventLiteVoCollectionFromPatientEvent(getDomainFactory().find("from PatientEvent pe where pe.patient.id = " + patient.getID_Patient() + " and pe.eventStatus.id <> " + EventStatus.RIE.getID() + " and pe.event.patientDiaryImpact = 1 ")); */
+		return PatientEventLiteVoAssembler.createPatientEventLiteVoCollectionFromPatientEvent(getDomainFactory().find("from PatientEvent pe where pe.patient.id = " + patient.getID_Patient() + " and pe.eventStatus.id <> " + EventStatus.RIE.getID() + " and pe.event.patientDiaryImpact = TRUE "));
 	}
 }

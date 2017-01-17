@@ -151,7 +151,8 @@ public class PharmacyApprovalWorklistImpl extends BasePharmacyApprovalWorklistIm
 		if (wardName == null)
 			throw new DomainRuntimeException("Can not search ward after null name.");
 
-		String query = " FROM Location AS loc WHERE loc.upperName LIKE :NAME AND loc.isActive = 1 AND loc.isVirtual = 0 AND loc.type.id = " + LocationType.WARD.getID() + " order by loc.name asc";
+		/* TODO MSSQL case - String query = " FROM Location AS loc WHERE loc.upperName LIKE :NAME AND loc.isActive = 1 AND loc.isVirtual = 0 AND loc.type.id = " + LocationType.WARD.getID() + " order by loc.name asc"; */
+		String query = " FROM Location AS loc WHERE loc.upperName LIKE :NAME AND loc.isActive = true AND loc.isVirtual = 0 AND loc.type.id = " + LocationType.WARD.getID() + " order by loc.name asc";
 
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
@@ -170,7 +171,8 @@ public class PharmacyApprovalWorklistImpl extends BasePharmacyApprovalWorklistIm
 		if (name == null)
 			throw new DomainRuntimeException("Can not search after null name.");
 
-		String query = " FROM Hcp AS hcp WHERE (hcp.mos.name.upperSurname LIKE :SNAME OR hcp.mos.name.upperForename LIKE :FNAME) AND hcp.isActive = 1 order by hcp.mos.name.upperSurname asc, hcp.mos.name.upperForename asc";
+		/* TODO MSSQL case - String query = " FROM Hcp AS hcp WHERE (hcp.mos.name.upperSurname LIKE :SNAME OR hcp.mos.name.upperForename LIKE :FNAME) AND hcp.isActive = 1 order by hcp.mos.name.upperSurname asc, hcp.mos.name.upperForename asc"; */
+		String query = " FROM Hcp AS hcp WHERE (hcp.mos.name.upperSurname LIKE :SNAME OR hcp.mos.name.upperForename LIKE :FNAME) AND hcp.isActive = true order by hcp.mos.name.upperSurname asc, hcp.mos.name.upperForename asc";
 
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();

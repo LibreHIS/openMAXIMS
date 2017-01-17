@@ -5,14 +5,14 @@
 	<!-- POINT THE WORKSPACE TO YOUR SOURCE DIRECTORY -->
 	<property name="workspace" value="D:\IdeaProjects\openMAXIMS\Source Library\openmaxims_workspace\" />
 	<property name="project.name" value="openMAXIMS" />
-	<property name="dbtype" value="MSQ05" />
+	<property name="dbtype" value="PGSQL" />
 	<property name="hib.version" value="3" />
 
 	<!-- ***************************************** -->
 	<!-- Only these 5 properties need to be changed -->
 	<!-- POINT TO YOUR SQL DB and ADMIN ACCOUNT -->
 	<property name="dbHost" value="localhost" />
-	<property name="dbPort" value="1433" />
+	<property name="dbPort" value="5432" />
 	<property name="dbName" value="openmaxims_train" />
 	<property name="userid" value="openmaxims"  />
 	<property name="password" value="openmaxims" />

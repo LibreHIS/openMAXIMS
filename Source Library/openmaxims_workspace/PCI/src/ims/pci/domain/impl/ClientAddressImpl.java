@@ -59,8 +59,10 @@ public class ClientAddressImpl extends BaseClientAddressImpl
 
 		DomainFactory factory = getDomainFactory();
 
-		// WDEV-12550 - Added query condition to list back only active districts
-		String query = "select loc from Location as lsec left join lsec.locations as loc where (lsec.name = :SECNAME and loc.type.id = :VALUE and loc.isActive = 1) order by loc.name asc";
+		// Added query condition to list back only active districts
+		/* TODO MSSQL case - String query = "select loc from Location as lsec left join lsec.locations as loc where (lsec.name = :SECNAME and loc.type.id = :VALUE and loc.isActive = 1) order by loc.name asc"; */
+		String query = "select loc from Location as lsec left join lsec.locations as loc where (lsec.name = :SECNAME and loc.type.id = :VALUE and loc.isActive = TRUE) order by loc.name asc";
+
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
 
@@ -80,8 +82,10 @@ public class ClientAddressImpl extends BaseClientAddressImpl
 
 		DomainFactory factory = getDomainFactory();
 
-		// WDEV-12550 - Added query condition to list back only active sectors
-		String query = "select loc from LocSite as ls left join ls.locations as loc where (ls.name = :CCANAME and loc.type.id = :VALUE and loc.isActive = 1) order by loc.name asc";
+		// Added query condition to list back only active sectors
+		/* TODO MSSQL case - String query = "select loc from LocSite as ls left join ls.locations as loc where (ls.name = :CCANAME and loc.type.id = :VALUE and loc.isActive = 1) order by loc.name asc"; */
+		String query = "select loc from LocSite as ls left join ls.locations as loc where (ls.name = :CCANAME and loc.type.id = :VALUE and loc.isActive = TRUE) order by loc.name asc";
+
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
 
@@ -99,7 +103,9 @@ public class ClientAddressImpl extends BaseClientAddressImpl
 		StringBuffer hql = new StringBuffer();
 		hql.append(" from Organisation o");
 		hql.append(" where");
-		hql.append(" o.type.id = :lho and o.isActive = 1 order by o.name asc");
+
+		/* TODO MSSQL case - hql.append(" o.type.id = :lho and o.isActive = 1 order by o.name asc"); */
+		hql.append(" o.type.id = :lho and o.isActive = TRUE order by o.name asc");
 
 		return OrgLiteVoAssembler.createOrgLiteVoCollectionFromOrganisation(getDomainFactory().find(hql.toString(), new String[] { "lho" }, new Object[] { OrganisationType.LHO.getID() }));
 	}
@@ -109,7 +115,7 @@ public class ClientAddressImpl extends BaseClientAddressImpl
 		if (!lho.getID_OrganisationIsNotNull())
 			return null;
 
-		// WDEV-12550 - Added condition and parameters to filter only locations records of type CCA 
+		// Added condition and parameters to filter only locations records of type CCA
 		StringBuffer hql = new StringBuffer();
 		hql.append(" from LocSite as ls");
 		hql.append(" where");
@@ -132,9 +138,12 @@ public class ClientAddressImpl extends BaseClientAddressImpl
 		ArrayList<Object> values = new ArrayList<Object>();
 		StringBuffer hql = new StringBuffer();
 
-		// WDEV-12656 - Updated query to list only active DED
+		// Updated query to list only active DED
 		hql.append(" from DED ded");
-		hql.append(" where ded.upperName like :dedName and ded.isActive = 1");
+
+		/* TODO MSSQL case - hql.append(" where ded.upperName like :dedName and ded.isActive = 1"); */
+		hql.append(" where ded.upperName like :dedName and ded.isActive = TRUE");
+
 		markers.add("dedName");
 		values.add(DEDLite);
 

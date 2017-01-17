@@ -336,7 +336,9 @@ public class HcpAdminImpl extends DomainImpl implements HcpAdmin, ims.domain.imp
 
 		hql = " from Medic m "; 
 		StringBuffer condStr = new StringBuffer();
-		condStr.append(" m.isHCPaResponsibleHCP = 1");
+
+		/* TODO MSSQL case - condStr.append(" m.isHCPaResponsibleHCP = 1"); */
+		condStr.append(" m.isHCPaResponsibleHCP = true");
 		
 		andStr = " and ";
 		

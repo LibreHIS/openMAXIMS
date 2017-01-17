@@ -250,12 +250,19 @@ public class EDischargePreViewComponentImpl extends BaseEDischargePreViewCompone
 		String careContextIDs = "";
 		
 		DomainFactory factory = getDomainFactory();
+
+		/* TODO MSSQL case - String sql = "select distinct drdcc, tto, ttos " +
+					 "from DischargeReportDetail as drd left join drd.careContext as drdcc left join drd.gpRecipients as gp, " +
+					 "MedicationDetails as md left join md.careContext as mdcc left join md.tTORequired as tto left join md.tTOs as ttos, " +
+					 "DischargeDetails as dd left join dd.careContext as ddcc " +
+					 "where" +
+					 "(drd.isClinicalDetailsComplete = 1 and dd.dateOfDischarge is not null  and gp.id is not null )"; */
 		String sql = "select distinct drdcc, tto, ttos " +  
 					 "from DischargeReportDetail as drd left join drd.careContext as drdcc left join drd.gpRecipients as gp, " + 
 					 "MedicationDetails as md left join md.careContext as mdcc left join md.tTORequired as tto left join md.tTOs as ttos, " + 
 					 "DischargeDetails as dd left join dd.careContext as ddcc " +
 					 "where" + 
-					 "(drd.isClinicalDetailsComplete = 1 and dd.dateOfDischarge is not null  and gp.id is not null )";         
+					 "(drd.isClinicalDetailsComplete = true and dd.dateOfDischarge is not null  and gp.id is not null )";
 		
 		List lst = factory.find(sql);
 		

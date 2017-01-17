@@ -200,7 +200,9 @@ public class EDWhiteBoardNewDialogImpl extends BaseEDWhiteBoardNewDialogImpl
 		
 		StringBuffer hql = new StringBuffer();
 		hql.append("select whiteBoardCfg from WhiteBoardConfig as whiteBoardCfg ");
-		hql.append("where whiteBoardCfg.currentArea.id = :areaID  and (whiteBoardCfg.isRIE is null or whiteBoardCfg.isRIE=0) ");
+
+		/* TODO MSSQL case - hql.append("where whiteBoardCfg.currentArea.id = :areaID  and (whiteBoardCfg.isRIE is null or whiteBoardCfg.isRIE=0) "); */
+		hql.append("where whiteBoardCfg.currentArea.id = :areaID  and (whiteBoardCfg.isRIE is null or whiteBoardCfg.isRIE = FALSE) ");
 		
 		DomainFactory factory = getDomainFactory();
 		List<?> list = factory.find(hql.toString(), new String[] {"areaID"}, new Object[] {trackingAreaRef.getID_TrackingArea()});
@@ -218,7 +220,9 @@ public class EDWhiteBoardNewDialogImpl extends BaseEDWhiteBoardNewDialogImpl
 			throw new CodingRuntimeException("Cannot get PatientWhiteboardRecordVo value on null Patient or null Attendance.");
 		
 		StringBuffer hql = new StringBuffer();
-		hql.append("select patWhiteboard from PatientWhiteboardRecord as patWhiteboard where patWhiteboard.patient.id = :patID  and patWhiteboard.attendance.id= :attendanceID and (patWhiteboard.isRIE is null or patWhiteboard.isRIE=0) ");
+
+		/* TODO MSSQL case - hql.append("select patWhiteboard from PatientWhiteboardRecord as patWhiteboard where patWhiteboard.patient.id = :patID  and patWhiteboard.attendance.id= :attendanceID and (patWhiteboard.isRIE is null or patWhiteboard.isRIE=0) "); */
+		hql.append("select patWhiteboard from PatientWhiteboardRecord as patWhiteboard where patWhiteboard.patient.id = :patID  and patWhiteboard.attendance.id= :attendanceID and (patWhiteboard.isRIE is null or patWhiteboard.isRIE = FALSE) ");
 		
 		DomainFactory factory = getDomainFactory();
 		DomainObject doPatWhiteboard = factory.findFirst(hql.toString(), new String[] {"patID","attendanceID"}, new Object[] {patientRef.getID_Patient(), careContextRef.getID_CareContext()});
@@ -233,7 +237,9 @@ public class EDWhiteBoardNewDialogImpl extends BaseEDWhiteBoardNewDialogImpl
 			throw new CodingRuntimeException("Cannot get PatientAssessment value on null Care context or null User Assessment.");
 		
 		StringBuffer hql = new StringBuffer();
-		hql.append("select patAssess from PatientAssessment as patAssess left join patAssess.assessmentData as patAssessData where patAssess.careContext.id = :careContextID  and patAssessData.userAssessment.id= :userAssessID and (patAssess.isRIE is null or patAssess.isRIE=0) ");
+
+		/* TODO MSSQL case - hql.append("select patAssess from PatientAssessment as patAssess left join patAssess.assessmentData as patAssessData where patAssess.careContext.id = :careContextID  and patAssessData.userAssessment.id= :userAssessID and (patAssess.isRIE is null or patAssess.isRIE=0) "); */
+		hql.append("select patAssess from PatientAssessment as patAssess left join patAssess.assessmentData as patAssessData where patAssess.careContext.id = :careContextID  and patAssessData.userAssessment.id= :userAssessID and (patAssess.isRIE is null or patAssess.isRIE = FALSE) ");
 		
 		DomainFactory factory = getDomainFactory();
 		DomainObject doPatAssess = factory.findFirst(hql.toString(), new String[] {"careContextID","userAssessID"}, new Object[] {careContextRef.getID_CareContext(), userAssessmentRef.getID_UserAssessment()});
@@ -279,7 +285,9 @@ public class EDWhiteBoardNewDialogImpl extends BaseEDWhiteBoardNewDialogImpl
 			throw new CodingRuntimeException("Cannot get PatientWhiteboardActionVo value on null values.");
 		
 		StringBuffer hql = new StringBuffer();
-		hql.append("select pwa from PatientWhiteboardRecord as pwr left join pwr.currentActions as pwa left join pwa.actionType as wat where pwr.id = :patWhiteboardID and wat.id = :whiteboardOtherActionID and (pwa.isRIE is null or pwa.isRIE=0) ");
+
+		/* TODO MSSQL case - hql.append("select pwa from PatientWhiteboardRecord as pwr left join pwr.currentActions as pwa left join pwa.actionType as wat where pwr.id = :patWhiteboardID and wat.id = :whiteboardOtherActionID and (pwa.isRIE is null or pwa.isRIE=0) "); */
+		hql.append("select pwa from PatientWhiteboardRecord as pwr left join pwr.currentActions as pwa left join pwa.actionType as wat where pwr.id = :patWhiteboardID and wat.id = :whiteboardOtherActionID and (pwa.isRIE is null or pwa.isRIE = FALSE) ");
 		
 		DomainFactory factory = getDomainFactory();
 		DomainObject doPatWhiteboardAction = factory.findFirst(hql.toString(), new String[] {"patWhiteboardID","whiteboardOtherActionID"}, new Object[] {patientWhiteBoard.getID_PatientWhiteboardRecord(), whiteBoardOtherAction.getID_WhiteBoardOtherActions()});

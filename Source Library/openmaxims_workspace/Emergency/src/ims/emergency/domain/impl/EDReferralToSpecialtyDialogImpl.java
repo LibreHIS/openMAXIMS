@@ -289,13 +289,14 @@ public class EDReferralToSpecialtyDialogImpl extends BaseEDReferralToSpecialtyDi
 		return null;
 	}
 
-	//WDEV-17641
 	public SpecialtyCollection listSpecialties()
 	{
 		DomainFactory factory = getDomainFactory();
 		
 		StringBuffer hql = new StringBuffer();
-		hql.append("select lookInst from Lookup as look left join look.instances as lookInst left join lookInst.mappings as mappings where (look.id = 621 and mappings.extSystem = 'MAXIMS' and mappings.extCode like 'EDREFER%' and lookInst.active = 1)");
+
+		/* TODO MSSQL case - hql.append("select lookInst from Lookup as look left join look.instances as lookInst left join lookInst.mappings as mappings where (look.id = 621 and mappings.extSystem = 'MAXIMS' and mappings.extCode like 'EDREFER%' and lookInst.active = 1)"); */
+		hql.append("select lookInst from Lookup as look left join look.instances as lookInst left join lookInst.mappings as mappings where (look.id = 621 and mappings.extSystem = 'MAXIMS' and mappings.extCode like 'EDREFER%' and lookInst.active = true)");
 
 		List<?> list = factory.find(hql.toString());
 
@@ -316,7 +317,6 @@ public class EDReferralToSpecialtyDialogImpl extends BaseEDReferralToSpecialtyDi
 		return null;
 	}
 
-	//WDEV-19006 
 	public TrackingWithPartialAdmissionVo getTrackingWithEDPartialAdmission(TrackingRefVo trackingRef)
 	{
 		if(trackingRef == null || trackingRef.getID_Tracking() == null)

@@ -71,7 +71,10 @@ public class NewResultsAllTabComponentImpl extends BaseNewResultsAllTabComponent
 			names.add("name");
 			values.add(name.toUpperCase() + "%");
 		}
-		hql += (" and loc.isVirtual = :virtual and loc.isActive = 1) order by loc.upperName asc");
+
+		/* TODO MSSQL case - hql += (" and loc.isVirtual = :virtual and loc.isActive = 1) order by loc.upperName asc"); */
+		hql += (" and loc.isVirtual = :virtual and loc.isActive = TRUE) order by loc.upperName asc");
+
 		names.add("virtual");
 		values.add(Boolean.FALSE);
 		
@@ -87,7 +90,8 @@ public class NewResultsAllTabComponentImpl extends BaseNewResultsAllTabComponent
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
 
-		String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE (mos.name.upperSurname LIKE :HCP_NAME OR mos.name.upperForename LIKE :HCP_NAME) AND hcp.isActive = 1 AND hcp.hcpType.id = :MEDIC_TYPE ORDER BY mos.name.upperSurname";
+		/* TODO MSSQL case - String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE (mos.name.upperSurname LIKE :HCP_NAME OR mos.name.upperForename LIKE :HCP_NAME) AND hcp.isActive = 1 AND hcp.hcpType.id = :MEDIC_TYPE ORDER BY mos.name.upperSurname"; */
+		String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE (mos.name.upperSurname LIKE :HCP_NAME OR mos.name.upperForename LIKE :HCP_NAME) AND hcp.isActive = TRUE AND hcp.hcpType.id = :MEDIC_TYPE ORDER BY mos.name.upperSurname";
 		
 		paramNames.add("HCP_NAME");
 		paramValues.add(name.toUpperCase() + "%");
@@ -121,13 +125,14 @@ public class NewResultsAllTabComponentImpl extends BaseNewResultsAllTabComponent
 		}		
 		if (nameFilter != null && nameFilter.length() > 0)
 		{
-			hql.append(prepend + " (clin.upperName like :clinName) "); //WDEV-20219
+			hql.append(prepend + " (clin.upperName like :clinName) ");
 			names.add("clinName");
 			values.add("%" + nameFilter.toUpperCase() + "%");
 			prepend = " and ";
 		}
-		
-		hql.append(prepend + " clin.isActive = 1 ");
+
+		/* TODO MSSQL case - hql.append(prepend + " clin.isActive = 1 "); */
+		hql.append(prepend + " clin.isActive = TRUE ");
 		
 		List<?> clinics = factory.find(hql.toString(), names, values, 1000);
 		return ClinicLiteVoAssembler.createClinicLiteVoCollectionFromClinic(clinics).sort(true);

@@ -143,21 +143,23 @@ public class WardViewPatientSummaryComponentImpl extends BaseWardViewPatientSumm
 	{
 		if (ward == null || ward.getID_Location() == null)
 			return 0;
-		
-		String query = "SELECT COUNT (inpat.id) FROM InpatientEpisode AS inpat LEFT JOIN inpat.homeLeaves as hl WHERE inpat.pasEvent.location.id = :WARD_ID AND inpat.isOnHomeLeave = 1 AND (hl.isRIE is null OR hl.isRIE = 0) AND (hl.bedRetained is null OR  hl.bedRetained = 0) AND hl.dateReturnedFromHomeLeave is null";
+
+		/* TODO MSSQL case - String query = "SELECT COUNT (inpat.id) FROM InpatientEpisode AS inpat LEFT JOIN inpat.homeLeaves as hl WHERE inpat.pasEvent.location.id = :WARD_ID AND inpat.isOnHomeLeave = 1 AND (hl.isRIE is null OR hl.isRIE = 0) AND (hl.bedRetained is null OR  hl.bedRetained = 0) AND hl.dateReturnedFromHomeLeave is null"; */
+		String query = "SELECT COUNT (inpat.id) FROM InpatientEpisode AS inpat LEFT JOIN inpat.homeLeaves as hl WHERE inpat.pasEvent.location.id = :WARD_ID AND inpat.isOnHomeLeave = true AND (hl.isRIE is null OR hl.isRIE = false) AND (hl.bedRetained is null OR  hl.bedRetained = false) AND hl.dateReturnedFromHomeLeave is null";
 		
 		String[] paramNames = new String[] {"WARD_ID"};
 		Object[] paramValues = new Object[] {ward.getID_Location()};
 		
 		return (int) getDomainFactory().countWithHQL(query, paramNames, paramValues);
 	}
-	//WDEV-20363
+
 	public Integer countPatientsOnHomeLeaveWithBedRetained(LocationRefVo ward, LocationRefVo bay)
 	{
 		if (ward == null || ward.getID_Location() == null)
 			return 0;
-		
-		String query = "SELECT COUNT (inpat.id) FROM BedSpaceState as bspace LEFT JOIN bspace.inpatientEpisode AS inpat LEFT JOIN inpat.homeLeaves as hl LEFT JOIN inpat.bed as bd WHERE bspace.ward.id = :WARD_ID AND inpat.isOnHomeLeave = 1 AND (hl.isRIE is null OR hl.isRIE = 0) AND hl.bedRetained = 1 and hl.dateReturnedFromHomeLeave is null and hl.timeReturnedFromHomeLeave is null and bd is not null";
+
+		/* TODO MSSQL case - String query = "SELECT COUNT (inpat.id) FROM BedSpaceState as bspace LEFT JOIN bspace.inpatientEpisode AS inpat LEFT JOIN inpat.homeLeaves as hl LEFT JOIN inpat.bed as bd WHERE bspace.ward.id = :WARD_ID AND inpat.isOnHomeLeave = 1 AND (hl.isRIE is null OR hl.isRIE = 0) AND hl.bedRetained = 1 and hl.dateReturnedFromHomeLeave is null and hl.timeReturnedFromHomeLeave is null and bd is not null"; */
+		String query = "SELECT COUNT (inpat.id) FROM BedSpaceState as bspace LEFT JOIN bspace.inpatientEpisode AS inpat LEFT JOIN inpat.homeLeaves as hl LEFT JOIN inpat.bed as bd WHERE bspace.ward.id = :WARD_ID AND inpat.isOnHomeLeave = true AND (hl.isRIE is null OR hl.isRIE = false) AND hl.bedRetained = true and hl.dateReturnedFromHomeLeave is null and hl.timeReturnedFromHomeLeave is null and bd is not null";
 		
 		String[] paramNames = new String[] {"WARD_ID"};
 		Object[] paramValues = new Object[] {ward.getID_Location()};
@@ -183,8 +185,9 @@ public class WardViewPatientSummaryComponentImpl extends BaseWardViewPatientSumm
 	{
 		if (ward == null || ward.getID_Location() == null)
 			return 0;
-		
-		String query = "SELECT COUNT (inpat.id) FROM InpatientEpisode AS inpat WHERE inpat.pasEvent.location.id = :WARD_ID AND inpat.confirmedDischargeDateTime <= :DATE_24H AND inpat.isConfirmedDischarge = 1 AND ((inpat.isReadyToLeave is null OR inpat.isReadyToLeave = 0) AND inpat.readyToLeaveDecisionDateTime is null)";
+
+		/* TODO MSSQL case - String query = "SELECT COUNT (inpat.id) FROM InpatientEpisode AS inpat WHERE inpat.pasEvent.location.id = :WARD_ID AND inpat.confirmedDischargeDateTime <= :DATE_24H AND inpat.isConfirmedDischarge = 1 AND ((inpat.isReadyToLeave is null OR inpat.isReadyToLeave = 0) AND inpat.readyToLeaveDecisionDateTime is null)"; */
+		String query = "SELECT COUNT (inpat.id) FROM InpatientEpisode AS inpat WHERE inpat.pasEvent.location.id = :WARD_ID AND inpat.confirmedDischargeDateTime <= :DATE_24H AND inpat.isConfirmedDischarge = true AND ((inpat.isReadyToLeave is null OR inpat.isReadyToLeave = false) AND inpat.readyToLeaveDecisionDateTime is null)";
 		
 		String[] paramNames = new String[] {"WARD_ID", "DATE_24H"};
 		Object[] paramValues = new Object[] {ward.getID_Location(), new ims.framework.utils.DateTime().addHours(24).getJavaDate()};
@@ -192,13 +195,13 @@ public class WardViewPatientSummaryComponentImpl extends BaseWardViewPatientSumm
 		return (int) getDomainFactory().countWithHQL(query, paramNames, paramValues);
 	}
 
-	//WDEV-20984 
 	public Integer countPatientsReadyToLeave(ims.core.resource.place.vo.LocationRefVo ward, ims.core.resource.place.vo.LocationRefVo bay)
 	{		
 		if (ward == null || ward.getID_Location() == null)
 			return 0;
-		
-		String query = "SELECT COUNT (inpat.id) FROM InpatientEpisode AS inpat WHERE inpat.pasEvent.location.id = :WARD_ID AND inpat.isReadyToLeave = 1 and inpat.readyToLeaveDecisionDateTime <= :TODAY_HIGH ";
+
+		/* TODO MSSQL case - String query = "SELECT COUNT (inpat.id) FROM InpatientEpisode AS inpat WHERE inpat.pasEvent.location.id = :WARD_ID AND inpat.isReadyToLeave = 1 and inpat.readyToLeaveDecisionDateTime <= :TODAY_HIGH "; */
+		String query = "SELECT COUNT (inpat.id) FROM InpatientEpisode AS inpat WHERE inpat.pasEvent.location.id = :WARD_ID AND inpat.isReadyToLeave = true and inpat.readyToLeaveDecisionDateTime <= :TODAY_HIGH ";
 		
 		String[] paramNames = new String[] {"WARD_ID", "TODAY_HIGH"};
 		Object[] paramValues = new Object[] {ward.getID_Location(), new ims.framework.utils.DateTime().addHours(24).getJavaDate()};
@@ -220,7 +223,10 @@ public class WardViewPatientSummaryComponentImpl extends BaseWardViewPatientSumm
 		
 		query.append(" location.id = :WARD_ID ");
 		query.append(" AND status.id = :STATUS_ID ");
-		query.append(" AND appointment.isWardAttendance = 1 ");
+
+		/* TODO MSSQL case - query.append(" AND appointment.isWardAttendance = 1 "); */
+		query.append(" AND appointment.isWardAttendance = true ");
+
 		query.append(" AND appointment.appointmentDate = :TODAY ");
 		String[] paramNames = new String[] { "WARD_ID", "STATUS_ID", "TODAY" };
 		Object[] paramValues = new Object[] {ward.getID_Location(), Status_Reason.BOOKED.getID(), new ims.framework.utils.Date().getDate()};
@@ -242,7 +248,10 @@ public class WardViewPatientSummaryComponentImpl extends BaseWardViewPatientSumm
 		
 		query.append(" location.id = :WARD_ID ");
 		query.append(" AND status.id = :STATUS_ID ");
-		query.append(" AND appointment.isWardAttendance = 1 ");
+
+		/* TODO MSSQL case - query.append(" AND appointment.isWardAttendance = 1 "); */
+		query.append(" AND appointment.isWardAttendance = true ");
+
 		query.append(" AND appointment.appointmentDate = :TODAY ");
 		
 		String[] paramNames = new String[] {"WARD_ID", "STATUS_ID", "TODAY"};
@@ -265,7 +274,10 @@ public class WardViewPatientSummaryComponentImpl extends BaseWardViewPatientSumm
 		
 		query.append(" location.id = :WARD_ID ");
 		query.append(" AND status.id = :STATUS_ID ");
-		query.append(" AND appointment.isWardAttendance = 1 ");
+
+		/* TODO MSSQL case - query.append(" AND appointment.isWardAttendance = 1 "); */
+		query.append(" AND appointment.isWardAttendance = true ");
+
 		query.append(" AND appointment.appointmentDate = :TODAY ");
 		
 		String[] paramNames = new String[] {"WARD_ID", "STATUS_ID", "TODAY"};
@@ -341,8 +353,10 @@ public class WardViewPatientSummaryComponentImpl extends BaseWardViewPatientSumm
 		query.append("LEFT JOIN pel.electiveListStatus AS els LEFT JOIN els.electiveListStatus AS elStatus ");
 		query.append("LEFT JOIN pel.tCIDetails AS tci LEFT JOIN tci.tCIWard AS ward ");
 		query.append("LEFT JOIN pel.patient AS patient ");
-		
-		query.append("WHERE ward.id = :WARD_ID AND elStatus.id = :TCI_GIVEN AND tci.isActive = 1 AND tci.currentOutcome is null ");
+
+		/* TODO MSSQL case - query.append("WHERE ward.id = :WARD_ID AND elStatus.id = :TCI_GIVEN AND tci.isActive = 1 AND tci.currentOutcome is null "); */
+		query.append("WHERE ward.id = :WARD_ID AND elStatus.id = :TCI_GIVEN AND tci.isActive = true AND tci.currentOutcome is null ");
+
 		query.append( " AND tci.tCIDate = :TODAY");
 		
 		String[] paramNames = new String[] {"WARD_ID", "TCI_GIVEN", "TODAY"};

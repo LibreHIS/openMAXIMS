@@ -2651,8 +2651,9 @@ public class AppointmentOutcomeDialogImpl extends BaseAppointmentOutcomeDialogIm
 	{
 		if(rttStatusPoint == null)
 			return null;
-		
-		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = 1 and rttMap.encounterType is null";
+
+		/* TODO MSSQL case - String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = 1 and rttMap.encounterType is null"; */
+		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = true and rttMap.encounterType is null";
 		List<?> listRTTMap = getDomainFactory().find(query, new String[] {"RTTStatusPoint"}, new Object[] {rttStatusPoint.getId()});
 		
 		if(listRTTMap != null && listRTTMap.size() > 0 && listRTTMap.get(0) instanceof RTTStatusEventMap)
@@ -2662,11 +2663,6 @@ public class AppointmentOutcomeDialogImpl extends BaseAppointmentOutcomeDialogIm
 		
 		return null;
 	}
-
-	
-	
-	//-------end of wdev-19930
-	
 	
 	
 	/**
@@ -2948,13 +2944,17 @@ public class AppointmentOutcomeDialogImpl extends BaseAppointmentOutcomeDialogIm
 		
 		StringBuilder query = new StringBuilder("SELECT outcomeConfig FROM AppointmentOutcomeConfig AS outcomeConfig ");
 		
-		if (Status_Reason.DNA.equals(status))
-			query.append("WHERE outcomeConfig.usedForDNA = 1");
-		else if (Status_Reason.NOT_SEEN.equals(status))
-			query.append("WHERE outcomeConfig.usedForNotSeen = 1");
-		else if (Status_Reason.SEEN.equals(status))
-			query.append("WHERE outcomeConfig.usedForSeen = 1");
-		
+		if (Status_Reason.DNA.equals(status)) {
+			/* TODO MSSQL case - query.append("WHERE outcomeConfig.usedForDNA = 1"); */
+			query.append("WHERE outcomeConfig.usedForDNA = true");
+		} else if (Status_Reason.NOT_SEEN.equals(status)) {
+			/* TODO MSSQL case - query.append("WHERE outcomeConfig.usedForNotSeen = 1"); */
+			query.append("WHERE outcomeConfig.usedForNotSeen = true");
+		} else if (Status_Reason.SEEN.equals(status)) {
+			/* TODO MSSQL case - query.append("WHERE outcomeConfig.usedForSeen = 1"); */
+			query.append("WHERE outcomeConfig.usedForSeen = true");
+		}
+
 		return AppointmentOutcomeConfigVoAssembler.createAppointmentOutcomeConfigVoCollectionFromAppointmentOutcomeConfig(getDomainFactory().find(query.toString()));
 	}
 	
@@ -2968,7 +2968,6 @@ public class AppointmentOutcomeDialogImpl extends BaseAppointmentOutcomeDialogIm
 		
 		String query = "SELECT COUNT (tci.id) FROM TCIForPatientElectiveList AS tci LEFT JOIN tci.appointment AS appt WHERE appt.id = :APPT_ID and tci.isRIE is null";
 		
-		//WDEV-23321
 		try
 		{
 			count = getDomainFactory().countWithHQL(query, new String[] {"APPT_ID"}, new Object[] {appointment.getID_Booking_Appointment()});
@@ -3824,15 +3823,20 @@ public class AppointmentOutcomeDialogImpl extends BaseAppointmentOutcomeDialogIm
 		StringBuilder query = new StringBuilder("SELECT outcomeConfig FROM AppointmentOutcomeConfig AS outcomeConfig ");
 		query.append(" LEFT JOIN outcomeConfig.appointmentOutcome AS appointmentOutcome ");
 		
-		if (Status_Reason.DNA.equals(status))
-			query.append("WHERE outcomeConfig.usedForDNA = 1");
-		else if (Status_Reason.NOT_SEEN.equals(status))
-			query.append("WHERE outcomeConfig.usedForNotSeen = 1");
-		else if (Status_Reason.SEEN.equals(status))
-			query.append("WHERE outcomeConfig.usedForSeen = 1");
+		if (Status_Reason.DNA.equals(status)) {
+			/* TODO MSSQL case - query.append("WHERE outcomeConfig.usedForDNA = 1"); */
+			query.append("WHERE outcomeConfig.usedForDNA = true");
+		} else if (Status_Reason.NOT_SEEN.equals(status)) {
+			/* TODO MSSQL case - query.append("WHERE outcomeConfig.usedForNotSeen = 1"); */
+			query.append("WHERE outcomeConfig.usedForNotSeen = true");
+		} else if (Status_Reason.SEEN.equals(status)) {
+			/* TODO MSSQL case - query.append("WHERE outcomeConfig.usedForSeen = 1"); */
+			query.append("WHERE outcomeConfig.usedForSeen = true");
+		}
 
-		query.append(" AND appointmentOutcome.active = 1 "); //WDEV-23584
-		
+		/* TODO MSSQL case - query.append(" AND appointmentOutcome.active = 1 "); */
+		query.append(" AND appointmentOutcome.active = true ");
+
 		if (rttStatusPoint != null && rttStatusPoint.getID_RTTStatusPoint() != null)
 		{
 			query.append(" AND appointmentOutcome.id IN (");
@@ -3906,8 +3910,11 @@ public class AppointmentOutcomeDialogImpl extends BaseAppointmentOutcomeDialogIm
 		ArrayList values = new ArrayList();
 		
 		String hql = "select hcp from Sch_Session as session left join session.listOwners as owners left join owners.hcp as hcp  ";
-			   hql += "where session.id = :sessionID and (owners.attendingClinician = 1 or owners.listOwner = 1) and " +
-			   		  "hcp.isActive = :isActive and (hcp.mos.name.upperSurname like :hcpSurname or hcp.mos.name.upperForename like :hcpForname)";
+
+		/* TODO MSSQL case - hql += "where session.id = :sessionID and (owners.attendingClinician = 1 or owners.listOwner = 1) and " +
+			   		  "hcp.isActive = :isActive and (hcp.mos.name.upperSurname like :hcpSurname or hcp.mos.name.upperForename like :hcpForname)"; */
+		hql += "where session.id = :sessionID and (owners.attendingClinician = true or owners.listOwner = true) and " +
+				"hcp.isActive = :isActive and (hcp.mos.name.upperSurname like :hcpSurname or hcp.mos.name.upperForename like :hcpForname)";
 		
 		markers.add("sessionID");
 		values.add(session.getID_Sch_Session());

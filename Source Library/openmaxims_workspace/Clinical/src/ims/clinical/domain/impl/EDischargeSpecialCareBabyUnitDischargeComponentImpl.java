@@ -73,50 +73,10 @@ public class EDischargeSpecialCareBabyUnitDischargeComponentImpl extends BaseEDi
 		DomainFactory factory = getDomainFactory();
 		factory.save(NeonatalVoAssembler.extractNeoNatal(factory, neonatal));
 		
-		//updating summary WDEV-11348
+		// Updating summary
 		IEDischargeHelper impl = (IEDischargeHelper) getDomainImpl(EDischargeHelper.class); 
 		impl.updateSummaryIfRequired(neonatal, summary, factory);
 	}
-	
-	/**
-	 * @param record - instance of vo that implements IEDischargeSummary
-	 * @param summary
-	 * @param factory
-	 */
-	/*
-	private void updateSummaryIfRequired(IEDischargeSummary record, SummaryRefVo summary, DomainFactory factory) throws ims.domain.exceptions.StaleObjectException
-	{
-		if(summary == null)
-			return;
-		
-		boolean updateRequired = false;
-		Summary doSummary = (Summary)factory.getDomainObject(summary);
-		SummaryDetail doSummaryDetail = (SummaryDetail) doSummary.getSummaryDetails().get(findDetailRecordForType(doSummary.getSummaryDetails(),EDischargeSummarySection.NEONATAL));
-		if(record.getIEDischargeSummaryIsComplete())
-		{
-			updateRequired = true;
-			doSummaryDetail.setProgressStatus(getDomLookup(EDischargeSummarySectionStatus.COMPLETED));
-		}
-		else
-		{
-			updateRequired = true;
-			doSummaryDetail.setProgressStatus(getDomLookup(EDischargeSummarySectionStatus.IN_PROGRESS));
-		}
-		
-		if(updateRequired)
-			factory.save(doSummaryDetail);
-	}
 
-	private int findDetailRecordForType(List summaryDetails, EDischargeSummarySection section)
-	{
-		for(int i=0; i<summaryDetails.size(); i++)
-		{
-			SummaryDetail doSummDetail = (SummaryDetail) summaryDetails.get(i);
-			if(doSummDetail.getSection().equals(getDomLookup(section)))
-				return i;
-		}
-		
-		throw new CodingRuntimeException("Summary Detail record not instantiated for " + section.getText());
-	}
-	*/
+
 }

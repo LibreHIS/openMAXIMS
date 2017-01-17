@@ -68,7 +68,7 @@ public class SupportNetworkFamilyImpl extends DomainImpl implements ims.core.dom
 		
 		if (activeOnly.equals(Boolean.TRUE))
 		{
-			if (isRieMode == null || isRieMode) //WDEV-15479
+			if (isRieMode == null || isRieMode)
 			{
 				hql.append(" and suppNet.isCurrentlyActiveFamilySupport = :isActive");
 				names.add("isActive");
@@ -76,7 +76,9 @@ public class SupportNetworkFamilyImpl extends DomainImpl implements ims.core.dom
 			}
 			else
 			{
-				hql.append(" and ((suppNet.isCurrentlyActiveFamilySupport = :isActive and suppNet.isRIE is null ) or (suppNet.isRIE = 1))");
+				/* TODO MSSQL case - hql.append(" and ((suppNet.isCurrentlyActiveFamilySupport = :isActive and suppNet.isRIE is null ) or (suppNet.isRIE = 1))"); */
+				hql.append(" and ((suppNet.isCurrentlyActiveFamilySupport = :isActive and suppNet.isRIE is null ) or (suppNet.isRIE = true))");
+
 				names.add("isActive");
 				values.add(Boolean.TRUE);
 			}

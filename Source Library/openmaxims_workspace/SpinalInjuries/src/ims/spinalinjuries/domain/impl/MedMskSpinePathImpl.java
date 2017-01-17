@@ -230,9 +230,9 @@ public class MedMskSpinePathImpl extends DomainImpl implements ims.spinalinjurie
 	public Integer countForPrimaryPathology(ims.core.vo.PatientShort pID)
 	{
 		DomainFactory factory = getDomainFactory();
-		
-		List spine =   factory.find("select count (m1_1.id) from MskSpinePath as m1_1 left join m1_1.careContext as c1_1 left join c1_1.episodeOfCare as e1_1 left join e1_1.careSpell as c2_1 where (c2_1.patient.id = :PID and m1_1.isPrimaryPathology = 1)",
-				new String[]{"PID" }, new Object[]{pID.getID_Patient()});
+
+		/* TODO MSSQL case - factory.find("select count (m1_1.id) from MskSpinePath as m1_1 left join m1_1.careContext as c1_1 left join c1_1.episodeOfCare as e1_1 left join e1_1.careSpell as c2_1 where (c2_1.patient.id = :PID and m1_1.isPrimaryPathology = 1)", new String[]{"PID" }, new Object[]{pID.getID_Patient()}); */
+		List spine = factory.find("select count (m1_1.id) from MskSpinePath as m1_1 left join m1_1.careContext as c1_1 left join c1_1.episodeOfCare as e1_1 left join e1_1.careSpell as c2_1 where (c2_1.patient.id = :PID and m1_1.isPrimaryPathology = TRUE)", new String[]{"PID" }, new Object[]{pID.getID_Patient()});
 		
 		if(spine != null && spine.size() > 0)
 		{
@@ -256,7 +256,7 @@ public class MedMskSpinePathImpl extends DomainImpl implements ims.spinalinjurie
 		
 		DomainFactory factory = getDomainFactory();
 		
-		List spine =   factory.find("select m1_1 from MskSpinePath as m1_1 left join m1_1.careContext as c1_1 left join c1_1.episodeOfCare as e1_1 left join e1_1.careSpell as c2_1 where (c2_1.patient.id = :PID and m1_1.isPrimaryPathology = 1)",
+		List spine =   factory.find("select m1_1 from MskSpinePath as m1_1 left join m1_1.careContext as c1_1 left join c1_1.episodeOfCare as e1_1 left join e1_1.careSpell as c2_1 where (c2_1.patient.id = :PID and m1_1.isPrimaryPathology = true)",
 				new String[]{"PID" }, new Object[]{voRef.getID_Patient()});
 		MSKSpinePathologyFindingVoCollection collSpinePathology = MSKSpinePathologyFindingVoAssembler.createMSKSpinePathologyFindingVoCollectionFromMskSpinePath(spine);
 		if(collSpinePathology != null && collSpinePathology.size() > 0)

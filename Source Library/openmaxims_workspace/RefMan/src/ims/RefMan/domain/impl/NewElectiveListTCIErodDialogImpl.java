@@ -140,8 +140,10 @@ public class NewElectiveListTCIErodDialogImpl extends BaseNewElectiveListTCIErod
 	{
 		if(hcpId == null)
 			   throw new CodingRuntimeException("Cannot get ElectiveListConfig on null HCP id.");
-		
-		List list = getDomainFactory().find("select config from ElectiveListConfiguration as config left join config.service as serv left join config.hCPs as hcps left join hcps.hCP as hcp where (hcp.id = :hcpID) and (serv.id = :serviceID) and (config.isActive = 1)", 
+
+		/* TODO MSSQL case - List list = getDomainFactory().find("select config from ElectiveListConfiguration as config left join config.service as serv left join config.hCPs as hcps left join hcps.hCP as hcp where (hcp.id = :hcpID) and (serv.id = :serviceID) and (config.isActive = 1)",
+				new String[] {"hcpID", "serviceID"}, new Object[] {hcpId, serviceId}); */
+		List list = getDomainFactory().find("select config from ElectiveListConfiguration as config left join config.service as serv left join config.hCPs as hcps left join hcps.hCP as hcp where (hcp.id = :hcpID) and (serv.id = :serviceID) and (config.isActive = true)",
 				new String[] {"hcpID", "serviceID"}, new Object[] {hcpId, serviceId});
 		
 		return ElectiveListConfigurationVoAssembler.createElectiveListConfigurationVoCollectionFromElectiveListConfiguration(list);
@@ -151,8 +153,10 @@ public class NewElectiveListTCIErodDialogImpl extends BaseNewElectiveListTCIErod
 	{
 		if(serviceId == null)
 			   throw new CodingRuntimeException("Cannot get ElectiveListConfig on null Service id.");
-		
-		List list = getDomainFactory().find("select config from ElectiveListConfiguration as config left join config.service as serv where (config.isActive = 1) and (serv.id = :servID)", 
+
+		/* TODO MSSQL case - List list = getDomainFactory().find("select config from ElectiveListConfiguration as config left join config.service as serv where (config.isActive = 1) and (serv.id = :servID)",
+				new String[] {"servID"}, new Object[] {serviceId}); */
+		List list = getDomainFactory().find("select config from ElectiveListConfiguration as config left join config.service as serv where (config.isActive = true) and (serv.id = :servID)",
 				new String[] {"servID"}, new Object[] {serviceId});
 		
 		return ElectiveListConfigurationVoAssembler.createElectiveListConfigurationVoCollectionFromElectiveListConfiguration(list);
@@ -162,8 +166,10 @@ public class NewElectiveListTCIErodDialogImpl extends BaseNewElectiveListTCIErod
 	{
 		if(specialtyId == null)
 			   throw new CodingRuntimeException("Cannot get ElectiveListConfig on null Specialty id.");
-		
-		List list = getDomainFactory().find("select config from ElectiveListConfiguration as config left join config.service as serv left join serv.specialty as spec where (config.isActive = 1) and (spec.id = :servID)", 
+
+		/* TODO MSSQL case - List list = getDomainFactory().find("select config from ElectiveListConfiguration as config left join config.service as serv left join serv.specialty as spec where (config.isActive = 1) and (spec.id = :servID)",
+				new String[] {"servID"}, new Object[] {specialtyId}); */
+		List list = getDomainFactory().find("select config from ElectiveListConfiguration as config left join config.service as serv left join serv.specialty as spec where (config.isActive = true) and (spec.id = :servID)",
 				new String[] {"servID"}, new Object[] {specialtyId});
 		
 		return ElectiveListConfigurationVoAssembler.createElectiveListConfigurationVoCollectionFromElectiveListConfiguration(list);
@@ -599,14 +605,15 @@ public class NewElectiveListTCIErodDialogImpl extends BaseNewElectiveListTCIErod
 		return false;
 	}
 
-	//WDEV-18388
 	public LocationLiteVoCollection listHospitals(String name)
 	{
 		DomainFactory factory = getDomainFactory();
 		
 		List locations;
 
-		String hql = " from Location loc where loc.isActive = 1 and loc.type = :locType ";
+		/* TODO MSSQL case - String hql = " from Location loc where loc.isActive = 1 and loc.type = :locType "; */
+		String hql = " from Location loc where loc.isActive = true and loc.type = :locType ";
+
 		StringBuffer condStr = new StringBuffer();
 		String andStr = " and ";
 
@@ -636,7 +643,8 @@ public class NewElectiveListTCIErodDialogImpl extends BaseNewElectiveListTCIErod
 
 	public ElectiveListConfigurationVoCollection getElectiveList()
 	{
-		List list = getDomainFactory().find("select config from ElectiveListConfiguration as config where (config.isActive = 1) order by config.waitingListName asc ");
+		/* TODO MSSQL case - List list = getDomainFactory().find("select config from ElectiveListConfiguration as config where (config.isActive = 1) order by config.waitingListName asc "); */
+		List list = getDomainFactory().find("select config from ElectiveListConfiguration as config where (config.isActive = true) order by config.waitingListName asc ");
 		
 		return ElectiveListConfigurationVoAssembler.createElectiveListConfigurationVoCollectionFromElectiveListConfiguration(list);
 	}
@@ -832,12 +840,13 @@ public class NewElectiveListTCIErodDialogImpl extends BaseNewElectiveListTCIErod
 		return impl.saveAutomaticCaseNoteRequests(patient, mos, location, requiredByDate, null, tci);
 	}
 
-	//WDEV-20065
 	public LocationLiteVoCollection listHospitalsByElectiveList(ElectiveListConfigurationRefVo electiveListConfig, String name)
 	{
 		DomainFactory factory = getDomainFactory();
 		
-		String hql = " select loc from ElectiveListConfiguration as electiveListConf left join electiveListConf.listLocations as listLocations left join listLocations.listLocation as loc where electiveListConf.id = :electiveList and loc.isActive = 1 and loc.type = :locType ";
+		/* TODO MSSQL case - String hql = " select loc from ElectiveListConfiguration as electiveListConf left join electiveListConf.listLocations as listLocations left join listLocations.listLocation as loc where electiveListConf.id = :electiveList and loc.isActive = 1 and loc.type = :locType "; */
+		String hql = " select loc from ElectiveListConfiguration as electiveListConf left join electiveListConf.listLocations as listLocations left join listLocations.listLocation as loc where electiveListConf.id = :electiveList and loc.isActive = true and loc.type = :locType ";
+
 		StringBuffer condStr = new StringBuffer();
 		String andStr = " and ";
 

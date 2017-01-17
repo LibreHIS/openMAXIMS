@@ -105,8 +105,10 @@ public class PrintAppointmentImpl extends BasePrintAppointmentImpl
 		}
 		hql += " )";		
 		hql +=" and ba.isRIE is null and sess.isRIE is null and profile.isRIE is null";
-		
-		String finalHQL = "select pt.template from ProfileTemplate as pt left join pt.template as temp left join temp.report as report join pt.profile as prof where report.isActive =1 and temp.isActive =1 and prof.id in ( "; //WDEV-23494 //WDEV-23731 
+
+		/* TODO MSSQL case - String finalHQL = "select pt.template from ProfileTemplate as pt left join pt.template as temp left join temp.report as report join pt.profile as prof where report.isActive =1 and temp.isActive =1 and prof.id in ( "; */
+		String finalHQL = "select pt.template from ProfileTemplate as pt left join pt.template as temp left join temp.report as report join pt.profile as prof where report.isActive = TRUE and temp.isActive = TRUE and prof.id in ( ";
+
 		finalHQL += hql;
 		finalHQL += " )";		
 		finalHQL +=" and pt.isRIE is null and temp.isRIE is null and prof.isRIE is null";
@@ -117,7 +119,6 @@ public class PrintAppointmentImpl extends BasePrintAppointmentImpl
 	}
 
 
-	//WDEV-19381
 	public Boolean savePatientDocument(PatientDocumentVo patientDocumentToSave, ArrayList idsArrayList) throws StaleObjectException
 	{
 		DomainFactory factory = getDomainFactory();

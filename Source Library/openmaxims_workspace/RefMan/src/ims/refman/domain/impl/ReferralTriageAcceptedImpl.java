@@ -52,8 +52,9 @@ public class ReferralTriageAcceptedImpl extends BaseReferralTriageAcceptedImpl
 	{
 		if(service == null || service.getID_Service() == null)
 			return null;
-		
-		String query = "select sf from ServiceFunction as sf left join sf.service as s left join sf.function as f where s.id = :ServiceId and f.id is not null and sf.isActive = 1";
+
+		/* TODO MSSQL case - String query = "select sf from ServiceFunction as sf left join sf.service as s left join sf.function as f where s.id = :ServiceId and f.id is not null and sf.isActive = 1"; */
+		String query = "select sf from ServiceFunction as sf left join sf.service as s left join sf.function as f where s.id = :ServiceId and f.id is not null and sf.isActive = true";
 		
 		return ServiceFunctionLiteVoAssembler.createServiceFunctionLiteVoCollectionFromServiceFunction(getDomainFactory().find(query, new String[] {"ServiceId"}, new Object[] {service.getID_Service()}));
 	}

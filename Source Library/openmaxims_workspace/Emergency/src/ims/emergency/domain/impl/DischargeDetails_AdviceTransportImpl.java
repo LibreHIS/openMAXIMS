@@ -52,7 +52,9 @@ public class DischargeDetails_AdviceTransportImpl extends BaseDischargeDetails_A
 		
 		query.append("SELECT advice FROM AdviceLeafletsConfig AS advice LEFT JOIN advice.problems AS problem ");
 		query.append("LEFT JOIN advice.template AS template ");
-		query.append("WHERE advice.isGenericAdviceLeaflet = 1 ");
+
+		/* TODO MSSQL case - query.append("WHERE advice.isGenericAdviceLeaflet = 1 "); */
+		query.append("WHERE advice.isGenericAdviceLeaflet = true ");
 		
 		if (clinicalProblem != null && clinicalProblem.getID_ClinicalProblem() != null)
 		{

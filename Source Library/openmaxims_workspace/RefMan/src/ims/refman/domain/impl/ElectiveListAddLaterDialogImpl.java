@@ -469,10 +469,13 @@ public class ElectiveListAddLaterDialogImpl extends BaseElectiveListAddLaterDial
 			values.add(hcpRef.getID_Hcp());
 			andStr = " and ";
 			
-			if (isDefaultHCP!=null) //WDEV-23222
+			if (isDefaultHCP!=null)
 			{
 				hqlConditions.append(andStr);
-				hqlConditions.append(" e2_1.defaultForHCP = 1 ");
+
+				/* TODO MSSQL case - hqlConditions.append(" e2_1.defaultForHCP = 1 "); */
+				hqlConditions.append(" e2_1.defaultForHCP = true ");
+
 				andStr = " and ";
 			}
 		}
@@ -548,8 +551,10 @@ public class ElectiveListAddLaterDialogImpl extends BaseElectiveListAddLaterDial
 	{
 		if( hCpRef == null || serviceRef == null)
 			return false;
-		
-		StringBuilder query = new StringBuilder("select distinct m1_1 from Medic as m1_1 left join m1_1.serviceFunction as h1_1 left join h1_1.service as s1_1 where(m1_1.id = :hcpId and s1_1.id = :serviceId and m1_1.isHCPaResponsibleHCP = 1)");
+
+		/* TODO MSSQL case - StringBuilder query = new StringBuilder("select distinct m1_1 from Medic as m1_1 left join m1_1.serviceFunction as h1_1 left join h1_1.service as s1_1 where(m1_1.id = :hcpId and s1_1.id = :serviceId and m1_1.isHCPaResponsibleHCP = 1)"); */
+		StringBuilder query = new StringBuilder("select distinct m1_1 from Medic as m1_1 left join m1_1.serviceFunction as h1_1 left join h1_1.service as s1_1 where(m1_1.id = :hcpId and s1_1.id = :serviceId and m1_1.isHCPaResponsibleHCP = true)");
+
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
 		
@@ -577,15 +582,16 @@ public class ElectiveListAddLaterDialogImpl extends BaseElectiveListAddLaterDial
 	{
 		if(name == null || (name != null && name.length() == 0))
 			return null;
-			//throw new DomainRuntimeException("Can not search on null name.");
-		
+
 		StringBuffer hqlConditions = new StringBuffer();
 
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
 		String andStr = "";
 
-		String hql = "select medic from Medic as medic left join medic.serviceFunction as h1_1 left join h1_1.service as s1_1 where medic.isActive = 1 and (medic.mos.name.upperSurname like :hcpSname or medic.mos.name.upperForename like :hcpFname)";
+		/* TODO MSSQL case - String hql = "select medic from Medic as medic left join medic.serviceFunction as h1_1 left join h1_1.service as s1_1 where medic.isActive = 1 and (medic.mos.name.upperSurname like :hcpSname or medic.mos.name.upperForename like :hcpFname)"; */
+		String hql = "select medic from Medic as medic left join medic.serviceFunction as h1_1 left join h1_1.service as s1_1 where medic.isActive = true and (medic.mos.name.upperSurname like :hcpSname or medic.mos.name.upperForename like :hcpFname)";
+
 		markers.add("hcpSname");
 		values.add(name.toUpperCase() + "%");
 		markers.add("hcpFname");

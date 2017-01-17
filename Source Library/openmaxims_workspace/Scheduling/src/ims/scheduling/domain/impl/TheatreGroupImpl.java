@@ -69,7 +69,8 @@ public class TheatreGroupImpl extends BaseTheatreGroupImpl
 		
 		if (Boolean.TRUE.equals(active))
 		{
-			hql += " where theatreGroup.isActive = 1 ";
+			/* TODO MSSQL case - hql += " where theatreGroup.isActive = 1 "; */
+			hql += " where theatreGroup.isActive = true ";
 		}
 		
 		hql +=" order by theatreGroup.theatreGroupName asc ";

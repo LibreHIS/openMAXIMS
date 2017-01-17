@@ -60,8 +60,9 @@ public class PatientDiagnosisDialogImpl extends BasePatientDiagnosisDialogImpl
         Connection conection = factory.getJdbcConnection();
         
         StringBuffer sql = new StringBuffer();
-        
-        sql.append("select a.id, a.diagnosisn from core_diagnosis a LEFT OUTER JOIN core_diagnosis_keywords k ON a.id = k.id where (k.keyword like ? or a.diagnosisn like ?) and a.isactive = 1 ");
+
+		/* TODO MSSQL case -  sql.append("select a.id, a.diagnosisn from core_diagnosis a LEFT OUTER JOIN core_diagnosis_keywords k ON a.id = k.id where (k.keyword like ? or a.diagnosisn like ?) and a.isactive = 1 "); */
+        sql.append("select a.id, a.diagnosisn from core_diagnosis a LEFT OUTER JOIN core_diagnosis_keywords k ON a.id = k.id where (k.keyword like ? or a.diagnosisn like ?) and a.isactive = true ");
         
         if (listOfExistingDiagnosis != null && listOfExistingDiagnosis.trim().length() > 0)
 		{

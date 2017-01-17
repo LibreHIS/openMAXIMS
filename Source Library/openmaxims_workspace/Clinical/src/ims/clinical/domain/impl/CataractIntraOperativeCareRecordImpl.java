@@ -38,9 +38,6 @@ import ims.clinical.domain.Procedures;
 import ims.clinical.domain.base.impl.BaseCataractIntraOperativeCareRecordImpl;
 import ims.clinical.vo.IntraOperativeCareRecordVo;
 import ims.clinical.vo.domain.IntraOperativeCareRecordVoAssembler;
-import ims.clinicaladmin.vo.MedicationHotlistVo;
-import ims.clinicaladmin.vo.MedicationHotlistVoCollection;
-import ims.clinicaladmin.vo.domain.MedicationHotlistVoAssembler;
 import ims.core.clinical.domain.objects.IntraOperativeCareRecord;
 import ims.core.clinical.domain.objects.PatientProcedure;
 import ims.core.clinical.vo.IntraOperativeCareRecordRefVo;
@@ -49,7 +46,6 @@ import ims.core.domain.impl.ADTImpl;
 import ims.core.patient.vo.PatientRefVo;
 import ims.core.vo.InpatientEpisodeVo;
 import ims.core.vo.MedicationLiteVoCollection;
-import ims.core.vo.PatientProcedureLiteVo;
 import ims.core.vo.PatientProcedureVo;
 import ims.core.vo.PatientShort;
 import ims.core.vo.domain.LocShortVoAssembler;
@@ -192,7 +188,10 @@ public class CataractIntraOperativeCareRecordImpl extends BaseCataractIntraOpera
 		String condStr = "select m3_1 from MedicationHotlist as m1_1 left";
 		condStr += " join m1_1.hotListItem as m2_1 left join " ;
 		condStr += "m2_1.medication as m3_1 left join m1_1.specialty ";
-		condStr +="as l1_1 where (m3_1.isActive = 1 and m1_1.specialty.id = :speciality)";
+
+		/* TODO MSSQL case - condStr +="as l1_1 where (m3_1.isActive = 1 and m1_1.specialty.id = :speciality)"; */
+		condStr +="as l1_1 where (m3_1.isActive = true and m1_1.specialty.id = :speciality)";
+
 		ArrayList<String> markers = new  ArrayList<String>();
 		ArrayList<Serializable> values = new ArrayList<Serializable>();
 		markers.add("speciality");

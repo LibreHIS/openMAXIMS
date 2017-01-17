@@ -56,8 +56,9 @@ public class PatientDocumentEditImpl extends BasePatientDocumentEditImpl
 			throw new CodingRuntimeException("Can not check if document is still checked out on a null Document Id.");
 		
 		DomainFactory factory = getDomainFactory();
-		
-		long isCheckedOut = factory.countWithHQL("select count(pd.id) from PatientDocument as pd where pd.id = :patientDocument and pd.isLockedForEditing = 1 and pd.lockedByUser.id =:currUser", new String[] {"patientDocument","currUser"}, new Object[] {documentId.getID_PatientDocument(),((MemberOfStaffShortVo)getMosUser()).getID_MemberOfStaff()});
+
+		/* TODO MSSQL case - long isCheckedOut = factory.countWithHQL("select count(pd.id) from PatientDocument as pd where pd.id = :patientDocument and pd.isLockedForEditing = 1 and pd.lockedByUser.id =:currUser", new String[] {"patientDocument","currUser"}, new Object[] {documentId.getID_PatientDocument(),((MemberOfStaffShortVo)getMosUser()).getID_MemberOfStaff()}); */
+		long isCheckedOut = factory.countWithHQL("select count(pd.id) from PatientDocument as pd where pd.id = :patientDocument and pd.isLockedForEditing = true and pd.lockedByUser.id =:currUser", new String[] {"patientDocument","currUser"}, new Object[] {documentId.getID_PatientDocument(),((MemberOfStaffShortVo)getMosUser()).getID_MemberOfStaff()});
 		
 		if (isCheckedOut==1)
 			return true;

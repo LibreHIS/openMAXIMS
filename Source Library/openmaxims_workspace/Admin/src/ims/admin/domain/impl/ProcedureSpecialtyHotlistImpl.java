@@ -50,9 +50,9 @@ public class ProcedureSpecialtyHotlistImpl extends BaseProcedureSpecialtyHotlist
 		
 		StringBuilder query = new StringBuilder();
 		StringBuilder queryCount = new StringBuilder();
-		
-		query.append(" from ProcedureHotlist as p1_1 left join p1_1.hotlistItem as p2_1 " +
-				"left join p2_1.procedure as p3_1 where (p3_1.isActive = 1 and ");
+
+		/* TODO MSSQL case - query.append(" from ProcedureHotlist as p1_1 left join p1_1.hotlistItem as p2_1 left join p2_1.procedure as p3_1 where (p3_1.isActive = 1 and "); */
+		query.append(" from ProcedureHotlist as p1_1 left join p1_1.hotlistItem as p2_1 left join p2_1.procedure as p3_1 where (p3_1.isActive = true and ");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();

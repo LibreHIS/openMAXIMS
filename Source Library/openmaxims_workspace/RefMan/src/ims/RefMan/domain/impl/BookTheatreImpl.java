@@ -120,7 +120,8 @@ public class BookTheatreImpl extends BaseBookTheatreImpl
 
 	public ims.core.vo.ServiceLiteVoCollection listActiveCanBeScheduledService()
 	{
-		return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(getDomainFactory().find("from Service service where (service.isActive = 1 and service.canBeScheduled = 1 and service.serviceCategory.id != '" + ServiceCategory.RADIOLOGY_MODALITY.getID() + "') order by service.serviceName asc"));	//wdev-20862
+		/* TODO MSSQL case - return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(getDomainFactory().find("from Service service where (service.isActive = 1 and service.canBeScheduled = 1 and service.serviceCategory.id != '" + ServiceCategory.RADIOLOGY_MODALITY.getID() + "') order by service.serviceName asc")); */
+		return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(getDomainFactory().find("from Service service where (service.isActive = true and service.canBeScheduled = true and service.serviceCategory.id != '" + ServiceCategory.RADIOLOGY_MODALITY.getID() + "') order by service.serviceName asc"));
 	}
 
 	public ims.scheduling.vo.Sch_BookingTheatreVo saveTheatreBooking(ims.scheduling.vo.Sch_BookingTheatreVo voBooking, CatsReferralRefVo catsRef, SessionTheatreTCISlotLiteVo voSessTheatreSlot,TheatreType theatreType) throws ims.domain.exceptions.DomainInterfaceException, ims.domain.exceptions.StaleObjectException
@@ -515,22 +516,21 @@ public class BookTheatreImpl extends BaseBookTheatreImpl
 			}
 		}
 
-		// Theatre CurrentAppts - theatre appts with status of Booked for
-		// Referral
+		// Theatre CurrentAppts - theatre appts with status of Booked for Referral
 		List theatreAppts = factory.find("select appt from CatsReferral as catsRef join catsRef.appointments as appt where (catsRef.id = :idCatsRef and appt.apptStatus = :bookedStatus and appt.theatreBooking <> null )", new String[]{"idCatsRef", "bookedStatus"}, new Object[]{catsReferral.getID_CatsReferral(), getDomLookup(Status_Reason.BOOKED)});
 		voReferralBooking.setCurrentAppointments(BookingAppointmentLiteVoAssembler.createBookingAppointmentLiteVoCollectionFromBooking_Appointment(theatreAppts));
 
 		// TheatreAppts Requiring Rebook for Referral
-		List rebookTheatreAppts = factory.find("select appt from CatsReferral as catsRef join catsRef.appointments as appt where (catsRef.id = :idCatsRef and appt.requiresRebook = 1 and appt.theatreBooking <> null )", new String[]{"idCatsRef"}, new Object[]{catsReferral.getID_CatsReferral()});
+		/* TODO MSSQL case - List rebookTheatreAppts = factory.find("select appt from CatsReferral as catsRef join catsRef.appointments as appt where (catsRef.id = :idCatsRef and appt.requiresRebook = 1 and appt.theatreBooking <> null )", new String[]{"idCatsRef"}, new Object[]{catsReferral.getID_CatsReferral()}); */
+		List rebookTheatreAppts = factory.find("select appt from CatsReferral as catsRef join catsRef.appointments as appt where (catsRef.id = :idCatsRef and appt.requiresRebook = true and appt.theatreBooking <> null )", new String[]{"idCatsRef"}, new Object[]{catsReferral.getID_CatsReferral()});
 		voReferralBooking.setAppointmentsRequiringRebook(BookingAppointmentLiteVoAssembler.createBookingAppointmentLiteVoCollectionFromBooking_Appointment(rebookTheatreAppts));
 
-		// Clinical Appts - WDEV-7653
+		// Clinical Appts
 		List clinAppts = factory.find("select appt from CatsReferral as catsRef join catsRef.appointments as appt where (catsRef.id = :idCatsRef and appt.theatreBooking is null )", new String[]{"idCatsRef"}, new Object[]{catsReferral.getID_CatsReferral()});
 		voReferralBooking.setOtherAppointments(BookingAppointmentLiteVoAssembler.createBookingAppointmentLiteVoCollectionFromBooking_Appointment(clinAppts));
 
 		// Invs Requiring an appt - For the CatsReferral - orderInvestigations
-		// that are in the InvestigationOrders Collection and not in the
-		// collection of OrderInvAppt
+		// that are in the InvestigationOrders Collection and not in the collection of OrderInvAppt
 		List ordInvs = listInvsRequiringAppt(catsReferral, factory);
 		voReferralBooking.setOrdersRequiringAppt(OrderInvestigationBookingVoAssembler.createOrderInvestigationBookingVoCollectionFromOrderInvestigation(ordInvs));
 		
@@ -539,7 +539,6 @@ public class BookTheatreImpl extends BaseBookTheatreImpl
 		return voReferralBooking;
 	}
 
-	//WDEV-20181
 	private ContractServiceLocationsConfigVo getContractServiceLocConf(ContractConfigRefVo contract, ServiceRefVo service)
 	{
 		ContractConfiguration impl = (ContractConfiguration) getDomainImpl(ContractConfigurationImpl.class);
@@ -547,11 +546,12 @@ public class BookTheatreImpl extends BaseBookTheatreImpl
 	}
 
 	// Invs Requiring an appt - For the CatsReferral - orderInvestigations that
-	// are in the InvestigationOrders Collection and not in the collection of
-	// OrderInvAppt
+	// are in the InvestigationOrders Collection and not in the collection of OrderInvAppt
 	private List listInvsRequiringAppt(ims.RefMan.vo.CatsReferralRefVo catsReferral, DomainFactory factory)
 	{
-		String hql = "select ordInv from CatsReferral as catsRef " + "join catsRef.investigationOrders as ocsOrder join ocsOrder.investigations as ordInv left join ordInv.investigation.providerService as provService left join provService.locationService.service as service " + "where (catsRef.id = :idCatsRef and (service.canBeScheduled = 1  ) " + "and ordInv.id not in " + "(select ordInv1.id from CatsReferral as catsRef1 " + "join  catsRef1.orderInvAppts as ordInvAppt " + "join ordInvAppt.orderInvestigation as ordInv1" + " where catsRef1.id = :idCatsRef) and ordInv.ordInvCurrentStatus.ordInvStatus.id not in (:cancelled,:cancelledrequest))";
+		/* TODO MSSQL case - String hql = "select ordInv from CatsReferral as catsRef " + "join catsRef.investigationOrders as ocsOrder join ocsOrder.investigations as ordInv left join ordInv.investigation.providerService as provService left join provService.locationService.service as service " + "where (catsRef.id = :idCatsRef and (service.canBeScheduled = 1  ) " + "and ordInv.id not in " + "(select ordInv1.id from CatsReferral as catsRef1 " + "join  catsRef1.orderInvAppts as ordInvAppt " + "join ordInvAppt.orderInvestigation as ordInv1" + " where catsRef1.id = :idCatsRef) and ordInv.ordInvCurrentStatus.ordInvStatus.id not in (:cancelled,:cancelledrequest))"; */
+		String hql = "select ordInv from CatsReferral as catsRef " + "join catsRef.investigationOrders as ocsOrder join ocsOrder.investigations as ordInv left join ordInv.investigation.providerService as provService left join provService.locationService.service as service " + "where (catsRef.id = :idCatsRef and (service.canBeScheduled = true  ) " + "and ordInv.id not in " + "(select ordInv1.id from CatsReferral as catsRef1 " + "join  catsRef1.orderInvAppts as ordInvAppt " + "join ordInvAppt.orderInvestigation as ordInv1" + " where catsRef1.id = :idCatsRef) and ordInv.ordInvCurrentStatus.ordInvStatus.id not in (:cancelled,:cancelledrequest))";
+
 		return factory.find(hql, new String[]{"idCatsRef", "cancelled", "cancelledrequest"}, new Object[]{catsReferral.getID_CatsReferral(), OrderInvStatus.CANCELLED.getID(), OrderInvStatus.CANCEL_REQUEST.getID()});
 	}
 
@@ -652,7 +652,9 @@ public class BookTheatreImpl extends BaseBookTheatreImpl
 
 		markers.add("THEATRE_SESSION");
 		values.add(SchProfileType.THEATRE.getID());
-		List date = factory.find(" Select min (session.sessionDate) from Sch_Session as session " + " left join session.sch_Profile as profile left join profile.theatreDetails as theatreDet left join theatreDet.procedure as proc" + listOwnerJoin + " where ( proc.id = :procId and proc.isActive = 1) " + serviceCriteria + locationCriteria + listOwnerCriteria + theatreTypeCriteria + " and session.sessionStatus = :open and session.sessionDate >= :today  and session.sessionProfileType.id = :THEATRE_SESSION ", markers, values, 1000);// WDEV-11777
+
+		/* TODO MSSQL case - List date = factory.find(" Select min (session.sessionDate) from Sch_Session as session " + " left join session.sch_Profile as profile left join profile.theatreDetails as theatreDet left join theatreDet.procedure as proc" + listOwnerJoin + " where ( proc.id = :procId and proc.isActive = 1) " + serviceCriteria + locationCriteria + listOwnerCriteria + theatreTypeCriteria + " and session.sessionStatus = :open and session.sessionDate >= :today  and session.sessionProfileType.id = :THEATRE_SESSION ", markers, values, 1000); */
+		List date = factory.find(" Select min (session.sessionDate) from Sch_Session as session " + " left join session.sch_Profile as profile left join profile.theatreDetails as theatreDet left join theatreDet.procedure as proc" + listOwnerJoin + " where ( proc.id = :procId and proc.isActive = true) " + serviceCriteria + locationCriteria + listOwnerCriteria + theatreTypeCriteria + " and session.sessionStatus = :open and session.sessionDate >= :today  and session.sessionProfileType.id = :THEATRE_SESSION ", markers, values, 1000);
 
 		if (date != null && date.get(0) != null)
 			return new ims.framework.utils.Date((java.util.Date) date.get(0));
@@ -662,7 +664,7 @@ public class BookTheatreImpl extends BaseBookTheatreImpl
 
 	public SessionTheatreVoCollection listSession(Date startDate, Date endDate, ServiceRefVo service, LocationRefVo location, IMos consultant, IGenericItem procedure, TheatreType theatreType, Integer timeRequired, Boolean allowOverBook)
 	{
-		// all params must be set
+		// All params must be set
 		if (startDate == null || endDate == null || procedure == null)
 			throw new DomainRuntimeException("Not all mandatory search params set in method listSession");
 
@@ -742,7 +744,9 @@ public class BookTheatreImpl extends BaseBookTheatreImpl
 
 		markers.add("THEATRE_SESSION");
 		values.add(SchProfileType.THEATRE.getID());
-		List sessions = factory.find(" Select distinct session from Sch_Session as session " + " left join session.sch_Profile as profile " + "left join profile.theatreDetails as theatreDet left join theatreDet.procedure as proc " + "left join session.theatreSlots as tSlot " + listOwnerJoin + " where ( proc.id = :procId and proc.isActive = 1 ) " + serviceCriteria + locationCriteria + listOwnerCriteria + theatreTypeCriteria + timeRequiredCriteria + " and session.sessionStatus = :open and session.sessionDate >= :startDate and session.sessionDate <= :endDate and session.sessionProfileType.id = :THEATRE_SESSION and (tSlot.status.id = :openId or tSlot is null) ", markers, values, 1000);// wdev-11777
+
+		/* TODO MSSQL case - List sessions = factory.find(" Select distinct session from Sch_Session as session " + " left join session.sch_Profile as profile " + "left join profile.theatreDetails as theatreDet left join theatreDet.procedure as proc " + "left join session.theatreSlots as tSlot " + listOwnerJoin + " where ( proc.id = :procId and proc.isActive = 1 ) " + serviceCriteria + locationCriteria + listOwnerCriteria + theatreTypeCriteria + timeRequiredCriteria + " and session.sessionStatus = :open and session.sessionDate >= :startDate and session.sessionDate <= :endDate and session.sessionProfileType.id = :THEATRE_SESSION and (tSlot.status.id = :openId or tSlot is null) ", markers, values, 1000); */
+		List sessions = factory.find(" Select distinct session from Sch_Session as session " + " left join session.sch_Profile as profile " + "left join profile.theatreDetails as theatreDet left join theatreDet.procedure as proc " + "left join session.theatreSlots as tSlot " + listOwnerJoin + " where ( proc.id = :procId and proc.isActive = true ) " + serviceCriteria + locationCriteria + listOwnerCriteria + theatreTypeCriteria + timeRequiredCriteria + " and session.sessionStatus = :open and session.sessionDate >= :startDate and session.sessionDate <= :endDate and session.sessionProfileType.id = :THEATRE_SESSION and (tSlot.status.id = :openId or tSlot is null) ", markers, values, 1000);
 
 		voCollSessionShort = SessionTheatreVoAssembler.createSessionTheatreVoCollectionFromSch_Session(sessions);
 

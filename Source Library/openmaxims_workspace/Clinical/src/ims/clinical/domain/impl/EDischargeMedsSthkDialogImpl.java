@@ -71,35 +71,24 @@ public class EDischargeMedsSthkDialogImpl extends BaseEDischargeMedsSthkDialogIm
 		return MedicationLiteVoAssembler.create((Medication)getDomainFactory().getDomainObject(Medication.class, voRef.getID_Medication()));
 	}
 
-	public MedicationLiteVoCollection listMedicationHotlist(String text, HcpRefVo hcp) throws DomainInterfaceException//WDEV-11888//WDEV-11979
+	public MedicationLiteVoCollection listMedicationHotlist(String text, HcpRefVo hcp) throws DomainInterfaceException
 	{
-		//	WDEV-11979 - Start
+	    /* TODO MSSQL case - String hql = "select distinct med from MedicationFavourtiesForHCP as medFav left join medFav.hCP as hcp " +
+				"left join medFav.medication as med left join med.keywords as kw where " +
+				"(hcp.id = :hcpId and med.isActive = 1 and medFav.isRIE is null)"; */
 		String hql = "select distinct med from MedicationFavourtiesForHCP as medFav left join medFav.hCP as hcp " +
 				"left join medFav.medication as med left join med.keywords as kw where " +
-				"(hcp.id = :hcpId and med.isActive = 1 and medFav.isRIE is null)";
+				"(hcp.id = :hcpId and med.isActive = true and medFav.isRIE is null)";
+
 		ArrayList<String> names = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
 		names.add("hcpId");
 		values.add(hcp.getID_Hcp());
 		return MedicationLiteVoAssembler.createMedicationLiteVoCollectionFromMedication(Keywords.searchByKeywords(getDomainFactory(), text, hql, names, values));
-		//WDEV-11979 - End
-		/*WDEV-11979
-		String hql = "select distinct med from MedicationHotlist as medhot left join medhot.user as usr " +
-				"left join medhot.hotListItem as hli left join hli.medication as med left join med.keywords as kw where" +
-				"(medhot.user.id = :medicId and med.isActive = :active)" ;
-		ArrayList<String> names = new ArrayList<String>();
-		ArrayList<Object> values = new ArrayList<Object>();
-		names.add("medicId");
-		values.add(hcp.getID_Hcp());
-		names.add("active");
-		values.add(true);
-		return MedicationLiteVoAssembler.createMedicationLiteVoCollectionFromMedication(Keywords.searchByKeywords(getDomainFactory(), text, hql, names, values));
-		*/
 	}
 
-	public void addMedicationToHotlist(MedicationRefVo medication, HcpRefVo hcp)//WDEV-11888//WDEV-11979
+	public void addMedicationToHotlist(MedicationRefVo medication, HcpRefVo hcp)
 	{
-		//WDEV-11979 - Start
 		String sql = "select medFavs from MedicationFavourtiesForHCP as medFavs left join medFavs.hCP as hcp" +
 				" left join medFavs.medication as med where (hcp.id = :hcpId and med.id = :medId and medFavs.isRIE is null )";
 		List dos = getDomainFactory().find(sql,new String[]{"hcpId","medId"},new Object[]{hcp.getID_Hcp(),medication.getID_Medication()});
@@ -249,16 +238,20 @@ public class EDischargeMedsSthkDialogImpl extends BaseEDischargeMedsSthkDialogIm
 		return result;
 	}
 
-	public MedicationLiteVoCollection listFrequentMedications(Integer count, HcpRefVo hcp)//WDEV-11979
+	public MedicationLiteVoCollection listFrequentMedications(Integer count, HcpRefVo hcp)
 	{
 		if (hcp == null || !hcp.getID_HcpIsNotNull())
 			throw new DomainRuntimeException("Provided Hcp is invalid");
 		if (count == null || count < 1)
 			throw new DomainRuntimeException("Count must be 1 or greater");
-		
+
+		/* TODO MSSQL case - String hql = "select medcation from MedicationFavourtiesForHCP as medFav" +
+				" left join medFav.hCP as hcp left join medFav.medication as medcation where " +
+				"(hcp.id = :hcpId and medFav.isRIE is null and medcation.isActive = 1) order by medFav.count desc, upper(medcation.medicationName) asc "; */
 		String hql = "select medcation from MedicationFavourtiesForHCP as medFav" +
 				" left join medFav.hCP as hcp left join medFav.medication as medcation where " +
-				"(hcp.id = :hcpId and medFav.isRIE is null and medcation.isActive = 1) order by medFav.count desc, upper(medcation.medicationName) asc ";
+				"(hcp.id = :hcpId and medFav.isRIE is null and medcation.isActive = true) order by medFav.count desc, upper(medcation.medicationName) asc ";
+
 		List dos = getDomainFactory().find(hql,"hcpId",(Object)hcp.getID_Hcp());
 		if (dos == null || dos.size() == 0)
 			return null;

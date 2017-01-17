@@ -88,8 +88,9 @@ public class OutcomeSummaryDialogImpl extends BaseOutcomeSummaryDialogImpl
 	{
 		if (session == null || session.getID_Sch_Session() == null)
 			return null;
-		
-		String query = "SELECT hcp FROM Sch_Session AS session LEFT JOIN session.listOwners AS listOwner LEFT JOIN listOwner.hcp AS hcp WHERE session.id = :SESSION AND listOwner.listOwner = 1";
+
+		/* TODO MSSQL case - String query = "SELECT hcp FROM Sch_Session AS session LEFT JOIN session.listOwners AS listOwner LEFT JOIN listOwner.hcp AS hcp WHERE session.id = :SESSION AND listOwner.listOwner = 1"; */
+		String query = "SELECT hcp FROM Sch_Session AS session LEFT JOIN session.listOwners AS listOwner LEFT JOIN listOwner.hcp AS hcp WHERE session.id = :SESSION AND listOwner.listOwner = true";
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();

@@ -83,8 +83,11 @@ public class VTERiskAssessmentWorklistImpl extends BaseVTERiskAssessmentWorklist
 		StringBuffer hql = new StringBuffer();
 
 		hql.append(" select hosp from LocSite as hosp left join hosp.type as hosptype");
-		hql.append(" where hosp.isActive = 1 and hosp.isVirtual = 0 and hosptype.id=:HospType");
-		hql.append(" order by hosp.upperName asc"); //WDEV-20219 UPPER(hosp.name)
+
+		/* TODO MSSQL case - hql.append(" where hosp.isActive = 1 and hosp.isVirtual = 0 and hosptype.id=:HospType"); */
+		hql.append(" where hosp.isActive = true and hosp.isVirtual = false and hosptype.id=:HospType");
+
+		hql.append(" order by hosp.upperName asc");
 
 		markers.add("HospType");
 		values.add(LocationType.HOSP.getID());
@@ -98,8 +101,7 @@ public class VTERiskAssessmentWorklistImpl extends BaseVTERiskAssessmentWorklist
 		return implLoc.listActiveWardsForHospitalByNameLite(hospital, wardName);
 	}
 
-	//WDEV-15414
-	public List<IVTERiskAssessment> listPatients(VTERiskAssessmentWorklistCriteriaVo criteria) 
+	public List<IVTERiskAssessment> listPatients(VTERiskAssessmentWorklistCriteriaVo criteria)
 	{
 		if(new VTERiskAssessmentWorklistCriteriaVo().equals(criteria))
 			throw new CodingRuntimeException("At least one search criteria must be provided");

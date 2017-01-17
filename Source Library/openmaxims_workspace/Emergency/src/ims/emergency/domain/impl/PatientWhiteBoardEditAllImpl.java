@@ -178,7 +178,9 @@ public class PatientWhiteBoardEditAllImpl extends BasePatientWhiteBoardEditAllIm
 		
 		StringBuffer hql = new StringBuffer();
 		hql.append("select whiteBoardCfg from WhiteBoardConfig as whiteBoardCfg ");
-		hql.append("where whiteBoardCfg.currentArea.id = :areaID  and (whiteBoardCfg.isRIE is null or whiteBoardCfg.isRIE=0) ");
+
+		/* TODO MSSQL case - hql.append("where whiteBoardCfg.currentArea.id = :areaID  and (whiteBoardCfg.isRIE is null or whiteBoardCfg.isRIE=0) "); */
+		hql.append("where whiteBoardCfg.currentArea.id = :areaID  and (whiteBoardCfg.isRIE is null or whiteBoardCfg.isRIE = FALSE) ");
 		
 		DomainFactory factory = getDomainFactory();
 		List<?> list = factory.find(hql.toString(), new String[] {"areaID"}, new Object[] {trackingAreaRef.getID_TrackingArea()});

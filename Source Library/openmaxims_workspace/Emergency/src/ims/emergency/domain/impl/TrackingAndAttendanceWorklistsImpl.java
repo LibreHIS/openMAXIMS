@@ -250,7 +250,7 @@ public class TrackingAndAttendanceWorklistsImpl extends BaseTrackingAndAttendanc
 		{
 			if (STATUS_CURRENTLY_IN_ED.equals(searchCriteria.getEDStatus()))
 			{
-				if( getCurrentLocation() != null )		//wdev-18310
+				if( getCurrentLocation() != null )
 				{
 					queryConditionPart.append(logicalCondition).append(" (tracking.eDLocation.id = :CURRENT_LOCATION AND (tracking.isDischarged is null OR tracking.isDischarged = 0)) ");
 					
@@ -261,8 +261,9 @@ public class TrackingAndAttendanceWorklistsImpl extends BaseTrackingAndAttendanc
 			}
 			else if (STATUS_DISCHARGED.equals(searchCriteria.getEDStatus()))
 			{
-				queryConditionPart.append(logicalCondition).append(" tracking.isDischarged = 1 ");
-				
+				/* TODO MSSQL case - queryConditionPart.append(logicalCondition).append(" tracking.isDischarged = 1 "); */
+				queryConditionPart.append(logicalCondition).append(" tracking.isDischarged = true ");
+
 				logicalCondition = " AND ";
 			}
 		}
@@ -329,35 +330,29 @@ public class TrackingAndAttendanceWorklistsImpl extends BaseTrackingAndAttendanc
 		// Results Awaiting to be Seen
 		if (Boolean.TRUE.equals(searchCriteria.getAwaitingReview())) //WDEV-15941
 		{
-			/*queryFromJoinPart.append(", OrderInvestigation AS ordInv LEFT JOIN ordInv.orderDetails AS ordDetails LEFT JOIN ordDetails.patient AS invPatient ");
-			
-			queryConditionPart.append(logicalCondition).append(" ordInv.ordInvCurrentStatus.ordInvStatus.id = :REVIEW and patient.id = invPatient.id AND ordInv.id is not null AND ((attendance.dischargeDateTime is not null AND ordInv.displayDateTime BETWEEN attendance.registrationDateTime AND attendance.dischargeDateTime) OR (attendance.dischargeDateTime is null AND ordInv.displayDateTime BETWEEN attendance.registrationDateTime AND :CURRENT_DATE_TIME ))");
-			logicalCondition = " AND ";
-
-			paramNames.add("CURRENT_DATE_TIME");		paramValues.add(new DateTime().getJavaDate());
-			paramNames.add("REVIEW");					paramValues.add(OrderInvStatus.REVIEW.getID());*/
-			
 			queryFromJoinPart.append(" left join patient.oCSNotification as patNotification left join patNotification.newResults as newRes left join patNotification.seenResults as seenRes ");
 			queryConditionPart.append(logicalCondition).append(" (newRes is not null and (seenRes is null or (seenRes is not null and newRes.newCount > seenRes.seenCount))) ");
 		}
 		
-		if(Boolean.TRUE.equals(searchCriteria.getAttendanceNotCoded()))//WDEV-19304
+		if(Boolean.TRUE.equals(searchCriteria.getAttendanceNotCoded()))
 		{
-			/*queryConditionPart.append(logicalCondition).append("((attendance.careContext.id not in (select pDiag.careContext.id from PatientDiagnosis as pDiag where pDiag.careContext.id = attendance.careContext.id and (pDiag.isRIE is null or pDiag.isRIE = 0) AND attendance.careContext.id not in (SELECT noKnownInv.attendance.id from AttendDiagInvTreatStatus AS noKnownInv where noKnownInv.attendance.id = attendance.careContext.id AND (noKnownInv.isRIE is null or noKnownInv.isRIE = 0) AND (noKnownInv.diagnosesNotRecorded = true OR noKnownInv.noDiagnoses = true))))  "); //WDEV-19304
-			queryConditionPart.append(" OR (attendance.careContext.id not in (select att.id from InvestigationsForAttend as ifa left join ifa.attendance as att left join ifa.investigations as invAttend where att.id = attendance.careContext.id and invAttend.active = 1) AND attendance.careContext.id not in (SELECT noKnownInv.attendance.id from AttendDiagInvTreatStatus AS noKnownInv where noKnownInv.attendance.id = attendance.careContext.id AND (noKnownInv.isRIE is null or noKnownInv.isRIE = 0) AND (noKnownInv.noInvestigations = true OR noKnownInv.investigationNotRecorded = true)) AND patient.id not in (select ordDetAttend.patient.id from OrderInvestigation as ordInvAttend left join ordInvAttend.orderDetails as ordDetAttend where ((attendance.dischargeDateTime is not null AND ordInvAttend.displayDateTime BETWEEN attendance.registrationDateTime AND attendance.dischargeDateTime) OR (attendance.dischargeDateTime is null AND ordInvAttend.displayDateTime BETWEEN attendance.registrationDateTime AND :ATTEND_CURRENT_DATE_TIME ))))" ); //WDEV-19304
-			queryConditionPart.append(" OR (attendance.careContext.id not in (select interventionTreatAttend.attendance.id from InterventionsTreatmentsForAttendence as interventionTreatAttend left join interventionTreatAttend.interventionTreatments as interventionTreat where interventionTreatAttend.attendance.id = attendance.careContext.id and interventionTreat.id is not null) OR  attendance.careContext.id not in (SELECT noKnownInv.attendance.id from AttendDiagInvTreatStatus AS noKnownInv where noKnownInv.attendance.id = attendance.careContext.id AND (noKnownInv.isRIE is null or noKnownInv.isRIE = 0) AND (noKnownInv.noTreatments = true OR noKnownInv.treatmentsNotRecorded = true)))"); //WDEV-19304
-			queryConditionPart.append(")");*/
-			queryConditionPart.append(logicalCondition).append("((NOT EXISTS (select pDiag.careContext.id from PatientDiagnosis as pDiag where pDiag.careContext.id = attendance.careContext.id and (pDiag.isRIE is null or pDiag.isRIE = 0)) AND NOT EXISTS (SELECT noKnownInv.attendance.id from AttendDiagInvTreatStatus AS noKnownInv WHERE noKnownInv is not null AND noKnownInv.attendance.id = attendance.careContext.id AND (noKnownInv.isRIE is null or noKnownInv.isRIE = 0) AND (noKnownInv.diagnosesNotRecorded = true OR noKnownInv.noDiagnoses = true))  "); //WDEV-19304
-			queryConditionPart.append(" OR (NOT EXISTS (select att.id from InvestigationsForAttend as ifa left join ifa.attendance as att left join ifa.investigations as invAttend where att.id = attendance.careContext.id and invAttend.active = 1) AND NOT EXISTS (SELECT noKnownInv.attendance.id from AttendDiagInvTreatStatus AS noKnownInv WHERE noKnownInv is not null AND noKnownInv.attendance.id = attendance.careContext.id AND (noKnownInv.isRIE is null or noKnownInv.isRIE = 0) AND (noKnownInv.noInvestigations = true OR noKnownInv.investigationNotRecorded = true))  AND NOT EXISTS (select ordDetAttend.patient.id from OrderInvestigation as ordInvAttend left join ordInvAttend.orderDetails as ordDetAttend where (ordDetAttend.patient.id = attendance.patient.id AND (attendance.dischargeDateTime is not null AND ordInvAttend.displayDateTime BETWEEN attendance.registrationDateTime AND attendance.dischargeDateTime) OR (attendance.dischargeDateTime is null AND ordInvAttend.displayDateTime BETWEEN attendance.registrationDateTime AND :ATTEND_CURRENT_DATE_TIME))))" ); //WDEV-19304
-			queryConditionPart.append(" OR (NOT EXISTS (select interventionTreatAttend.attendance.id from InterventionsTreatmentsForAttendence as interventionTreatAttend left join interventionTreatAttend.interventionTreatments as interventionTreat where interventionTreatAttend.attendance.id = attendance.careContext.id and interventionTreat.id is not null)AND NOT EXISTS (SELECT noKnownInv.attendance.id from AttendDiagInvTreatStatus AS noKnownInv WHERE noKnownInv is not null AND noKnownInv.attendance.id = attendance.careContext.id AND (noKnownInv.isRIE is null or noKnownInv.isRIE = 0) AND (noKnownInv.noTreatments = true OR noKnownInv.treatmentsNotRecorded = true)))"); //WDEV-19304
-			queryConditionPart.append(" )) ");
+		    /* TODO MSSQL case - queryConditionPart.append(logicalCondition).append("((NOT EXISTS (select pDiag.careContext.id from PatientDiagnosis as pDiag where pDiag.careContext.id = attendance.careContext.id and (pDiag.isRIE is null or pDiag.isRIE = 0)) AND NOT EXISTS (SELECT noKnownInv.attendance.id from AttendDiagInvTreatStatus AS noKnownInv WHERE noKnownInv is not null AND noKnownInv.attendance.id = attendance.careContext.id AND (noKnownInv.isRIE is null or noKnownInv.isRIE = 0) AND (noKnownInv.diagnosesNotRecorded = true OR noKnownInv.noDiagnoses = true))  "); */
+			queryConditionPart.append(logicalCondition).append("((NOT EXISTS (select pDiag.careContext.id from PatientDiagnosis as pDiag where pDiag.careContext.id = attendance.careContext.id and (pDiag.isRIE is null or pDiag.isRIE = false)) AND NOT EXISTS (SELECT noKnownInv.attendance.id from AttendDiagInvTreatStatus AS noKnownInv WHERE noKnownInv is not null AND noKnownInv.attendance.id = attendance.careContext.id AND (noKnownInv.isRIE is null or noKnownInv.isRIE = false) AND (noKnownInv.diagnosesNotRecorded = true OR noKnownInv.noDiagnoses = true))  ");
+
+            /* TODO MSSQL case - queryConditionPart.append(" OR (NOT EXISTS (select att.id from InvestigationsForAttend as ifa left join ifa.attendance as att left join ifa.investigations as invAttend where att.id = attendance.careContext.id and invAttend.active = 1) AND NOT EXISTS (SELECT noKnownInv.attendance.id from AttendDiagInvTreatStatus AS noKnownInv WHERE noKnownInv is not null AND noKnownInv.attendance.id = attendance.careContext.id AND (noKnownInv.isRIE is null or noKnownInv.isRIE = 0) AND (noKnownInv.noInvestigations = true OR noKnownInv.investigationNotRecorded = true))  AND NOT EXISTS (select ordDetAttend.patient.id from OrderInvestigation as ordInvAttend left join ordInvAttend.orderDetails as ordDetAttend where (ordDetAttend.patient.id = attendance.patient.id AND (attendance.dischargeDateTime is not null AND ordInvAttend.displayDateTime BETWEEN attendance.registrationDateTime AND attendance.dischargeDateTime) OR (attendance.dischargeDateTime is null AND ordInvAttend.displayDateTime BETWEEN attendance.registrationDateTime AND :ATTEND_CURRENT_DATE_TIME))))" );  */
+            queryConditionPart.append(" OR (NOT EXISTS (select att.id from InvestigationsForAttend as ifa left join ifa.attendance as att left join ifa.investigations as invAttend where att.id = attendance.careContext.id and invAttend.active = true) AND NOT EXISTS (SELECT noKnownInv.attendance.id from AttendDiagInvTreatStatus AS noKnownInv WHERE noKnownInv is not null AND noKnownInv.attendance.id = attendance.careContext.id AND (noKnownInv.isRIE is null or noKnownInv.isRIE = false) AND (noKnownInv.noInvestigations = true OR noKnownInv.investigationNotRecorded = true))  AND NOT EXISTS (select ordDetAttend.patient.id from OrderInvestigation as ordInvAttend left join ordInvAttend.orderDetails as ordDetAttend where (ordDetAttend.patient.id = attendance.patient.id AND (attendance.dischargeDateTime is not null AND ordInvAttend.displayDateTime BETWEEN attendance.registrationDateTime AND attendance.dischargeDateTime) OR (attendance.dischargeDateTime is null AND ordInvAttend.displayDateTime BETWEEN attendance.registrationDateTime AND :ATTEND_CURRENT_DATE_TIME))))" );
+
+            /* TODO MSSQL case - queryConditionPart.append(" OR (NOT EXISTS (select interventionTreatAttend.attendance.id from InterventionsTreatmentsForAttendence as interventionTreatAttend left join interventionTreatAttend.interventionTreatments as interventionTreat where interventionTreatAttend.attendance.id = attendance.careContext.id and interventionTreat.id is not null)AND NOT EXISTS (SELECT noKnownInv.attendance.id from AttendDiagInvTreatStatus AS noKnownInv WHERE noKnownInv is not null AND noKnownInv.attendance.id = attendance.careContext.id AND (noKnownInv.isRIE is null or noKnownInv.isRIE = 0) AND (noKnownInv.noTreatments = true OR noKnownInv.treatmentsNotRecorded = true)))"); */
+            queryConditionPart.append(" OR (NOT EXISTS (select interventionTreatAttend.attendance.id from InterventionsTreatmentsForAttendence as interventionTreatAttend left join interventionTreatAttend.interventionTreatments as interventionTreat where interventionTreatAttend.attendance.id = attendance.careContext.id and interventionTreat.id is not null)AND NOT EXISTS (SELECT noKnownInv.attendance.id from AttendDiagInvTreatStatus AS noKnownInv WHERE noKnownInv is not null AND noKnownInv.attendance.id = attendance.careContext.id AND (noKnownInv.isRIE is null or noKnownInv.isRIE = false) AND (noKnownInv.noTreatments = true OR noKnownInv.treatmentsNotRecorded = true)))");
+
+            queryConditionPart.append(" )) ");
 			
 			logicalCondition = " AND ";
 
 			paramNames.add("ATTEND_CURRENT_DATE_TIME");		paramValues.add(new DateTime().getJavaDate());
 		}
 		
-		//WDEV-19282 Main Presenting Problem
+		// Main Presenting Problem
 		if (searchCriteria.getClinicalProblem() != null)
 		{
 			queryFromJoinPart.append(" left join triage.mainPresentingProblem as presProblem left join presProblem.problem as clinicalProblem ");
@@ -366,22 +361,22 @@ public class TrackingAndAttendanceWorklistsImpl extends BaseTrackingAndAttendanc
 
 			paramNames.add("clinicalProblemID");		paramValues.add(searchCriteria.getClinicalProblem().getID_ClinicalProblem());
 		}
-		
-		//WDEV-19298
+
 		if (Boolean.TRUE.equals(searchCriteria.getShowTemporaryRegistrations()))
 		{
-			queryConditionPart.append(logicalCondition).append(" patient.isQuickRegistrationPatient = 1 ");
+		    /* TODO MSSQL case - queryConditionPart.append(logicalCondition).append(" patient.isQuickRegistrationPatient = 1 "); */
+			queryConditionPart.append(logicalCondition).append(" patient.isQuickRegistrationPatient = true ");
+
 			logicalCondition = " AND ";
 		}
 		
-		//WDEV-20703
 		if (Boolean.TRUE.equals(searchCriteria.getIncludeRequiresDischargeDocumentationReview()))
 		{
-			queryConditionPart.append(logicalCondition).append(" (tracking.requiringDischargeDocumentationReview = 1) ");
+		    /* TODO MSSQL case - queryConditionPart.append(logicalCondition).append(" (tracking.requiringDischargeDocumentationReview = 1) "); */
+			queryConditionPart.append(logicalCondition).append(" (tracking.requiringDischargeDocumentationReview = true) ");
 			logicalCondition = " AND ";
 		}
 		
-		//WDEV-19652
 		if (searchCriteria.getIDValueIsNotNull())
 		{
 			boolean isCaseSensitivePatIdSearch = ConfigFlag.DOM.CASE_SENSITIVE_PATID.getValue();
@@ -483,13 +478,14 @@ public class TrackingAndAttendanceWorklistsImpl extends BaseTrackingAndAttendanc
 		return PatientShortAssembler.create((Patient) getDomainFactory().getDomainObject(Patient.class, patientRef.getID_Patient()));
 	}
 
-	//WDEV-17653
 	public SpecialtyCollection listSpecialties()
 	{
 		DomainFactory factory = getDomainFactory();
 		
 		StringBuffer hql = new StringBuffer();
-		hql.append("select lookInst from Lookup as look left join look.instances as lookInst left join lookInst.mappings as mappings where (look.id = 621 and mappings.extSystem = 'MAXIMS' and mappings.extCode like 'EDREFER%' and lookInst.active = 1)");
+
+		/* TODO MSSQL case - hql.append("select lookInst from Lookup as look left join look.instances as lookInst left join lookInst.mappings as mappings where (look.id = 621 and mappings.extSystem = 'MAXIMS' and mappings.extCode like 'EDREFER%' and lookInst.active = 1)"); */
+		hql.append("select lookInst from Lookup as look left join look.instances as lookInst left join lookInst.mappings as mappings where (look.id = 621 and mappings.extSystem = 'MAXIMS' and mappings.extCode like 'EDREFER%' and lookInst.active = true)");
 
 		List<?> list = factory.find(hql.toString());
 

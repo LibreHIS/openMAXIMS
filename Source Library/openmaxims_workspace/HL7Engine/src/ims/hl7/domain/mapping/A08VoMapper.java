@@ -37,13 +37,11 @@ import ims.core.vo.InpatientEpisodeVo;
 import ims.core.vo.LocSiteShortVo;
 import ims.core.vo.OutPatientAttendanceVo;
 import ims.core.vo.PasEventVo;
-import ims.core.vo.PatRelative;
 import ims.core.vo.Patient;
 import ims.core.vo.ifInpatientEpisodeVo;
 import ims.core.vo.lookups.MsgUpdateType;
 import ims.core.vo.lookups.SourceOfReferral;
 import ims.core.vo.lookups.Specialty;
-import ims.core.vo.lookups.TaxonomyType;
 import ims.emergency.vo.ifEDAttendanceVo;
 import ims.framework.utils.Date;
 import ims.framework.utils.DateFormat;
@@ -66,7 +64,6 @@ import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.v24.message.ADT_A01;
 import ca.uhn.hl7v2.model.v24.segment.EVN;
-import ca.uhn.hl7v2.model.v24.segment.NK1;
 import ca.uhn.hl7v2.model.v24.segment.PD1;
 import ca.uhn.hl7v2.model.v24.segment.PV1;
 import ca.uhn.hl7v2.model.v24.segment.PV2;
@@ -74,7 +71,7 @@ import ca.uhn.hl7v2.model.v24.segment.PV2;
 public class A08VoMapper extends VoMapper
 {
 	private static final Logger			LOG		= Logger.getLogger(A08VoMapper.class);
-	private A01VoMapper a01Vomapper; //WDEV-19481
+	private A01VoMapper a01Vomapper;
 	
 	public Message populateMessage(IHL7OutboundMessageHandler event)  throws Exception
 	{
@@ -222,64 +219,20 @@ public class A08VoMapper extends VoMapper
 				{
 					message.getEVN().getRecordedDateTime().getTimeOfAnEvent().setValue(patElectList.getSystemInfo().getCreationDateTime().toString(DateTimeFormat.ISO));
 				}
-			} //WDEV-22918
+			}
 														
 		}
 
 		populateMSH( event.getProviderSystem(),  message.getMSH(),Long.toString( new java.util.Date().getTime()), "ADT", "A08");
 		renderPatientVoToPID(patient, message.getPID(), event.getProviderSystem());
 
-		//WDEV-22006 Comment out following code and replace by calling a single method
-//		NK1 nk1 = message.getNK1();
-//		
-//		//WDEV-20335
-//		Boolean isConfidential = patient.getIsConfidential();
-////		renderNextOfKinVoToNK1(patient.getNok(), nk1,event.getProviderSystem(), isConfidential); //WDEV-20335
-//
-//		//WDEV-20336 Populate NK1 from PDSRelative object first. If object is Null then use Next of Kin VO
-//		int NK1Iteration = 0;
-//		
-//		if(patient.getPDSrelativesIsNotNull()
-//				&& patient.getPDSrelatives().size() > 0)
-//		{
-//			for (int i=0; i < patient.getPDSrelatives().size(); i++)
-//			{
-//				PatRelative patRelative = patient.getPDSrelatives().get(i);
-//				renderPatRelativeVoToNK1(patRelative, nk1, event.getProviderSystem(), isConfidential);
-//				NK1Iteration ++;
-//			}
-//		} 
-//		else
-//		{
-//			renderNextOfKinVoToNK1(patient.getNok(), nk1, event.getProviderSystem(), isConfidential);
-//			NK1Iteration ++;
-//		}//WDEV-20336
-//	
-//		// If config flag HL7_INCLUDE_FAMILY_SUPPORT  is true and 
-//		// any support family network contact details exist, then add these as NK1 segments (within a loop)
-//		// renderSupportNetworkFamilyVoToNK1(SupportNetworkFamily snfVo, NK1 nk1,ProviderSystemVo providerSystem)
-//		if(patient.getSupportNetworkFamilyIsNotNull() && ConfigFlag.HL7.HL7_INCLUDE_FAMILY_SUPPORT.getValue())
-//		{
-//
-//			for (int i=0; i<patient.getSupportNetworkFamily().size(); i++)
-//			{
-//				NK1 sfn = message.getNK1(NK1Iteration);
-//				if(patient.getSupportNetworkFamily().get(i).getInactivatingDateTime()==null)
-//				{
-//					//WDEV-20335
-//					renderSupportNetworkFamilyVoToNK1(patient.getSupportNetworkFamily().get(i), sfn, event.getProviderSystem(), isConfidential); //WDEV-20335
-//					NK1Iteration++;
-//				}
-//			}
-//		}
 		renderPatientVoToNK1(patient, message, event.getProviderSystem());
-		//WDEV-22006
+
 		
 		PD1 pd1=message.getPD1();
-		//WDEV-20993
-//		renderGPDetailsToPD1(patient, pd1);
+
 		renderGPDetailsToPD1(patient, pd1, event.getProviderSystem());
-		renderPatientDetailsToPD1(patient, pd1, event.getProviderSystem()); //WDEV-22624
+		renderPatientDetailsToPD1(patient, pd1, event.getProviderSystem());
 		message.getEVN().getEventTypeCode().setValue("A08");
 		
 		return message;
@@ -288,19 +241,16 @@ public class A08VoMapper extends VoMapper
 	
 	
 
-	//WDEV-20112
-//	public Message processEvent(Message msg, ProviderSystemVo providerSystem) throws HL7Exception
-	public EventResponse processEvent(Message msg, ProviderSystemVo providerSystem) throws HL7Exception //WDEV-20122
+
+	public EventResponse processEvent(Message msg, ProviderSystemVo providerSystem) throws HL7Exception
 	{
 		return (processUpdatePatientInformation(msg, providerSystem));
 	}
 
-	//WDEV-20112
-//	private Message processUpdatePatientInformation(Message msg, ProviderSystemVo providerSystem) throws HL7Exception
-	private EventResponse processUpdatePatientInformation(Message msg, ProviderSystemVo providerSystem) throws HL7Exception //WDEV-20112
+
+	private EventResponse processUpdatePatientInformation(Message msg, ProviderSystemVo providerSystem) throws HL7Exception
 	{
-		//WDEV-20112
-		EventResponse response = new EventResponse(); //WDEV-20112
+		EventResponse response = new EventResponse();
 		
 		try
 		{
@@ -778,7 +728,7 @@ public class A08VoMapper extends VoMapper
 				pv2.getReferralSourceCode(0).getSecondAndFurtherGivenNamesOrInitialsThereof().setValue(apptDetails.getPracticeCode());
 			}
 
-			//PV2-23 Clinic organization name (XON)
+			// PV2-23 Clinic organization name (XON)
 
 			// EVN-2 Record date/time (TS)
 			if(catsReferral.getReferralDetails() != null
@@ -792,57 +742,12 @@ public class A08VoMapper extends VoMapper
 				patient = apptDetails.getPatient();
 				renderPatientVoToPID(patient, message.getPID(), event.getProviderSystem());
 
-				//WDEV-22006 Comment out following code and replace by calling a single method
-//				NK1 nk1 = message.getNK1(0);				
-//				//WDEV-20335
-//				Boolean isConfidential = patient.getIsConfidential();
-//	
-//				//WDEV-20336
-//				int NK1Iteration = 0;
-//				
-//				if(patient.getPDSrelativesIsNotNull())
-//				{
-//					for (int i=0; i < patient.getPDSrelatives().size(); i++)
-//					{
-//						PatRelative patRelative = patient.getPDSrelatives().get(i);
-//						renderPatRelativeVoToNK1(patRelative, nk1, event.getProviderSystem(), isConfidential);
-//						NK1Iteration ++;
-//					}
-//				} 
-//				else
-//				{
-//					renderNextOfKinVoToNK1(patient.getNok(), nk1, event.getProviderSystem(), isConfidential);
-//					NK1Iteration ++;
-//				}//WDEV-20336
-//				
-//				
-//				// If configuration flag HL7_INCLUDE_FAMILY_SUPPORT  is true and 
-//				// any support family network contact details exist, then add these as NK1 segments (within a loop)
-//				// renderSupportNetworkFamilyVoToNK1(SupportNetworkFamily snfVo, NK1 nk1,ProviderSystemVo providerSystem)
-//				
-//				if(patient.getSupportNetworkFamilyIsNotNull() && ConfigFlag.HL7.HL7_INCLUDE_FAMILY_SUPPORT.getValue())
-//				{
-//					
-//					for (int i=0; i<patient.getSupportNetworkFamily().size(); i++)
-//					{
-//						NK1 sfn = message.getNK1(NK1Iteration);
-//						if(patient.getSupportNetworkFamily().get(i).getInactivatingDateTime() == null)
-//						{
-//							//WDEV-20335
-//							renderSupportNetworkFamilyVoToNK1(patient.getSupportNetworkFamily().get(i), sfn, event.getProviderSystem(), isConfidential); //WDEV-20335
-//							NK1Iteration++;
-//						}
-//					}
-//				}
-
 				renderPatientVoToNK1(patient, message, event.getProviderSystem());
-				//WDEV-22006
 				
 				PD1 pd1 = message.getPD1();
-				//WDEV-20993
-//				renderGPDetailsToPD1(patient, pd1);
+
 				renderGPDetailsToPD1(patient, pd1, event.getProviderSystem());
-				renderPatientDetailsToPD1(patient, pd1, event.getProviderSystem()); //WDEV-22624
+				renderPatientDetailsToPD1(patient, pd1, event.getProviderSystem());
 				
 				if(event.getProviderSystem().getConfigurationProperty("PreAdmitADTOnFirstAppointment") != null
 						&& event.getProviderSystem().getConfigurationProperty("PreAdmitADTOnFirstAppointment").getPropertyValue() != null
@@ -855,8 +760,7 @@ public class A08VoMapper extends VoMapper
 
 			populateMSH( event.getProviderSystem(),  message.getMSH(),Long.toString( new java.util.Date().getTime()),"ADT","A08");
 			message.getEVN().getEventTypeCode().setValue("A08");
-	
-			//WDEV-22918
+
 			// EVN-2 Recorded date/time (TS)
 			if (apptDetails.getSystemInfo() != null)
 			{

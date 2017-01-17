@@ -105,8 +105,10 @@ public class ClinicalOutcomeDetailsImpl extends BaseClinicalOutcomeDetailsImpl
 			paramNames.add("REF_ID");
 			paramValues.add(referral.getID_CatsReferral());
 		}
-		
-		query.append(" and outcome.isActive = 1");
+
+		/* TODO MSSQL case - query.append(" and outcome.isActive = 1"); */
+		query.append(" and outcome.isActive = true");
+
 		query.append(" order by outcome.clinicalOutcome asc");
 
 		return ClinicalOutcomeConfigLiteVoAssembler.createClinicalOutcomeConfigLiteVoCollectionFromClinicalOutcomeConfig(getDomainFactory().find(query.toString(), paramNames, paramValues));
@@ -149,14 +151,18 @@ public class ClinicalOutcomeDetailsImpl extends BaseClinicalOutcomeDetailsImpl
 
 	public Boolean isProcedureNotMandatoryForClinicalOutcomeContext(ClinicalOutcomeContext context)
 	{
-		String query ="select co from ClinicalOutcomeContextProcedureRequiredConfig as context left join context.context as lkpcontext where lkpcontext.id = :IdContext and context.procedureNotMandatory=1";
+		/* TODO MSSQL case - String query ="select co from ClinicalOutcomeContextProcedureRequiredConfig as context left join context.context as lkpcontext where lkpcontext.id = :IdContext and context.procedureNotMandatory=1"; */
+		String query ="select co from ClinicalOutcomeContextProcedureRequiredConfig as context left join context.context as lkpcontext where lkpcontext.id = :IdContext and context.procedureNotMandatory = TRUE";
+
 		long countWithHQL = getDomainFactory().countWithHQL(query, new String[]{"IdContext"}, new Object[]{context.getId()});
 		return countWithHQL>0;
 	}
 
 	public ClinicalOutcomeContextCollection listClinicalOutcomeContextWithNotMandatoryProcedure()
 	{
-		String query ="select lkpcontext from ClinicalOutcomeContextProcedureRequiredConfig as context left join context.context as lkpcontext where context.procedureNotMandatory=1";
+		/* TODO MSSQL case - String query ="select lkpcontext from ClinicalOutcomeContextProcedureRequiredConfig as context left join context.context as lkpcontext where context.procedureNotMandatory=1"; */
+		String query ="select lkpcontext from ClinicalOutcomeContextProcedureRequiredConfig as context left join context.context as lkpcontext where context.procedureNotMandatory = TRUE";
+
 		List find = getDomainFactory().find(query, new String[]{}, new Object[]{});
 		if (find == null || find.size() == 0)
 			 return null;

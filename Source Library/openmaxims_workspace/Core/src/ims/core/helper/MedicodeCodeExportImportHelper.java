@@ -1263,36 +1263,6 @@ Mother and baby using delivery facilities only and not using a Hospital Bed in t
 		
 	}
 
-
-//	private String getMappingForCoding(CodingStatus codingStatus)
-//	{
-////		if(codingStatus == null)
-////			return "";
-////		LookupMappingVoCollection vocol = getMappings(codingStatus.getID());
-////		if(vocol != null && vocol.size() > 0)
-////		{
-////			for(int i=0; i<vocol.size(); i++)
-////			{
-////				LookupMappingVo voSpec = vocol.get(i);
-////				if(voSpec != null && voSpec.getExtSystem() != null && voSpec.getExtSystem().equals(ims.core.vo.lookups.TaxonomyType.CDS.toString()))
-////				{
-////					return voSpec.getExtCode();
-////				}
-////				
-////			}
-////				
-////		}
-////		return "";
-//		
-//		//code based on Medicode values instead
-//		if (codingStatus == null)
-//			return "";
-//		else if (codingStatus.equals(Cod ingStatus.UNCODED))
-//			return "0";
-//		else if (codingStatus.equals(CodingStatus.CODED))
-//			return "1";
-//	}
-
 	private CodingStatus getCodingStatus(String extCodingStatus)
 	{
 //		null

@@ -55,11 +55,16 @@ public class ConsultantProcedureHotlistDialogImpl extends BaseConsultantProcedur
 
 	public ims.core.vo.ProcedureLiteVoCollection listProcedures(ProcedureCategory category, String procNameFilter, ims.core.vo.HcpLiteVo currUser)
 	{
-			
+
+        /* TODO MSSQL case - StringBuilder query = new StringBuilder(
+				"select p1_1 from ConsultantProcedureCategory as c1_1 left join " +
+				"c1_1.categoryProcedures as c2_1 left join c2_1.procedures as p1_1 " +
+				"where (p1_1.isActive = 1 and c1_1.performingHCP.id = :Hcp_id"); */
+
 		StringBuilder query = new StringBuilder(
 				"select p1_1 from ConsultantProcedureCategory as c1_1 left join " +
 				"c1_1.categoryProcedures as c2_1 left join c2_1.procedures as p1_1 " +
-				"where (p1_1.isActive = 1 and c1_1.performingHCP.id = :Hcp_id");
+				"where (p1_1.isActive = true and c1_1.performingHCP.id = :Hcp_id");
 		
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
@@ -76,9 +81,9 @@ public class ConsultantProcedureHotlistDialogImpl extends BaseConsultantProcedur
 		}
 		if (procNameFilter != null)
 		{
-			query.append(" and upper(p1_1.procedureName) like :nameFilter");   //wdev-13658
+			query.append(" and upper(p1_1.procedureName) like :nameFilter");
 			paramNames.add("nameFilter");
-			paramValues.add("%"+procNameFilter.toUpperCase()+"%");             //wdev-13658
+			paramValues.add("%"+procNameFilter.toUpperCase()+"%");
 			
 		}
 		query.append(" ) order by p1_1.procedureName asc ");

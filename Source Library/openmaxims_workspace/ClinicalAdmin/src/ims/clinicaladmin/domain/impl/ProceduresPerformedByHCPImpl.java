@@ -149,12 +149,12 @@ public class ProceduresPerformedByHCPImpl extends BaseProceduresPerformedByHCPIm
 		return null;
 	}
 
-	//WDEV-10772
-	public ProcedureLiteVoCollection getAvailableProcedures(String procedures, String filter) 
+	public ProcedureLiteVoCollection getAvailableProcedures(String procedures, String filter)
 	{
 		DomainFactory factory=getDomainFactory();
-		
-		String query = "from Procedure as p where p.isActive = 1 ";
+
+		/* TODO MSSQL case - String query = "from Procedure as p where p.isActive = 1 "; */
+		String query = "from Procedure as p where p.isActive = true ";
 		
 		if(filter != null && filter.length() > 0)
 		{

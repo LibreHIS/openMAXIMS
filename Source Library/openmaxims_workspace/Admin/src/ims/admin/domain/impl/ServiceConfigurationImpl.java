@@ -292,7 +292,8 @@ public class ServiceConfigurationImpl extends BaseServiceConfigurationImpl
 		
 		if(Boolean.TRUE.equals(activeOnly))
 		{
-			hql += " and servfunc.isActive = 1 ";
+		    /* TODO MSSQL case - hql += " and servfunc.isActive = 1 "; */
+			hql += " and servfunc.isActive = true ";
 		}
 		
 		hql += " order by UPPER(servfunc.function.text) asc";
@@ -316,8 +317,10 @@ public class ServiceConfigurationImpl extends BaseServiceConfigurationImpl
 		DomainFactory factory = getDomainFactory();
 		ArrayList markers = new ArrayList();
 		ArrayList values = new ArrayList();
-		
-		String hql = "select act from Activity as act left join act.activityType as actType where actType.id = :AppointmentType and act.isActive = 1 ";
+
+		/* TODO MSSQL case - String hql = "select act from Activity as act left join act.activityType as actType where actType.id = :AppointmentType and act.isActive = 1 "; */
+		String hql = "select act from Activity as act left join act.activityType as actType where actType.id = :AppointmentType and act.isActive = true ";
+
 		markers.add("AppointmentType");
 		values.add(ActivityType.APPOINTMENTTYPES.getID());
 		

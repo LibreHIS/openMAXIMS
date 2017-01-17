@@ -92,13 +92,14 @@ public class CancelTCIForPatientElectiveListDialogImpl extends BaseCancelTCIForP
 		return ElectiveTCIForReferralDetailsVoAssembler.create((TCIForPatientElectiveList) getDomainFactory().getDomainObject(TCIForPatientElectiveList.class, tciId));
 	}
 	
-	//WDEV-19446 - structured TCI cancellation reason 
+	// Structured TCI cancellation reason
 	public CancellationTypeReasonVoCollection getCancellationReasons(Status_Reason typeReasonVo)
 	{
 		if (typeReasonVo == null)
 			return null;
-		
-		String hql = " from CancellationTypeReason as cnclReason where cnclReason.cancellationType.id = :CANCELTYPE_ID and cnclReason.tCITheatre = 1 order by cnclReason.cancellationReason.text asc "; //WDEV-20595, WDEV-22723
+
+		/* TODO MSSQL case - String hql = " from CancellationTypeReason as cnclReason where cnclReason.cancellationType.id = :CANCELTYPE_ID and cnclReason.tCITheatre = 1 order by cnclReason.cancellationReason.text asc "; */
+		String hql = " from CancellationTypeReason as cnclReason where cnclReason.cancellationType.id = :CANCELTYPE_ID and cnclReason.tCITheatre = true order by cnclReason.cancellationReason.text asc ";
 		
 		DomainFactory domainFactory = getDomainFactory();
 		
@@ -109,21 +110,6 @@ public class CancelTCIForPatientElectiveListDialogImpl extends BaseCancelTCIForP
 		
 		return CancellationTypeReasonVoAssembler.createCancellationTypeReasonVoCollectionFromCancellationTypeReason(list);
 	}
-
-	/*private Status_Reason getMappedTypeReason(AdmissionOfferOutcome typeReasonVo)
-	{
-		if (typeReasonVo == null)
-			return null;
-		
-		if (AdmissionOfferOutcome.ADMISSION_CANCELLED_BY_HOSPITAL_BEFORE_6.equals(typeReasonVo) || AdmissionOfferOutcome.ADMISSION_CANCELLED_BY_HOSPITAL_ON_DAY_7.equals(typeReasonVo))
-			return Status_Reason.HOSPITALCANCELLED;
-		else if (AdmissionOfferOutcome.ADMISSION_CANCELLED_BY_PATIENT_2.equals(typeReasonVo))
-			return Status_Reason.PATIENTCANCELLED;
-		
-		return null;
-	}
-	//WDEV-19446 ---------------ends here	
-	*/
 	
 	public MemberOfStaffLiteVo getMemberOfStaff(MemberOfStaffRefVo memberOfStaff)
 	{

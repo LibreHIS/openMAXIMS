@@ -1206,10 +1206,6 @@ public class Logic extends BaseLogic
 
 		StringBuffer tooltip = new StringBuffer();
 
-		/*
-		 * tooltip.append("<table border=1>"); tooltip.append("<tr><td><b>Category  &nbsp &nbsp</b></td><td><b>Start Date &nbsp &nbsp </b></td><td><b>End Date &nbsp &nbsp </b></td></tr>"); for (int i=0;i<collSpecialInterestDetails.size();i++) { tooltip.append("<tr>"); SpecialInterestDetailsVo specInterest = collSpecialInterestDetails.get(i); tooltip.append("<td><b>"+specInterest.getSpecialInterestCategory().toString()+ "</b></td><td><b>"+specInterest.getStartDateTime().toString() +"</b></td><td><b>" + specInterest.getCompletedDateTime().toString()+"</b></td></tr>"); } tooltip.append("</table>");
-		 */
-		// tooltip.append("<table style=\"border :1px solid black; border-collapse:collapse;\">");
 		tooltip.append("<table style=\"border :1px solid black; border-collapse:collapse;\">");
 		tooltip.append("<tr><td style=\" border:1px solid black;\"><b>Category  &nbsp &nbsp</b></td><td style=\" border:1px solid black;\"><b>Start Date &nbsp &nbsp </b></td><td style=\" border:1px solid black;\"><b>End Date &nbsp &nbsp </b></td></tr>");
 		for (int i = 0; i < collSpecialInterestDetails.size(); i++)
@@ -1225,7 +1221,6 @@ public class Logic extends BaseLogic
 		return tooltip.toString();
 	}
 
-	// wdev-14420
 	private void displayRecord(ims.vo.ValueObject selectedRow)
 	{
 		if (selectedRow != null)

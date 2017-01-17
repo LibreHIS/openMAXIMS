@@ -292,6 +292,22 @@ public class DischargeSummaryScheduleImpl extends BaseDischargeSummaryScheduleIm
 		List domainObjectList = null;
 		
 		DomainFactory factory = getDomainFactory();
+
+		/* TODO MSSQL case - String sql = "select medicationDetails.careContext, medicationDetails.tTARequired, medicationDetails.tTAReceived " +
+					 " from MedicationDetails as medicationDetails left join medicationDetails.careContext as careContext " +
+					 " where " +
+					 	" (medicationDetails.careContext.id in (select drd.careContext.id from " +
+					 	" DischargeReportDetail as drd left join " +
+					 	" drd.careContext as drdcc left join " +
+					 	" drd.gpRecipients as gp " +
+					 	" where " +
+					 	" (drd.isClinicalDetailsComplete = 1 and gp.id is " +
+					 	" not null and drdcc.id in (select cc.id from " +
+					 								" DischargeDetails as dd left join " +
+					 								" dd.careContext as cc where (dd.dateOfDischarge is " +
+					 								" not null and dd.dischargeLetterStatus.id <> -1727 )))) " +
+					 " and medicationDetails.tTARequired is not null ) "; */
+
 		String sql = "select medicationDetails.careContext, medicationDetails.tTARequired, medicationDetails.tTAReceived " +
 					 " from MedicationDetails as medicationDetails left join medicationDetails.careContext as careContext " + 
 					 " where " +
@@ -300,8 +316,8 @@ public class DischargeSummaryScheduleImpl extends BaseDischargeSummaryScheduleIm
 					 	" drd.careContext as drdcc left join " +
 					 	" drd.gpRecipients as gp " +
 					 	" where " +
-					 	" (drd.isClinicalDetailsComplete = 1 and gp.id is " +
-					 	" not null  and drdcc.id in (select cc.id from " + 
+					 	" (drd.isClinicalDetailsComplete = true and gp.id is " +
+					 	" not null and drdcc.id in (select cc.id from " +
 					 								" DischargeDetails as dd left join " +
 					 								" dd.careContext as cc where (dd.dateOfDischarge is " + 
 					 								" not null and dd.dischargeLetterStatus.id <> -1727 )))) " +
@@ -1090,7 +1106,9 @@ public class DischargeSummaryScheduleImpl extends BaseDischargeSummaryScheduleIm
 			return false;
 		
 		StringBuilder query = new StringBuilder("SELECT COUNT (patAlert.id) FROM PatientAlert AS patAlert LEFT JOIN patAlert.patient AS pat LEFT JOIN patAlert.alertType AS type ");
-		query.append("WHERE pat.id = :PAT_ID AND type.id = :ALERT_TYPE AND patAlert.isCurrentlyActiveAlert = 1");
+
+		/* TODO MSSQL case - query.append("WHERE pat.id = :PAT_ID AND type.id = :ALERT_TYPE AND patAlert.isCurrentlyActiveAlert = 1"); */
+		query.append("WHERE pat.id = :PAT_ID AND type.id = :ALERT_TYPE AND patAlert.isCurrentlyActiveAlert = true");
 		
 		long count = getDomainFactory().countWithHQL(query.toString(), new String[] {"PAT_ID", "ALERT_TYPE"}, new Object[] {patient.getID_Patient(), AlertType.SEALED_ENVELOPE_PATIENT.getID()});
 		

@@ -72,7 +72,10 @@ public class ScheduledJobsProvider extends DomainImpl implements IScheduledJobsP
 	public IConfiguredScheduledJob[] getConfiguredScheduledJobs() 
 	{
 		DomainFactory factory = getDomainFactory();
-		String hqlString = "from ConfiguredJob as configuredJob where configuredJob.isActive = 1";
+
+		/* TODO MSSQL case - String hqlString = "from ConfiguredJob as configuredJob where configuredJob.isActive = 1"; */
+		String hqlString = "from ConfiguredJob as configuredJob where configuredJob.isActive = true";
+
 		List jobs = factory.find(hqlString, new String[] {}, new Object[] {});
 		return ConfiguredJobVoAssembler.createConfiguredJobVoCollectionFromConfiguredJob(jobs).toIConfiguredScheduledJobArray();
 	}

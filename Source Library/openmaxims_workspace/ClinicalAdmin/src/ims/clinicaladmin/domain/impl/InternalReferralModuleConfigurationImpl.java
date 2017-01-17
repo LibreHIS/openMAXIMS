@@ -66,16 +66,17 @@ public class InternalReferralModuleConfigurationImpl extends BaseInternalReferra
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
 		
-		query.append("WHERE serv.upperName LIKE :SRV_NAME"); //WDEV-20219 UPPER(serv.serviceName)
+		query.append("WHERE serv.upperName LIKE :SRV_NAME");
 		paramNames.add("SRV_NAME");
 		paramValues.add(serviceName.toUpperCase() + '%');
 		
 		if (Boolean.TRUE.equals(activeOnly))
 		{
-    		query.append(" AND servConf.active = 1");
+		    /* TODO MSSQL case - query.append(" AND servConf.active = 1"); */
+    		query.append(" AND servConf.active = true");
 		}
 		
-		query.append(" ORDER BY serv.upperName"); //WDEV-20219 UPPER(serv.serviceName)
+		query.append(" ORDER BY serv.upperName");
 		
 		return ServiceConfigIntReferralLiteVoAssembler.createServiceConfigIntReferralLiteVoCollectionFromServiceConfigIntReferral(getDomainFactory().find(query.toString(), paramNames, paramValues));
 	}
@@ -112,14 +113,16 @@ public class InternalReferralModuleConfigurationImpl extends BaseInternalReferra
 		StringBuilder query = new StringBuilder("SELECT srv FROM Service AS srv");
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
-		
-		query.append(" WHERE srv.upperName LIKE :SRV_NAME AND srv.serviceCategory.id = :CLINICAL AND srv.isActive = 1"); //WDEV-20219 UPPER(srv.serviceName)
+
+		/* TODO MSSQL case - query.append(" WHERE srv.upperName LIKE :SRV_NAME AND srv.serviceCategory.id = :CLINICAL AND srv.isActive = 1"); */
+		query.append(" WHERE srv.upperName LIKE :SRV_NAME AND srv.serviceCategory.id = :CLINICAL AND srv.isActive = true");
+
 		paramNames.add("SRV_NAME");
 		paramValues.add(serviceName.toUpperCase() + '%');
 		paramNames.add("CLINICAL");
 		paramValues.add(ServiceCategory.CLINICAL.getID());
 		
-		query.append(" ORDER BY srv.upperName"); //WDEV-20219 UPPER(srv.serviceName)
+		query.append(" ORDER BY srv.upperName");
 
 		return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(getDomainFactory().find(query.toString(), paramNames, paramValues));
 	}
@@ -176,7 +179,8 @@ public class InternalReferralModuleConfigurationImpl extends BaseInternalReferra
 
 		if (referralServiceConfig != null && referralServiceConfig.getID_ServiceConfigIntReferral() != null)
 		{
-			query.append("WHERE serv.id = :ID_SERV AND servConf.active = 1 AND servConf.id != :ID_CONF_SRV");
+			/* TODO MSSQL case - query.append("WHERE serv.id = :ID_SERV AND servConf.active = 1 AND servConf.id != :ID_CONF_SRV"); */
+			query.append("WHERE serv.id = :ID_SERV AND servConf.active = true AND servConf.id != :ID_CONF_SRV");
 
 
 			long count = getDomainFactory().countWithHQL(query.toString(), new String[] {"ID_SERV", "ID_CONF_SRV"}, new Object[] {serviceType.getID_Service(), referralServiceConfig.getID_ServiceConfigIntReferral()});
@@ -186,7 +190,8 @@ public class InternalReferralModuleConfigurationImpl extends BaseInternalReferra
 		}
 		else
 		{
-			query.append("WHERE serv.id = :ID_SERV AND servConf.active = 1");
+		    /* TODO MSSQL case - query.append("WHERE serv.id = :ID_SERV AND servConf.active = 1"); */
+			query.append("WHERE serv.id = :ID_SERV AND servConf.active = true");
 			long count = getDomainFactory().countWithHQL(query.toString(), new String[] {"ID_SERV"}, new Object[] {serviceType.getID_Service()});
 			
 			if (count > 0)

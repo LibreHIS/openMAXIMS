@@ -704,15 +704,16 @@ public class MyOrderImpl extends DomainImpl implements ims.ocrr.domain.MyOrder, 
 		filter.setQueryName(name);
 		
 		HcpAdmin impl = (HcpAdmin) getDomainImpl(HcpAdminImpl.class);
-		HcpLiteVoCollection voCollHcp = impl.listResponsibleMedics(filter); //WDEV-11656
+		HcpLiteVoCollection voCollHcp = impl.listResponsibleMedics(filter);
 		return voCollHcp;
 	}
 	public HcpLiteVoCollection listHcpLiteByName(String hcpName)
 	{
 		if (hcpName == null || hcpName.length() == 0)
 			return null;
-		
-		String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE hcp.isActive = 1 AND hcp.isHCPaResponsibleHCP = 1 AND mos.name.upperSurname LIKE :HCP_NAME";
+
+		/* TODO MSSQL case - String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE hcp.isActive = 1 AND hcp.isHCPaResponsibleHCP = 1 AND mos.name.upperSurname LIKE :HCP_NAME"; */
+		String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE hcp.isActive = TRUE AND hcp.isHCPaResponsibleHCP = TRUE AND mos.name.upperSurname LIKE :HCP_NAME";
 		
 		return HcpLiteVoAssembler.createHcpLiteVoCollectionFromHcp(getDomainFactory().find(query, "HCP_NAME", hcpName.toUpperCase() + "%")).sort();
 	}
@@ -806,7 +807,10 @@ public class MyOrderImpl extends DomainImpl implements ims.ocrr.domain.MyOrder, 
 	public ClinicLiteVoCollection listClinicsForHospitalByNameLite(LocationRefVo location, String name)
 	{
 		DomainFactory factory = getDomainFactory();
-		List clinics = factory.find("from Clinic clin where clin.clinicLocation.id = :idLocation and clin.upperName like :clinName and clin.isActive = 1 order by clin.upperName", new String[]{"idLocation", "clinName"}, new Object[]{location.getID_Location(), "%" + name.toUpperCase() + "%"}); //WDEV-20219 
+
+		/* TODO MSSQL case - List clinics = factory.find("from Clinic clin where clin.clinicLocation.id = :idLocation and clin.upperName like :clinName and clin.isActive = 1 order by clin.upperName", new String[]{"idLocation", "clinName"}, new Object[]{location.getID_Location(), "%" + name.toUpperCase() + "%"});  */
+		List clinics = factory.find("from Clinic clin where clin.clinicLocation.id = :idLocation and clin.upperName like :clinName and clin.isActive = TRUE order by clin.upperName", new String[]{"idLocation", "clinName"}, new Object[]{location.getID_Location(), "%" + name.toUpperCase() + "%"});
+
 		return ClinicLiteVoAssembler.createClinicLiteVoCollectionFromClinic(clinics);
 	}
 
@@ -1406,13 +1410,13 @@ public class MyOrderImpl extends DomainImpl implements ims.ocrr.domain.MyOrder, 
 		return LocSiteShortVoAssembler.create(doLocation);
 	}
 
-	//WDEV-15899
 	public HcpLiteVoCollection listResponsibleEdClinicians(String hcpName)
 	{
 		if (hcpName == null || hcpName.length() == 0)
 			return null;
-		
-		String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE hcp.isActive = 1 AND hcp.isAResponsibleEDClinician = 1 AND mos.name.upperSurname LIKE :HCP_NAME";
+
+		/* TODO MSSQL case - String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE hcp.isActive = 1 AND hcp.isAResponsibleEDClinician = 1 AND mos.name.upperSurname LIKE :HCP_NAME"; */
+		String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE hcp.isActive = TRUE AND hcp.isAResponsibleEDClinician = TRUE AND mos.name.upperSurname LIKE :HCP_NAME";
 		
 		return HcpLiteVoAssembler.createHcpLiteVoCollectionFromHcp(getDomainFactory().find(query, "HCP_NAME", hcpName.toUpperCase() + "%")).sort();
 	}
@@ -1453,7 +1457,9 @@ public class MyOrderImpl extends DomainImpl implements ims.ocrr.domain.MyOrder, 
 		String clinicalMapping = "Clinical Mapping";
 		
 		StringBuilder query = new StringBuilder("SELECT orderPriority.id FROM LookupInstance AS orderPriority LEFT JOIN orderPriority.type AS lookupType LEFT JOIN orderPriority.mappings AS mappings");
-		query.append(" WHERE lookupType.id = :ORDER_PRIORITY_TYPE AND orderPriority.active = 1");
+
+		/* TODO MSSQL case - query.append(" WHERE lookupType.id = :ORDER_PRIORITY_TYPE AND orderPriority.active = 1"); */
+		query.append(" WHERE lookupType.id = :ORDER_PRIORITY_TYPE AND orderPriority.active = TRUE");
 		
 		if (Boolean.TRUE.equals(requiresPathologyMappings))
 		{
@@ -1540,12 +1546,13 @@ public class MyOrderImpl extends DomainImpl implements ims.ocrr.domain.MyOrder, 
 		return PasEventShortVoAssembler.create((PASEvent) getDomainFactory().findFirst(query.toString(), paramNames, paramValues));
 	}
 
-	//wdev-17823
-	public OrderCategory getOrderCategoryByMap() 
+	public OrderCategory getOrderCategoryByMap()
 	{
 		DomainFactory factory = getDomainFactory(); 
 		StringBuffer hql = new StringBuffer();
-		hql.append("select lookInst from Lookup as look left join look.instances as lookInst left join lookInst.mappings as mappings where (look.id = 1161035 and mappings.extSystem = 'MAXIMS' and mappings.extCode like 'ALIAS_DEFAULT' and lookInst.active = 1)");
+
+		/* TODO MSSQL case - hql.append("select lookInst from Lookup as look left join look.instances as lookInst left join lookInst.mappings as mappings where (look.id = 1161035 and mappings.extSystem = 'MAXIMS' and mappings.extCode like 'ALIAS_DEFAULT' and lookInst.active = 1)"); */
+		hql.append("select lookInst from Lookup as look left join look.instances as lookInst left join lookInst.mappings as mappings where (look.id = 1161035 and mappings.extSystem = 'MAXIMS' and mappings.extCode like 'ALIAS_DEFAULT' and lookInst.active = TRUE)");
 		List<?> list = factory.find(hql.toString());
 
 		if (list!=null && list.size()>0)

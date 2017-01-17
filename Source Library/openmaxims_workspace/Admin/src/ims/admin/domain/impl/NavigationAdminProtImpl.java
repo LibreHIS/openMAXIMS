@@ -118,9 +118,11 @@ public class NavigationAdminProtImpl extends BaseNavigationAdminProtImpl
 		return AppFormVoAssembler.create(appDO);
 	}
 	public ReportTemplateLiteVoCollection listReports(String nameFilter) {
-		
+
+		/* TODO MSSQL case - String hql = "select repTem from ReportBo as rep left join rep.templates as repTem where " +
+				"(rep.isActive = 1 and repTem.isActive = 1 and upper(repTem.name) like :name) order by upper(repTem.name)"; */
 		String hql = "select repTem from ReportBo as rep left join rep.templates as repTem where " +
-				"(rep.isActive = 1 and repTem.isActive = 1 and upper(repTem.name) like :name) order by upper(repTem.name)";
+				"(rep.isActive = true and repTem.isActive = true and upper(repTem.name) like :name) order by upper(repTem.name)";
 		
 		return  ReportTemplateLiteVoAssembler.createReportTemplateLiteVoCollectionFromTemplateBo(
 				getDomainFactory().find(hql,"name","%"+(nameFilter == null ? "":nameFilter.toUpperCase())+"%"));
@@ -169,7 +171,8 @@ public class NavigationAdminProtImpl extends BaseNavigationAdminProtImpl
 	@Override
 	public Boolean navigationHasAssociatedRole(AppNavigationRefVo navigation) 
 	{
-		String hql = "SELECT COUNT(role.id) from AppRole as role left join role.navigation as nav WHERE (role.isActive = 1 AND nav.id = :NAV)";
+	    /* TODO MSSQL case - String hql = "SELECT COUNT(role.id) from AppRole as role left join role.navigation as nav WHERE (role.isActive = 1 AND nav.id = :NAV)"; */
+		String hql = "SELECT COUNT(role.id) from AppRole as role left join role.navigation as nav WHERE (role.isActive = true AND nav.id = :NAV)";
 		
 		long count = getDomainFactory().countWithHQL(hql, new String[]{"NAV"}, new Object[]{navigation.getID_AppNavigation()});
 		

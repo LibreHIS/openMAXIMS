@@ -97,49 +97,20 @@ public class A15VoMapper extends VoMapper
 			{
 				
 				// PV1-42 Pending location (PL)
-				// 	PV1-42-1 Point of care (IS)
+				// PV1-42-1 Point of care (IS)
 				if(inpatientEpisode.getPendingTransfer().getDestinationWard() != null
 						&& inpatientEpisode.getPendingTransfer().getDestinationWard().getCodeMappings() != null)
 				{
-					//WDEV-20269
-//					for (int i=0; i<inpatientEpisode.getPendingTransfer().getDestinationWard().getCodeMappings().size(); i++)
-//					{
-//						TaxonomyMap codeMapping = inpatientEpisode.getPendingTransfer().getDestinationWard().getCodeMappings().get(i);
-//						if(codeMapping.getTaxonomyCode() != null
-//								&& codeMapping.getTaxonomyCode().length() > 0)
-//						{
-//						 pv1.getPendingLocation().getPointOfCare().setValue(codeMapping.getTaxonomyCode().toString());
-//						}
-//					}
+
 					TaxonomyMap map = inpatientEpisode.getPendingTransfer().getDestinationWard().getTaxonomyMap(event.getProviderSystem().getCodeSystem());	
 					if (map != null)
 					{
 						pv1.getPendingLocation().getPointOfCare().setValue(map.getTaxonomyCode());
-					} //WDEV-20269
+					}
 				}
 				
-				// 	PV1-42-4 Facility (HD)
-				//WDEV-20269
-//				if(inpatientEpisode.getPendingTransfer().getDestinationWard() != null
-//						&& inpatientEpisode.getPendingTransfer().getDestinationWard().getParentLocation() != null
-//						&& inpatientEpisode.getPendingTransfer().getDestinationWard().getParentLocation().getName() != null
-//						&& inpatientEpisode.getPendingTransfer().getDestinationWard().getParentLocation().getCodeMappings() !=null)
-//				{
-//					for (int i=0; i<inpatientEpisode.getPendingTransfer().getDestinationWard().getParentLocation().getCodeMappings().size(); i++)
-//					{
-//						TaxonomyMap codeMapping = inpatientEpisode.getPendingTransfer().getDestinationWard().getParentLocation().getCodeMappings().get(i);
-//						if(codeMapping.getTaxonomyCode() != null 
-//								&& codeMapping.getTaxonomyCode().length() > 0
-//								&& codeMapping.getTaxonomyName() != null
-//								&& codeMapping.getTaxonomyName().getText().length() > 0
-//								&& inpatientEpisode.getPendingTransfer().getDestinationWard().getParentLocation().getName().length() > 0)
-//						{
-//							pv1.getPendingLocation().getFacility().getNamespaceID().setValue(inpatientEpisode.getPendingTransfer().getDestinationWard().getParentLocation().getName());
-//							pv1.getPendingLocation().getFacility().getUniversalID().setValue(codeMapping.getTaxonomyCode());
-//							pv1.getPendingLocation().getFacility().getUniversalIDType().setValue(codeMapping.getTaxonomyName().toString());
-//						}
-//					}
-//				}
+				// PV1-42-4 Facility (HD)
+
 				// Need to recurse up Location.Parent to highest parent to obtain current facility (hospital)
 				if(inpatientEpisode.getPendingTransfer().getDestinationWard() != null
 						&& inpatientEpisode.getPendingTransfer().getDestinationWard().getParentLocation() !=null)

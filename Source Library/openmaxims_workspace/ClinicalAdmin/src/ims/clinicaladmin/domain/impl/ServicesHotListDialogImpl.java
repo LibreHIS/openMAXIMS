@@ -43,8 +43,9 @@ public class ServicesHotListDialogImpl extends BaseServicesHotListDialogImpl
 	{
 		DomainFactory factory = getDomainFactory();
 		
+		/* TODO MSSQL case - List lstServices = factory.find("from Service s where s.isActive = 1"); */
+		List lstServices = factory.find("from Service s where s.isActive = true");
 
-		List lstServices = factory.find("from Service s where s.isActive = 1");
 		if(lstServices != null && lstServices.size() > 0)
 		{
 			return ServiceShortVoAssembler.createServiceShortVoCollectionFromService(lstServices);

@@ -72,8 +72,9 @@ public class PatientProcedureDialogImpl extends BasePatientProcedureDialogImpl
         Connection conection = factory.getJdbcConnection();
         
         StringBuffer sql = new StringBuffer();
-        
-        sql.append("select p.id, p.proceduren from core_procedure p LEFT OUTER JOIN core_procedure_keywords k ON p.id = k.id where (k.keyword like ? or p.proceduren like ?) and p.isactive = 1 ");
+
+		/* TODO MSSQL case - sql.append("select p.id, p.proceduren from core_procedure p LEFT OUTER JOIN core_procedure_keywords k ON p.id = k.id where (k.keyword like ? or p.proceduren like ?) and p.isactive = 1 "); */
+        sql.append("select p.id, p.proceduren from core_procedure p LEFT OUTER JOIN core_procedure_keywords k ON p.id = k.id where (k.keyword like ? or p.proceduren like ?) and p.isactive = true ");
         
         if (listOfExistingProcedures != null && listOfExistingProcedures.trim().length() > 0)
 		{

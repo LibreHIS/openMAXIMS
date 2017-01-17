@@ -720,8 +720,9 @@ public final class EDDischargeDetailsJobImpl extends ims.scheduler.SchedulerJob
 	{
 		String[] result = null;		
 		DomainFactoryBridge factory = getDomainFactory();
-		
-		List<?> lst = factory.find("select r1_1.reportXml, t1_1.templateXml, r1_1.reportName, r1_1.reportDescription, t1_1.name, t1_1.description from ReportBo as r1_1 left join r1_1.templates as t1_1 where (r1_1.imsId= :imsid and t1_1.isActive = 1) order by t1_1.name", new String[] {"imsid"}, new Object[] {imsId}); //WDEV-22416
+
+		/* TODO MSSQL case - List<?> lst = factory.find("select r1_1.reportXml, t1_1.templateXml, r1_1.reportName, r1_1.reportDescription, t1_1.name, t1_1.description from ReportBo as r1_1 left join r1_1.templates as t1_1 where (r1_1.imsId= :imsid and t1_1.isActive = 1) order by t1_1.name", new String[] {"imsid"}, new Object[] {imsId}); */
+		List<?> lst = factory.find("select r1_1.reportXml, t1_1.templateXml, r1_1.reportName, r1_1.reportDescription, t1_1.name, t1_1.description from ReportBo as r1_1 left join r1_1.templates as t1_1 where (r1_1.imsId= :imsid and t1_1.isActive = TRUE) order by t1_1.name", new String[] {"imsid"}, new Object[] {imsId});
 		
 		if(lst.iterator().hasNext())
 		{
@@ -788,8 +789,10 @@ public final class EDDischargeDetailsJobImpl extends ims.scheduler.SchedulerJob
 	private TrackingJobVoCollection getDischargedTrackings() 
 	{
 		DomainFactoryBridge factory = getDomainFactory();
-		
-		String query = "select tr from Tracking as tr left join tr.dischargeLetterStatus as trStatus where tr.isDischarged = 1 and trStatus.id = :DischargeLetterStatus";
+
+		/* TODO MSSQL case - String query = "select tr from Tracking as tr left join tr.dischargeLetterStatus as trStatus where tr.isDischarged = 1 and trStatus.id = :DischargeLetterStatus"; */
+		String query = "select tr from Tracking as tr left join tr.dischargeLetterStatus as trStatus where tr.isDischarged = TRUE and trStatus.id = :DischargeLetterStatus";
+
 		List<?> results = factory.find(query, new String[] {"DischargeLetterStatus"}, new Object[] {DischargeLetterStatus.IN_PROGRESS.getID()});
 		
 		return TrackingJobVoAssembler.createTrackingJobVoCollectionFromTracking(results);

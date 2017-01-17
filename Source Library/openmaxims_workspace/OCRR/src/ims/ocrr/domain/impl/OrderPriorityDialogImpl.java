@@ -46,7 +46,9 @@ public class OrderPriorityDialogImpl extends BaseOrderPriorityDialogImpl
 		
 		
 		StringBuilder query = new StringBuilder("SELECT orderPriority.id FROM LookupInstance AS orderPriority LEFT JOIN orderPriority.type AS lookupType LEFT JOIN orderPriority.mappings AS mappings");
-		query.append(" WHERE lookupType.id = :ORDER_PRIORITY_TYPE AND orderPriority.active = 1 AND mappings.extSystem = :PATHOLOGY_SYSTEM ORDER BY orderPriority.id");
+
+		/* TODO MSSQL case - query.append(" WHERE lookupType.id = :ORDER_PRIORITY_TYPE AND orderPriority.active = 1 AND mappings.extSystem = :PATHOLOGY_SYSTEM ORDER BY orderPriority.id"); */
+		query.append(" WHERE lookupType.id = :ORDER_PRIORITY_TYPE AND orderPriority.active = TRUE AND mappings.extSystem = :PATHOLOGY_SYSTEM ORDER BY orderPriority.id");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
@@ -74,7 +76,9 @@ public class OrderPriorityDialogImpl extends BaseOrderPriorityDialogImpl
 		
 		
 		StringBuilder query = new StringBuilder("SELECT orderPriority.id FROM LookupInstance AS orderPriority LEFT JOIN orderPriority.type AS lookupType LEFT JOIN orderPriority.mappings AS mappings");
-		query.append(" WHERE lookupType.id = :ORDER_PRIORITY_TYPE AND orderPriority.active = 1 AND mappings.extSystem = :RADIOLOGY_SYSTEM ORDER BY orderPriority.id");
+
+		/* TODO MSSQL case - query.append(" WHERE lookupType.id = :ORDER_PRIORITY_TYPE AND orderPriority.active = 1 AND mappings.extSystem = :RADIOLOGY_SYSTEM ORDER BY orderPriority.id"); */
+		query.append(" WHERE lookupType.id = :ORDER_PRIORITY_TYPE AND orderPriority.active = TRUE AND mappings.extSystem = :RADIOLOGY_SYSTEM ORDER BY orderPriority.id");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
@@ -101,7 +105,9 @@ public class OrderPriorityDialogImpl extends BaseOrderPriorityDialogImpl
 		String clinicalSystem = "Clinical Mapping";
 		
 		StringBuilder query = new StringBuilder("SELECT orderPriority.id FROM LookupInstance AS orderPriority LEFT JOIN orderPriority.type AS lookupType LEFT JOIN orderPriority.mappings AS mappings");
-		query.append(" WHERE lookupType.id = :ORDER_PRIORITY_TYPE AND orderPriority.active = 1 AND mappings.extSystem = :CLINICAL_SYSTEM ORDER BY orderPriority.id");
+
+		/* TODO MSSQL case - query.append(" WHERE lookupType.id = :ORDER_PRIORITY_TYPE AND orderPriority.active = 1 AND mappings.extSystem = :CLINICAL_SYSTEM ORDER BY orderPriority.id"); */
+		query.append(" WHERE lookupType.id = :ORDER_PRIORITY_TYPE AND orderPriority.active = TRUE AND mappings.extSystem = :CLINICAL_SYSTEM ORDER BY orderPriority.id");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();

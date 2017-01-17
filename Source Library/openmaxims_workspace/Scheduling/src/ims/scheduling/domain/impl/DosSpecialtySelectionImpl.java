@@ -55,8 +55,10 @@ public class DosSpecialtySelectionImpl extends BaseDosSpecialtySelectionImpl
 
 		String ids = getLocationsIdsForHospital(location);
 
+		/* TODO MSSQL case - String hql = " select serv from DirectoryofService as dos left join dos.service as serv left join serv.specialty as spec left join dos.location as loc " +
+					 "where dos.isActive = 1 and spec.id = :specialtyID and loc.id in ( " + ids + " ) and serv.id <> :serviceID"; */
 		String hql = " select serv from DirectoryofService as dos left join dos.service as serv left join serv.specialty as spec left join dos.location as loc " +
-					 "where dos.isActive = 1 and spec.id = :specialtyID and loc.id in ( " + ids + " ) and serv.id <> :serviceID";
+					 "where dos.isActive = true and spec.id = :specialtyID and loc.id in ( " + ids + " ) and serv.id <> :serviceID";
 
 		ArrayList markers = new ArrayList();
 		ArrayList values = new ArrayList();
@@ -87,8 +89,10 @@ public class DosSpecialtySelectionImpl extends BaseDosSpecialtySelectionImpl
 
 		String ids = getLocationsIdsForHospital(location);
 
+		/* TODO MSSQL case - String hql = " select dos from DirectoryofService as dos left join dos.service as serv left join serv.specialty as spec left join dos.location as loc" +
+					 " where dos.isActive = 1 and serv.id <> :profileServiceID and loc.id in ( " + ids + " ) "; */
 		String hql = " select dos from DirectoryofService as dos left join dos.service as serv left join serv.specialty as spec left join dos.location as loc" +
-					 " where dos.isActive = 1 and serv.id <> :profileServiceID and loc.id in ( " + ids + " ) ";
+					 " where dos.isActive = true and serv.id <> :profileServiceID and loc.id in ( " + ids + " ) ";
 
 		ArrayList markers = new ArrayList();
 		ArrayList values = new ArrayList();

@@ -1235,8 +1235,9 @@ public class ReferralDetailsComponentImpl extends BaseReferralDetailsComponentIm
 		
 		DomainFactory factory = getDomainFactory();
 		
-		// WDEV-21265 select distinct service as could be multiple returned per location configuration, these are filtered at front end, but this prevents > 200 rows returned error
-		String query = "select distinct s from ContractConfig as cc left join cc.serviceLocations as sl left join sl.service as s where cc.id = :ContractConfig and s.isActive = 1";
+		// Select distinct service as could be multiple returned per location configuration, these are filtered at front end, but this prevents > 200 rows returned error
+		/* TODO MSSQL case - String query = "select distinct s from ContractConfig as cc left join cc.serviceLocations as sl left join sl.service as s where cc.id = :ContractConfig and s.isActive = 1"; */
+		String query = "select distinct s from ContractConfig as cc left join cc.serviceLocations as sl left join sl.service as s where cc.id = :ContractConfig and s.isActive = true";
 		
 		List doServices = factory.find(query, new String[] {"ContractConfig"}, new Object[] {contractConfig.getID_ContractConfig()});
 
@@ -1266,8 +1267,10 @@ public class ReferralDetailsComponentImpl extends BaseReferralDetailsComponentIm
 		DomainFactory factory = getDomainFactory();
 		
 		List doServices=null;
-		// WDEV-21265 select distinct service as could be multiple returned per location configuration, these are filtered at front end, but this prevents > 200 rows returned error
-		StringBuffer query = new StringBuffer("select distinct s from ContractConfig as cc left join cc.serviceLocations as sl left join sl.service as s, ReferralService as rs left join rs.referralServices as rs1 where cc.id = :ContractConfig and s.isActive = 1 and s.id = rs1.id "); //WDEV-22951
+
+		// Select distinct service as could be multiple returned per location configuration, these are filtered at front end, but this prevents > 200 rows returned error
+		/* TODO MSSQL case - StringBuffer query = new StringBuffer("select distinct s from ContractConfig as cc left join cc.serviceLocations as sl left join sl.service as s, ReferralService as rs left join rs.referralServices as rs1 where cc.id = :ContractConfig and s.isActive = 1 and s.id = rs1.id "); */
+		StringBuffer query = new StringBuffer("select distinct s from ContractConfig as cc left join cc.serviceLocations as sl left join sl.service as s, ReferralService as rs left join rs.referralServices as rs1 where cc.id = :ContractConfig and s.isActive = true and s.id = rs1.id ");
 		if (wildcardService != null)
 		{
 			query.append(" and s.upperName like :wildcardService order by s.upperName asc ");
@@ -1288,14 +1291,16 @@ public class ReferralDetailsComponentImpl extends BaseReferralDetailsComponentIm
 		return domainImpl.listServices(name, ServiceCategory.CLINICAL, null, true);
 	}
 
-	//wdev-20727
 	public ServiceFunctionLiteVoCollection listServiceFunctionByService(ServiceRefVo service)
 	{
 		if(service == null || service.getID_Service() == null)
 			throw new CodingRuntimeException("service parameter is null or id not provided in method listServiceFunctionByService");
 		
 		DomainFactory factory = getDomainFactory();
-		List servFuncs = factory.find("from ServiceFunction as servFunc where servFunc.service.id = :idService and servFunc.isActive = 1",new String[]{"idService"}, new Object[]{service.getID_Service()});
+
+		/* TODO MSSQL case - List servFuncs = factory.find("from ServiceFunction as servFunc where servFunc.service.id = :idService and servFunc.isActive = 1",new String[]{"idService"}, new Object[]{service.getID_Service()}); */
+		List servFuncs = factory.find("from ServiceFunction as servFunc where servFunc.service.id = :idService and servFunc.isActive = true",new String[]{"idService"}, new Object[]{service.getID_Service()});
+
 		return ServiceFunctionLiteVoAssembler.createServiceFunctionLiteVoCollectionFromServiceFunction(servFuncs);
 	}
 

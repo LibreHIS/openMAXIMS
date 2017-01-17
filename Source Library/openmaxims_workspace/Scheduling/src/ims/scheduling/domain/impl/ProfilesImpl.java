@@ -479,14 +479,10 @@ public class ProfilesImpl extends DomainImpl implements ims.scheduling.domain.Pr
 
 	public ServiceVoCollection listServices() 
 	{
-		/*LocationService impl = (LocationService) getDomainImpl(LocationServiceImpl.class);
-		return impl.listService(Boolean.TRUE);*/
-		
 		DomainFactory factory = getDomainFactory();
-		
-		return ServiceVoAssembler.createServiceVoCollectionFromService(factory.find("from Service service where service.isActive = 1 and service.canBeScheduled = 1"));	//wdev-20074
 
-		
+		/* TODO MSSQL case - return ServiceVoAssembler.createServiceVoCollectionFromService(factory.find("from Service service where service.isActive = 1 and service.canBeScheduled = 1")); */
+		return ServiceVoAssembler.createServiceVoCollectionFromService(factory.find("from Service service where service.isActive = true and service.canBeScheduled = true"));
 	}
 	
 	public Sch_ProfileVo getProfileDetails(ProfileShortVo profile)
@@ -790,18 +786,19 @@ public class ProfilesImpl extends DomainImpl implements ims.scheduling.domain.Pr
 	}
 	
 
-	//wdev-20074
 	public ServiceFunctionLiteVoCollection listServiceFunctionByService(ServiceRefVo service)
 	{
 		if(service == null || service.getID_Service() == null)
 			throw new CodingRuntimeException("service parameter is null or id not provided in method listServiceFunctionByService");
 		
 		DomainFactory factory = getDomainFactory();
-		List servFuncs = factory.find("from ServiceFunction as servFunc where servFunc.service.id = :idService and servFunc.isActive = 1",new String[]{"idService"}, new Object[]{service.getID_Service()});
+
+		/* TODO MSSQL case - List servFuncs = factory.find("from ServiceFunction as servFunc where servFunc.service.id = :idService and servFunc.isActive = 1",new String[]{"idService"}, new Object[]{service.getID_Service()}); */
+		List servFuncs = factory.find("from ServiceFunction as servFunc where servFunc.service.id = :idService and servFunc.isActive = true",new String[]{"idService"}, new Object[]{service.getID_Service()});
+
 		return ServiceFunctionLiteVoAssembler.createServiceFunctionLiteVoCollectionFromServiceFunction(servFuncs);
 	}
 
-	//wdev-20074
 	public ActivityLiteVoCollection listActivityByService(ServiceRefVo serviceRef, Boolean isFlexible)
 	{
 		
@@ -812,26 +809,25 @@ public class ProfilesImpl extends DomainImpl implements ims.scheduling.domain.Pr
 		String hql = null;
 		if( Boolean.TRUE.equals(isFlexible))
 		{
-			hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.service as s2_1 left join s1_1.activity as a1_1 where (s1_1.isActive = 1 and s2_1.id = :serviceId  and s1_1.isFlexible = 1 and a1_1.isActive = 1)";   //wdev-20262
+			/* TODO MSSQL case - hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.service as s2_1 left join s1_1.activity as a1_1 where (s1_1.isActive = 1 and s2_1.id = :serviceId  and s1_1.isFlexible = 1 and a1_1.isActive = 1)";  */
+			hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.service as s2_1 left join s1_1.activity as a1_1 where (s1_1.isActive = true and s2_1.id = :serviceId  and s1_1.isFlexible = true and a1_1.isActive = true)";
 		}
 		else
 		{
-			hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.service as s2_1 left join s1_1.activity as a1_1 where (s1_1.isActive = 1 and s2_1.id = :serviceId  and s1_1.isFlexible = 0 and a1_1.isActive = 1)";		//wdev-20262
+			/* TODO MSSQL case - hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.service as s2_1 left join s1_1.activity as a1_1 where (s1_1.isActive = 1 and s2_1.id = :serviceId  and s1_1.isFlexible = 0 and a1_1.isActive = 1)"; */
+			hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.service as s2_1 left join s1_1.activity as a1_1 where (s1_1.isActive = true and s2_1.id = :serviceId  and s1_1.isFlexible = false and a1_1.isActive = true)";
 		}
 		List lst = factory.find(hql, new String[]{"serviceId"}, new Object[]{new Integer(serviceRef.getID_Service())});
 		
 		return (ActivityLiteVoAssembler.createActivityLiteVoCollectionFromActivity(lst));
 	}
 
-	//wdev-20233
 	public LocShortVoCollection getLocationByParent(LocationRefVo locRef, String value, LocationType type1)
 	{
-		//http://jira/browse/WDEV-21222
 		OrganisationAndLocation impl = (OrganisationAndLocation)getDomainImpl(OrganisationAndLocationImpl.class);
 		return impl.getLocationByParent(locRef,value,type1);
 	}
 
-	//wdve-20074
 	public LocShortVoCollection getCaseNoteFolderLocationByParent(LocationRefVo locRef, String value, LocationType type)
 	{
 		OrganisationAndLocation impl = (OrganisationAndLocation) getDomainImpl(OrganisationAndLocationImpl.class);

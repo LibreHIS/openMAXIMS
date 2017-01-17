@@ -91,35 +91,6 @@ public class Logic extends BaseLogic
 					form.getLocalContext().setMinus224(voASR.getID());
 			}
 		}
-		
-		
-/*		Lkup lookupDto = null;
-		try
-		{
-			lookupDto = domain.getLookupInstance(Lookups.SchedulerActionActReason);
-		}
-		catch (DomainInterfaceException e)
-		{
-			engine.showMessage(e.getMessage());
-		}
-//		form.getLocalContext().setStatus(lookupDto);  
-		for(int i=0; lookupDto != null && i<lookupDto.DataCollection.count(); i++)
-		{
-//			if (lookupDto.DataCollection.get(i).Lkup_id.equals("-2189")) // Open
-//				form.Status().newRow(lookupDto.DataCollection.get(i).Lkup_id, lookupDto.DataCollection.get(i).Lkup_nm + " / Arrived");
-//			else if ((!lookupDto.DataCollection.get(i).Lkup_id.equals("-2194")) && // if not Arrived, Moved or Rebooked
-//					(!lookupDto.DataCollection.get(i).Lkup_id.equals("-2195")) &&
-//					(!lookupDto.DataCollection.get(i).Lkup_id.equals("-2196")))
-//				form.Status().newRow(lookupDto.DataCollection.get(i).Lkup_id, lookupDto.DataCollection.get(i).Lkup_nm);
-			
-			if(mapColl.get(i).getExtCode()!=null && mapColl.get(i).getExtCode().equals("-224")
-					&& mapColl.get(i).getExtSystem()!=null && mapColl.get(i).getExtSystem().equals("MAXIMS"))
-					form.getLocalContext().setMinus224(voASR.getID());
-*/
-	//	}
-
-		//wdev-15154
-			
 				
 		//Set the default to OrderBy
 		clearPIDAndPatient();	

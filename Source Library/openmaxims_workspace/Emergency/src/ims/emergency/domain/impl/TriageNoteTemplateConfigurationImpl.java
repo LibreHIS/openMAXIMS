@@ -66,7 +66,9 @@ public class TriageNoteTemplateConfigurationImpl extends BaseTriageNoteTemplateC
 
 		StringBuffer hql = new StringBuffer();
 
-		hql.append(" select probl from ClinicalProblem as probl left join probl.keywords as k where (probl.pCName like :ClinicalProblemSearchText or k.keyword like :ClinicalProblemSearchText) and probl.isActive = 1");
+		/* TODO MSSQL case - hql.append(" select probl from ClinicalProblem as probl left join probl.keywords as k where (probl.pCName like :ClinicalProblemSearchText or k.keyword like :ClinicalProblemSearchText) and probl.isActive = 1"); */
+		hql.append(" select probl from ClinicalProblem as probl left join probl.keywords as k where (probl.pCName like :ClinicalProblemSearchText or k.keyword like :ClinicalProblemSearchText) and probl.isActive = true");
+
 		hql.append(" order by UPPER(probl.pCName) asc");
 
 		markers.add("ClinicalProblemSearchText");

@@ -491,25 +491,7 @@ public class Logic extends BaseLogic
 		}
 		return false;
 	}
-	/*private boolean isOnlyOneBayOpen(WardBayConfigForWardViewVo wardBayConfigForWardViewVo)
-	{
-		int openCount = 0;
-		int activeCount = 0;
-		for (int i=0; i<wardBayConfigForWardViewVo.getBays().size();i++)
-		{
-			if (wardBayConfigForWardViewVo.getBays().get(i) == null)
-				continue;
-			if (Boolean.TRUE.equals(wardBayConfigForWardViewVo.getBays().get(i).getIsActive()))
-			{	
-				activeCount ++;
-				if ((wardBayConfigForWardViewVo.getBays().get(i).getBayAvailabilityStatus() == null || WardBayStatus.OPEN.equals(wardBayConfigForWardViewVo.getBays().get(i).getBayAvailabilityStatus())) && !isBayOutOfOpeningHours(wardBayConfigForWardViewVo.getBays().get(i)))
-					openCount++;
-			}
-		}
-		return openCount == 1 && activeCount > 1; 
-	}*/
 
-	//WDEV-22920 
 	private boolean canBlockAtLeastABay(WardBayConfigForWardViewVo wardBayConfigForWardViewVo)
 	{
 		if (wardBayConfigForWardViewVo == null || wardBayConfigForWardViewVo.getBays() == null || wardBayConfigForWardViewVo.getBays().size() == 0)
@@ -531,7 +513,7 @@ public class Logic extends BaseLogic
 	}
 	private void clearDisplay(boolean bValueSelectionCleared)
 	{
-		clearData(bValueSelectionCleared); //WDEV-20811
+		clearData(bValueSelectionCleared);
 		form.dyngrdDisplay().clear();
 		form.bedPlanner().clear();
 				

@@ -1684,12 +1684,13 @@ public class PDSDemographicsImpl extends DTODomainImplementation implements ims.
 		return null;
 	}
 
-	private RTTStatusEventMapVo getRTTStatusEventMap(RTTStatusPoint rttStatusPoint) //WDEV-18326
+	private RTTStatusEventMapVo getRTTStatusEventMap(RTTStatusPoint rttStatusPoint)
 	{
 		if (rttStatusPoint == null || rttStatusPoint.getId() == null)	
 			return null;
 
-		String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = 1 and rttstat.nationalCode = :natCode and event.encounterType is null ";
+		/* TODO MSSQL case - String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = 1 and rttstat.nationalCode = :natCode and event.encounterType is null "; */
+		String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = true and rttstat.nationalCode = :natCode and event.encounterType is null ";
 
 		DomainFactory factory = getDomainFactory();
 
@@ -3293,7 +3294,10 @@ public class PDSDemographicsImpl extends DTODomainImplementation implements ims.
 	public PrivateInsuranceCompanyVoCollection listPrivateInsuranceCompanyVo()
 	{
 		DomainFactory factory = getDomainFactory();
-		String query = "select p1_1 from PrivateInsuranceCompany as p1_1 where (p1_1.isActive = 1) order by p1_1.upperName asc ";
+
+		/* TODO MSSQL case - String query = "select p1_1 from PrivateInsuranceCompany as p1_1 where (p1_1.isActive = 1) order by p1_1.upperName asc "; */
+		String query = "select p1_1 from PrivateInsuranceCompany as p1_1 where (p1_1.isActive = true) order by p1_1.upperName asc ";
+
 		List<?> privateInsuranceComp = factory.find(query);
 		
 		if( privateInsuranceComp != null && privateInsuranceComp.size() > 0)
@@ -3311,7 +3315,9 @@ public class PDSDemographicsImpl extends DTODomainImplementation implements ims.
 			throw new CodingRuntimeException("countPendingPdsGeneralUpdatesRequests: param 'pat' cannot be null !");
 		
 		DomainFactory factory = getDomainFactory();
-		String hql = "select count (p1_1.id) from PDSGeneralUpdateRequest as p1_1 where (p1_1.patient.id = :pid and p1_1.active = 1 and p1_1.status.id = :status)"; 
+
+		/* TODO MSSQL case - String hql = "select count (p1_1.id) from PDSGeneralUpdateRequest as p1_1 where (p1_1.patient.id = :pid and p1_1.active = 1 and p1_1.status.id = :status)"; */
+		String hql = "select count (p1_1.id) from PDSGeneralUpdateRequest as p1_1 where (p1_1.patient.id = :pid and p1_1.active = true and p1_1.status.id = :status)";
 	
 		ArrayList markers = new ArrayList();
 		ArrayList values = new ArrayList();
@@ -4113,8 +4119,9 @@ public class PDSDemographicsImpl extends DTODomainImplementation implements ims.
 		
 		ArrayList names = new ArrayList();
 		ArrayList values = new ArrayList();
-			
-		StringBuffer taxonomyHql = new StringBuffer("select li from LookupInstance as li left join li.type as l where l.id = :lookupType and li.active = 1 and upper(li.text) like :lkptext order by upper(li.text) asc"); 
+
+		/* TODO MSSQL case - StringBuffer taxonomyHql = new StringBuffer("select li from LookupInstance as li left join li.type as l where l.id = :lookupType and li.active = 1 and upper(li.text) like :lkptext order by upper(li.text) asc"); */
+		StringBuffer taxonomyHql = new StringBuffer("select li from LookupInstance as li left join li.type as l where l.id = :lookupType and li.active = true and upper(li.text) like :lkptext order by upper(li.text) asc");
 		
 		names.add("lookupType");								
 		names.add("lkptext");

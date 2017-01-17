@@ -684,7 +684,9 @@ public class ClinicListImpl extends DomainImpl implements ims.RefMan.domain.Clin
 
 	public OrganisationLiteVoCollection listOrganisation() 
 	{
-		String hql = "from Organisation as org where  (org.type is not null  and org.type.id not in (:gpp,:supp,:pct) and org.isActive = 1 and org.parentOrganisation is null) order by org.upperName asc ";
+		/* TODO MSSQL case - String hql = "from Organisation as org where  (org.type is not null  and org.type.id not in (:gpp,:supp,:pct) and org.isActive = 1 and org.parentOrganisation is null) order by org.upperName asc "; */
+		String hql = "from Organisation as org where  (org.type is not null  and org.type.id not in (:gpp,:supp,:pct) and org.isActive = true and org.parentOrganisation is null) order by org.upperName asc ";
+
 		List<?> list = getDomainFactory().find(hql,new String[]{"gpp","supp","pct"},new Object[]{OrganisationType.GPP.getId(),OrganisationType.SUPPLIER.getId(),OrganisationType.NHS_PCT.getId()});
 		if (list == null || list.size() == 0)
 			return null;
@@ -1062,7 +1064,8 @@ public class ClinicListImpl extends DomainImpl implements ims.RefMan.domain.Clin
 	
 	private RTTStatusPoint getRTTStatusPointForDNAAppt(int bookedApptEventId)
 	{
-		String query = "select trs from RTTStatusEventMap as rsem left join rsem.targetRTTStatus as trs left join rsem.event as e where e.id =:eventID and rsem.active = 1 ";
+		/* TODO MSSQL case - String query = "select trs from RTTStatusEventMap as rsem left join rsem.targetRTTStatus as trs left join rsem.event as e where e.id =:eventID and rsem.active = 1 "; */
+		String query = "select trs from RTTStatusEventMap as rsem left join rsem.targetRTTStatus as trs left join rsem.event as e where e.id =:eventID and rsem.active = true ";
 		
 		List<?> rttList = getDomainFactory().find(query, new String[] {"eventID"}, new Object[] {bookedApptEventId});
 		
@@ -1230,12 +1233,13 @@ public class ClinicListImpl extends DomainImpl implements ims.RefMan.domain.Clin
 		return null;
 	}
 
-	private RTTStatusEventMapVo getRTTStatusEventMap(RTTStatusPoint rttStatusPoint) //WDEV-18325 
+	private RTTStatusEventMapVo getRTTStatusEventMap(RTTStatusPoint rttStatusPoint)
 	{
 		if (rttStatusPoint == null || rttStatusPoint.getId() == null)	
 			return null;
 
-		String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = 1 and rttstat.nationalCode = :natCode";
+		/* TODO MSSQL case - String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = 1 and rttstat.nationalCode = :natCode"; */
+		String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = true and rttstat.nationalCode = :natCode";
 
 		DomainFactory factory = getDomainFactory();
 
@@ -1247,7 +1251,7 @@ public class ClinicListImpl extends DomainImpl implements ims.RefMan.domain.Clin
 		}
 		return null;		
 	}
-	//WDEV-17987
+
 	private boolean canClearLastPatArrivedDate(CatsReferral doCats)
 	{
 		if (doCats.getAppointments() == null)

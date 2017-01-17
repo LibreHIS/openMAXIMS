@@ -49,7 +49,6 @@ public class SessionSlotDialogImpl extends BaseSessionSlotDialogImpl
 	/**
 	* listActivities
 	*/	
-	//WDEV-22973 
 	public ActivityVoCollection listActivities(CatsReferralRefVo catsReferralRef, ServiceRefVo serviceRef)
 	{
 		if (catsReferralRef != null && serviceRef != null)
@@ -59,10 +58,17 @@ public class SessionSlotDialogImpl extends BaseSessionSlotDialogImpl
 
 			Long noConsultationActivityRequiredForReferral = factory.countWithHQL("select count(cats.id) from CatsReferral as cats where cats.id = :CatsReferralId and (cats.consultationActivityRequired = 0 or cats.consultationActivityRequired is null) ", new String[] {"CatsReferralId"}, new Object[] {catsReferralRef.getID_CatsReferral()});
 
-			if (noConsultationActivityRequiredForReferral == null || noConsultationActivityRequiredForReferral == 0) //WDEV-22672
+			if (noConsultationActivityRequiredForReferral == null || noConsultationActivityRequiredForReferral == 0)
 			{
 				Long appointmentsCount = factory.countWithHQL("select count(appts.id) from CatsReferral as cats right join cats.appointments as appts where appts.theatreBooking is null and cats.id = :CatsReferralId", new String[] {"CatsReferralId"}, new Object[] {catsReferralRef.getID_CatsReferral()});
-				query = "select act from ServiceActivity as servActivity left join servActivity.activity as act left join servActivity.service as serv where serv.id = :serviceID and act.activityType.id = :actType and servActivity.isActive = :isActive" + ((appointmentsCount == null || appointmentsCount == 0) ? " and (act.firstAppointment = 1 or act.diagnostic = 1)" : "") + " order by act.name asc";			}
+
+				/* TODO MSSQL case - query = "select act from ServiceActivity as servActivity left join servActivity.activity as act left join servActivity.service as serv where serv.id = :serviceID and act.activityType.id = :actType and servActivity.isActive = :isActive" +
+						((appointmentsCount == null || appointmentsCount == 0) ? " and (act.firstAppointment = 1 or act.diagnostic = 1)" : "") +
+						" order by act.name asc"; */
+				query = "select act from ServiceActivity as servActivity left join servActivity.activity as act left join servActivity.service as serv where serv.id = :serviceID and act.activityType.id = :actType and servActivity.isActive = :isActive" +
+						((appointmentsCount == null || appointmentsCount == 0) ? " and (act.firstAppointment = true or act.diagnostic = true)" : "") +
+						" order by act.name asc";
+			}
 			else
 			{
 				query = "select act from ServiceActivity as servActivity left join servActivity.activity as act left join servActivity.service as serv where serv.id = :serviceID and act.activityType.id = :actType and servActivity.isActive = :isActive order by act.name asc";
@@ -82,7 +88,6 @@ public class SessionSlotDialogImpl extends BaseSessionSlotDialogImpl
 
 	}
 	
-	//WDEV-22827 //WDEV-22931
 	public ServiceFunctionVoCollection listServiceFunctionByService(SessionShortVo session)
 	{
 		if (session == null || session.getID_Sch_Session() == null)

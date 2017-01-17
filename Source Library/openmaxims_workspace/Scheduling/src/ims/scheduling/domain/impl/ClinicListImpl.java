@@ -430,12 +430,13 @@ public class ClinicListImpl extends DomainImpl implements ims.scheduling.domain.
 		return null;
 	}
 
-	private RTTStatusEventMapVo getRTTStatusEventMap(RTTStatusPoint rttStatusPoint) //WDEV-18325 
+	private RTTStatusEventMapVo getRTTStatusEventMap(RTTStatusPoint rttStatusPoint)
 	{
 		if (rttStatusPoint == null || rttStatusPoint.getId() == null)	
 			return null;
 
-		String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = 1 and rttstat.nationalCode = :natCode and event.encounterType is null ";
+		/* TODO MSSQL case - String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = 1 and rttstat.nationalCode = :natCode and event.encounterType is null "; */
+		String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = true and rttstat.nationalCode = :natCode and event.encounterType is null ";
 
 		DomainFactory factory = getDomainFactory();
 

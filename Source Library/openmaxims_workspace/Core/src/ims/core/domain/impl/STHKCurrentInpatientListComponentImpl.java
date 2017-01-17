@@ -170,13 +170,15 @@ public class STHKCurrentInpatientListComponentImpl extends BaseCurrentInpatientL
 				values.add(strSearchSurname);
 	
 			}
-		}//WDEV-13065
+		}
 		
 		if (voFilter.getAlertIsNotNull())
 		{
 			hql += " join inpat.pasEvent.patient.patientAlerts as patAlerts ";
 
-			sb.append(andStr + "patAlerts.alertType = :alertID and patAlerts.isCurrentlyActiveAlert = 1");		//wdev-11083
+			/* TODO MSSQL case - sb.append(andStr + "patAlerts.alertType = :alertID and patAlerts.isCurrentlyActiveAlert = 1"); */
+			sb.append(andStr + "patAlerts.alertType = :alertID and patAlerts.isCurrentlyActiveAlert = true");
+
 			markers.add("alertID");
 			values.add(getDomLookup(voFilter.getAlert()));
 			andStr = " and ";

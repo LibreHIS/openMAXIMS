@@ -290,7 +290,8 @@ public class BookTheatreSlotImpl extends BaseBookTheatreSlotImpl
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
 
-		String hql = "select medic from Medic as medic left join medic.serviceFunction as servFunc left join servFunc.service as serv where medic.isActive = 1 and servFunc.isActive = 1 and medic.isHCPaResponsibleHCP = 1 ";
+		/* TODO MSSQL case - String hql = "select medic from Medic as medic left join medic.serviceFunction as servFunc left join servFunc.service as serv where medic.isActive = 1 and servFunc.isActive = 1 and medic.isHCPaResponsibleHCP = 1 "; */
+		String hql = "select medic from Medic as medic left join medic.serviceFunction as servFunc left join servFunc.service as serv where medic.isActive = true and servFunc.isActive = true and medic.isHCPaResponsibleHCP = true ";
 		
 		
 		if (hcp != null)
@@ -327,7 +328,9 @@ public class BookTheatreSlotImpl extends BaseBookTheatreSlotImpl
 		ArrayList<Object> values = new ArrayList<Object>();
 		String andStr = "";
 
-		String hql = "select medic from Medic as medic left join medic.serviceFunction as servFunct left join servFunct.service as serv where medic.isActive = 1 and (medic.mos.name.upperSurname like :hcpSname or medic.mos.name.upperForename like :hcpFname)";
+		/* TODO MSSQL case - String hql = "select medic from Medic as medic left join medic.serviceFunction as servFunct left join servFunct.service as serv where medic.isActive = 1 and (medic.mos.name.upperSurname like :hcpSname or medic.mos.name.upperForename like :hcpFname)"; */
+		String hql = "select medic from Medic as medic left join medic.serviceFunction as servFunct left join servFunct.service as serv where medic.isActive = true and (medic.mos.name.upperSurname like :hcpSname or medic.mos.name.upperForename like :hcpFname)";
+
 		markers.add("hcpSname");
 		values.add(name.toUpperCase() + "%");
 		markers.add("hcpFname");

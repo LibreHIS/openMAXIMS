@@ -200,18 +200,14 @@ public class DirectoryOfServiceAdminImpl extends DomainImpl implements ims.sched
 	 */
 	public ServiceFunctionVoCollection listServiceFunctions(ServiceShortVo serviceShort) 
 	{
-		/*DomainFactory factory = getDomainFactory();
-		
-		List<?> funcs = factory.find("from ServiceFunction serviceFunc where serviceFunc.service.id = :serviceId",new String[]{"serviceId"},new Object[]{serviceShort.getID_Service()});
-		return ServiceFunctionVoAssembler.createServiceFunctionVoCollectionFromServiceFunction(funcs);*/
-		
-		
-		//wdev-20262
 		if(serviceShort == null || serviceShort.getID_Service() == null)
 			throw new CodingRuntimeException("service parameter is null or id not provided in method listServiceFunctionByService");
 		
 		DomainFactory factory = getDomainFactory();
-		List servFuncs = factory.find("from ServiceFunction as servFunc where servFunc.service.id = :idService and servFunc.isActive = 1",new String[]{"idService"}, new Object[]{serviceShort.getID_Service()});
+
+		/* TODO MSSQL case - List servFuncs = factory.find("from ServiceFunction as servFunc where servFunc.service.id = :idService and servFunc.isActive = 1",new String[]{"idService"}, new Object[]{serviceShort.getID_Service()}); */
+		List servFuncs = factory.find("from ServiceFunction as servFunc where servFunc.service.id = :idService and servFunc.isActive = true",new String[]{"idService"}, new Object[]{serviceShort.getID_Service()});
+
 		return ServiceFunctionVoAssembler.createServiceFunctionVoCollectionFromServiceFunction(servFuncs);
 	}
 
@@ -236,7 +232,7 @@ public class DirectoryOfServiceAdminImpl extends DomainImpl implements ims.sched
 
 	
 
-	/* (non-Javadoc)
+	/**
 	 * @see ims.scheduling.domain.DirectoryOfServiceAdmin#listLocationLiteByNameAndOrganisation(java.lang.String, ims.core.resource.place.vo.OrganisationRefVo)
 	 */
 	public LocationLiteVoCollection listLocationLiteByNameAndOrganisation(String name, OrganisationRefVo organisation) {
@@ -246,13 +242,15 @@ public class DirectoryOfServiceAdminImpl extends DomainImpl implements ims.sched
 	
 
 	public OrganisationLiteVoCollection listOrganisations() {
-		String hql = "from Organisation as org where  (org.type is not null  and org.type.id not in (:gpp,:supp,:pct) and org.isActive = 1 and org.parentOrganisation is null) order by org.upperName asc ";
+		/* TODO MSSQL case - String hql = "from Organisation as org where  (org.type is not null  and org.type.id not in (:gpp,:supp,:pct) and org.isActive = 1 and org.parentOrganisation is null) order by org.upperName asc "; */
+		String hql = "from Organisation as org where  (org.type is not null  and org.type.id not in (:gpp,:supp,:pct) and org.isActive = true and org.parentOrganisation is null) order by org.upperName asc ";
+
 		List<?> list = getDomainFactory().find(hql,new String[]{"gpp","supp","pct"},new Object[]{OrganisationType.GPP.getId(),OrganisationType.SUPPLIER.getId(),OrganisationType.NHS_PCT.getId()});
 		if (list == null || list.size() == 0)
 			return null;
 		return OrganisationLiteVoAssembler.createOrganisationLiteVoCollectionFromOrganisation(list);
 	}
-	//WDEV-11662
+
 	public ContractConfigShortVoCollection listActiveContracts() 
 	{
 		String hql = "from ContractConfig as cc where (cc.status.id = :status and cc.isRIE is null) order by upper(cc.contractName) asc";

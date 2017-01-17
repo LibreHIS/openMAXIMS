@@ -109,8 +109,10 @@ public class InternalReferralsIncomingListComponentImpl extends BaseInternalRefe
 				{
 					hqlConditions.append(or);
 				}
-				
-				hqlConditions.append(" (status.id = :AcceptedId and clinicReferralStatus.appointmentBooked = 1) ");
+
+				/* TODO MSSQL case - hqlConditions.append(" (status.id = :AcceptedId and clinicReferralStatus.appointmentBooked = 1) ");*/
+				hqlConditions.append(" (status.id = :AcceptedId and clinicReferralStatus.appointmentBooked = true) ");
+
 				paramNames.add("AcceptedId");
 				paramValues.add(InternalReferralStatus.ACCEPTED.getID());
 				
@@ -124,8 +126,9 @@ public class InternalReferralsIncomingListComponentImpl extends BaseInternalRefe
 				{
 					hqlConditions.append(or);
 				}
-				
-				hqlConditions.append(" (status.id = :AcceptedId and clinicReferralStatus.appointmentRequired = 1) ");
+
+				/* TODO MSSQL case - hqlConditions.append(" (status.id = :AcceptedId and clinicReferralStatus.appointmentRequired = 1) "); */
+				hqlConditions.append(" (status.id = :AcceptedId and clinicReferralStatus.appointmentRequired = true) ");
 				paramNames.add("AcceptedId");
 				paramValues.add(InternalReferralStatus.ACCEPTED.getID());
 				

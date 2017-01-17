@@ -32,9 +32,7 @@ import ims.coe.vo.domain.DischargeAssembler;
 import ims.core.admin.vo.CareContextRefVo;
 import ims.core.domain.Reports;
 import ims.core.domain.impl.ReportsImpl;
-//import ims.core.vo.lookups.ClinicalNotesStatus;
 import ims.domain.DomainFactory;
-//import ims.domain.exceptions.DomainException;
 import ims.domain.exceptions.DomainInterfaceException;
 import ims.domain.exceptions.DomainRuntimeException;
 import ims.domain.exceptions.StaleObjectException;
@@ -125,10 +123,8 @@ public class CarePlanDetailsImpl extends DomainImpl implements ims.nursing.domai
 		String hql = "from NursingClinicalNotes ncn join fetch ncn.carePlans as carePlan where carePlan.id = :idCarePlan and (ncn.recordingDateTime >= :startDate and ncn.recordingDateTime < :endDate ) ";
 		if(activeOnly == true)
 		{
-			// WDEV-7771
-			//hql += "and ncn.currentStatus.status.id = '" + ClinicalNotesStatus.ACTIVE.getID() + "'";
-			//hql += "and ncn.currentStatus.correctionConfirmed != 1";
-			hql += "and ncn.isCorrected <> 1"; //WDEV-15049
+			/* TODO MSSQL case - hql += "and ncn.isCorrected <> 1"; */
+			hql += "and ncn.isCorrected <> true";
 		}
 		
 		List notes = getDomainFactory().find(hql, new String[]{"idCarePlan", "startDate", "endDate"},new Object[]{carePlanRefVo.getID_CarePlan(), dateFrom.getDate(), dateTo.copy().addDay(1).getDate()});
@@ -158,7 +154,7 @@ public class CarePlanDetailsImpl extends DomainImpl implements ims.nursing.domai
 		ims.nursing.careplans.domain.objects.CarePlanEvaluationNote doNote =  CarePlanEvaluationNoteAssembler.extractCarePlanEvaluationNote(getDomainFactory(), voNote);
 		getDomainFactory().save(doNote);
 	}
-	//wdev-13495
+
 	public CarePlanCollection listCarePlans(ims.nursing.vo.CarePlan voCarePlan)	throws DomainInterfaceException 
 	{
 		DomainFactory factory = getDomainFactory();

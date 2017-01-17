@@ -116,7 +116,8 @@ public class PCIScheduleConfigurationImpl extends BaseScheduleConfigurationImpl
 			ArrayList<Object> values = new ArrayList<Object>();
 
 			// Select all active default schedules
-			hql.append(" where sc.isDefaultSchedule = 1 ");
+			/* TODO MSSQL case - hql.append(" where sc.isDefaultSchedule = 1 "); */
+			hql.append(" where sc.isDefaultSchedule = TRUE ");
 
 			// Filter different schedule
 			if (scheduleConfigurationVo.getID_ScheduleConfigurationIsNotNull())

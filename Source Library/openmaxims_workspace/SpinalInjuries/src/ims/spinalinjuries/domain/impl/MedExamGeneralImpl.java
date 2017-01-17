@@ -390,12 +390,14 @@ public class MedExamGeneralImpl extends DomainImpl implements ims.spinalinjuries
 		VitalSignsAll metrics = (VitalSignsAll) getDomainImpl(VitalSignsImpl.class);
 		return metrics.saveMetricsToPatient(voMetrics);
 	}
-	//WDEV-18707 	
+
 	public Boolean isLastVitalSignsRIEd(ExamGenRefVo medExamRef)
 	{
 		if (medExamRef == null)
 			return false;
-		String hql = "select vs from ExamGen as eg left join eg.vitalSigns as vs where eg.id = :MEDEXAMID and vs.isRIE = 1";
+
+		/* TODO MSSQL case - String hql = "select vs from ExamGen as eg left join eg.vitalSigns as vs where eg.id = :MEDEXAMID and vs.isRIE = 1"; */
+		String hql = "select vs from ExamGen as eg left join eg.vitalSigns as vs where eg.id = :MEDEXAMID and vs.isRIE = true";
 
 		List<?> res = getDomainFactory().find(hql,new String[] {"MEDEXAMID"}, new Object[]{ medExamRef.getID_ExamGen()});
 		if (res != null && res.size() > 0)

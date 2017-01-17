@@ -56,11 +56,14 @@ public class DiagnosticImageTransferWorklistImpl extends BaseDiagnosticImageTran
 	public HcpLiteVoCollection listHCP(String name, Boolean responsibleHcp)
 	{
 		StringBuilder query = new StringBuilder("SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos");
-		query.append(" WHERE (mos.name.upperSurname LIKE :NAME OR mos.name.upperForename LIKE :NAME) AND hcp.isActive = 1");
+
+		/* TODO MSSQL case - query.append(" WHERE (mos.name.upperSurname LIKE :NAME OR mos.name.upperForename LIKE :NAME) AND hcp.isActive = 1"); */
+		query.append(" WHERE (mos.name.upperSurname LIKE :NAME OR mos.name.upperForename LIKE :NAME) AND hcp.isActive = true");
 		
 		if (Boolean.TRUE.equals(responsibleHcp))
 		{
-			query.append(" AND hcp.isHCPaResponsibleHCP = 1 ");
+		    /* TODO MSSQL case - query.append(" AND hcp.isHCPaResponsibleHCP = 1 "); */
+			query.append(" AND hcp.isHCPaResponsibleHCP = true ");
 		}
 		
 		query.append(" ORDER BY UPPER(mos.name.upperSurname)");

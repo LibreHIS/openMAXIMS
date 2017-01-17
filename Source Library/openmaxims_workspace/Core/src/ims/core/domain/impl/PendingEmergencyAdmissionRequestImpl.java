@@ -255,27 +255,31 @@ public class PendingEmergencyAdmissionRequestImpl extends BasePendingEmergencyAd
 	{
 		if (name == null)
 			return null;
-		
-		StringBuilder query = new StringBuilder("SELECT mos FROM MemberOfStaff AS mos WHERE mos.isActive = 1 AND mos.name.upperSurname LIKE :NAME");
+
+		/* TODO MSSQL case - StringBuilder query = new StringBuilder("SELECT mos FROM MemberOfStaff AS mos WHERE mos.isActive = 1 AND mos.name.upperSurname LIKE :NAME"); */
+		StringBuilder query = new StringBuilder("SELECT mos FROM MemberOfStaff AS mos WHERE mos.isActive = true AND mos.name.upperSurname LIKE :NAME");
+
 		query.append(" ORDER BY mos.name.upperSurname ");
 		
 		return MemberOfStaffLiteVoAssembler.createMemberOfStaffLiteVoCollectionFromMemberOfStaff(getDomainFactory().find(query.toString(), "NAME", name.toUpperCase() + "%"));
 	}
 
-	//WDEV-21422
 	public HcpLiteVoCollection listConsultants(ServiceRefVo service, String name)
 	{
 		if (name == null)
 			return null;
 		
 		StringBuilder query = new StringBuilder("SELECT medic FROM Medic AS medic LEFT JOIN medic.mos AS mos LEFT JOIN medic.grade AS grade ");
-		if (service != null) //WDEV-21422
+		if (service != null)
 		{
 			query.append(" LEFT JOIN medic.serviceFunction as servf LEFT JOIN servf.service as service" );
 		}
-		
-		query.append(" WHERE mos.name.upperSurname LIKE :NAME AND medic.isActive = 1 AND grade.id = :CONSULTANT" + (service != null ? " AND service.id = :SERVICE_ID" : "") +  
-				" ORDER BY mos.name.upperSurname ");
+
+		/* TODO MSSQL case - query.append(" WHERE mos.name.upperSurname LIKE :NAME AND medic.isActive = 1 AND grade.id = :CONSULTANT" + (service != null ? " AND service.id = :SERVICE_ID" : "") + " ORDER BY mos.name.upperSurname "); */
+		query.append(
+		        " WHERE mos.name.upperSurname LIKE :NAME AND medic.isActive = true AND grade.id = :CONSULTANT" +
+                (service != null ? " AND service.id = :SERVICE_ID" : "") +
+                " ORDER BY mos.name.upperSurname ");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();

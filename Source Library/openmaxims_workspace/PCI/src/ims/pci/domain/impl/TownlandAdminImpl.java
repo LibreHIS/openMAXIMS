@@ -137,7 +137,7 @@ public class TownlandAdminImpl extends BaseTownlandAdminImpl
 		return TownlandShortVoAssembler.createTownlandShortVoCollectionFromTownland(factory.find(query, markers, values));
 	}
 
-	// WDEV-12657 - Updated function: added parameter to control whether inactive records should be listed
+	// Added parameter to control whether inactive records should be listed
 	public DEDLiteVoCollection listDEDs(String searchText, Boolean listInactive) 
 	{
 		if(searchText == null || (searchText != null && searchText.trim().length() == 0))
@@ -149,10 +149,12 @@ public class TownlandAdminImpl extends BaseTownlandAdminImpl
 		hql.append(" from DED ded");
 		hql.append(" where ded.upperName like :dedName");
 		
-		// WDEV-12657 - Update query to list only active records
-		if (!listInactive)
-			hql.append(" and ded.isActive = 1");
-		
+		// Update query to list only active records
+		if (!listInactive) {
+			/* TODO MSSQL case - hql.append(" and ded.isActive = 1"); */
+			hql.append(" and ded.isActive = true");
+		}
+
 		return DEDLiteVoAssembler.createDEDLiteVoCollectionFromDED(getDomainFactory().find(hql.toString(), new String []{"dedName"}, new Object []{DEDLite}));
 	}
 }

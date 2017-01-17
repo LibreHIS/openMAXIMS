@@ -159,9 +159,9 @@ public class CDSGenerateImpl extends BaseCDSGenerateImpl implements StatefulJob
 	private static final String CONTRACT_CODE="E01";  // Contract Code for UKSH
 	private static final String UNKNOWN_CONSULTANT="C9999998";
 	private static final String UNKNOWN_GP="G9999998";
-	//private static final String UNKNOWN_REFERRER="X9999998";  wdev-9484
+
 	private static final String UNKNOWN_PRACTICE="V81999";
-	private static final String NO_PROCEDURE=" ";  // wdev-9720 changed from X999 to blank as requested
+	private static final String NO_PROCEDURE=" ";
 	private static final Logger	LOG					= Logging.getLogger(CDSGenerateImpl.class);
 	private static final int DIAGNOSIS_TYPE=1;
 	private static final int PROCEDURE_TYPE=2;
@@ -170,14 +170,14 @@ public class CDSGenerateImpl extends BaseCDSGenerateImpl implements StatefulJob
 	private static final int ADMISSION=1;
 	private static final int DAY_CASE=2;
 	
-	//the next 3 definitions should be declared identically in CDSgenerate logic java file
+	// The next 3 definitions should be declared identically in CDSgenerate logic java file
 	private static final String	INPATIENT_REPORT_TYPE	= "INPATIENT_REPORT";
 	private static final String	OUTPATIENT_REPORT_TYPE	= "OUTPATIENT_REPORT";
 	private static final String	HRG_REPORT_TYPE	= "HRG_REPORT";
-	private static final String ELECTIVELIST_REPORT_TYPE = "ELECTIVELIST_REPORT"; //WDEV-18912
+	private static final String ELECTIVELIST_REPORT_TYPE = "ELECTIVELIST_REPORT";
 	
-	//WDEV-15012: max number of lines in buffer before flushing to disk
-	private static final int	BUFFER_LINES	= 2000; 
+	// Max number of lines in buffer before flushing to disk
+	private static final int	BUFFER_LINES	= 2000;
 	private static final int	MAX_RECORDS_LOG	= 5000;
 
 	private static String		INPATIENT_REPORT		= "CDS Inpatient";
@@ -3400,8 +3400,9 @@ public class CDSGenerateImpl extends BaseCDSGenerateImpl implements StatefulJob
 			tmp = "%" + tmp;
 		
 		DomainFactory factory = getDomainFactory();
-		
-		List lst = factory.find("from Location loc where loc.isActive = 1 and loc.isVirtual = 0 and loc.name like :NAME and loc.type.id <> -853 order by loc.name", new String[] {"NAME"}, new Object[] {tmp}); //WDEV-19532
+
+		/* TODO MSSQL case - List lst = factory.find("from Location loc where loc.isActive = 1 and loc.isVirtual = 0 and loc.name like :NAME and loc.type.id <> -853 order by loc.name", new String[] {"NAME"}, new Object[] {tmp}); */
+		List lst = factory.find("from Location loc where loc.isActive = TRUE and loc.isVirtual = FALSE and loc.name like :NAME and loc.type.id <> -853 order by loc.name", new String[] {"NAME"}, new Object[] {tmp});
 
 		return LocationLiteVoAssembler.createLocationLiteVoCollectionFromLocation(lst);
 	}
@@ -3702,8 +3703,7 @@ public class CDSGenerateImpl extends BaseCDSGenerateImpl implements StatefulJob
 		}
 
 		result.setLogUrl(requestUrl + "/download/" + (String)obj[4] + "_" + df.format(now) + "_log.html");
-		//form.htmResult().setHTML("<IFRAME id=\"ResultFrame123\" name=\"PostFrame\" width=\"100%\" height=\"100%\" frameborder=0 src='" + engine.getRequestUrl() + "/download/" + (String)obj[4] + "_" + df.format(now) + "_log.html" + "'></IFRAME>");
-		
+
 		histVo.setFileUrl(result.getResultUrl());
 		histVo.setLogUrl(result.getLogUrl());
 		histVo.setJobSuccessful(Boolean.TRUE);

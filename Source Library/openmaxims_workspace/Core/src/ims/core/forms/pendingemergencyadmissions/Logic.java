@@ -76,51 +76,7 @@ import java.util.GregorianCalendar;
 
 public class Logic extends BaseLogic
 {
-	/**
-	 * WDEV-13136 WDEV-22365 - removed unused comparator
-	 * @author George Josan
-	 *	Comparator for manual sorting after age
-	
-	private static class AgeComparator implements Comparator<PendingEmergencyAdmissionLiteVo>
-	{
-		private int direction;
 
-		public AgeComparator(SortOrder sortOrderAge)
-		{
-			if (SortOrder.ASCENDING.equals(sortOrderAge))
-				direction = 1;
-			else
-				direction = -1;
-		}
-
-		/**
-		 * Function used to compare two records after age
-		 
-		public int compare(PendingEmergencyAdmissionLiteVo o1, PendingEmergencyAdmissionLiteVo o2)
-		{
-			if (o1.getPasEventIsNotNull() && o1.getPasEvent().getPatientIsNotNull() && o1.getPasEvent().getPatient().getAgeIsNotNull()
-					&& o2.getPasEventIsNotNull() && o2.getPasEvent().getPatientIsNotNull() && o2.getPasEvent().getPatient().getAgeIsNotNull())
-			{
-				return o1.getPasEvent().getPatient().getAge().compareTo(o2.getPasEvent().getPatient().getAge()) * direction;
-			}
-			
-			if (o1.getPasEventIsNotNull() && o1.getPasEvent().getPatientIsNotNull() && o1.getPasEvent().getPatient().getAgeIsNotNull()
-					&& (!o2.getPasEventIsNotNull() || !o2.getPasEvent().getPatientIsNotNull() || !o2.getPasEvent().getPatient().getAgeIsNotNull()) )
-			{
-				return direction;
-			}
-			
-			if (o1.getPasEventIsNotNull() && o1.getPasEvent().getPatientIsNotNull() && o1.getPasEvent().getPatient().getAgeIsNotNull()
-					&& (!o2.getPasEventIsNotNull() || !o2.getPasEvent().getPatientIsNotNull() || !o2.getPasEvent().getPatient().getAgeIsNotNull()) )
-			{
-				return -1 * direction;
-			}
-
-			return 0;
-		}
-	} **/
-	
-	//wdev-21464
 	public static class AgeDOBComparator implements Comparator<Object>
 	{
 		private int direction = 1;

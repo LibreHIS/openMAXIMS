@@ -533,8 +533,9 @@ public class TaxonomySearchImpl extends DTODomainImplementation implements ims.c
 		
 		if (nat_code.equals(TaxonomyType.NAT_SPEC_CODE)) specOrTreat = "isSpecialty";
 		else specOrTreat = "isTreatment";
-		
-		String sql = "select description, code from nat_spec_codes where " + specOrTreat + " = 1 and description like ? "; 
+
+		/* TODO MSSQL case - String sql = "select description, code from nat_spec_codes where " + specOrTreat + " = 1 and description like ? "; */
+		String sql = "select description, code from nat_spec_codes where " + specOrTreat + " = TRUE and description like ? ";
 		
 		DomainFactory factory = getDomainFactory();		
 		Connection conn = factory.getJdbcConnection();
@@ -546,7 +547,6 @@ public class TaxonomySearchImpl extends DTODomainImplementation implements ims.c
 			ps = conn.prepareCall(sql);
 			ps.setString(1, "%" + filter.getDescription().toUpperCase() + "%");
 			rs = ps.executeQuery();
-			//rs = conn.createStatement().executeQuery(sql.toString());
 			taxMap = new TaxonomyMap();
 			
 			while (rs.next())

@@ -380,10 +380,10 @@ public class SelectElectiveListConfigurationImpl extends BaseSelectElectiveListC
 		if (listIdHcp!=null && listIdHcp.length()>0)
 		{	
 			hqlConditions.append(andStr);
-			hqlConditions.append("  hcp.id in "+ listIdHcp +" and hcps.defaultForHCP=1");
-			//and listOwners.defaultForHCP=1
-			//markers.add("ID_List");
-			//values.add(listIdHcp);
+
+			/* TODO MSSQL case - hqlConditions.append("  hcp.id in "+ listIdHcp +" and hcps.defaultForHCP=1"); */
+			hqlConditions.append("  hcp.id in "+ listIdHcp +" and hcps.defaultForHCP = TRUE");
+
 			andStr = " and ";
 		}
 		

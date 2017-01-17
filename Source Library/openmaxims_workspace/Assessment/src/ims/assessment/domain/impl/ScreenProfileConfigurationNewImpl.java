@@ -56,7 +56,10 @@ public class ScreenProfileConfigurationNewImpl extends BaseScreenProfileConfigur
 		if(PreActiveActiveInactiveStatus.ACTIVE.equals(profile.getActiveStatus()))
 		{
 			StringBuffer sb = new StringBuffer();
-			sb.append("select count (s1_1.id) from ScreeningProfile as s1_1 where s1_1.activeStatus.id = -617 and s1_1.contextType.id = :CONTEXT_ID and 1 = 1");
+
+			/* TODO MSSQL case - sb.append("select count (s1_1.id) from ScreeningProfile as s1_1 where s1_1.activeStatus.id = -617 and s1_1.contextType.id = :CONTEXT_ID and 1 = 1"); */
+			sb.append("select count (s1_1.id) from ScreeningProfile as s1_1 where s1_1.activeStatus.id = -617 and s1_1.contextType.id = :CONTEXT_ID and true = true");
+
 			List list = null;
 			
 			if(profile.getID_ScreeningProfileIsNotNull())

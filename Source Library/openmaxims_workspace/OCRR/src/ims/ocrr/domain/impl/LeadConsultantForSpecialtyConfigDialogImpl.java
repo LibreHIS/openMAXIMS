@@ -61,8 +61,11 @@ public class LeadConsultantForSpecialtyConfigDialogImpl extends BaseLeadConsulta
 		StringBuffer hql = new StringBuffer();
 			
 		hql.append(" select hcp from Hcp as hcp left join hcp.mos as mos, Medic as medic");
-		hql.append(" where mos.name.upperSurname like :HcpName and hcp.isActive = 1 and medic.isHCPaResponsibleHCP = 1 and medic.id = hcp.id ");
-		hql.append(" order by mos.name.upperSurname asc"); //WDEV-20219
+
+		/* TODO MSSQL case - hql.append(" where mos.name.upperSurname like :HcpName and hcp.isActive = 1 and medic.isHCPaResponsibleHCP = 1 and medic.id = hcp.id "); */
+		hql.append(" where mos.name.upperSurname like :HcpName and hcp.isActive = TRUE and medic.isHCPaResponsibleHCP = TRUE and medic.id = hcp.id ");
+
+		hql.append(" order by mos.name.upperSurname asc");
 		
 		markers.add("HcpName");
 		values.add(hcpNameLite);

@@ -62,7 +62,8 @@ public class PatientDiaryImpl extends BasePatientDiaryImpl
 		
 		if (activeOnly != null && activeOnly)
 		{
-			hql.append(" and d.active = 1 ");
+			/* TODO MSSQL case - hql.append(" and d.active = 1 "); */
+			hql.append(" and d.active = true ");
 		}
 		if (fromDate != null && toDate != null)
 		{

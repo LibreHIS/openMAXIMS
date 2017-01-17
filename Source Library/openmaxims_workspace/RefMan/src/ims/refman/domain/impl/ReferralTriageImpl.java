@@ -160,8 +160,10 @@ public class ReferralTriageImpl extends BaseReferralTriageImpl
 	{
 		if(rttStatusPoint == null)
 			return null;
-		
-		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = 1 and rttMap.encounterType is null";
+
+		/* TODO MSSQL case - String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = 1 and rttMap.encounterType is null"; */
+		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = true and rttMap.encounterType is null";
+
 		List<?> listRTTMap = getDomainFactory().find(query, new String[] {"RTTStatusPoint"}, new Object[] {rttStatusPoint.getId()});
 		
 		if(listRTTMap != null && listRTTMap.size() > 0 && listRTTMap.get(0) instanceof RTTStatusEventMap)
@@ -412,7 +414,8 @@ public class ReferralTriageImpl extends BaseReferralTriageImpl
 
 	public ServiceLiteVoCollection listReferralServices()
 	{
-		String query = "select s from ReferralService as rs left join rs.referralServices as s where s.isActive = 1 order by s.upperName asc ";
+		/* TODO MSSQL case - String query = "select s from ReferralService as rs left join rs.referralServices as s where s.isActive = 1 order by s.upperName asc "; */
+		String query = "select s from ReferralService as rs left join rs.referralServices as s where s.isActive = true order by s.upperName asc ";
 		DomainFactory factory = getDomainFactory();
 		
 		List services = factory.find(query);
@@ -1287,9 +1290,15 @@ public class ReferralTriageImpl extends BaseReferralTriageImpl
 		ArrayList<Object> paramValues = new ArrayList<Object>();
 		String query = " select h from Hcp h ";
 		query += " left join h.serviceFunction as servf left join servf.service as serv ";
-		query += " where h.isActive = 1 and (h.mos.name.upperSurname like :NAME or h.mos.name.upperForename like :NAME) ";
-		query += " AND h.isHCPaResponsibleHCP = 1 ";
-		query += " AND serv.id = :serviceID and servf.isActive = 1 ";
+
+		/* TODO MSSQL case - query += " where h.isActive = 1 and (h.mos.name.upperSurname like :NAME or h.mos.name.upperForename like :NAME) "; */
+		query += " where h.isActive = true and (h.mos.name.upperSurname like :NAME or h.mos.name.upperForename like :NAME) ";
+
+		/* TODO MSSQL case -  */
+		query += " AND h.isHCPaResponsibleHCP = true ";
+
+		/* TODO MSSQL case -  */
+		query += " AND serv.id = :serviceID and servf.isActive = true ";
 
 		paramNames.add("NAME");
 		paramValues.add(value.toUpperCase() + "%");

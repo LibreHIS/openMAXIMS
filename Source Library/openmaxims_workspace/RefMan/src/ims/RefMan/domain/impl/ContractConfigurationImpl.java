@@ -57,9 +57,12 @@ public class ContractConfigurationImpl extends BaseContractConfigurationImpl imp
 
 	public ims.core.vo.OrganisationLiteVoCollection listActiveOrganisations()
 	{
+		/* TODO MSSQL case - String hql =  "from Organisation as org where (org.type.id not in (" +
+				getInvalidTypes()+
+				") and org.isActive = 1 and org.isRIE is null) order by org.upperName"; */
 		String hql =  "from Organisation as org where (org.type.id not in (" +
 				getInvalidTypes()+
-				") and org.isActive = 1 and org.isRIE is null) order by org.upperName"; //WDEV-20219 upper(org.upperName)
+				") and org.isActive = true and org.isRIE is null) order by org.upperName";
 		
 		List<?> dos = getDomainFactory().find(hql);
 		
@@ -266,7 +269,10 @@ public class ContractConfigurationImpl extends BaseContractConfigurationImpl imp
 		if( cCGCode != null )
 		{
 			hqlBuilder.append(and);
-			hqlBuilder.append(" c3_1.cCGCode like :ccgCode and c3_1.isActive = 1");
+
+			/* TODO MSSQL case - hqlBuilder.append(" c3_1.cCGCode like :ccgCode and c3_1.isActive = 1"); */
+			hqlBuilder.append(" c3_1.cCGCode like :ccgCode and c3_1.isActive = true");
+
 			and = "and ";
 			paramNames.add("ccgCode");
 			paramValues.add("%"+cCGCode+"%");

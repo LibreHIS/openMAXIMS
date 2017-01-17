@@ -42,15 +42,15 @@ public class ReasonTextDialogImpl extends BaseReasonTextDialogImpl
 
 	private static final long serialVersionUID = 1L;
 	
-	//WDEV-21736
-	public CancelAppointmentReasonCollection listReasons() 
+	public CancelAppointmentReasonCollection listReasons()
 	{
 		DomainFactory factory = getDomainFactory();
 		
 		ArrayList markers = new ArrayList();
 		ArrayList values = new ArrayList();
-		
-		String hql = "SELECT r FROM CancellationTypeReason AS t LEFT JOIN t.cancellationReason as r WHERE t.cancellationType.id = :cancellationType AND r.active = 1";
+
+		/* TODO MSSQL case - String hql = "SELECT r FROM CancellationTypeReason AS t LEFT JOIN t.cancellationReason as r WHERE t.cancellationType.id = :cancellationType AND r.active = 1"; */
+		String hql = "SELECT r FROM CancellationTypeReason AS t LEFT JOIN t.cancellationReason as r WHERE t.cancellationType.id = :cancellationType AND r.active = true";
 		
 		markers.add("cancellationType");
 		values.add(Status_Reason.HOSPITALCANCELLED.getID());
@@ -69,5 +69,4 @@ public class ReasonTextDialogImpl extends BaseReasonTextDialogImpl
 		}
 		return col;
 	}
-	//WDEV-21736 ends here
 }

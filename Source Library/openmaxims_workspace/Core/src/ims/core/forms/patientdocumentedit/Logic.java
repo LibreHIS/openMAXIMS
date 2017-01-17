@@ -51,7 +51,7 @@ public class Logic extends BaseLogic
 {
 	private static final long serialVersionUID = 1L;
 	
-	private static final String CHECKOUT_FOLDER = "CheckOut"; //WDEV-13366
+	private static final String CHECKOUT_FOLDER = "CheckOut";
 
 	@Override
 	protected void onFormOpen(Object[] args) throws ims.framework.exceptions.PresentationLogicException
@@ -83,22 +83,19 @@ public class Logic extends BaseLogic
 			form.txtDocumentName().setValue(form.getGlobalContext().Core.getPatientCorrespondence().getName());
 			form.txtDocumentDate().setValue(form.getGlobalContext().Core.getPatientCorrespondence().getDocumentDate() != null ? form.getGlobalContext().Core.getPatientCorrespondence().getDocumentDate().toString() : null);
 			
-			//WDEV-11714
 			form.intNoOfCopies().setValue(form.getGlobalContext().Core.getPatientCorrespondence().getNoOfCopies());
-			form.chkEnclosure().setValue(form.getGlobalContext().Core.getPatientCorrespondence().getHasEnclosure());//WDEV-18815
+			form.chkEnclosure().setValue(form.getGlobalContext().Core.getPatientCorrespondence().getHasEnclosure());
 			
 		}
 		
 		if (form.getGlobalContext().Core.getPatientCorrespondenceIsNotNull() && form.getGlobalContext().Core.getPatientCorrespondence().getCurrentDocumentStatusIsNotNull())
 		{
-			//hideCurrentStatus(form.getGlobalContext().Core.getPatientCorrespondence().getCurrentDocumentStatus());
-			form.cmbStatus().setValue(form.getGlobalContext().Core.getPatientCorrespondence().getCurrentDocumentStatus().getCorrespondenceStatus()); //WDEV-18815
+			form.cmbStatus().setValue(form.getGlobalContext().Core.getPatientCorrespondence().getCurrentDocumentStatus().getCorrespondenceStatus());
 		}
 		
-		updateControlsState();//WDEV-18815
+		updateControlsState();
 	}
 	
-	//WDEV-18815
 	private void updateControlsState()
 	{
 		PatientDocumentStatusVo currentDocumentStatus = form.getGlobalContext().Core.getPatientCorrespondence().getCurrentDocumentStatus();
@@ -109,8 +106,7 @@ public class Logic extends BaseLogic
 		form.GroupUpdateStatus().setEnabled(GroupUpdateStatusEnumeration.rdoReview, isNotFinalDocument && (DocumentStatus.DRAFT.equals(currentDocumentStatus.getCorrespondenceStatus()) || DocumentStatus.FOR_UPDATE.equals(currentDocumentStatus.getCorrespondenceStatus())));
 		form.GroupUpdateStatus().setEnabled(GroupUpdateStatusEnumeration.rdoUpdate, isNotFinalDocument && (DocumentStatus.FOR_REVIEW.equals(currentDocumentStatus.getCorrespondenceStatus())));//WDEV-19039
 		form.GroupUpdateStatus().setEnabled(GroupUpdateStatusEnumeration.rdoReadyToSent, isNotFinalDocument && (DocumentStatus.DRAFT.equals(currentDocumentStatus.getCorrespondenceStatus()) || DocumentStatus.FOR_UPDATE.equals(currentDocumentStatus.getCorrespondenceStatus()) || DocumentStatus.FOR_REVIEW.equals(currentDocumentStatus.getCorrespondenceStatus())));
-		
-		//WDEV-19277
+
 		form.GroupUpdateStatus().setVisible(GroupUpdateStatusEnumeration.rdoComplete,isNotFinalDocument && DocumentStatus.READY_TO_SEND.equals(currentDocumentStatus.getCorrespondenceStatus()));
 		form.GroupUpdateStatus().setVisible(GroupUpdateStatusEnumeration.rdoReview, isNotFinalDocument && (DocumentStatus.DRAFT.equals(currentDocumentStatus.getCorrespondenceStatus()) || DocumentStatus.FOR_UPDATE.equals(currentDocumentStatus.getCorrespondenceStatus())));
 		form.GroupUpdateStatus().setVisible(GroupUpdateStatusEnumeration.rdoUpdate, isNotFinalDocument && (DocumentStatus.FOR_REVIEW.equals(currentDocumentStatus.getCorrespondenceStatus())));//WDEV-19039

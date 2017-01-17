@@ -102,7 +102,10 @@ public class InsuranceDetailsCCImpl extends BaseInsuranceDetailsCCImpl
 	public PrivateInsuranceCompanyVoCollection listPrivateInsuranceCompanyVo()
 	{
 		DomainFactory factory = getDomainFactory();
-		String query = "select p1_1 from PrivateInsuranceCompany as p1_1 where (p1_1.isActive = 1) order by p1_1.upperName asc ";
+
+		/* TODO MSSQL case - String query = "select p1_1 from PrivateInsuranceCompany as p1_1 where (p1_1.isActive = 1) order by p1_1.upperName asc "; */
+		String query = "select p1_1 from PrivateInsuranceCompany as p1_1 where (p1_1.isActive = true) order by p1_1.upperName asc ";
+
 		List<?> privateInsuranceComp = factory.find(query);
 		
 		if( privateInsuranceComp != null && privateInsuranceComp.size() > 0)

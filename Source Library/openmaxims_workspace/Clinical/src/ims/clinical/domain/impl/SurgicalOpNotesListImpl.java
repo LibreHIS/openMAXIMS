@@ -60,10 +60,14 @@ public class SurgicalOpNotesListImpl extends BaseSurgicalOpNotesListImpl
 
 	public ims.core.vo.ProcedureLiteVoCollection listProcedures(String filterName)
 	{
-		String hql = "from Procedure as p1_1 where " +
+	    /* TODO MSSQL case - String hql = "from Procedure as p1_1 where " +
 				"(UPPER(p1_1.procedureName) like :nameFilter and p1_1.isActive = 1)" +
-				" order by p1_1.procedureName asc"; 
-		List<?> result = getDomainFactory().find(hql,"nameFilter","%"+filterName.toUpperCase()+"%");		//wdev-16291
+				" order by p1_1.procedureName asc"; */
+		String hql = "from Procedure as p1_1 where " +
+				"(UPPER(p1_1.procedureName) like :nameFilter and p1_1.isActive = true)" +
+				" order by p1_1.procedureName asc";
+
+		List<?> result = getDomainFactory().find(hql,"nameFilter","%"+filterName.toUpperCase()+"%");
 		if (result == null || result.size() == 0)
 			return null;
 		return ProcedureLiteVoAssembler.createProcedureLiteVoCollectionFromProcedure(result);
@@ -71,11 +75,14 @@ public class SurgicalOpNotesListImpl extends BaseSurgicalOpNotesListImpl
 
 	public ims.core.vo.DiagLiteVoCollection listDiagnosis(String filterName)
 	{
-		 
-		String hql = "from Diagnosis as d1_1 where " +
+		/* TODO MSSQL case - String hql = "from Diagnosis as d1_1 where " +
 				"(UPPER(d1_1.diagnosisName) like :nameFilter and d1_1.isActive = 1) " +
-				"order by d1_1.diagnosisName asc"; 
-		List<?> result = getDomainFactory().find(hql,"nameFilter","%"+filterName.toUpperCase()+"%");		//wdev-16291
+				"order by d1_1.diagnosisName asc";  */
+		String hql = "from Diagnosis as d1_1 where " +
+				"(UPPER(d1_1.diagnosisName) like :nameFilter and d1_1.isActive = true) " +
+				"order by d1_1.diagnosisName asc";
+
+		List<?> result = getDomainFactory().find(hql,"nameFilter","%"+filterName.toUpperCase()+"%");
 		if (result == null || result.size() == 0)
 			return null;
 		return DiagLiteVoAssembler.createDiagLiteVoCollectionFromDiagnosis(result);
@@ -87,7 +94,7 @@ public class SurgicalOpNotesListImpl extends BaseSurgicalOpNotesListImpl
 		"where (UPPER(g1_1.name) like :nameFilter and g1_1.activeStatus.id = :active)"+ 
 		" order by g1_1.name asc"; 
 		List<?> result = getDomainFactory().find(hql,new String[]{"nameFilter","active"},
-				new Object[]{"%"+nameFilter.toUpperCase()+"%",PreActiveActiveInactiveStatus.ACTIVE.getID()});	//wdev-16291
+				new Object[]{"%"+nameFilter.toUpperCase()+"%",PreActiveActiveInactiveStatus.ACTIVE.getID()});
 		if (result == null || result.size() == 0)
 			return null;
 		return GraphicAssessmentShortVoAssembler.createGraphicAssessmentShortVoCollectionFromGraphicAssessment(result);
@@ -95,11 +102,15 @@ public class SurgicalOpNotesListImpl extends BaseSurgicalOpNotesListImpl
 
 	public ims.core.vo.LocationLiteVoCollection listHospitals(String filterName)
 	{
+	    /* TODO MSSQL case - String hql = "from Location as l1_1 where "+
+		"(UPPER(l1_1.name) like :nameFilter and l1_1.isActive = 1 and l1_1.isVirtual = 0 and l1_1.type.id = :hospTypeId) "+
+		"order by l1_1.name asc"; */
 		String hql = "from Location as l1_1 where "+
-		"(UPPER(l1_1.name) like :nameFilter and l1_1.isActive = 1 and l1_1.isVirtual = 0 and l1_1.type.id = :hospTypeId) "+ 
-		"order by l1_1.name asc"; //WDEV-19532
+		"(UPPER(l1_1.name) like :nameFilter and l1_1.isActive = true and l1_1.isVirtual = false and l1_1.type.id = :hospTypeId) "+
+		"order by l1_1.name asc";
+
 		List<?> result = getDomainFactory().find(hql,new String[]{"nameFilter","hospTypeId"},
-				new Object[]{"%"+filterName.toUpperCase()+"%",LocationType.HOSP.getID()});						//wdev-16291
+				new Object[]{"%"+filterName.toUpperCase()+"%",LocationType.HOSP.getID()});
 		if (result == null || result.size() == 0)
 			return null;
 		return LocationLiteVoAssembler.createLocationLiteVoCollectionFromLocation(result);

@@ -80,7 +80,9 @@ public class SurgicalAuditProcedureStaffDialogImpl extends BaseSurgicalAuditProc
 		return null;
 	
 		DomainFactory factory = getDomainFactory();
-		List nurses = factory.find("select n1_1	from Nurse as n1_1 left join n1_1.mos as m1_1 left join m1_1.locations as h1_1 left join h1_1.location as l1_1 left join n1_1.hcpType as l2_1 where (h1_1.location.id =:idLoc  and n1_1.hcpType.id =:idHcpType and n1_1.isActive = 1)", new String[] {"idLoc","idHcpType"}, new Object[] {locRef.getID_Location(),getDomLookup(hcpType).getId()});
+
+		/* TODO MSSQL case - List nurses = factory.find("select n1_1	from Nurse as n1_1 left join n1_1.mos as m1_1 left join m1_1.locations as h1_1 left join h1_1.location as l1_1 left join n1_1.hcpType as l2_1 where (h1_1.location.id =:idLoc  and n1_1.hcpType.id =:idHcpType and n1_1.isActive = 1)", new String[] {"idLoc","idHcpType"}, new Object[] {locRef.getID_Location(),getDomLookup(hcpType).getId()}); */
+		List nurses = factory.find("select n1_1	from Nurse as n1_1 left join n1_1.mos as m1_1 left join m1_1.locations as h1_1 left join h1_1.location as l1_1 left join n1_1.hcpType as l2_1 where (h1_1.location.id =:idLoc  and n1_1.hcpType.id =:idHcpType and n1_1.isActive = true)", new String[] {"idLoc","idHcpType"}, new Object[] {locRef.getID_Location(),getDomLookup(hcpType).getId()});
 		 
 		 
 		if (nurses != null && nurses.size() > 0)
@@ -124,15 +126,16 @@ public class SurgicalAuditProcedureStaffDialogImpl extends BaseSurgicalAuditProc
 			values.add(getDomLookup(medicType).getId());
 		}
 		
-		//WDEV-15691
+
 		if( medicGrade != null)
 		{
 			hql.append(prepend + " m1_1.grade.id =:idMedicGrade");
 			names.add("idMedicGrade");
 			values.add(getDomLookup(medicGrade).getId());
 		}
-		
-		hql.append(" and m1_1.isActive = 1");
+
+		/* TODO MSSQL case - hql.append(" and m1_1.isActive = 1"); */
+		hql.append(" and m1_1.isActive = true");
 		
 		
 		List medics = factory.find(hql.toString(), names, values); 
@@ -146,14 +149,15 @@ public class SurgicalAuditProcedureStaffDialogImpl extends BaseSurgicalAuditProc
 		
 	}
 	
-	//WDEV-15691
 	public HcpLiteVoCollection getOtheDisciplineHcp(LocationRefVo locationRef, HcpDisType hcpDisType)
 	{
 		if( (locationRef == null || locationRef.getID_Location() == null) && hcpDisType == null)
 			return null;
 		
 		DomainFactory factory = getDomainFactory();
-		List <?> hcp = factory.find("select hcp	from Hcp as hcp left join hcp.mos as mos left join mos.locations as locs left join locs.location as loc where (loc.id =:idLoc  and hcp.hcpType.id =:idHcpType and hcp.isActive = 1 ) order by mos.name.upperSurname asc, mos.name.upperForename asc ", new String[] {"idLoc","idHcpType"}, new Object[] {locationRef.getID_Location(),getDomLookup(hcpDisType).getId()}); 
+
+		/* TODO List <?> hcp = factory.find("select hcp	from Hcp as hcp left join hcp.mos as mos left join mos.locations as locs left join locs.location as loc where (loc.id =:idLoc  and hcp.hcpType.id =:idHcpType and hcp.isActive = 1 ) order by mos.name.upperSurname asc, mos.name.upperForename asc ", new String[] {"idLoc","idHcpType"}, new Object[] {locationRef.getID_Location(),getDomLookup(hcpDisType).getId()}); */
+		List <?> hcp = factory.find("select hcp	from Hcp as hcp left join hcp.mos as mos left join mos.locations as locs left join locs.location as loc where (loc.id =:idLoc  and hcp.hcpType.id =:idHcpType and hcp.isActive = true ) order by mos.name.upperSurname asc, mos.name.upperForename asc ", new String[] {"idLoc","idHcpType"}, new Object[] {locationRef.getID_Location(),getDomLookup(hcpDisType).getId()});
 		 
 		if (hcp != null && hcp.size() > 0)
 			return HcpLiteVoAssembler.createHcpLiteVoCollectionFromHcp(hcp);

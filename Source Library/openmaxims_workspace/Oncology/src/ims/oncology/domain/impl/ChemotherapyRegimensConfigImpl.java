@@ -71,14 +71,18 @@ public class ChemotherapyRegimensConfigImpl extends BaseChemotherapyRegimensConf
 			// Add the status part of the query
     		if (Boolean.TRUE.equals(activeOnly))
     		{
-    			query.append("l1_1.active = 1");
+				/* TODO MSSQL case - query.append("l1_1.active = 1"); */
+    			query.append("l1_1.active = TRUE");
+
         		query.append(" AND ");
     		}
     		
     		query.append("(select count (med.id)  from ChemoRegimensDrugConfig as cfg join cfg.linkedDrug as med where (cfg.id = c1_1.id) ) > 0 ");
-    		query.append(" AND ");	
+    		query.append(" AND ");
+
     		// Add the Regimen name part to the query
 			query.append(" UPPER(l1_1.text) LIKE ");
+
 			// Determine how the regimen name should be searched after
 			switch (SearchPattern.getSearchPattern(searchPattern))
 			{
@@ -142,8 +146,9 @@ public class ChemotherapyRegimensConfigImpl extends BaseChemotherapyRegimensConf
 		StringBuilder query = new StringBuilder();
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
-		
-		query.append("select lkp from LookupInstance as lkp where lkp.type.id = :TYPE and lkp.active = 1 and lkp.id not in (select chemo.regimen.id from ChemoRegimensDrugConfig as chemo)");
+
+		/* TODO MSSQL case - query.append("select lkp from LookupInstance as lkp where lkp.type.id = :TYPE and lkp.active = 1 and lkp.id not in (select chemo.regimen.id from ChemoRegimensDrugConfig as chemo)"); */
+		query.append("select lkp from LookupInstance as lkp where lkp.type.id = :TYPE and lkp.active = TRUE and lkp.id not in (select chemo.regimen.id from ChemoRegimensDrugConfig as chemo)");
 		
 		paramNames.add("TYPE"); paramValues.add(RegimenAcronym.TYPE_ID);
 				

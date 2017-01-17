@@ -63,7 +63,8 @@ public class PreAssessmentWorklistImpl extends BasePreAssessmentWorklistImpl
 
 	public ims.core.vo.ServiceShortVoCollection listServices(String serviceName)
 	{
-		StringBuilder hqlBuilder = new StringBuilder("select s1_1 from ReferralService as r1_1 left join r1_1.referralServices as s1_1 where s1_1.upperName like :servName and s1_1.isActive = 1 ");
+		/* TODO MSSQL case - StringBuilder hqlBuilder = new StringBuilder("select s1_1 from ReferralService as r1_1 left join r1_1.referralServices as s1_1 where s1_1.upperName like :servName and s1_1.isActive = 1 "); */
+		StringBuilder hqlBuilder = new StringBuilder("select s1_1 from ReferralService as r1_1 left join r1_1.referralServices as s1_1 where s1_1.upperName like :servName and s1_1.isActive = true ");
 		
 		List <?> dos = getDomainFactory().find(hqlBuilder.toString(),"servName",serviceName.toUpperCase()+"%");
 		
@@ -93,7 +94,10 @@ public class PreAssessmentWorklistImpl extends BasePreAssessmentWorklistImpl
 		String andStr = "";
 		
 		hqlConditions.append(andStr);
-		hqlConditions.append(" patElective.preAssessmentRequired = 1 and elStatus.electiveListStatus.id <> :Status and ( patElective.requiresVetting = 0 or patElective.requiresVetting is null ) ");		//wdev-21152
+
+		/* TODO MSSQL case - hqlConditions.append(" patElective.preAssessmentRequired = 1 and elStatus.electiveListStatus.id <> :Status and ( patElective.requiresVetting = 0 or patElective.requiresVetting is null ) "); */
+		hqlConditions.append(" patElective.preAssessmentRequired = true and elStatus.electiveListStatus.id <> :Status and ( patElective.requiresVetting = false or patElective.requiresVetting is null ) ");
+
 		markers.add("Status");
 		values.add(WaitingListStatus.REMOVED.getID());
 		
@@ -180,11 +184,11 @@ public class PreAssessmentWorklistImpl extends BasePreAssessmentWorklistImpl
 		
 		StringBuffer hqlConditionsOR = new StringBuffer();
 		String orStr = "";
-		if (searchCriteria.getPreAssessmentRequired()) //those that does not have preAssessmentOutcome saved and no PreAssessment Booked
+		if (searchCriteria.getPreAssessmentRequired()) // Those that does not have preAssessmentOutcome saved and no PreAssessment Booked
 		{
 			hqlConditionsOR.append(orStr);
 			hqlJoins.append(" left join patElective.preAssessmentOutcome as preAssessmentOutcome ");
-			hqlConditionsOR.append(" (patElective.preAssessmentOutcome is null AND patElective.preAssessmentAppointment is null) "); //WDEV-21037
+			hqlConditionsOR.append(" (patElective.preAssessmentOutcome is null AND patElective.preAssessmentAppointment is null) ");
 			orStr = " OR ";
 		}
 		
@@ -192,7 +196,10 @@ public class PreAssessmentWorklistImpl extends BasePreAssessmentWorklistImpl
 		{
 			hqlConditionsOR.append(orStr);
 			hqlJoins.append(" left join patElective.preAssessmentOutcome as preAssessmentOutcome ");
-			hqlConditionsOR.append(" (preAssessmentOutcome.fitToProceed = 0) ");	
+
+			/* TODO MSSQL case - hqlConditionsOR.append(" (preAssessmentOutcome.fitToProceed = 0) "); */
+			hqlConditionsOR.append(" (preAssessmentOutcome.fitToProceed = false) ");
+
 			orStr = " OR ";
 		}
 		
@@ -200,7 +207,10 @@ public class PreAssessmentWorklistImpl extends BasePreAssessmentWorklistImpl
 		{
 			hqlConditionsOR.append(orStr);
 			hqlJoins.append(" left join patElective.preAssessmentOutcome as preAssessmentOutcome ");
-			hqlConditionsOR.append(" (preAssessmentOutcome.fitToProceed = 1) ");
+
+			/* TODO MSSQL case - hqlConditionsOR.append(" (preAssessmentOutcome.fitToProceed = 1) "); */
+			hqlConditionsOR.append(" (preAssessmentOutcome.fitToProceed = true) ");
+
 			orStr = " OR ";
 		}
 		
@@ -210,20 +220,24 @@ public class PreAssessmentWorklistImpl extends BasePreAssessmentWorklistImpl
 			{
 				hqlConditionsOR.append(orStr);
     			hqlJoins.append(" left join patElective.preAssessmentOutcome as preAssessmentOutcome left join preAssessmentOutcome.waitingForDetails as waitingForDet left join waitingForDet.informationToBeReceived as infoReceived");
-    			hqlConditionsOR.append(" (preAssessmentOutcome is not null AND preAssessmentOutcome.fitToProceed is null AND (infoReceived.id in (" + getWaitingForIDs(searchCriteria.getWaitingFor()) + ") AND (waitingForDet.received is null OR waitingForDet.received = 0))) ");
-    			orStr = " OR ";
+
+				/* TODO MSSQL case - hqlConditionsOR.append(" (preAssessmentOutcome is not null AND preAssessmentOutcome.fitToProceed is null AND (infoReceived.id in (" + getWaitingForIDs(searchCriteria.getWaitingFor()) + ") AND (waitingForDet.received is null OR waitingForDet.received = 0))) "); */
+    			hqlConditionsOR.append(" (preAssessmentOutcome is not null AND preAssessmentOutcome.fitToProceed is null AND (infoReceived.id in (" + getWaitingForIDs(searchCriteria.getWaitingFor()) + ") AND (waitingForDet.received is null OR waitingForDet.received = FALSE))) ");
+
+				orStr = " OR ";
 			}
 			else
 			{
 				hqlConditionsOR.append(orStr);
     			hqlJoins.append(" left join patElective.preAssessmentOutcome as preAssessmentOutcome  ");
-    			hqlConditionsOR.append(" (preAssessmentOutcome.detailsOutstanding=1 AND preAssessmentOutcome.fitToProceed is null)");
+
+				/* TODO MSSQL case - hqlConditionsOR.append(" (preAssessmentOutcome.detailsOutstanding=1 AND preAssessmentOutcome.fitToProceed is null)"); */
+    			hqlConditionsOR.append(" (preAssessmentOutcome.detailsOutstanding = TRUE AND preAssessmentOutcome.fitToProceed is null)");
     			orStr = " OR ";
 			}
 		}
 		
-		//WDEV-21037
-		if (searchCriteria.getPastAppointment()) 
+		if (searchCriteria.getPastAppointment())
 		{
 			hqlConditionsOR.append(orStr);
 			hqlJoins.append(" left join patElective.preAssessmentAppointment as preAssessmentAppt ");

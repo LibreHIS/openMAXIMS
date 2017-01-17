@@ -211,11 +211,19 @@ public class PatientPathwaysAwaitingValidationImpl extends BasePatientPathwaysAw
 											" left join referral.journey as pathways "+
 											" left join pathways.currentClock as cc ");
 
-		StringBuffer hqlConditions = new StringBuffer("where pathways.validationCompletedDT is null "+
+		/* TOD MSSQL case - StringBuffer hqlConditions = new StringBuffer("where pathways.validationCompletedDT is null "+
 				" and pathways.validationCompletedBy is null "+
 				" and (pathways.isRIE = 0 or pathways.isRIE is null) "+
 				" and referral.rTTClockImpact = 1" +
 				" and (service.isRIE = 0 or service.isRIE is null) " +
+				" and refdetails.service.id is not null "+
+				" and cc is not null "+
+				" and cc.stopDate is null "); */
+		StringBuffer hqlConditions = new StringBuffer("where pathways.validationCompletedDT is null "+
+				" and pathways.validationCompletedBy is null "+
+				" and (pathways.isRIE = FALSE or pathways.isRIE is null) "+
+				" and referral.rTTClockImpact = TRUE" +
+				" and (service.isRIE = FALSE or service.isRIE is null) " +
 				" and refdetails.service.id is not null "+
 				" and cc is not null "+
 				" and cc.stopDate is null ");
@@ -445,377 +453,30 @@ public class PatientPathwaysAwaitingValidationImpl extends BasePatientPathwaysAw
 		return ServiceShortVoAssembler.createServiceShortVoCollectionFromService(serviceList);
 
 	}
-
-//	//WDEV-21431
-//	@Override
-//	public CatsReferralListManualAssemblyVoCollection listCATSReferrals(CATSReferralFilterVo voCATSFilter)
-//	{
-//		if (voCATSFilter == null)
-//		{
-//			throw new CodingRuntimeException("Invalid voCATSFilter");
-//		}
-//
-////		String hqlSB = getBaseSelectQuery(bIncludeICPColumn, bIncludeELEColumn);
-//		String hqlSB = getBaseSelectQuery(false, false);
-//		hqlSB += "from CatsReferral as catsref ";
-//		hqlSB += getBaseJoinQuery();
-//		
-//		ArrayList<String> markers = new ArrayList<String>();
-//		ArrayList<Serializable> values = new ArrayList<Serializable>();
-//	
-//	
-////		boolean isCaseSensitivePatIdSearch = ConfigFlag.DOM.CASE_SENSITIVE_PATID.getValue();  //WDEV-18817
-////
-//		StringBuffer sb = new StringBuffer();
-//		String hqlJoin = "";
-//		String andStr = "";
-//		
-//		if (voCATSFilter.getServiceIsNotNull() || (voCATSFilter.getServices() != null) 
-//				&& voCATSFilter.getServices().size() > 0)
-//		{
-//			sb.append(andStr + " ( (refDetails.service.id in (" + getServicesIds(voCATSFilter) + ") ) ");
-//		}
-//
-//
-////		if(voCATSFilter.getPatientIsNotNull())
-////		{
-////			sb.append(" catsref.patient.id = :pat");
-////			markers.add("pat");
-////			values.add(voCATSFilter.getPatient().getID_Patient());
-////			
-////			sb.append(" and catsref.isRIE is null order by refDetails.dateOfReferral asc, refDetails.id asc");
-////			hqlSB+= " where ";
-////			
-////			hqlSB+= sb.toString();
-////			
-////			return assembleRecords(getDomainFactory().find(hqlSB.toString(), markers, values));
-////		}
-//		
-////		if (voCATSFilter.getContractIsNotNull())
-////		{
-////			sb.append(andStr + " ( catsref.contract.id = :contra ) ");
-////			markers.add("contra");
-////			values.add(voCATSFilter.getContract().getID_ContractConfig());
-////			andStr = " and ";
-////		}
-////		else if (voCATSFilter.getContractsForOrgIsNotNull())
-////		{
-////			StringBuffer sbContracts = new StringBuffer();
-////			for (int cOrgs = 0 ; voCATSFilter.getContractsForOrgIsNotNull() && cOrgs < voCATSFilter.getContractsForOrg().size() ; cOrgs++)
-////			{
-////				sbContracts.append(voCATSFilter.getContractsForOrg().get(cOrgs).getID_ContractConfig());
-////				if (cOrgs+1 < voCATSFilter.getContractsForOrg().size())
-////					sbContracts.append(", ");
-////			}
-////
-////			sb.append(andStr + " ( catsref.contract.id in (" + sbContracts.toString() + ") ) ");
-////			andStr = " and ";
-////		}
-//
-////		//WDEV-7447
-////		if (voCATSFilter.getLocationIsNotNull())
-////		{
-////			sb.append(andStr + " ( refDetails.location.id = :loc ) ");
-////			markers.add("loc");
-////			values.add(voCATSFilter.getLocation().getID_Location());
-////			andStr = " and ";
-////		}
-////		//wdev-13652
-////		if(voCATSFilter.getTreatmentCenterIsNotNull())
-////		{
-////			sb.append(andStr + " ( catsref.nearestTreatmentCentre.id = :treatCenter ) ");
-////			markers.add("treatCenter");
-////			values.add(voCATSFilter.getTreatmentCenter().getLocation().getID_Location());
-////			andStr = " and ";
-////			
-////		}
-////		//---------------
-//		
-////		if (voCATSFilter.getServiceIsNotNull() || (voCATSFilter.getServices() != null) 
-////				&& voCATSFilter.getServices().size() > 0)
-////		{
-////			sb.append(andStr + " ( (refDetails.service.id in (" + getServicesIds(voCATSFilter) + ") ) ");
-////
-////			sb.append(" or (catsref.isCAB = :cab2 and refDetails = null) ) ");
-////			markers.add("cab2");
-////			values.add(Boolean.TRUE);
-////			andStr = " and ";
-////		}
-//		
-////		if (voCATSFilter.getReviewTypeIsNotNull())
-////		{
-////			hqlJoin += " join catsref.currentReviewDetail as reviewedRecs ";
-////
-////			sb.append(andStr + " reviewedRecs.reviewType.id = :type");
-////			markers.add("type");
-////			values.add(voCATSFilter.getReviewType().getID());
-////			andStr = " and ";
-////		}
-////		
-////		if (voCATSFilter.getClinicTypeIsNotNull())
-////		{
-////			sb.append(andStr + " refDetails.function.id = :ct");
-////			markers.add("ct");
-////			values.add(voCATSFilter.getClinicType().getID_ServiceFunction());
-////			andStr = " and ";
-////		}
-////		// WDEV-17895 isDad label has been removed
-////		/*
-////		if (voCATSFilter.getIsDADIsNotNull() 
-////			&& voCATSFilter.getIsDAD().booleanValue())
-////		{
-////			sb.append(andStr + " refDetails.isDADReferral = :dad");
-////			markers.add("dad");
-////			values.add(Boolean.TRUE);
-////			andStr = " and ";
-////		}
-////		 */
-////		
-////		if (voCATSFilter.getIsCABIsNotNull() 
-////			&& voCATSFilter.getIsCAB().booleanValue())
-////		{
-////			sb.append(andStr + " catsref.isCAB = :cab");
-////			markers.add("cab");
-////			values.add(Boolean.TRUE);
-////			andStr = " and ";
-////		}
-////
-////		if (voCATSFilter.getIsManualIsNotNull() 
-////			&& voCATSFilter.getIsManual().booleanValue())
-////		{
-////			sb.append(andStr + " catsref.isCAB = :cab");
-////			markers.add("cab");
-////			values.add(Boolean.FALSE);
-////			andStr = " and ";
-////		}
-////
-////		if (voCATSFilter.getDOSIsNotNull())
-////		{
-////			sb.append(andStr + " catsref.dOS.id = :dos");
-////			markers.add("dos");
-////			values.add(voCATSFilter.getDOS().getID_DirectoryofService());
-////			andStr = " and ";
-////		}
-////
-////		if (voCATSFilter.getNHSNumberIsNotNull())
-////		{
-////			hqlJoin += " join catsref.patient.identifiers as patids ";
-////			
-////			sb.append(andStr + " patids.type = :idType");
-////			markers.add("idType");
-////			values.add(getDomLookup(PatIdType.NHSN));
-////			andStr = " and ";
-////
-////			sb.append(andStr + (!isCaseSensitivePatIdSearch ? "UPPER(patids.value)" : "patids.value") + " like :idValue"); //WDEV-18817
-////			markers.add("idValue");
-////			values.add((!isCaseSensitivePatIdSearch ? voCATSFilter.getNHSNumber().trim().toUpperCase() : voCATSFilter.getNHSNumber().trim()) + "%"); //WDEV-18817
-////			andStr = " and ";
-////		}
-////
-////		if (voCATSFilter.getExcludeProviderCancellationIsNotNull()
-////			&& voCATSFilter.getExcludeProviderCancellation().booleanValue()
-////			&& ( voCATSFilter.getStatus() == null
-////				|| ( voCATSFilter.getStatusIsNotNull()
-////						&& ! voCATSFilter.getStatus().equals(ReferralWorklistStatus.PROVIDER_CANCELLATION)) ))
-////		{
-////			sb.append(andStr + " catsref.currentStatus.referralStatus != :providerCancellation ");
-////			markers.add("providerCancellation");
-////			values.add(getDomLookup(ReferralApptStatus.REFERRAL_CANCELLED_BY_PROVIDER));
-////			andStr = " and ";
-////		}
-////		
-////		if (voCATSFilter.getFromDateIsNotNull() && voCATSFilter.getToDateIsNotNull())
-////		{
-////			sb.append(andStr + " ( ( refDetails != null and refDetails.dateOfReferral between :fromdate and :todate )");
-////			markers.add("fromdate");
-////			values.add(new DateTime(voCATSFilter.getFromDate(), new Time("00:00:00")).getJavaDate() );
-////			markers.add("todate");
-////			values.add(new DateTime(voCATSFilter.getToDate(), new Time("23:59:59")).getJavaDate() );
-////			andStr = " and ";
-////
-////			sb.append(" or (refDetails = null and catsref.isCAB = :cab1) )");
-////			markers.add("cab1");
-////			values.add(Boolean.TRUE);
-////
-////		}
-////		else if (voCATSFilter.getFromDateIsNotNull() && voCATSFilter.getToDate() == null)
-////		{
-////			sb.append(andStr + " ( (refDetails = null and catsref.isCAB = :cab1) " +
-////					"or (refDetails != null and refDetails.dateOfReferral >= :fromdate) ) ");
-////			markers.add("cab1");
-////			values.add(Boolean.TRUE);
-////			markers.add("fromdate");
-////			values.add(new DateTime(voCATSFilter.getFromDate(), new Time("00:00:00")).getJavaDate() );
-////			andStr = " and ";
-////			
-////		}
-////		else if (voCATSFilter.getFromDate() == null && voCATSFilter.getToDateIsNotNull())
-////		{
-////			sb.append(andStr + " ( (refDetails = null and catsref.isCAB = :cab1)" +
-////				"or (refDetails != null and refDetails.dateOfReferral <= :todate) ) ");
-////			markers.add("cab1");
-////			values.add(Boolean.TRUE);
-////			markers.add("todate");
-////			values.add(new DateTime(voCATSFilter.getToDate(), new Time("23:59:59")).getJavaDate() );
-////			andStr = " and ";
-////		}
-////	
-////		//WDEV-19327 
-////		if (voCATSFilter.getResponsibleHCP() != null)
-////		{
-////			sb.append(andStr +  " ( refDetails != null and m.id= :respHCP ) ");
-////			markers.add("respHCP");
-////			values.add(voCATSFilter.getResponsibleHCP().getIMosId());	
-////			andStr = " and ";
-////		}
-////		
-////		//start WDEV-20275
-////		if (voCATSFilter.getReferralUrgencies() != null && voCATSFilter.getReferralUrgencies().size() > 0)
-////		{
-////			sb.append(andStr +  " ur.id in " + getReferralUrgenciesForSearch(voCATSFilter.getReferralUrgencies()));
-////			andStr = " and ";
-////		}
-////		
-////		if(voCATSFilter.getStatus() != null)
-////		{
-////			sb.append(andStr +  " catsref.currentStatus.referralStatus.id != :worklist ");
-////			markers.add("worklist");
-////			values.add(ReferralApptStatus.END_OF_CARE.getID());	
-////			andStr = " and ";	
-////		}		
-////		//end WDEV-20275
-////		
-////		
-////		//wdev-15109 //Comented because of this issue WDEV-19212 
-////		//PatIdType dispIdType = PatIdType.getNegativeInstance(ConfigFlag.UI.DISPLAY_PATID_TYPE.getValue()); 
-////		//if (dispIdType == null)
-////		//	sb.append(andStr + "  patidtype1.id = -9 ");
-////		//else
-////		//	sb.append(andStr + "  patidtype1.id = " + dispIdType.getID() );
-////		//wdev-15109
-//		
-////		andStr = " and ";
-////
-//		List<?> refList = null;
-////		
-////		if (voCATSFilter.getStatusIsNotNull())
-////		{
-////			if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.AWAITING_REFERRAL_LETTER))
-////				refList = domListAwaitingReferralLetter(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.AWAITING_TRIAGE))
-////				refList = domListAwaitingTriage(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.CONSULTATION_APPOINTMENT_REQUIRED))
-////				refList = domListConsAppointmentRequired(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.OTHER_APPOINTMENTS_REQUIRED))
-////				refList = domListOtherApptsRequired(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.PROVISIONAL_REJECTION))
-////				refList = domListProvisionalRejection(hqlSB, sb, markers, values, andStr, voCATSFilter.getSecondOpinionReason(), hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.REFERRAL_ACCEPTED))
-////				refList = domListReferralAccepted(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.REFERRAL_REJECTED))
-////				refList = domListReferralRejected(hqlSB, sb, markers, values, andStr,voCATSFilter.getIsCAB(), hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.REVIEW_APPOINTMENTS))
-////				refList = domListReviewAppointments(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.REJECTED_INVESTIGATIONS))
-////				refList = domListRejectedInvestigations(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.REFERRALS_PENDING_RESULTS))
-////				refList = domListPendingResults(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.FLAGGED_FOR_REVIEW))
-////				refList = domListFlaggedForReview(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.PROVIDER_CANCELLATION))
-////				refList = domListProviderCancellation(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.FURTHER_MANAGMENT_REQUIRED))
-////				refList = domListFurtherManagementRequired(bIncludeICPColumn, bIncludeELEColumn, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.FINAL_DISCHARGE_DOCUMENT_REQUIRED))
-////				refList = domListFinalDischargeDocumentRequired(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.DISCHARGED_REFERRALS))
-////				refList = domListDischargeReferrals(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.ORDERINV_ACCEPTED_APPT_REQUIRED))
-////				refList = domListOrderInvAcceptedApptRequired(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.FIT_FOR_SURGERY_NEED_APPT))
-////				refList = domListFitForSurgeryAndNeedAppointment(hqlSB, sb, markers, values, andStr, hqlJoin, voCATSFilter);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.REVIEW_CANCELLED_APPOINTMENTS))
-////				refList = domListReviewCancelledAppointments(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.REVIEW_DNA_APPOINTMENTS))
-////				refList = domListReviewDNAAppointments(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.CAB_REFERRALS_TO_BE_ACCEPTED_ON_CAB))
-////				refList = domListCABReferralsToBeAcceptedOnCAB(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.ONWARD_REFERRAL_WORKLIST))
-////				refList = domListOnwardReferralWorklist(bIncludeICPColumn, bIncludeELEColumn, sb, markers, values, andStr, hqlJoin, voCATSFilter.getOnwardReferralReason());
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.REPORTS_REQUIRED_WORKLIST))
-////				refList = domListReportsRequiredWorklist(hqlSB, sb, markers, values, andStr, hqlJoin, voCATSFilter.getReportSubCategory());
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.DISCHARGE_REPORT_WORKLIST))
-////				refList = domListDischargeReportRequired(hqlSB, sb, markers, values, andStr, hqlJoin, voCATSFilter);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.MY_ALLOCATED_WORKLIST))
-////				refList = domListMyAllocatedWorklist(bIncludeICPColumn, bIncludeELEColumn, sb, markers, values, andStr, hqlJoin, voCATSFilter.getAllocatedTo());
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.FURTHER_MANAGEMENT_REQUIRED_TLT))
-////				refList = domListFurtherManagementTLTRequired(bIncludeICPColumn, bIncludeELEColumn, sb, markers, values, andStr, hqlJoin, voCATSFilter.getTLTType());
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.NOT_FIT_OR_SUITABLE_FOR_SURGERY))
-////				refList = domListNotFitOrUnsuitableForSurgery(hqlSB, sb, markers, values, andStr, hqlJoin, voCATSFilter.getTLTType());
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.RefMan_REPORTS_REQUIRED_WORKLIST))
-////				refList = domListRefManReportsRequiredWorklist(hqlSB, sb, markers, values, andStr, hqlJoin, voCATSFilter.getNoteType());
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.DISCHARGED_TO_GP))
-////				refList = domListDischargeToGPWorklist(hqlSB, sb, markers, values, andStr, hqlJoin, voCATSFilter.getNoteType());
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.REFER_BACK_TO_CONS_WORKLIST))
-////				refList = domListReferBackToConsultantWorklist(bIncludeICPColumn, bIncludeELEColumn, sb, markers, values, andStr, hqlJoin, voCATSFilter.getNoteType());
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.AWAITING_CLINICAL_INFO))
-////				refList = domListAwaitingClinicalInformationWorklist(bIncludeICPColumn, bIncludeELEColumn, sb, markers, values, andStr, hqlJoin, voCATSFilter.getNoteType());
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.ACTIVE_MONITORING_REQ_APPOINTMENT))
-////				refList = domListActiveMonitoringWorklistApptRequired(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.ACTIVE_MONITORING))
-////				refList = domListActiveMonitoringWorklist(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.TWENTYFOUR_HOUR_POST_OP))
-////				refList = domList24HourMonitoringWorklist(hqlSB, sb, markers, values, andStr, hqlJoin, voCATSFilter.getProcedure());
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.REFERRAL_TRIAGE_WORKLIST))
-////				refList = domListReferralTriageWorklist(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.OP_PROCEDURE_AWAITING_APPOINTMENT))    //wdev-13765
-////				refList = domListopProcedureAawaittingAppointment(hqlSB, sb, markers, values, andStr, hqlJoin, voCATSFilter.getTLTType(),voCATSFilter); //wdev-13765
-////			else if (voCATSFilter.getStatus().equals(ReferralWorklistStatus.CONSULTATION_ACTIVITY_REQUIRED))    //WDEV-20643
-////				refList = domListReferralConsultationActivityRequiredrefList(hqlSB, sb, markers, values, andStr, hqlJoin);
-////			
-////		}
-////		else
-////		{
-//			if (hqlJoin != "")
-//				hqlSB += hqlJoin;
-//			
-//			sb.append(andStr + " catsref.isRIE is null order by refDetails.dateOfReferral asc, refDetails.id asc");
-//			hqlSB += " where ";
-//			
-//			hqlSB += sb.toString();
-//			return assembleRecords(getDomainFactory().find(hqlSB.toString(), markers, values));
-////		}
-////		
-////		if (refList == null || refList.size() == 0)
-////			return null;
-////		else
-//		
-////		return assembleRecords(getDomainFactory().find(hqlSB.toString(), markers, values));
-////		return assembleRecords(refList);
-//	}
 	
-	//WDEV-21431
-	private String getBaseSelectQuery(Boolean includeICPColumn, Boolean includeELEColumn) 
+	private String getBaseSelectQuery(Boolean includeICPColumn, Boolean includeELEColumn)
 	{
-		//WDEV-19621
 		String name = ims.configuration.ConfigFlag.UI.DISPLAY_PATID_TYPE.getValue();
 		ims.core.vo.lookups.PatIdType displayPatIDType = ims.core.vo.lookups.PatIdType.getNegativeInstance(name);
-		
-		//wdev-15109
-		String hqlSB = "select new ims.RefMan.helper.CatsReferralManualClass( catsref.id, title1.text, pat1.name.surname, pat1.name.forename, " +
+
+		/* TODO MSSQL case - String hqlSB = "select new ims.RefMan.helper.CatsReferralManualClass( catsref.id, title1.text, pat1.name.surname, pat1.name.forename, " +
 		" (select max(p21_1.value) from Patient as p11_1 left join p11_1.identifiers as p21_1 where (p21_1.type = -9 and p11_1.id = pat1.id)) as ANY_NHS, " +
 		" (select max(p211_1.value) from Patient as p111_1 left join p111_1.identifiers as p211_1 where (p211_1.type = -9 and p211_1.verified = 1 and p111_1.id = pat1.id)) as VERIFIED_NHS," +
-		" (select max(p21_1.value) from Patient as p11_1 left join p11_1.identifiers as p21_1 where (p21_1.type = " + displayPatIDType.getID() + " and p11_1.id = pat1.id)) , " + //WDEV-19621
+		" (select max(p21_1.value) from Patient as p11_1 left join p11_1.identifiers as p21_1 where (p21_1.type = " + displayPatIDType.getID() + " and p11_1.id = pat1.id)) , " +
+		" pat1.dod, "; */
+		String hqlSB = "select new ims.RefMan.helper.CatsReferralManualClass( catsref.id, title1.text, pat1.name.surname, pat1.name.forename, " +
+		" (select max(p21_1.value) from Patient as p11_1 left join p11_1.identifiers as p21_1 where (p21_1.type = -9 and p11_1.id = pat1.id)) as ANY_NHS, " +
+		" (select max(p211_1.value) from Patient as p111_1 left join p111_1.identifiers as p211_1 where (p211_1.type = -9 and p211_1.verified = TRUE and p111_1.id = pat1.id)) as VERIFIED_NHS," +
+		" (select max(p21_1.value) from Patient as p11_1 left join p11_1.identifiers as p21_1 where (p21_1.type = " + displayPatIDType.getID() + " and p11_1.id = pat1.id)) , " +
 		" pat1.dod, ";
-		//wdev-15109
 
 		if (includeICPColumn)
-			hqlSB+="(select max(icp.careContext.id) from PatientICP as icp where icp.careContext.id = catsref.careContext.id),";//WDEV-12965
+			hqlSB+="(select max(icp.careContext.id) from PatientICP as icp where icp.careContext.id = catsref.careContext.id),";
 		else
 			hqlSB+= "catsref.id, ";
 		
 		if (includeELEColumn)
-			hqlSB+="(select max(ele.id) from PatientElectiveList as ele where ele.referral.id = catsref.id),";//WDEV-18389
+			hqlSB+="(select max(ele.id) from PatientElectiveList as ele where ele.referral.id = catsref.id),";
 		else
 			hqlSB+= "catsref.id, ";
 			
@@ -825,32 +486,13 @@ public class PatientPathwaysAwaitingValidationImpl extends BasePatientPathwaysAw
 		return hqlSB;
 	}
 	
-	//WDEV-21431
-	private String getBaseJoinQuery() 
+	private String getBaseJoinQuery()
 	{
-//		return 	"left join catsref.patient as pat1 " +
-//			"left join catsref.additionalInvApptsStatus as addinv " +
-//			"left join pat1.name.title as title1 " +
-//			"left join pat1.identifiers as patid1 " +
-//			"left join patid1.type as patidtype1 " +
-//			"left join catsref.referralDetails as refDetails " +
-//			"left join refDetails.service as service1 " +
-//			"left join refDetails.location as loc1 " +
-//			"left join catsref.currentStatus as stat1 " +
-//			"left join stat1.referralStatus as refstat1 " +
-//			"left join catsref.consultationAppt as appt1 " + 
-//			"left join refDetails.consultant as cons " +
-//			"left join cons.mos as m " +
-//			"left join catsref.urgency as ur " +
-//			"left join catsref.triageOutcome as triageOutcome left join triageOutcome.triageOutcomeStatus as triageOutcomeStatus "+
-//			"left join catsref.triageOutcome as triageOutcome left join triageOutcome.triagePendingDiagnosticResult as triagePendingDiagnosticResult "; //WDEV-20880
-		return 	"left join catsref.referralDetails as refDetails " +
-		"left join refDetails.service as service1 ";
+		return 	"left join catsref.referralDetails as refDetails left join refDetails.service as service1 ";
 	}
 	
 	
-	//WDEV-21431
-	private String getServicesIds(CATSReferralFilterVo criteria) 
+	private String getServicesIds(CATSReferralFilterVo criteria)
 	{
 		if(criteria == null)
 			return null;

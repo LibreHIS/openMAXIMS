@@ -42,7 +42,6 @@ public class SchoolQueryDialogImpl extends BaseSchoolQueryDialogImpl
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * WDEV - 12502 (entire function)
 	 * Searching for schools will only list active records
 	 */
 	public ims.core.vo.SchoolShortVoCollection list(String school, ims.core.vo.LocationLiteVo sector)
@@ -50,7 +49,9 @@ public class SchoolQueryDialogImpl extends BaseSchoolQueryDialogImpl
 		DomainFactory factory = getDomainFactory();
 		
 		StringBuffer hql = new StringBuffer();
-		hql.append("from School s where s.isActive = 1");
+
+		/* TODO MSSQL case - hql.append("from School s where s.isActive = 1"); */
+		hql.append("from School s where s.isActive = true");
 		
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
@@ -61,7 +62,7 @@ public class SchoolQueryDialogImpl extends BaseSchoolQueryDialogImpl
 			hql.append(" and ");
 			hql.append("s.upperCaseName like :schoolName");
 			markers.add("schoolName");
-			values.add(school.toUpperCase() + "%");					// WDEV-10956 - will only search for schools name beginning with text provided
+			values.add(school.toUpperCase() + "%");					// Will only search for schools name beginning with text provided
 		}
 		
 		if(sector != null && sector.getID_LocationIsNotNull())

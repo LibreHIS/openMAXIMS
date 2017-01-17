@@ -62,8 +62,9 @@ public class PdsPatientDetailsImpl extends BasePdsPatientDetailsImpl
 		
 		ArrayList names = new ArrayList();
 		ArrayList values = new ArrayList();
-			
-		StringBuffer taxonomyHql = new StringBuffer("select li from LookupInstance as li left join li.type as l where l.id = :lookupType and li.active = 1 and upper(li.text) like :lkptext order by upper(li.text) asc"); 
+
+		/* TODO MSSQL case - StringBuffer taxonomyHql = new StringBuffer("select li from LookupInstance as li left join li.type as l where l.id = :lookupType and li.active = 1 and upper(li.text) like :lkptext order by upper(li.text) asc"); */
+		StringBuffer taxonomyHql = new StringBuffer("select li from LookupInstance as li left join li.type as l where l.id = :lookupType and li.active = true and upper(li.text) like :lkptext order by upper(li.text) asc");
 		
 		names.add("lookupType");								
 		names.add("lkptext");

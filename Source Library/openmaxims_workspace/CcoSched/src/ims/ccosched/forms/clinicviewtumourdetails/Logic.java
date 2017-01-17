@@ -82,56 +82,14 @@ public class Logic extends BaseLogicDTO
 							row.setTechnique(value.getTreatmentTechniqueIsNotNull() ? value.getTreatmentTechnique().getText() : "");
 						}
 					}
-					//PatTrPlanGroupSiteTechVo element = (PatTrPlanGroupSiteTechVo) iter.next();
-//					GenForm.TreatmentSiteRow row = form.TreatmentSite().getRows().newRow();
-//					row.setGroup(element.getTreatmentGroupIsNotNull()?element.getTreatmentGroup().getName():"");
-//					row.setTreatmentSites(element.getTreatmentSiteIsNotNull()?element.getTreatmentSite().getDescription():"");
-//					row.setTechnique(element.getTreatmentTechniqueIsNotNull()?GetTechniqueLkupName(element.getTreatmentTechnique().getTechnique().toString()):"");
 				}
 			}
-			
-//replaced
-//			//Do a get in Go_ptplactDTO
-//			Go_ptplact actionDto = (Go_ptplact) domain.getDTOInstance(Go_ptplact.class);
-//			actionDto.Filter.Pt_act_id = form.getGlobalContext().CcoSched.ClinicView.getActionId();
-//			Result result = actionDto.get();
-//			if(result != null)
-//			{
-//				engine.showMessage(result.getMessage());
-//				return;
-//			}
-//
-//			//Populate the grid
-//			for(int i=0; i<actionDto.DataCollection.get(0).SeqnoCollection.count(); i++)
-//			{
-//				GenForm.TreatmentSiteRow row = form.TreatmentSite().getRows().newRow();
-//				row.setGroup(actionDto.DataCollection.get(0).SeqnoCollection.get(i).Tgrouptxt);
-//				row.setTreatmentSites(actionDto.DataCollection.get(0).SeqnoCollection.get(i).Txsitetxt);
-//				row.setTechnique(GetTechniqueLkupName(actionDto.DataCollection.get(0).SeqnoCollection.get(i).Techniq));
-//			}
-//
-//			//Do a get in Go_ptreatplDTO
-//			if(!actionDto.DataCollection.get(0).Pt_tp_id.equals(""))
-//			{
-//				Go_ptreatpl trPlanDto = (Go_ptreatpl) domain.getDTOInstance(Go_ptreatpl.class);
-//				trPlanDto.Filter.Unid = actionDto.DataCollection.get(0).Pt_tp_id;
-//				result = trPlanDto.get();
-//				if(result != null)
-//				{
-//					engine.showMessage(result.getMessage());
-//					return;
-//				}
-//
-//				//Populate details
-//				form.TumourGroup().setValue(trPlanDto.DataCollection.get(0).Tumgrouptxt);
-//				form.TumourSite().setValue(trPlanDto.DataCollection.get(0).Tumsitetxt);
-//				form.TumourHistology().setValue(trPlanDto.DataCollection.get(0).Cshisttxt);
-//			}
+
 	}
 	
 	private void LoadLookups()
 	{
-		//Technique
+		// Technique
 		Lkup lookupDto =  form.getGlobalContext().CcoSched.TreatmentPlan.getTechnique();
 		if (lookupDto == null)
 		{

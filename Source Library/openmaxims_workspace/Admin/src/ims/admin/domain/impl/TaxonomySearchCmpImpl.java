@@ -643,8 +643,9 @@ public class TaxonomySearchCmpImpl extends DTODomainImplementation implements im
 		
 		if (nat_code.equals(TaxonomyType.NAT_SPEC_CODE)) specOrTreat = "isSpecialty";
 		else specOrTreat = "isTreatment";
-		
-		String sql = "select description, code from nat_spec_codes where " + specOrTreat + " = 1 and description like '%" + filter.getDescription().toUpperCase() + "%' "; 
+
+		/* TODO MSSQL case - String sql = "select description, code from nat_spec_codes where " + specOrTreat + " = 1 and description like '%" + filter.getDescription().toUpperCase() + "%' "; */
+		String sql = "select description, code from nat_spec_codes where " + specOrTreat + " = true and description like '%" + filter.getDescription().toUpperCase() + "%' ";
 		
 		DomainFactory factory = getDomainFactory();		
 		Connection conn = factory.getJdbcConnection();

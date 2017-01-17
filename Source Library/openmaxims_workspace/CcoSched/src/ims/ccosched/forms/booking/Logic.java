@@ -109,18 +109,16 @@ public class Logic extends BaseLogic
 		form.PatientDiary().setEnabled(true);
 		form.Level().setEnabled(true);
 		form.Instances().setEnabled(true);
-//		#endregion
 
 		Date now = new Date();
 		form.Calendar().setCurrentMonth(now);
 		GregorianCalendar gregCalObject = new GregorianCalendar();
-		//for (int i = 1; i <= DateTime.DaysInMonth(form.Calendar().getCurrentMonth().getYear(), form.Calendar().getCurrentMonth().getMonth()); ++i)
 		for (int i = 1; i <= gregCalObject.getActualMaximum(Calendar.DAY_OF_MONTH); ++i)
 			form.Calendar().addNoSessionDates(new Date(form.Calendar().getCurrentMonth().getYear(), form.Calendar().getCurrentMonth().getMonth(), i));
 
 		form.DateSelected().setValue("");
 		
-		form.htm1().setHTML("");//WDEV-14396
+		form.htm1().setHTML("");
 		form.LocationSelected().setValue("");
 		form.Action().setValue("");
 		form.NumResSelected().setValue("");
@@ -370,39 +368,16 @@ public class Logic extends BaseLogic
 				
 			}
 			
-//			replaced old code			
-//			for(int i=0; i<tpActivityActions.DataCollection.count(); i++)
-//			{
-//				Go_ptplact.Go_ptplactRecord tpActivityAction = tpActivityActions.DataCollection.get(i);
-//				//ICCO675 - 23/04/2003 - it should not add
-//				//an action to the tree control if the action already has
-//				//appointments booked for it i.e. the appt_head_id and appt_id will contain values
-//				//17/02/2005 - don't display the schedulable
-//				if(tpActivityAction.Appt_id.equals("") && tpActivityAction.Appt_head_id.equals("") && isTPSchedulable(tpActivityAction))
-//				{
-//					//WDEV-3368 - Remove the Pretreatment action from the upper tree. 
-//					if(tpActivityAction.Action_id.equals(ACTION_ID) == false)
-//					{
-//						values.put(new Integer(j), tpActivityAction);
-//						TreeNode node = form.Activity().getNodes().add(new Integer(j), tpActivityAction.Activity_idtxt);
-//						j++;
-//						values.put(new Integer(j), tpActivityAction);
-//						node.getNodes().add(new Integer(j), tpActivityAction.Action_idtxt);
-//						j++;
-//					}
-//				}
-//			}
-			
-			//17/11/2004 - Fix related with the behaviour of the TreeControl in C# where
-			//after populating the tree then the first root node is selected by default
+			// Fix related with the behaviour of the TreeControl in C# where
+			// after populating the tree then the first root node is selected by default
 			selectFirstNode();
-			//End fix
+			// End fix
 			
 			if (form.Activity().getNodes().size() == 0)
 			{
 				emptyFlag = true;
 				form.TreatmentPlanActivities().setValue(false);
-				//ICCO934 5) 09/11/04 - Fire manually the click event
+				// ICCO934 5) Fire manually the click event
 				TreatmentPlanActivitiesClick();
 			}
 			else
@@ -488,7 +463,7 @@ public class Logic extends BaseLogic
 					}
 					if (flag)
 					{
-					//	WDEV-3368 - Remove the Pretreatment action from the upper tree. 
+					// Remove the Pretreatment action from the upper tree.
 						if(activityAction.getActionIsNotNull() && activityAction.getAction().getID_Action().equals(ACTION_ID) == false)
 						{
 							values.put(new Integer(j), activityAction);
@@ -499,46 +474,13 @@ public class Logic extends BaseLogic
 					}
 				}
 			}
-			
-//			replaced old code			
-//			// Adding the Activities.
-//			for(int i=0; i< activityActions.DataCollection.count(); i++)
-//			{
-//				Sd_activity_action.Sd_activity_actionRecord activityAction = activityActions.DataCollection.get(i);
-//				/*//17/02/2005 - don't display the records having the sched_flag = "N" (not schedulable)
-//				if(activityAction.Sched_flag.equals("N"))
-//					continue;*/
-//					
-//				boolean flag = true;
-//				for(int k=0; k<form.Activity().getNodes().size(); k++)
-//				{
-//					TreeNode node = form.Activity().getNodes().get(k);
-//					Sd_activity_action.Sd_activity_actionRecord tmp = (Sd_activity_action.Sd_activity_actionRecord)values.get(node.getValue());
-//					if ((tmp.Grp_id.equals(activityAction.Grp_id)) && (tmp.Activ_id.equals(activityAction.Activ_id)))
-//					{
-//						flag = false;
-//						break;
-//					}
-//				}
-//				if (flag)
-//				{
-//					//WDEV-3368 - Remove the Pretreatment action from the upper tree. 
-//					if(activityAction.Action_id.equals(ACTION_ID) == false)
-//					{
-//						values.put(new Integer(j), activityAction);
-//						form.Activity().getNodes().add(new Integer(j), activityAction.Activ_nm);
-//						++j;
-//					}
-//				}
-//			}
 
-			//17/11/2004 - Fix related with the behaviour of the TreeControl in C# where
-			//after populating the tree then the first root node is selected by default
+			// Fix related with the behaviour of the TreeControl in C# where
+			// after populating the tree then the first root node is selected by default
 			selectFirstNode();
-			//End Fix
+			// End Fix
 
-			// Adding the Actions.
-			//foreach (dto.Sd_activity_action.Sd_activity_actionClient activityAction in activityActions.Sd_activity_actionCollection)
+			// Adding the Actions
 			if (activityActions != null)
 			{
 				for (Iterator iter = activityActions.iterator(); iter.hasNext();) {
@@ -546,9 +488,8 @@ public class Logic extends BaseLogic
 					for(int i=0; i<form.Activity().getNodes().size(); i++)
 					{
 						TreeNode node = form.Activity().getNodes().get(i);
-						// WDEV-14164 - while fixing this issue, noticed that this code
-						// is expecting type ActivityActionVo in form.Activity, when it is
-						// now 	PatTreatPlanActionVo
+						// While fixing this issue, noticed that this code
+						// is expecting type ActivityActionVo in form.Activity, when it is now 	PatTreatPlanActionVo
 						if (values.get(node.getValue()) instanceof PatTreatPlanActionVo)
 						{
 							PatTreatPlanActionVo tmp = (PatTreatPlanActionVo)values.get(node.getValue());
@@ -585,27 +526,7 @@ public class Logic extends BaseLogic
 				}
 				
 			}
-				
-//			replaced old code			
-//			// Adding the Actions.
-//			//foreach (dto.Sd_activity_action.Sd_activity_actionClient activityAction in activityActions.Sd_activity_actionCollection)
-//			for(int k=0; k<activityActions.DataCollection.count(); k++ )
-//			{
-//				Sd_activity_action.Sd_activity_actionRecord activityAction =  activityActions.DataCollection.get(k);
-//				for(int i=0; i<form.Activity().getNodes().size(); i++)
-//				{
-//					TreeNode node = form.Activity().getNodes().get(i);
-//					Sd_activity_action.Sd_activity_actionRecord tmp = (Sd_activity_action.Sd_activity_actionRecord)values.get(node.getValue());
-//					//17/02/2005 - don't add the actions not bookable -> sched_flag = "N"
-//					if ((tmp.Grp_id.equals(activityAction.Grp_id)) && (tmp.Activ_id.equals(activityAction.Activ_id)) && !tmp.Sched_flag.equals("N"))
-//					{
-//						values.put(new Integer(j), activityAction);
-//						node.getNodes().add(new Integer(j), activityAction.Action_nm);
-//						++j;
-//						break;
-//					}
-//				}
-//			}
+
 			if (values != null && values.size() > 0)
 			{
 			FieldsDependingActivity(((ActivityActionVo)values.get(new Integer(0))).getActivityId().toString());
@@ -617,149 +538,7 @@ public class Logic extends BaseLogic
 			ShowSequence(1);
 			onActivityTreeViewSelectionChanged(form.Activity().getSelectedNode());
 		}
-		
-//replaced old code
-//		form.getGlobalContext().CcoSched.TreatmentPlan.setIgnoreActionID1(form.TreatmentPlanActivities().getValue()?Boolean.FALSE:Boolean.TRUE);
-//		form.Activity().clear();
-//		Hashtable<Integer, Object> values = new Hashtable<Integer, Object>();
-//		int j = 0;
-//		form.getLocalContext().setActivityTree(values);
-//
-//		boolean emptyFlag = false;
-//		if (form.TreatmentPlanActivities().getValue())
-//		{
-//			Go_ptplact tpActivityActions = form.getGlobalContext().CcoSched.ActionUpdate.getTreatmentPlanActions();
-//			if (tpActivityActions.DataCollection.count() == 0 && m_NoActionsFlag)
-//			{
-//				HideEverything();
-//				ShowMessage("Error: No actions on selected treatment plan.");
-//				return false;
-//			}
-//			
-//			for(int i=0; i<tpActivityActions.DataCollection.count(); i++)
-//			{
-//				Go_ptplact.Go_ptplactRecord tpActivityAction = tpActivityActions.DataCollection.get(i);
-//				//ICCO675 - 23/04/2003 - it should not add
-//				//an action to the tree control if the action already has
-//				//appointments booked for it i.e. the appt_head_id and appt_id will contain values
-//				//17/02/2005 - don't display the schedulable
-//				if(tpActivityAction.Appt_id.equals("") && tpActivityAction.Appt_head_id.equals("") && isTPSchedulable(tpActivityAction))
-//				{
-//					//WDEV-3368 - Remove the Pretreatment action from the upper tree. 
-//					if(tpActivityAction.Action_id.equals(ACTION_ID) == false)
-//					{
-//						values.put(new Integer(j), tpActivityAction);
-//						TreeNode node = form.Activity().getNodes().add(new Integer(j), tpActivityAction.Activity_idtxt);
-//						j++;
-//						values.put(new Integer(j), tpActivityAction);
-//						node.getNodes().add(new Integer(j), tpActivityAction.Action_idtxt);
-//						j++;
-//					}
-//				}
-//			}
-//			//17/11/2004 - Fix related with the behaviour of the TreeControl in C# where
-//			//after populating the tree then the first root node is selected by default
-//			selectFirstNode();
-//			//End fix
-//			if (form.Activity().getNodes().size() == 0)
-//			{
-//				emptyFlag = true;
-//				form.TreatmentPlanActivities().setValue(false);
-//				//ICCO934 5) 09/11/04 - Fire manually the click event
-//				TreatmentPlanActivitiesClick();
-//			}
-//			else
-//			{
-//				// Default 
-//				boolean flag = false;
-//				for(int i=0; i<form.Activity().getNodes().size(); i++)
-//				{
-//					TreeNode root =  form.Activity().getNodes().get(i);
-//					if (flag)
-//						break;
-//					for(int k=0; k<root.getNodes().size();k++)
-//					{
-//						TreeNode node = root.getNodes().get(k);
-//						if (((Go_ptplact.Go_ptplactRecord)values.get(node.getValue())).Pt_act_id.equals(form.getGlobalContext().CcoSched.TreatmentPlan.getActionID()))
-//						{
-//							form.Activity().setValue(node.getValue());
-//							//Manually fire the event
-//							onActivityTreeViewSelectionChanged(node);
-//							flag = true;
-//							break;
-//						}
-//					}
-//				}
-//				FieldsDependingActivity(((Go_ptplact.Go_ptplactRecord)values.get(form.Activity().getValue())).Activity_id);
-//			}
-//		}
-//		else
-//		{
-//			Sd_activity_action activityActions = form.getGlobalContext().CcoSched.ActivityView.getActions();
-//
-//			// Adding the Activities.
-//			for(int i=0; i< activityActions.DataCollection.count(); i++)
-//			{
-//				Sd_activity_action.Sd_activity_actionRecord activityAction = activityActions.DataCollection.get(i);
-//				/*//17/02/2005 - don't display the records having the sched_flag = "N" (not schedulable)
-//				if(activityAction.Sched_flag.equals("N"))
-//					continue;*/
-//					
-//				boolean flag = true;
-//				for(int k=0; k<form.Activity().getNodes().size(); k++)
-//				{
-//					TreeNode node = form.Activity().getNodes().get(k);
-//					Sd_activity_action.Sd_activity_actionRecord tmp = (Sd_activity_action.Sd_activity_actionRecord)values.get(node.getValue());
-//					if ((tmp.Grp_id.equals(activityAction.Grp_id)) && (tmp.Activ_id.equals(activityAction.Activ_id)))
-//					{
-//						flag = false;
-//						break;
-//					}
-//				}
-//				if (flag)
-//				{
-//					//WDEV-3368 - Remove the Pretreatment action from the upper tree. 
-//					if(activityAction.Action_id.equals(ACTION_ID) == false)
-//					{
-//						values.put(new Integer(j), activityAction);
-//						form.Activity().getNodes().add(new Integer(j), activityAction.Activ_nm);
-//						++j;
-//					}
-//				}
-//			}
-//
-//			//17/11/2004 - Fix related with the behaviour of the TreeControl in C# where
-//			//after populating the tree then the first root node is selected by default
-//			selectFirstNode();
-//			//End Fix
-//			
-//			// Adding the Actions.
-//			//foreach (dto.Sd_activity_action.Sd_activity_actionClient activityAction in activityActions.Sd_activity_actionCollection)
-//			for(int k=0; k<activityActions.DataCollection.count(); k++ )
-//			{
-//				Sd_activity_action.Sd_activity_actionRecord activityAction =  activityActions.DataCollection.get(k);
-//				for(int i=0; i<form.Activity().getNodes().size(); i++)
-//				{
-//					TreeNode node = form.Activity().getNodes().get(i);
-//					Sd_activity_action.Sd_activity_actionRecord tmp = (Sd_activity_action.Sd_activity_actionRecord)values.get(node.getValue());
-//					//17/02/2005 - don't add the actions not bookable -> sched_flag = "N"
-//					if ((tmp.Grp_id.equals(activityAction.Grp_id)) && (tmp.Activ_id.equals(activityAction.Activ_id)) && !tmp.Sched_flag.equals("N"))
-//					{
-//						values.put(new Integer(j), activityAction);
-//						node.getNodes().add(new Integer(j), activityAction.Action_nm);
-//						++j;
-//						break;
-//					}
-//				}
-//			}
-//			FieldsDependingActivity(((Sd_activity_action.Sd_activity_actionRecord)values.get(new Integer(0))).Activ_id);
-//			form.Activity().setValue(new Integer(0));
-//		}
-//		if (!emptyFlag)
-//		{
-//			ShowSequence(1);
-//			onActivityTreeViewSelectionChanged(form.Activity().getSelectedNode());
-//		}
+
 		return true;
 	}
 
@@ -1398,24 +1177,12 @@ public class Logic extends BaseLogic
 						break;
 					}					
 				}
-
-//				replaced
-//				for(int k=0;k<activityActions.DataCollection.count(); k++)
-//				{
-//					Sd_activity_action.Sd_activity_actionRecord activityAction = activityActions.DataCollection.get(k); 
-//					if (activityAction.Grp_id.equals(tpActionSelected.Activitygrp) && activityAction.Activ_id.equals(tpActionSelected.Activity_id) && activityAction.Action_id.equals(tpActionSelected.Action_id))
-//						{
-//							Integer i = GetInteger(activityAction.Int_req);
-//							form.getGlobalContext().CcoSched.Booking.setIntervalRequired( i==null ? new Integer(0) : i);
-//							break;
-//						}
-//				}
 			}
 			else if (values != null && values.size() > 0)
 			{
-				//#region Fix 25 June 2003
+				// #region Fix 25 June 2003
 				form.getGlobalContext().CcoSched.TreatmentPlan.setActionID(null);
-				//#endregion
+				// #endregion
 				ActivityActionVo actionSelected = (ActivityActionVo)values.get(selectedNode.getValue());				
 				form.getGlobalContext().CcoSched.Booking.setActivityActionSelected(actionSelected);
 				groupID = actionSelected.getGroupIsNotNull()?actionSelected.getGroup().getID_ActivityGroup().toString():"";
@@ -1472,26 +1239,12 @@ public class Logic extends BaseLogic
 						}
 					}
 				}
-					
-//replaced code					
-//					for(int k=0; k<form.ListOwner().getValues().size(); k++)
-//					{	
-//						Sd_activstaff.Sd_activstaffRecord tmp = (Sd_activstaff.Sd_activstaffRecord)form.ListOwner().getValues().get(k);
-//						if (tmp.Staff_no.equals(s))
-//						{
-//							form.ListOwner().setValue(tmp);
-//							form.getGlobalContext().CcoSched.Booking.setListOwner(tmp);
-//							break;
-//						}
-//					}
 				}
 			}
 		
 			// Modality, Energy, Unit, Dose, Fractions, Duration.
 			if (activityID.equals("-202") || activityID.equals("-207"))
 			{
-				//form.Modality().clear();
-				//form.EnergyUnit().clear();
 				form.Modality().setEnabled(!tp);
 				form.Energy().setEnabled(!tp);
 				form.EnergyUnit().setEnabled(!tp);
@@ -1506,7 +1259,6 @@ public class Logic extends BaseLogic
 					{
 						form.Modality().newRow(tpActionSelected.getModality(), tpActionSelected.getModalityIsNotNull()?tpActionSelected.getModality().getText():"");
 						form.Modality().setValue(tpActionSelected.getModality());
-						//Context.ContextBooking.ModalityId = tpActionSelected.attModality_id; // ???????????????????
 						form.getLocalContext().setModalityId(tpActionSelected.getModalityIsNotNull()?tpActionSelected.getModality().toString():"");
 					}
 	
@@ -3554,26 +3306,11 @@ public class Logic extends BaseLogic
 					{
 						tpUpdatedActivityActions.add(tpActivityAction);
 					}
-					//http://jira/browse/WDEV-14157
 				}
 			}
-			
-//replaced code
-//			Go_ptplact.Go_ptplactRecord tpActionSelected = (Go_ptplact.Go_ptplactRecord)values.get((Integer)form.Activity().getValue());
-//			Go_ptplact tpActivityActions = form.getGlobalContext().CcoSched.ActionUpdate.getTreatmentPlanActions();
-//			Go_ptplact tpUpdatedActivityActions = (Go_ptplact)domain.getDTOInstance(Go_ptplact.class);
-//			for(int i=0; i<tpActivityActions.DataCollection.count(); i++)
-//			{
-//				Go_ptplact.Go_ptplactRecord tpActivityAction = tpActivityActions.DataCollection.get(i);
-//				//Test if the selected activity & action is in the context 
-//				if(!tpActivityAction.Activity_id.equals(tpActionSelected.Activity_id) && 
-//				   !tpActivityAction.Action_id.equals(tpActionSelected.Action_id))
-//				{
-//					tpUpdatedActivityActions.DataCollection.add(tpActivityAction);
-//				}
-//			}
 
-			//Set the value to the context
+
+			// Set the value to the context
 			if(tpUpdatedActivityActions != null)
 				form.getGlobalContext().CcoSched.ActionUpdate.setTreatmentPlanActions(tpUpdatedActivityActions);
 		}
@@ -3591,9 +3328,9 @@ public class Logic extends BaseLogic
 				form.getGlobalContext().CcoSched.Booking.setBookingSucceeded(null);
 				ShowMessage("Booking succeeded.");
 				m_Filter = null; //to refresh booking percentage
-				//ICCO675
+				// ICCO675
 				RemoveActivityActionFromContext();
-				//If there are no activities reload all of them
+				// If there are no activities reload all of them
 				if (form.TreatmentPlanActivities().getValue())
 				{
 					m_NoActionsFlag = false;
@@ -3708,8 +3445,7 @@ public class Logic extends BaseLogic
 							ok = true;
 						else
 						{
-							//04/01/2005
-							//apply the +- 10 mins rule (the flag - ims.configuration.gen.ConfigFlag.DTO.SCHEDULER_APPT_INTERVAL.getValue())
+							// Apply the +- 10 mins rule (the flag - ims.configuration.gen.ConfigFlag.DTO.SCHEDULER_APPT_INTERVAL.getValue())
 							Time newTime = GetRoundedTime((String)ar.get(j), slotsAvailable);
 							if(newTime != null)
 							{
@@ -3717,15 +3453,7 @@ public class Logic extends BaseLogic
 								ok = true;
 							}
 						}
-						/*for(int k=0; k<slotsAvailable.size(); k++)
-						{
-							String s = (String)slotsAvailable.get(k);
-							if (s.equals(a))
-							{
-								ok = true;
-								break;
-							}
-						}*/
+
 						if (!ok)
 						{
 							ShowMessage("The slot selected is not available for the date " + date.toString(DateFormat.STANDARD));
@@ -4497,7 +4225,7 @@ public class Logic extends BaseLogic
 		return defaultInterval;
 	}
 	
-	//Checks if the sched_flag is set to "N"
+	// Checks if the sched_flag is set to "N"
 	private boolean isTPSchedulable(PatTreatPlanActionVo tpActionSelected)
 	{
 		ActivityActionVoCollection activityActions = form.getGlobalContext().CcoSched.ActivityView.getActivityActions();		
@@ -4519,21 +4247,6 @@ public class Logic extends BaseLogic
 		
 		form.getGlobalContext().CcoSched.TreatmentPlan.getAnaesthetic();
 		return true;
-		
-//		Sd_activity_action activityActions = form.getGlobalContext().CcoSched.ActivityView.getActions();
-//		Sd_activity_action.Sd_activity_actionRecord activityAction;
-//		for(int k=0;k<activityActions.DataCollection.count(); k++)
-//		{
-//			activityAction = activityActions.DataCollection.get(k); 
-//			if (activityAction.Grp_id.equals(tpActionSelected.Activitygrp)  && 
-//				activityAction.Activ_id.equals(tpActionSelected.Activity_id)&& 
-//				activityAction.Action_id.equals(tpActionSelected.Action_id) && 
-//				activityAction.Sched_flag.equals("N"))
-//			{
-//				return false;
-//			}
-//		}
-//		form.getGlobalContext().CcoSched.TreatmentPlan.getAnaesthetic();
-//		return true;
+
 	}
 }		

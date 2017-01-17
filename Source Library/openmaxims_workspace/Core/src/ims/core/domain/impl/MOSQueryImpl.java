@@ -272,7 +272,8 @@ public class MOSQueryImpl extends BaseMOSQueryImpl
 		
 		if(service != null)
 		{
-			condStr.append(" and serv.id = :ServiceId and servf.isActive = 1 ");
+			/* TODO MSSQL case - condStr.append(" and serv.id = :ServiceId and servf.isActive = 1 "); */
+			condStr.append(" and serv.id = :ServiceId and servf.isActive = true ");
 			markers.add("ServiceId");
 			values.add(service.getID_Service());
 			
@@ -354,7 +355,9 @@ public class MOSQueryImpl extends BaseMOSQueryImpl
 		ArrayList<Object> values = new ArrayList<Object>();
 		String andStr = "";
 
-		String hql = "select medic from Medic as medic where medic.isActive = 1 and (medic.mos.name.upperSurname like :hcpSname or medic.mos.name.upperForename like :hcpFname)";
+		/* TODO MSSQL case - String hql = "select medic from Medic as medic where medic.isActive = 1 and (medic.mos.name.upperSurname like :hcpSname or medic.mos.name.upperForename like :hcpFname)"; */
+		String hql = "select medic from Medic as medic where medic.isActive = true and (medic.mos.name.upperSurname like :hcpSname or medic.mos.name.upperForename like :hcpFname)";
+
 		markers.add("hcpSname");
 		values.add(name.toUpperCase() + "%");
 		markers.add("hcpFname");

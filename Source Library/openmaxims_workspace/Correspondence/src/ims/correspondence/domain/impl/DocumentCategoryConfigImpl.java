@@ -58,8 +58,9 @@ public class DocumentCategoryConfigImpl extends BaseDocumentCategoryConfigImpl
 	 */
 	public TemplateForPatientDocumentVoCollection listReports(String templateName, TemplateBoRefVoCollection notThisOnes, DocumentCategory cat)
 	{
+        /* TODO MSSQL case - String hql = "select tem from TemplateBo as tem left join tem.report as rep where (tem.name like :name and tem.isActive = 1 and rep.isActive = 1 and tem.isRIE is null "; */
+		String hql = "select tem from TemplateBo as tem left join tem.report as rep where (tem.name like :name and tem.isActive = true and rep.isActive = true and tem.isRIE is null ";
 
-		String hql = "select tem from TemplateBo as tem left join tem.report as rep where (tem.name like :name and tem.isActive = 1 and rep.isActive = 1 and tem.isRIE is null ";
 		ArrayList<String> paramNames = new ArrayList<String>();
 		paramNames.add("name");
 		ArrayList<Object> paramValues = new ArrayList<Object>();

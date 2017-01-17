@@ -45,8 +45,9 @@ public class PrintReportByIMSIdImpl extends BasePrintReportByIMSIdImpl
 	{
 		String[] result = null;		
 		DomainFactory factory = getDomainFactory();
-		
-		List<?> lst = factory.find("select r.reportXml, t.templateXml from ReportBo as r left join r.templates as t where (r.imsId= :imsid and t.isActive = 1) order by t.name", new String[] {"imsid"}, new Object[] {imsId});//wdev-21262
+
+		/* TODO MSSQL case - List<?> lst = factory.find("select r.reportXml, t.templateXml from ReportBo as r left join r.templates as t where (r.imsId= :imsid and t.isActive = 1) order by t.name", new String[] {"imsid"}, new Object[] {imsId}); */
+		List<?> lst = factory.find("select r.reportXml, t.templateXml from ReportBo as r left join r.templates as t where (r.imsId= :imsid and t.isActive = true) order by t.name", new String[] {"imsid"}, new Object[] {imsId});
 		
 		if(lst.iterator().hasNext())
 		{

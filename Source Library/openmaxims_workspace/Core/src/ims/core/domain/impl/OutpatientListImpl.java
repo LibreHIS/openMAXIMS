@@ -129,10 +129,12 @@ public class OutpatientListImpl extends BaseOutpatientListImpl
 
 	public ClinicLiteVoCollection listClinicsforLocation(LocationRefVo voLocRef, String strClinicName)
 	{
-		//WDEV-15039
 		ArrayList<String> names = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
-		String prepend = " where clin.isActive = 1 and ";
+
+		/* TODO MSSQL case - String prepend = " where clin.isActive = 1 and "; */
+		String prepend = " where clin.isActive = true and ";
+
 		DomainFactory factory = getDomainFactory();
 		
 		StringBuffer hql = new StringBuffer("from Clinic clin ");

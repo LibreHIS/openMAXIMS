@@ -47,8 +47,9 @@ public class LinkedAppointmentDetailsComponentImpl extends BaseLinkedAppointment
 	public ims.core.vo.ServiceLiteVoCollection listService(String name)
 	{
 		DomainFactory factory = getDomainFactory();
-		
-		StringBuilder hql = new StringBuilder("select s from Service s where s.isActive = 1 and s.canBeScheduled = 1 ");
+
+		/* TODO MSSQL case - StringBuilder hql = new StringBuilder("select s from Service s where s.isActive = 1 and s.canBeScheduled = 1 "); */
+		StringBuilder hql = new StringBuilder("select s from Service s where s.isActive = true and s.canBeScheduled = true ");
 		
 		ArrayList markers = new ArrayList();
 		ArrayList values = new ArrayList();
@@ -72,7 +73,9 @@ public class LinkedAppointmentDetailsComponentImpl extends BaseLinkedAppointment
 			return null;
 		
 		DomainFactory factory = getDomainFactory();
-		String hql = "select servfunc from ServiceFunction servfunc where servfunc.service.id = :serviceid and servfunc.isActive = 1 order by UPPER(servfunc.function.text) asc";
+
+		/* TODO MSSQL case - String hql = "select servfunc from ServiceFunction servfunc where servfunc.service.id = :serviceid and servfunc.isActive = 1 order by UPPER(servfunc.function.text) asc"; */
+		String hql = "select servfunc from ServiceFunction servfunc where servfunc.service.id = :serviceid and servfunc.isActive = true order by UPPER(servfunc.function.text) asc";
 	
 		List servFuncList = factory.find(hql, new String[]{"serviceid"}, new Object[]{service.getID_Service()});
 		return ServiceFunctionLiteVoAssembler.createServiceFunctionLiteVoCollectionFromServiceFunction(servFuncList);

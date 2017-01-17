@@ -1165,26 +1165,7 @@ public class Logic extends BaseLogic
 
 	private void setSelectedMuscle()
 	{
-		/*boolean bRowSelected = false;
-		GenForm.grdMotorAreaRow[] rows = form.grdMotorArea().getAllRows();
-		
-		for (int i=0; i < rows.length; i++)
-		{
-			if (rows[i].getValue() instanceof MuscleVo)
-			{
-				if (rows[i].getValue().equals(form.getLocalContext().getSelectedMuscle()))
-				{	*/
-					form.grdMotorArea().setValue(form.getLocalContext().getSelectedMuscle());
-			/*		bRowSelected = true;
-				}
-			}
-		}
-
-		clearContextVariables();
-		if (bRowSelected)
-			onSelectMuscle();					
-		*/
-
+		form.grdMotorArea().setValue(form.getLocalContext().getSelectedMuscle());
 	}
 
 	private void setSelectedMotorArea()

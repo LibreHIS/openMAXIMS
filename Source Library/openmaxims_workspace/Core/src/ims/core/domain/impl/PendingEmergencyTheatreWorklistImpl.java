@@ -136,7 +136,8 @@ public class PendingEmergencyTheatreWorklistImpl extends BasePendingEmergencyThe
 			}
 			else if (Boolean.TRUE.equals(searchCriteria.getListOnlyEndoscopyProcedures()))
 			{
-				andStr += (" and PET.isEndoscopyProcedure = 1 or PET.isEndoscopySecondProcedure = 1");
+				/* TODO MSSQL case - andStr += (" and PET.isEndoscopyProcedure = 1 or PET.isEndoscopySecondProcedure = 1"); */
+				andStr += (" and PET.isEndoscopyProcedure = true or PET.isEndoscopySecondProcedure = true");
 			}
 			
 			if (searchCriteria.getResponsibleHCP() != null)

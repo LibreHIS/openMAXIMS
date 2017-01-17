@@ -169,9 +169,10 @@ public class MosAdminImpl extends DomainImpl implements ims.admin.domain.MosAdmi
 		ArrayList markers = new ArrayList();
 		ArrayList values = new ArrayList();
 		
+        /* TODO MSSQL case - String hql = " from MemberOfStaff mos join fetch mos.locations loc where loc.location.id = :Location and mos.isActive = 1 order by mos.name.upperSurname,mos.name.upperForename"; */
+		String hql = " from MemberOfStaff mos join fetch mos.locations loc where loc.location.id = :Location and mos.isActive = true order by mos.name.upperSurname,mos.name.upperForename"; //WDEV-15662
 
-		String hql = " from MemberOfStaff mos join fetch mos.locations loc where loc.location.id = :Location and mos.isActive = 1 order by mos.name.upperSurname,mos.name.upperForename"; //WDEV-15662
-		if (voLocation != null)
+        if (voLocation != null)
 		{
 			markers.add("Location");
 			values.add(voLocation.getID_Location());
@@ -763,9 +764,10 @@ public class MosAdminImpl extends DomainImpl implements ims.admin.domain.MosAdmi
 	{
 		if (currentMos == null || !currentMos.getID_MemberOfStaffIsNotNull())
 			return false;
-		
-		String query = "from AppUser as a1_1 where " +
-				"(a1_1.mos.id = :MemberOfStaff_id and a1_1.isActive = 1) )";
+
+		/* TODO MSSQL case - String query = "from AppUser as a1_1 where (a1_1.mos.id = :MemberOfStaff_id and a1_1.isActive = 1) )"; */
+		String query = "from AppUser as a1_1 where (a1_1.mos.id = :MemberOfStaff_id and a1_1.isActive = true) )";
+
 		int resultNr = getDomainFactory().count(query, new String[]{"MemberOfStaff_id"} , new Object[]{currentMos.getID_MemberOfStaff()});
 		
 		return resultNr != 0;		

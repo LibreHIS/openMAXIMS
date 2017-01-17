@@ -65,7 +65,8 @@ public class HydrotherapyImpl extends BaseHydrotherapyImpl
 		
 		if (Boolean.TRUE.equals(modeRIE))
 		{
-			query.append(" and hyd.isRIE = 1 order by hyd.systemInformation.creationDateTime desc");
+			/* TODO MSSQL case - query.append(" and hyd.isRIE = 1 order by hyd.systemInformation.creationDateTime desc"); */
+			query.append(" and hyd.isRIE = true order by hyd.systemInformation.creationDateTime desc");
 		}
 		else
 		{

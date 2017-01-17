@@ -110,9 +110,12 @@ public class HospitalAtNightCutOffPointsConfigImpl extends BaseHospitalAtNightCu
 		StringBuffer hql = new StringBuffer();
 
 		hql.append(" select hosp from LocSite as hosp left join hosp.type as hosptype");
-		hql.append(" where hosp.name like :HospNam and hosp.isActive = 1 and hosp.isVirtual = 0 and hosptype.id=:HospType");
-		hql.append(" and hosp.id not in (select h1_1.hospital.id  from HospitalAtNightCutOverPointsConfig as h1_1)"); //WDEV-14022 
-		hql.append(" order by hosp.upperName asc"); //WDEV-20219 UPPER(hosp.name)
+
+		/* TODO MSSQL case - hql.append(" where hosp.name like :HospNam and hosp.isActive = 1 and hosp.isVirtual = 0 and hosptype.id=:HospType"); */
+		hql.append(" where hosp.name like :HospNam and hosp.isActive = true and hosp.isVirtual = false and hosptype.id=:HospType");
+
+		hql.append(" and hosp.id not in (select h1_1.hospital.id  from HospitalAtNightCutOverPointsConfig as h1_1)");
+		hql.append(" order by hosp.upperName asc");
 
 		markers.add("HospNam");
 		markers.add("HospType");

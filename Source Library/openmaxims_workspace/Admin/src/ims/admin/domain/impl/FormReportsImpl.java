@@ -80,8 +80,11 @@ public class FormReportsImpl extends DomainImpl implements ims.admin.domain.Form
 	{
 		DomainFactory factory = getDomainFactory();
 		ims.admin.vo.ReportVoCollection collection = new ims.admin.vo.ReportVoCollection();
-		List reps = factory.find("from FormReportBo fr  where fr.form.id = :formId  and fr.report.isActive = :isActive and fr.report.templates.isActive = 1", new String[]{"formId", "isActive"}, new Object[]{formId, Boolean.TRUE});//WDEV-23731
-		if (reps != null && !reps.isEmpty())
+
+		/* TODO MSSQL case - List reps = factory.find("from FormReportBo fr  where fr.form.id = :formId  and fr.report.isActive = :isActive and fr.report.templates.isActive = 1", new String[]{"formId", "isActive"}, new Object[]{formId, Boolean.TRUE}); */
+		List reps = factory.find("from FormReportBo fr  where fr.form.id = :formId  and fr.report.isActive = :isActive and fr.report.templates.isActive = true", new String[]{"formId", "isActive"}, new Object[]{formId, Boolean.TRUE});//WDEV-23731
+
+        if (reps != null && !reps.isEmpty())
 		{
 			for (Iterator iter = reps.iterator(); iter.hasNext();) 
 			{

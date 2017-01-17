@@ -69,14 +69,15 @@ public class CancelAppointmentDialogImpl extends BaseCancelAppointmentDialogImpl
 		
 		String hql = "select cr from CancellationTypeReason as cr where cr.cancellationType = :cancelType";
 		
-		//WDEV-20595
 		if (Boolean.TRUE.equals(isTheatreAppointment)) //Theatre Appointment
 		{
-			hql += " and cr.tCITheatre = 1 ";
+			/* TODO MSSQL case - hql += " and cr.tCITheatre = 1 "; */
+			hql += " and cr.tCITheatre = true ";
 		}
 		else if (!(Boolean.TRUE.equals(cancelSession))) //Outpatient or Ward Attenders appointment
 		{
-			hql += " and cr.outpatients = 1 ";
+			/* TODO MSSQL case - hql += " and cr.outpatients = 1 "; */
+			hql += " and cr.outpatients = true ";
 		}
 		
 		List cancelReasons = factory.find(hql, new String[]{"cancelType"}, new Object[]{getDomLookup(type)});

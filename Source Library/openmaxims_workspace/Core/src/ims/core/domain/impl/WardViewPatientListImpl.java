@@ -287,7 +287,9 @@ public class WardViewPatientListImpl extends BaseWardViewPatientListImpl
 		query.append(" LEFT JOIN inpatEp.homeLeaves AS hl ");
 		query.append(" LEFT JOIN inpatEp.bed AS bed ");
 
-		query.append(" WHERE pas.location.id = :WARD_ID AND inpatEp.isOnHomeLeave = 1 AND (hl.isRIE is null OR hl.isRIE = 0) AND (hl.bedRetained is null OR  hl.bedRetained = 0) AND hl.dateReturnedFromHomeLeave is null AND bed is null");
+		/* TODO MSSQL case - query.append(" WHERE pas.location.id = :WARD_ID AND inpatEp.isOnHomeLeave = 1 AND (hl.isRIE is null OR hl.isRIE = 0) AND (hl.bedRetained is null OR  hl.bedRetained = 0) AND hl.dateReturnedFromHomeLeave is null AND bed is null"); */
+		query.append(" WHERE pas.location.id = :WARD_ID AND inpatEp.isOnHomeLeave = true AND (hl.isRIE is null OR hl.isRIE = false) AND (hl.bedRetained is null OR  hl.bedRetained = false) AND hl.dateReturnedFromHomeLeave is null AND bed is null");
+
 		query.append(" ORDER BY patient.name.upperSurname, patient.name.upperForename ");
 		
 		List<?> results = getDomainFactory().find(query.toString(),new String[]{"PENDING_TRANSF","WARD_ID"}, new Object[] {TransferStatus.PENDING.getID(),ward.getID_Location()});
@@ -345,8 +347,10 @@ public class WardViewPatientListImpl extends BaseWardViewPatientListImpl
 		query.append(" (select count(pt.id) from PendingTransfers as pt left join pt.inpatientEpisode as inp where inp.id = inpatEp.id and pt.currentStatus.id = :PENDING_TRANSF) ");
 		query.append(" FROM BedSpaceState AS bedSpaceState LEFT JOIN bedSpaceState.inpatientEpisode AS inpatEp ");
 		query.append(" LEFT JOIN inpatEp.pasEvent AS pas LEFT JOIN pas.patient AS patient ");
-		
-		query.append(" WHERE pas.location.id = :WARD_ID AND inpatEp.isOnHomeLeave = 1 ");
+
+		/* TODO MSSQL case - query.append(" WHERE pas.location.id = :WARD_ID AND inpatEp.isOnHomeLeave = 1 "); */
+		query.append(" WHERE pas.location.id = :WARD_ID AND inpatEp.isOnHomeLeave = true ");
+
 		query.append(" ORDER BY patient.name.upperSurname, patient.name.upperForename ");
 		
 		List<?> results = getDomainFactory().find(query.toString(), new String[] {"PENDING_TRANSF","WARD_ID"},new Object[] {TransferStatus.PENDING.getID(), ward.getID_Location()});
@@ -482,8 +486,10 @@ public class WardViewPatientListImpl extends BaseWardViewPatientListImpl
 		query.append(" FROM BedSpaceState AS bedSpaceState RIGHT JOIN bedSpaceState.inpatientEpisode AS inpatEp ");
 		query.append(" LEFT JOIN inpatEp.pasEvent AS pas LEFT JOIN pas.patient AS patient ");
 		query.append(" LEFT JOIN inpatEp.bed AS bed ");
-		
-		query.append(" WHERE pas.location.id = :WARD_ID AND inpatEp.confirmedDischargeDateTime <= :DATE_24H AND inpatEp.isConfirmedDischarge = 1 AND ((inpatEp.isReadyToLeave is null OR inpatEp.isReadyToLeave = 0) AND inpatEp.readyToLeaveDecisionDateTime IS NULL)");
+
+		/* TODO MSSQL case - query.append(" WHERE pas.location.id = :WARD_ID AND inpatEp.confirmedDischargeDateTime <= :DATE_24H AND inpatEp.isConfirmedDischarge = 1 AND ((inpatEp.isReadyToLeave is null OR inpatEp.isReadyToLeave = 0) AND inpatEp.readyToLeaveDecisionDateTime IS NULL)"); */
+		query.append(" WHERE pas.location.id = :WARD_ID AND inpatEp.confirmedDischargeDateTime <= :DATE_24H AND inpatEp.isConfirmedDischarge = true AND ((inpatEp.isReadyToLeave is null OR inpatEp.isReadyToLeave = false) AND inpatEp.readyToLeaveDecisionDateTime IS NULL)");
+
 		query.append(" ORDER BY patient.name.upperSurname, patient.name.upperForename ");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
@@ -553,7 +559,10 @@ public class WardViewPatientListImpl extends BaseWardViewPatientListImpl
 		query.append(" FROM BedSpaceState AS bedSpaceState RIGHT JOIN bedSpaceState.inpatientEpisode AS inpatEp ");
 		query.append(" LEFT JOIN inpatEp.pasEvent AS pas LEFT JOIN pas.patient AS patient ");
 		query.append(" WHERE pas.location.id = :WARD_ID");
-		query.append(" AND inpatEp.readyToLeaveDecisionDateTime <= :TODAY_HIGH AND inpatEp.isReadyToLeave = 1");
+
+		/* TODO MSSQL case - query.append(" AND inpatEp.readyToLeaveDecisionDateTime <= :TODAY_HIGH AND inpatEp.isReadyToLeave = 1"); */
+		query.append(" AND inpatEp.readyToLeaveDecisionDateTime <= :TODAY_HIGH AND inpatEp.isReadyToLeave = true");
+
 		query.append(" ORDER BY patient.name.upperSurname ");
 		
 		List<?> results = getDomainFactory().find(query.toString(), new String[]{"PENDING_TRANSF","WARD_ID","TODAY_HIGH"}, new Object[] {TransferStatus.PENDING.getID(),ward.getID_Location(), new DateTime().addHours(24).getJavaDate()});
@@ -815,7 +824,10 @@ public class WardViewPatientListImpl extends BaseWardViewPatientListImpl
 		query.append(" LEFT JOIN pel.electiveListStatus AS els LEFT JOIN els.electiveListStatus AS elStatus ");
 		query.append(" LEFT JOIN pel.tCIDetails AS tci LEFT JOIN tci.tCIWard AS ward ");
 		query.append(" LEFT JOIN pel.patient AS patient ");
-		query.append(" WHERE ward.id = :WARD_ID AND  elStatus.id = :TCI_GIVEN AND tci.isActive = 1 AND tci.currentOutcome is null ");
+
+		/* TODO MSSQL case - query.append(" WHERE ward.id = :WARD_ID AND  elStatus.id = :TCI_GIVEN AND tci.isActive = 1 AND tci.currentOutcome is null "); */
+		query.append(" WHERE ward.id = :WARD_ID AND  elStatus.id = :TCI_GIVEN AND tci.isActive = true AND tci.currentOutcome is null ");
+
 		query.append( " AND tci.tCIDate = :TODAY");
 		query.append(" ORDER BY patient.name.upperSurname, patient.name.upperForename ");
 		
@@ -827,38 +839,6 @@ public class WardViewPatientListImpl extends BaseWardViewPatientListImpl
 		paramNames.add("TODAY");		paramValues.add(new java.util.Date());
 		
 		return PatientElectiveListBedInfoVoAssembler.createPatientElectiveListBedInfoVoCollectionFromPatientElectiveList(getDomainFactory().find(query.toString(), paramNames, paramValues));
-		
-//		query.append(" LEFT JOIN inpat.pasEvent AS pas LEFT JOIN pas.patient AS patient ");
-//		query.append(" LEFT JOIN pas.specialty AS inpatSpecialty ");
-//		
-//		query.append(" WHERE inpat.pasEvent.location.id = :WARD_ID AND inpat.bed is not null ");
-//		query.append(" AND (inpatSpecialty is null OR inpatSpecialty.id NOT IN (");
-
-		// TODO - Ask what restriction should be applied here
-//			query.append("SELECT wardSpecialty.id FROM WardBayConfig AS wardConfig LEFT JOIN wardConfig.ward AS ward LEFT JOIN wardConfig.specialties AS spec LEFT JOIN spec.instance AS wardSpecialty WHERE ward.id = :WARD_ID ");
-		
-//		query.append(")");
-//		query.append(")");
-//		
-//		ArrayList<String> paramNames = new ArrayList<String>();
-//		ArrayList<Object> paramValues = new ArrayList<Object>();
-//		
-//		paramNames.add("WARD_ID");
-//		paramValues.add(ward.getID_Location());
-//		
-//		return PatientLite_IdentifiersVoAssembler.createPatientLite_IdentifiersVoCollectionFromPatient(getDomainFactory().find(query.toString(), paramNames, paramValues));
-//
-//		StringBuilder query = new StringBuilder("SELECT COUNT (pel.id) FROM PatientElectiveList AS pel ");
-//		query.append("LEFT JOIN pel.electiveListStatus AS els LEFT JOIN els.electiveListStatus AS elStatus ");
-//		query.append("LEFT JOIN pel.tCIDetails AS tci LEFT JOIN tci.tCIWard AS ward ");
-//		query.append("LEFT JOIN pel.patient AS patient ");
-//		
-//		query.append("WHERE ward.id = :WARD_ID AND elStatus.id = :TCI_GIVEN AND tci.isActive = 1 AND tci.currentOutcome is null ");
-//		
-//		String[] paramNames = new String[] {"WARD_ID", "TCI_GIVEN"};
-//		Object[] paramValues = new Object[] {ward.getID_Location(), WaitingListStatus.TCI_GIVEN.getID()};
-//		
-//		return (int) getDomainFactory().countWithHQL(query.toString(), paramNames, paramValues);
 	}
 	
 

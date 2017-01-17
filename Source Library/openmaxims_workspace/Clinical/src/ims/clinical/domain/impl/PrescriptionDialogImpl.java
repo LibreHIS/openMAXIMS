@@ -57,8 +57,9 @@ public class PrescriptionDialogImpl extends BasePrescriptionDialogImpl
         Connection conection = factory.getJdbcConnection();
         
         StringBuffer sql = new StringBuffer();
-        
-        sql.append("select a.id, a.medication, a.noofdayssu, l.id, l.text from shcl_medicationhotl s1 LEFT OUTER JOIN shcl_medicationhot2 s2 ON s1.id = s2.shcl_medicationhotl_hotlistite LEFT OUTER JOIN core_medication2 a ON s2.medication = a.id LEFT OUTER JOIN core_medication2_keywords k ON a.id = k.id LEFT OUTER JOIN applookup_instance l ON a.lkp_frequencyd = l.id where (k.keyword like ? or a.medication like ?) and a.isactive = 1 ");
+
+        /* TODO MSSQL case - sql.append("select a.id, a.medication, a.noofdayssu, l.id, l.text from shcl_medicationhotl s1 LEFT OUTER JOIN shcl_medicationhot2 s2 ON s1.id = s2.shcl_medicationhotl_hotlistite LEFT OUTER JOIN core_medication2 a ON s2.medication = a.id LEFT OUTER JOIN core_medication2_keywords k ON a.id = k.id LEFT OUTER JOIN applookup_instance l ON a.lkp_frequencyd = l.id where (k.keyword like ? or a.medication like ?) and a.isactive = 1 "); */
+        sql.append("select a.id, a.medication, a.noofdayssu, l.id, l.text from shcl_medicationhotl s1 LEFT OUTER JOIN shcl_medicationhot2 s2 ON s1.id = s2.shcl_medicationhotl_hotlistite LEFT OUTER JOIN core_medication2 a ON s2.medication = a.id LEFT OUTER JOIN core_medication2_keywords k ON a.id = k.id LEFT OUTER JOIN applookup_instance l ON a.lkp_frequencyd = l.id where (k.keyword like ? or a.medication like ?) and a.isactive = true ");
         
         if(specialty != null)
         {

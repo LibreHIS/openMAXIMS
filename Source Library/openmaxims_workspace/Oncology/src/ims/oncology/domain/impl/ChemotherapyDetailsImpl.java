@@ -184,14 +184,14 @@ public class ChemotherapyDetailsImpl extends BaseChemotherapyDetailsImpl
 	}
 
 	
-	//wdev-12819
-	public TreatmentHospitalCollection getHospitals(String text,TreatmentHospital treatmentHospital) 
+	public TreatmentHospitalCollection getHospitals(String text,TreatmentHospital treatmentHospital)
 	{
 		StringBuilder query = new StringBuilder();
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
-		
-		query.append("select lkp from LookupInstance as lkp where lkp.type.id = :TYPE and lkp.active = 1 ");
+
+		/* TODO MSSQL case - query.append("select lkp from LookupInstance as lkp where lkp.type.id = :TYPE and lkp.active = 1 "); */
+		query.append("select lkp from LookupInstance as lkp where lkp.type.id = :TYPE and lkp.active = TRUE ");
 		
 		paramNames.add("TYPE"); paramValues.add(TreatmentHospital.TYPE_ID);
 				

@@ -121,11 +121,11 @@ public class DashboardSecureKeyHelper
 		
 		if(url.indexOf("?sk=0") != -1 || url.indexOf("&sk=0") != -1)
 		{
-			//sk=0 means without Logi SecureKey authentication
+			// sk=0 means without Logi SecureKey authentication
 			useSecureKey = false;
 		}
 		
-		url = url.replaceAll("[&?]sk.*?(?=&|\\?|$)", ""); //regex to remove the query param "sk" and its value
+		url = url.replaceAll("[&?]sk.*?(?=&|\\?|$)", ""); // Regex to remove the query param "sk" and its value
         int indexAmp = url.indexOf('&');
 
         if(indexAmp > -1)

@@ -116,8 +116,10 @@ public class PrintEvolveLabelImpl extends BasePrintEvolveLabelImpl
 		
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Serializable> values = new ArrayList<Serializable>();
-		
-		String query = "from Location l where l.type.id = :LocationType and l.isActive = 1 and l.isVirtual = 0";
+
+		/* TODO MSSQL case - String query = "from Location l where l.type.id = :LocationType and l.isActive = 1 and l.isVirtual = 0"; */
+		String query = "from Location l where l.type.id = :LocationType and l.isActive = true and l.isVirtual = false";
+
 		markers.add("LocationType");
 		values.add(LocationType.WARD.getID());
 		
@@ -128,7 +130,7 @@ public class PrintEvolveLabelImpl extends BasePrintEvolveLabelImpl
 			values.add(name.toUpperCase() + "%");
 		}
 		
-		query += " order by l.upperName asc"; //WDEV-20219 l.name
+		query += " order by l.upperName asc";
 		List<?> locations = factory.find(query, markers, values);
 		
 		return LocationLiteVoAssembler.createLocationLiteVoCollectionFromLocation(locations);

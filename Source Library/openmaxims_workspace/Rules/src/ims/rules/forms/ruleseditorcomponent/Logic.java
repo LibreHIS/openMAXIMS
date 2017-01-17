@@ -3231,21 +3231,11 @@ public class Logic extends BaseLogic
 					sb.append("<b>  &&  </b> ");
 					tabs = 1;
 				}
-				/*
-				 * else if(condition.equals(RuleLogicalCondition.getInstance(
-				 * RuleLogicalConditionType.ALLFALSE))) {
-				 * sb.append("<b>  &&  </b> "); tabs=1; }
-				 */
 				else if (condition.equals(RuleLogicalCondition.getInstance(RuleLogicalConditionType.ONETRUE)))
 				{
 					sb.append("<b>  ||  </b> ");
 					tabs = 1;
 				}
-				/*
-				 * else if(condition.equals(RuleLogicalCondition.getInstance(
-				 * RuleLogicalConditionType.ONEFALSE))) {
-				 * sb.append("<b>  ||  </b> "); tabs=1; }
-				 */
 			}
 
 			renderCondition(sb, condition.getConditions().get(x), rule, tabs);

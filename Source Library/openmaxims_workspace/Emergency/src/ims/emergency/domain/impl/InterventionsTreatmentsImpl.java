@@ -59,7 +59,9 @@ public class InterventionsTreatmentsImpl extends BaseInterventionsTreatmentsImpl
 	public ims.clinicaladmin.vo.TreatmentInterventionLiteVoCollection listTreatmentsInterventionsFromHotlist(String listOfTreatmentsInterventionsAllreadyAdded, TreatmentInterventionType type)
 	{
 		DomainFactory factory = getDomainFactory();
-		StringBuilder query = new StringBuilder("select ti from TreatmentInterventionHotlist as th left join th.hotListItem as titem left join titem.treatmentIntervention as ti left join th.specialty as sp left join ti.treatmentInterventionType as tType where sp.id = :Emergency and ti.isActive = 1 ");
+
+		/* TODO MSSQL case - StringBuilder query = new StringBuilder("select ti from TreatmentInterventionHotlist as th left join th.hotListItem as titem left join titem.treatmentIntervention as ti left join th.specialty as sp left join ti.treatmentInterventionType as tType where sp.id = :Emergency and ti.isActive = 1 "); */
+		StringBuilder query = new StringBuilder("select ti from TreatmentInterventionHotlist as th left join th.hotListItem as titem left join titem.treatmentIntervention as ti left join th.specialty as sp left join ti.treatmentInterventionType as tType where sp.id = :Emergency and ti.isActive = true ");
 		
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
@@ -92,7 +94,9 @@ public class InterventionsTreatmentsImpl extends BaseInterventionsTreatmentsImpl
 			throw new CodingRuntimeException("Cannot search on null TreatmentIntervention name.");
 		
 		DomainFactory factory = getDomainFactory();
-		StringBuilder query = new StringBuilder("select ti from TreatmentIntervention as ti left join ti.keywords as kw where ti.isActive = 1 and ti.id not in (select tisec.id from TreatmentInterventionHotlist as th left join th.hotListItem as titem left join titem.treatmentIntervention as tisec left join th.specialty as sp where sp.id = :Emergency) and (ti.treatmentInterventionName like :TreatmentName or kw.keyword like :TreatmentName) ");
+
+		/* TODO MSSQL case - StringBuilder query = new StringBuilder("select ti from TreatmentIntervention as ti left join ti.keywords as kw where ti.isActive = 1 and ti.id not in (select tisec.id from TreatmentInterventionHotlist as th left join th.hotListItem as titem left join titem.treatmentIntervention as tisec left join th.specialty as sp where sp.id = :Emergency) and (ti.treatmentInterventionName like :TreatmentName or kw.keyword like :TreatmentName) "); */
+		StringBuilder query = new StringBuilder("select ti from TreatmentIntervention as ti left join ti.keywords as kw where ti.isActive = true and ti.id not in (select tisec.id from TreatmentInterventionHotlist as th left join th.hotListItem as titem left join titem.treatmentIntervention as tisec left join th.specialty as sp where sp.id = :Emergency) and (ti.treatmentInterventionName like :TreatmentName or kw.keyword like :TreatmentName) ");
 		
 		if(listOfTreatmentsInterventionsAllreadyAdded != null && listOfTreatmentsInterventionsAllreadyAdded.length() > 0)
 		{

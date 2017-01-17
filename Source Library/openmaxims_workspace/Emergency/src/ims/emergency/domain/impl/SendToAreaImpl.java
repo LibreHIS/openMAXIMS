@@ -85,7 +85,9 @@ public class SendToAreaImpl extends BaseSendToAreaDialogImpl
 		
 		if(	trackingAreaRef == null )		//AttendanceDetails 
 		{
-			String hsql = "select t1_1 from TrackingArea as t1_1 left join t1_1.eDLocation as l1_1 where(l1_1.id = :idLocation and t1_1.isRegistrationArea = 1)";
+		    /* TODO MSSQL case - String hsql = "select t1_1 from TrackingArea as t1_1 left join t1_1.eDLocation as l1_1 where(l1_1.id = :idLocation and t1_1.isRegistrationArea = 1)"; */
+			String hsql = "select t1_1 from TrackingArea as t1_1 left join t1_1.eDLocation as l1_1 where(l1_1.id = :idLocation and t1_1.isRegistrationArea = true)";
+
 			trackingAreas = factory.find(hsql, new String[] {"idLocation"}, new Object[] {locRef.getID_Location()});
 		}
 		else								//Tracking form, Move button
@@ -172,7 +174,6 @@ public class SendToAreaImpl extends BaseSendToAreaDialogImpl
 		return TrackingLiteVoAssembler.create(doTracking);
 	}
 
-	//WDEV-17140
 	public TrackingAreaLiteVo getRegistrationAreaByLocation(LocationRefVo locationRef)
 	{
 		if(locationRef == null)
@@ -180,7 +181,9 @@ public class SendToAreaImpl extends BaseSendToAreaDialogImpl
 		
 		StringBuffer hql = new StringBuffer();
 		hql.append("select trackArea from TrackingArea as trackArea ");
-		hql.append("where trackArea.eDLocation.id = :locationID and trackArea.isRegistrationArea = 1");
+
+		/* TODO MSSQL case - hql.append("where trackArea.eDLocation.id = :locationID and trackArea.isRegistrationArea = 1"); */
+		hql.append("where trackArea.eDLocation.id = :locationID and trackArea.isRegistrationArea = true");
 		
 		DomainFactory factory = getDomainFactory();
 		List<?> list = factory.find(hql.toString(), new String[] {"locationID"}, new Object[] {locationRef.getID_Location()});

@@ -349,8 +349,10 @@ public class DayCaseAdmissionDialogImpl extends BaseDayCaseAdmissionDialogImpl
 	{
 		if(rttStatusPoint == null)
 			return null;
-		
-		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = 1 and rttMap.encounterType is null ";
+
+		/* TODO MSSQL case - String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = 1 and rttMap.encounterType is null "; */
+		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = true and rttMap.encounterType is null ";
+
 		List<?> listRTTMap = getDomainFactory().find(query, new String[] {"RTTStatusPoint"}, new Object[] {rttStatusPoint.getId()});
 		
 		if(listRTTMap != null && listRTTMap.size() > 0 && listRTTMap.get(0) instanceof RTTStatusEventMap)
@@ -361,7 +363,7 @@ public class DayCaseAdmissionDialogImpl extends BaseDayCaseAdmissionDialogImpl
 		return null;
 	}
 
-	// WDEV-23646 - Ensure the correct event Date Time is used when creating a new RTT Status
+	// Ensure the correct event Date Time is used when creating a new RTT Status
 	private PathwayRTTStatus createPathwayRTTStatus(CatsReferral domCats, Date eventDateTime)
 	{
 		if(!ConfigFlag.DOM.RTT_STATUS_POINT_FUNCTIONALITY.getValue())

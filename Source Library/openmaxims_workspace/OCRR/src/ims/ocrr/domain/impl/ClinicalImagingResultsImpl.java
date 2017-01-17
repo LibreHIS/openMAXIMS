@@ -91,8 +91,9 @@ public class ClinicalImagingResultsImpl extends BaseClinicalImagingResultsImpl
 	{
 		if (name == null || name.length() == 0)
 			return null;
-		
-		String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE mos.name.upperSurname LIKE :HCP_NAME AND hcp.isActive = 1 AND hcp.isHCPaResponsibleHCP = 1 ORDER BY mos.name.upperSurname";
+
+		/* TODO MSSQL case - String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE mos.name.upperSurname LIKE :HCP_NAME AND hcp.isActive = 1 AND hcp.isHCPaResponsibleHCP = 1 ORDER BY mos.name.upperSurname"; */
+		String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE mos.name.upperSurname LIKE :HCP_NAME AND hcp.isActive = TRUE AND hcp.isHCPaResponsibleHCP = TRUE ORDER BY mos.name.upperSurname";
 		
 		return HcpLiteVoAssembler.createHcpLiteVoCollectionFromHcp(getDomainFactory().find(query, "HCP_NAME", name.toUpperCase() + "%", 400));
 	}
@@ -100,11 +101,6 @@ public class ClinicalImagingResultsImpl extends BaseClinicalImagingResultsImpl
 	public RadiologyResultListVoCollection listResults(DateTime dateFrom, DateTime dateTo, ServiceRefVo department, InvestigationIndexRefVo exam, HcpRefVo clinician,
 																	Integer optionIpOp, Boolean resultsOnly, PatientRefVo patientId, Boolean bCompleted, Boolean checked, Boolean unchecked)
 	{
-		/*
-		if(dateFrom == null || dateTo == null)
-			throw new DomainRuntimeException("Date From/To cannot be null !");
-		*/
-		
 		if(resultsOnly == null)
 			throw new CodingRuntimeException("ResultsOnly parameter cannot be null !");
 

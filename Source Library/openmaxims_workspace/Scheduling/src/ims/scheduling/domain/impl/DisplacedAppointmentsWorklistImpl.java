@@ -192,12 +192,16 @@ public class DisplacedAppointmentsWorklistImpl extends BaseDisplacedAppointments
 				String ownersIDs = getListOwnersIDs(displacedSearchCriteriaVo.getListOwners());
 
 				hql += " left join sess.listOwners as owners ";
-				condStr.append(andStr + " owners.hcp.id in ( " + ownersIDs + " )  and owners.listOwner = 1 "); 
+
+				/* TODO MSSQL case - condStr.append(andStr + " owners.hcp.id in ( " + ownersIDs + " )  and owners.listOwner = 1 "); */
+				condStr.append(andStr + " owners.hcp.id in ( " + ownersIDs + " )  and owners.listOwner = true ");
 
 				andStr = " and ";
 
 				hqlSubSelectDisplaced += " left join sessSub.listOwners as ownersSub ";
-				condStrSubselct.append(andStr + " ownersSub.hcp.id in ( " + ownersIDs + " )  and ownersSub.listOwner = 1 "); 
+
+				/* TODO MSSQL case - condStrSubselct.append(andStr + " ownersSub.hcp.id in ( " + ownersIDs + " )  and ownersSub.listOwner = 1 "); */
+				condStrSubselct.append(andStr + " ownersSub.hcp.id in ( " + ownersIDs + " )  and ownersSub.listOwner = true ");
 			}
 
 			if (displacedSearchCriteriaVo.getProfile() != null)
@@ -263,11 +267,8 @@ public class DisplacedAppointmentsWorklistImpl extends BaseDisplacedAppointments
 		markers.add("OUTPATIENT_SESSIONSUB");
 		values.add(SchProfileType.OUTPATIENT.getID());
 
-	//	condStrSubselct.append(" and (bstatus.id = :statusID) ");
-	//	markers.add("statusID");
-	//	values.add(Status_Reason.CANCELLED.getId());
-
-		hqlSubSelectDisplaced += " left join booking.apptStatus as bstatus where booking.isDisplaced = 1 " + condStrSubselct;
+		/* TODO MSSQL case - hqlSubSelectDisplaced += " left join booking.apptStatus as bstatus where booking.isDisplaced = 1 " + condStrSubselct; */
+		hqlSubSelectDisplaced += " left join booking.apptStatus as bstatus where booking.isDisplaced = true " + condStrSubselct;
 
 		hql += "where ";
 		
@@ -310,13 +311,12 @@ public class DisplacedAppointmentsWorklistImpl extends BaseDisplacedAppointments
 		ArrayList<Object> values = new ArrayList<Object>();
 
 		StringBuffer hql = new StringBuffer();
-		hql.append("select appt from Booking_Appointment as appt left join appt.session as sess left join appt.apptStatus as status where sess.id = :sessionID and appt.isDisplaced = 1 "); //and status.id = :statusID ");
+
+		/* TODO MSSQL case - hql.append("select appt from Booking_Appointment as appt left join appt.session as sess left join appt.apptStatus as status where sess.id = :sessionID and appt.isDisplaced = 1 "); */
+		hql.append("select appt from Booking_Appointment as appt left join appt.session as sess left join appt.apptStatus as status where sess.id = :sessionID and appt.isDisplaced = true ");
 
 		markers.add("sessionID");
 		values.add(session.getID_Sch_Session());
-		
-//		markers.add("statusID");
-	//	values.add(Status_Reason.CANCELLED.getId());
 
 		return BookingAppointmentForDisplacedAppointmentVoAssembler.createBookingAppointmentForDisplacedAppointmentVoCollectionFromBooking_Appointment(factory.find(hql.toString(), markers, values));
 		

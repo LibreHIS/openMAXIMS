@@ -84,12 +84,16 @@ public class TumourHistologyConfigImpl extends BaseTumourHistologyConfigImpl
 		if (Boolean.TRUE.equals(activeOnly))
 		{
 			query.append(aux);
-			query.append("histology.isActive = 1");
+
+			/* TODO MSSQL case - query.append("histology.isActive = 1"); */
+			query.append("histology.isActive = true");
 		}
 		else if (activeOnly != null)
 		{
 			query.append(aux);
-			query.append("(histology.isActive = 1 or histology.isActive = 0)");
+
+			/* TODO MSSQL case - query.append("(histology.isActive = 1 or histology.isActive = 0)"); */
+			query.append("(histology.isActive = true or histology.isActive = false)");
 		}
 		
 		return TumourHistologyLiteVoAssembler.createTumourHistologyLiteVoCollectionFromTumourHistology(getDomainFactory().find(query.toString(), paramNames, paramValues));

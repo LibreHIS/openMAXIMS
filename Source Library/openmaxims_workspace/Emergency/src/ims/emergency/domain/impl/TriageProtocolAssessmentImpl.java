@@ -146,8 +146,9 @@ public class TriageProtocolAssessmentImpl extends BaseTriageProtocolAssessmentIm
 			return null;
 		
 		DomainFactory factory = getDomainFactory();
-		
-		String query = "select cp from ClinicalProblem as cp left join cp.keywords as k where (UPPER(cp.pCName) like :ClinicalProblemSearchText or UPPER(k.keyword) like :ClinicalProblemSearchText) and cp.isActive = 1 order by upper(cp.pCName) asc";
+
+		/* TODO MSSQL case - String query = "select cp from ClinicalProblem as cp left join cp.keywords as k where (UPPER(cp.pCName) like :ClinicalProblemSearchText or UPPER(k.keyword) like :ClinicalProblemSearchText) and cp.isActive = 1 order by upper(cp.pCName) asc"; */
+		String query = "select cp from ClinicalProblem as cp left join cp.keywords as k where (UPPER(cp.pCName) like :ClinicalProblemSearchText or UPPER(k.keyword) like :ClinicalProblemSearchText) and cp.isActive = true order by upper(cp.pCName) asc";
 		
 		return ClinicalProblemShortVoAssembler.createClinicalProblemShortVoCollectionFromClinicalProblem((List<?>) factory.find(query, "ClinicalProblemSearchText", problemName + "%"));
 	}
@@ -158,15 +159,15 @@ public class TriageProtocolAssessmentImpl extends BaseTriageProtocolAssessmentIm
 		if (personName == null)
 			return null;
 		
-		
-		String query = "SELECT hcp FROM Hcp AS hcp WHERE hcp.mos.name.upperSurname LIKE :NAME and hcp.mos.staffType.id = :staffType AND hcp.isActive = 1 ORDER BY hcp.mos.name.upperSurname ASC"; //WDEV-17240
+		/* TODO MSSQL case - String query = "SELECT hcp FROM Hcp AS hcp WHERE hcp.mos.name.upperSurname LIKE :NAME and hcp.mos.staffType.id = :staffType AND hcp.isActive = 1 ORDER BY hcp.mos.name.upperSurname ASC"; */
+		String query = "SELECT hcp FROM Hcp AS hcp WHERE hcp.mos.name.upperSurname LIKE :NAME and hcp.mos.staffType.id = :staffType AND hcp.isActive = true ORDER BY hcp.mos.name.upperSurname ASC";
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
 		
 		
-		paramNames.add("NAME");				paramValues.add(personName.toUpperCase() + "%");//WDEV-17240
-		paramNames.add("staffType");		paramValues.add(StaffType.HCP.getID()); //WDEV-17240
+		paramNames.add("NAME");				paramValues.add(personName.toUpperCase() + "%");
+		paramNames.add("staffType");		paramValues.add(StaffType.HCP.getID());
 
 		return HcpLiteVoAssembler.createHcpLiteVoCollectionFromHcp(getDomainFactory().find(query, paramNames, paramValues));
 	}

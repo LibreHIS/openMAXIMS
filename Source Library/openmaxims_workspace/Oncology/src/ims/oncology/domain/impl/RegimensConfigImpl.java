@@ -172,8 +172,9 @@ public class RegimensConfigImpl extends BaseRegimensConfigImpl
 		StringBuilder query = new StringBuilder();
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
-		
-		query.append("select lkp from LookupInstance as lkp where lkp.type.id = :TYPE and lkp.active = 1 and lkp.id not in (select chemo.regimen.id from ChemoRegimensConfig as chemo where chemo.status.id = :ACTIVE)");
+
+		/* TODO MSSQL case - query.append("select lkp from LookupInstance as lkp where lkp.type.id = :TYPE and lkp.active = 1 and lkp.id not in (select chemo.regimen.id from ChemoRegimensConfig as chemo where chemo.status.id = :ACTIVE)"); */
+		query.append("select lkp from LookupInstance as lkp where lkp.type.id = :TYPE and lkp.active = TRUE and lkp.id not in (select chemo.regimen.id from ChemoRegimensConfig as chemo where chemo.status.id = :ACTIVE)");
 		
 		paramNames.add("TYPE"); paramValues.add(RegimenAcronym.TYPE_ID);
 		paramNames.add("ACTIVE"); paramValues.add(PreActiveActiveInactiveStatus.ACTIVE.getID());

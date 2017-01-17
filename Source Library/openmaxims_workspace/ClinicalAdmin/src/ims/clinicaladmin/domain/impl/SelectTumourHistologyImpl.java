@@ -58,7 +58,9 @@ public class SelectTumourHistologyImpl extends BaseSelectTumourHistologyImpl
 	{
 		// Start building the query
 		StringBuilder query = new StringBuilder();
-		query.append(" from TumourHistology as tHist where tHist.isActive is not null and tHist.isActive = 1 ");
+
+		/* TODO MSSQL case - query.append(" from TumourHistology as tHist where tHist.isActive is not null and tHist.isActive = 1 "); */
+		query.append(" from TumourHistology as tHist where tHist.isActive is not null and tHist.isActive = true ");
 		
 		// Arrays for parameters
 		ArrayList<String> paramNames = new ArrayList<String>();

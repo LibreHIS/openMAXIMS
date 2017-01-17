@@ -168,14 +168,14 @@ public class TheatreSessionManagementImpl extends BaseTheatreSessionManagementIm
 		if (profileName == null || profileName.length() == 0)
 			throw new CodingRuntimeException("Cannot search on a null ProfileName");
 
-		String query = "SELECT profile FROM Sch_Profile AS profile WHERE upper(profile.name) like :ProfileName and profile.isActive = 1 and profile.profileType.id = :THEATRE_PROFILE ORDER BY UPPER(profile.name) ASC";
+		/* TODO MSSQL case - String query = "SELECT profile FROM Sch_Profile AS profile WHERE upper(profile.name) like :ProfileName and profile.isActive = 1 and profile.profileType.id = :THEATRE_PROFILE ORDER BY UPPER(profile.name) ASC"; */
+		String query = "SELECT profile FROM Sch_Profile AS profile WHERE upper(profile.name) like :ProfileName and profile.isActive = true and profile.profileType.id = :THEATRE_PROFILE ORDER BY UPPER(profile.name) ASC";
 
 		return ProfileLiteVoAssembler.createProfileLiteVoCollectionFromSch_Profile(getDomainFactory().find(query, new String[] { "ProfileName", "THEATRE_PROFILE" }, new Object[] { profileName.toUpperCase() + "%", SchProfileType.THEATRE.getID() }));
 	}
 
 	public LocationLiteVoCollection listActiveHospitals()
 	{
-		//http://jira/browse/WDEV-21222
 		OrganisationAndLocation impl = (OrganisationAndLocation) getDomainImpl(OrganisationAndLocationImpl.class);
 		return impl.listActiveHospitalsLite();
 	}
@@ -299,7 +299,8 @@ public class TheatreSessionManagementImpl extends BaseTheatreSessionManagementIm
 
 				hql += " left join sess.listOwners as owners ";
 
-				condStr.append(andStr + " owners.hcp.id in ( " + ownersIDs + " ) and owners.listOwner = 1 "); //WDEV-20479
+				/* TODO MSSQL case - condStr.append(andStr + " owners.hcp.id in ( " + ownersIDs + " ) and owners.listOwner = 1 "); */
+				condStr.append(andStr + " owners.hcp.id in ( " + ownersIDs + " ) and owners.listOwner = true ");
 
 				andStr = " and ";
 			}

@@ -501,36 +501,10 @@ public class Logic extends BaseLogic
 
 	private void addColoursForKPIDate()
 	{
-		//WDEV-8017 - 65 days
+		// 65 days
 		Date[] arrDates = form.getLocalContext().getKPIDays();
-		if(arrDates == null || arrDates.length == 0)//WDEV-11713
+		if(arrDates == null || arrDates.length == 0)
 			return;
-		//WDEV-11713 Start
-		//Get no of weeks
-		/*WDEV-11761
-		 * int noOfWeeks = (int) Math.ceil((float)arrDates.length/5);
-		
-		int colorInterval = 18;
-		if (noOfWeeks > 1)
-			colorInterval = (int) Math.floor(18/(noOfWeeks-1));
-		
-		if (colorInterval <= 0)
-			colorInterval = 1;
-		
-		
-		for (int  i = 0 ; i < arrDates.length ; i++)
-		{
-				int week = (int) Math.floor(i/5);
-				
-				int colorIndex = week*colorInterval;
-				if (colorIndex > 17 || week == noOfWeeks-1)
-				{
-					colorIndex = 17;
-				}
-	
-				form.bookingCalendar().setBackColor(arrDates[i], Color.fromRGB(colors[colorIndex][0],colors[colorIndex][1],colors[colorIndex][2]));
-		}*/
-		//WDEV-11761 - Start
 		int noOfColors = (int) Math.ceil((float)arrDates.length/5);
 		float colorGap = 510;
 		float realValue = 0;

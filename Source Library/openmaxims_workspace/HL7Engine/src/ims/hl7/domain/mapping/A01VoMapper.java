@@ -75,29 +75,22 @@ public class A01VoMapper extends VoMapper
 {
 	private static final Logger			LOG		= Logger.getLogger(A01VoMapper.class);
 	private A28VoMapper a28mapper;
-	
-	//WDEV-20112
-//	public Message processEvent(Message msg, ProviderSystemVo providerSystem) throws HL7Exception
-	public EventResponse processEvent(Message msg, ProviderSystemVo providerSystem) throws HL7Exception //WDEV-20112
+
+	public EventResponse processEvent(Message msg, ProviderSystemVo providerSystem) throws HL7Exception
 	{
 		a28mapper = (A28VoMapper) HL7EngineApplication.getVoMapper(EvnCodes.A28);
 		if (a28mapper == null)
 		{
 			throw new HL7Exception("A01 mapper requires A28 mapper. A28 mapper not found in list of registerd mappers.");			
 		}
-		
-		//WDEV-20112
-	//	Message ack = processPatientAdmission(msg, providerSystem);
-	//	return ack;
-		//WDEV-20112
+
 		EventResponse response = new EventResponse();
 		response = processPatientAdmission(msg, providerSystem, response);
-		return response; //WDEV-20112
+		return response;
 	}
 
 	public Message populateMessage()
 	{
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -106,7 +99,6 @@ public class A01VoMapper extends VoMapper
 	{
 		LOG.debug("A01VoMapper populateMessage: entry");
 		ADT_A01 message = new ADT_A01();
-		//EDAttendanceFeedVo edAttendance = null;
 		Patient patient=null;
 		PV1 pv = message.getPV1();
 		
@@ -265,59 +257,15 @@ public class A01VoMapper extends VoMapper
 		{						
 			renderPatientVoToPID(patient, message.getPID(), event.getProviderSystem());
 			NK1 nk1 = message.getNK1(0);
-	
-			//WDEV-22006 Comment out following code and replace by calling a single method
-			
-//			// http://jira/browse/WDEV-20335
-//			Boolean isConfidential = patient.getIsConfidential();
-//					
-//			//WDEV-20336 Populate NK1 from PDSRelative object first. If object is Null then use Next of Kin VO
-//			int NK1Iteration = 0;
-//			
-//			if(patient.getPDSrelativesIsNotNull()
-//					&& patient.getPDSrelatives().size() > 0)
-//			{
-//				for (int i=0; i < patient.getPDSrelatives().size(); i++)
-//				{
-//					PatRelative patRelative = patient.getPDSrelatives().get(i);
-//					renderPatRelativeVoToNK1(patRelative, nk1, event.getProviderSystem(), isConfidential);
-//					NK1Iteration ++;
-//				}
-//			}
-//			else
-//			{
-//				renderNextOfKinVoToNK1(patient.getNok(), nk1, event.getProviderSystem(), isConfidential);
-//				NK1Iteration ++;
-//			}//WDEV-20336
-//			
-//			// If config flag HL7_INCLUDE_FAMILY_SUPPORT  is true and 
-//			// any support family network contact details exist, then add these as NK1 segments (within a loop)
-//			// renderSupportNetworkFamilyVoToNK1(SupportNetworkFamily snfVo, NK1 nk1,ProviderSystemVo providerSystem)
-//			
-//			if(patient.getSupportNetworkFamilyIsNotNull() && ConfigFlag.HL7.HL7_INCLUDE_FAMILY_SUPPORT.getValue())
-//			{
-//				
-//				for (int i=0; i<patient.getSupportNetworkFamily().size(); i++)
-//				{
-//					NK1 sfn = message.getNK1(NK1Iteration);
-//					if(patient.getSupportNetworkFamily().get(i).getInactivatingDateTime()==null)
-//					{
-//						//WDEV-20335
-//						renderSupportNetworkFamilyVoToNK1(patient.getSupportNetworkFamily().get(i), sfn, event.getProviderSystem(), isConfidential); //WDEV-20335
-//						NK1Iteration++;
-//					}
-//				}
-//			}
 			
 			renderPatientVoToNK1(patient, message, event.getProviderSystem());
-			//WDEV-22006
+
 			
 			PD1 pd1=message.getPD1();
-			//WDEV-20993
-//			renderGPDetailsToPD1(patient,pd1);			
+
 			renderGPDetailsToPD1(patient, pd1, event.getProviderSystem());
-			//WDEV-22624
-			renderPatientDetailsToPD1(patient, pd1, event.getProviderSystem()); //WDEV-22624
+
+			renderPatientDetailsToPD1(patient, pd1, event.getProviderSystem());
 			
 			
 		}
@@ -328,9 +276,7 @@ public class A01VoMapper extends VoMapper
 		return message;
 	}
 
-	//WDEV-20112
-//	private Message processPatientAdmission(Message msg, ProviderSystemVo providerSystem) throws HL7Exception
-	private EventResponse processPatientAdmission(Message msg, ProviderSystemVo providerSystem, EventResponse response) throws HL7Exception //WDEV-20112
+	private EventResponse processPatientAdmission(Message msg, ProviderSystemVo providerSystem, EventResponse response) throws HL7Exception
 	{
 		Patient patVo;
 	
@@ -476,33 +422,22 @@ public class A01VoMapper extends VoMapper
 	public void populateBasicEpisodeData(IHL7OutboundMessageHandler event, ifInpatientEpisodeVo inpatientEpisode, PV1 pv1, PV2 pv2) throws Exception
 	{
 		
-		//PV1-2 Patient Class (IS)
+		// PV1-2 Patient Class (IS)
 		pv1.getPatientClass().setValue("I");
 
-		//PV1-3 Assigned patient location (PL)
-		//PV1-3-1 Point of Care (IS)
+		// PV1-3 Assigned patient location (PL)
+		// PV1-3-1 Point of Care (IS)
 		if(inpatientEpisode.getWardLocation() != null
 				&& inpatientEpisode.getWardLocation().getCodeMappings() != null)
 		{
-			//WDEV-20269
-//			for (int i=0; i<inpatientEpisode.getWardLocation().getCodeMappings().size(); i++)
-//			{
-//				TaxonomyMap codeMapping = inpatientEpisode.getWardLocation().getCodeMappings().get(i);
-//				if(codeMapping.getTaxonomyCode() != null
-//						&& codeMapping.getTaxonomyCode().length() > 0)
-//				{
-//					pv1.getAssignedPatientLocation().getPointOfCare().setValue(codeMapping.getTaxonomyCode().toString());
-//				}
-//			}
 			TaxonomyMap map = inpatientEpisode.getWardLocation().getTaxonomyMap(event.getProviderSystem().getCodeSystem());	
 			if (map != null)
 			{
 				pv1.getAssignedPatientLocation().getPointOfCare().setValue(map.getTaxonomyCode());
-			} //WDEV-20269
+			}
 		}
-		
-		//WDEV-20204 
-		//PV1-3-2 Bay (IS) (Room)
+
+		// PV1-3-2 Bay (IS) (Room)
 		ConfigItems[] providerSystemConfigItems = toConfigItemArray(event.getProviderSystem().getConfigItems());
 		String includeBayInPatientLocation = HL7Utils.getConfigItem(providerSystemConfigItems, ConfigItems.IncludeBayInPatientLocaton);
 		// Only populate Pv1-3-2 if config flag is true
@@ -514,7 +449,7 @@ public class A01VoMapper extends VoMapper
 				if(inpatientEpisode.getBedSpaceStateBay().getCodeMappings() != null)
 				{
 					TaxonomyMap map = inpatientEpisode.getBedSpaceStateBay().getTaxonomyMap(event.getProviderSystem().getCodeSystem());
-					if (map != null) //Mapping is defined for provider system
+					if (map != null) // Mapping is defined for provider system
 					{
 						pv1.getAssignedPatientLocation().getRoom().setValue(map.getTaxonomyCode());
 					}
@@ -538,37 +473,13 @@ public class A01VoMapper extends VoMapper
 		{
 			pv1.getAssignedPatientLocation().getBed().setValue(inpatientEpisode.getBedNo());
 		}
-	
-		
-		
-		//PV1-3-4 Facility (HD)
-		//WDEV-20269
-//		if(inpatientEpisode.getWardLocation() != null
-//				&& inpatientEpisode.getWardLocation().getParentLocation() != null
-//				&& inpatientEpisode.getWardLocation().getParentLocation().getCodeMappings() !=null
-//				&& inpatientEpisode.getWardLocation().getParentLocation().getName() != null)
-//		{
-//			for (int i=0; i<inpatientEpisode.getWardLocation().getParentLocation().getCodeMappings().size(); i++)
-//			{
-//				TaxonomyMap codeMapping = inpatientEpisode.getWardLocation().getParentLocation().getCodeMappings().get(i);
-//				if(codeMapping.getTaxonomyCode() != null 
-//						&& codeMapping.getTaxonomyCode().length() > 0
-//						&& codeMapping.getTaxonomyName() != null
-//						&& codeMapping.getTaxonomyName().getText().length() > 0
-//						&& inpatientEpisode.getWardLocation().getParentLocation().getName().length() > 0)
-//				{
-//					pv1.getAssignedPatientLocation().getFacility().getNamespaceID().setValue(inpatientEpisode.getWardLocation().getParentLocation().getName());
-//					pv1.getAssignedPatientLocation().getFacility().getUniversalID().setValue(codeMapping.getTaxonomyCode());
-//					pv1.getAssignedPatientLocation().getFacility().getUniversalIDType().setValue(codeMapping.getTaxonomyName().toString());
-//				}
-//			}
-//		}
+
 		if(inpatientEpisode.getFacility() != null)
 		{
 			pv1.getAssignedPatientLocation().getFacility().getNamespaceID().setValue(inpatientEpisode.getFacility());
-		} //WDEV-20269
+		}
 
-		//PV1-3-9 Location Description (ST)
+		// PV1-3-9 Location Description (ST)
 		if(inpatientEpisode.getWardLocation() != null
 				&& inpatientEpisode.getWardLocation().getName() != null 
 				&& inpatientEpisode.getWardLocation().getName().length() > 0)
@@ -577,17 +488,7 @@ public class A01VoMapper extends VoMapper
 		}
 
 
-		//WDEV-22983
-		/*
-		 * If the AdmissionDetail.MethodofAdmission has the value EMERGENCY then we should populate the PV1.4 with AdmissionDetail.SourceOfEmergencyReferral. 
-		 * Otherwise continue to populate as is currently from AdmissionDetail.MethodofAdmission.
-		 */
-//		//WDEV-20244
-//		// PV1-4 Admission type (IS)
-//		if(inpatientEpisode.getMethodOfAdmission() != null)
-//		{
-//			pv1.getAdmissionType().setValue(svc.getRemoteLookup(inpatientEpisode.getMethodOfAdmission().getID(), event.getProviderSystem().getCodeSystem().getText()));
-//		} //WDEV-20244
+
 		if (inpatientEpisode.getMethodOfAdmission() != null)
 		{
 			if (MethodOfAdmission.EMERGENCY.equals(inpatientEpisode.getMethodOfAdmission())
@@ -599,7 +500,7 @@ public class A01VoMapper extends VoMapper
 			{
 				pv1.getAdmissionType().setValue(svc.getRemoteLookup(inpatientEpisode.getMethodOfAdmission().getID(), event.getProviderSystem().getCodeSystem().getText()));
 			}
-		} //WDEV-22983
+		}
 
 		
 		// PV1-5 Preadmission number (CX)
@@ -739,64 +640,43 @@ public class A01VoMapper extends VoMapper
 	public void populateBasicPatientElectiveList(IHL7OutboundMessageHandler event, ifElectiveListMessageQueueVo patElectList, PV1 pv1, PV2 pv2) throws Exception
 	{
 		
-		//PV1-2 Patient Class (IS)
+		// PV1-2 Patient Class (IS)
 		pv1.getPatientClass().setValue("P");
 
-		//PV1-3-1 Point of care (IS)
+		// PV1-3-1 Point of care (IS)
 		if(patElectList.getTCIWard() != null 
 				&& patElectList.getTCIWard().getCodeMappings() != null)
 		{
-			//WDEV-20269
-//			for (int i=0; i<patElectList.getTCIWard().getCodeMappings().size(); i++)
-//			{
-//				TaxonomyMap codeMapping = patElectList.getTCIWard().getCodeMappings().get(i);
-//				if(codeMapping.getTaxonomyCode() != null
-//						&& codeMapping.getTaxonomyCode().length() > 0)
-//				{
-//					pv1.getAssignedPatientLocation().getPointOfCare().setValue(codeMapping.getTaxonomyCode().toString());
-//				}
-//			}
+
 			TaxonomyMap map = patElectList.getTCIWard().getTaxonomyMap(event.getProviderSystem().getCodeSystem());	
 			if (map != null)
 			{
 				pv1.getAssignedPatientLocation().getPointOfCare().setValue(map.getTaxonomyCode().toString());
 			} 
-			//WDEV-20269
+
 		}
 	
-		//PV1-3-3 Bed (IS)
+		// PV1-3-3 Bed (IS)
 		if(patElectList.getTCIBed() != null 
 				&& patElectList.getTCIBed().length() > 0)
 		{
 			pv1.getAssignedPatientLocation().getBed().setValue(patElectList.getTCIBed());
 		}
 		
-		//PV1-3-4 Facility (HD)
+		// PV1-3-4 Facility (HD)
 		if(patElectList.getTCIHospital() != null
 				&& patElectList.getTCIHospital().getCodeMappings() !=null)
 		{
-			//WDEV-20269
-//			for (int i=0; i<patElectList.getTCIHospital().getCodeMappings().size(); i++)
-//			{
-//				TaxonomyMap codeMapping = patElectList.getTCIHospital().getCodeMappings().get(i);
-//				if(codeMapping.getTaxonomyCode() != null 
-//						&& codeMapping.getTaxonomyCode().length() > 0
-//						&& codeMapping.getTaxonomyName() != null
-//						&& codeMapping.getTaxonomyName().getText().length() > 0)
-//				{
-//					pv1.getAssignedPatientLocation().getFacility().getUniversalID().setValue(codeMapping.getTaxonomyCode());
-//					pv1.getAssignedPatientLocation().getFacility().getUniversalIDType().setValue(codeMapping.getTaxonomyName().toString());
-//				}
-//			}
+
 			TaxonomyMap map = patElectList.getTCIHospital().getTaxonomyMap(event.getProviderSystem().getCodeSystem());	
 			if (map != null)
 			{
 				pv1.getAssignedPatientLocation().getFacility().getUniversalID().setValue(map.getTaxonomyCode());
 			} 
-			//WDEV-20269
+
 		}
 		
-		//PV1-3-9 Location description (ST)
+		// PV1-3-9 Location description (ST)
 		if(patElectList.getTCIWard() != null 
 				&& patElectList.getTCIWard().getName() != null 
 				&& patElectList.getTCIWard().getName().length() > 0)

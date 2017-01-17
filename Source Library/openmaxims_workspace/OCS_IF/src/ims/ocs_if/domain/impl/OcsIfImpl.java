@@ -38,10 +38,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-
-
-
-
 import ims.admin.vo.DemographicFeedVo;
 import ims.admin.vo.EDAttendanceFeedVo;
 import ims.admin.vo.InPatientADTFeedVo;
@@ -52,7 +48,6 @@ import ims.configuration.gen.ConfigFlag;
 import ims.core.admin.domain.objects.ProviderSystem;
 import ims.core.clinical.domain.objects.NonUniqueTaxonomyMap;
 import ims.core.clinical.domain.objects.Service;
-import ims.core.clinical.domain.objects.TaxonomyMap;
 import ims.core.clinical.vo.ServiceRefVo;
 import ims.core.patient.vo.PatientRefVo;
 import ims.core.resource.people.vo.GpRefVo;
@@ -161,8 +156,6 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 	{
 		if (ordMsg == null)
 			throw new RuntimeException("Cannot save null Order Message");
-//WDEV-10170 		if (!ordMsg.isValidated())
-//WDEV-10170 			throw new CodingRuntimeException("Order Message has not been validated!");
 		
 		DomainFactory factory = getDomainFactory();
 		OrderMessage domMsg = IfOrderMessageVoAssembler.extractOrderMessage(factory, ordMsg);
@@ -378,16 +371,15 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 		
 		// wdev-2998 wasProcessed added to investigation level too
 		// so once a message has been processed for the investigation
-		// in question, this will be set to true.  We will omit these from
-		// the query
+		// in question, this will be set to true.  We will omit these from the query.
 
 		String sql=null;
 		
-		//http://jira/browse/WDEV-12682 Changed flag from PukkaJ to ICAB so only do the link to patient in ICAB systems
+		// Changed flag from PukkaJ to ICAB so only do the link to patient in ICAB systems
 		if(ConfigFlag.GEN.ICAB_ENABLED.getValue())
 		{
-			//WDEV-19317 Lower case table names and column names, ensure identifiers match definition
-			//           Done so that SQL will work for case sensitive DBs
+			// Lower case table names and column names, ensure identifiers match definition
+			// Done so that SQL will work for case sensitive DBs
 			sql = "select distinct (id) from ocrr_ocsorder where id in (" +
 			" select orderdetai from ocrr_orderinvestiga oi, ocrr_ocsorder ord, ocrr_investigation inv, ocrr_investigationi invidx, core_patient patient " +
 			" where oi.orderdetai = ord.id " +
@@ -407,7 +399,10 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 			" and ord.wasprocess = 0 " +
 			" and (os.wasprocess is null or os.wasprocess = 0)" +
 			" and (ord.wasdiscard is null or ord.wasdiscard = 0) " +
-			" and (os.colldateti is not null or os.ispatientc=1 or ord.sendnumber=1) " +
+
+			/* TODO MSSQL case - " and (os.colldateti is not null or os.ispatientc=1 or ord.sendnumber=1) " + */
+			" and (os.colldateti is not null or os.ispatientc = TRUE or ord.sendnumber = TRUE) " +
+
 			" and ord.lkp_authorisat=? ) order by id ";
 		}
 		else
@@ -429,17 +424,12 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 				" and ord.wasprocess = 0 " +
 				" and (os.wasprocess is null or os.wasprocess = 0)" +
 				" and (ord.wasdiscard is null or ord.wasdiscard = 0) " +
-				" and (os.colldateti is not null or os.ispatientc=1 or ord.sendnumber=1) " +
+
+				/* TODO MSSQL case - " and (os.colldateti is not null or os.ispatientc=1 or ord.sendnumber=1) " + */
+				" and (os.colldateti is not null or os.ispatientc = TRUE or ord.sendnumber = TRUE) " +
+
 				" and ord.lkp_authorisat=? ) order by id ";
 		}
-		
-		//List l = factory.find(" select ord from OcsOrder ord left join ord.specimens as sp where ord.wasProcessed = false and (ord.wasDiscarded = false or ord.wasDiscarded is null) and ord.authorisationOrderStatus.id = :authorised and ((sp.collDateTimePlacer is not null or sp.isPatientCollect = true) or sp is null ) order by ord.id", new String[]{"authorised"}, new Object[]{new Integer(AuthorisationOrderStatus.AUTHORISED.getId())}, 1);
-		//List l = factory.find(" select ord from OcsOrder ord left join ord.specimens as sp where ord.wasProcessed = false and ord.authorisationOrderStatus = :authorised and ((sp.collDateTimePlacer is not null or sp.isPatientCollect = true) or sp is null ) order by ord.id", new String[]{"authorised"}, new Object[]{getDomLookup(AuthorisationOrderStatus.AUTHORISED)}, 1);		
-//		if (l.size() == 0) 
-//			return null;
-//		
-//		OcsOrder ord = (OcsOrder)l.get(0);
-		//return ord.getId();
 		
 		try 
 		{

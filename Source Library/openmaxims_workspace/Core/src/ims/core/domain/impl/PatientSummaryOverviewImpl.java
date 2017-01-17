@@ -95,7 +95,10 @@ public class PatientSummaryOverviewImpl extends BasePatientSummaryOverviewImpl
 	public PatientSummaryOverviewVo getPatientSummaryOverview(CareContextRefVo careContext, PatientRefVo pat)
 	{
 		DomainObjectMap doMap = new DomainObjectMap();
-		String hql = "select gtp from GpToPractice as gtp, Patient as pat	" + "where (pat.gp.id = gtp.gp.id and gtp.isPrimaryPractice = 1 and pat.id = :patId and gtp.isRIE is null  and pat.isRIE is null )";
+
+		/* TODO MSSQL case - String hql = "select gtp from GpToPractice as gtp, Patient as pat	" + "where (pat.gp.id = gtp.gp.id and gtp.isPrimaryPractice = 1 and pat.id = :patId and gtp.isRIE is null  and pat.isRIE is null )"; */
+		String hql = "select gtp from GpToPractice as gtp, Patient as pat	" + "where (pat.gp.id = gtp.gp.id and gtp.isPrimaryPractice = true and pat.id = :patId and gtp.isRIE is null  and pat.isRIE is null )";
+
 		PatientSummaryOverviewVo result = new PatientSummaryOverviewVo();
 		DomainFactory df = getDomainFactory();
 		DomainObject doo = df.findFirst(hql, "patId", pat.getID_Patient());
@@ -108,13 +111,19 @@ public class PatientSummaryOverviewImpl extends BasePatientSummaryOverviewImpl
 		{
 			result.setSurgicalHistory(IntraOperativeCRforSummaryOverviewVoAssembler.createIntraOperativeCRforSummaryOverviewVoCollectionFromIntraOperativeCareRecord(doMap,find));
 		}
-		hql = "from PatientAlert as pa where (pa.patient.id = :patId and pa.isCurrentlyActiveAlert = 1 and pa.isRIE is null)";
+
+		/* TODO MSSQL case - hql = "from PatientAlert as pa where (pa.patient.id = :patId and pa.isCurrentlyActiveAlert = 1 and pa.isRIE is null)"; */
+		hql = "from PatientAlert as pa where (pa.patient.id = :patId and pa.isCurrentlyActiveAlert = true and pa.isRIE is null)";
+
 		find = df.find(hql, "patId", pat.getID_Patient());
 		if (find != null && find.size() > 0)
 		{
 			result.setPatientAlerts(PatientAlertLiteVoAssembler.createPatientAlertLiteVoCollectionFromPatientAlert(doMap,find));
 		}
-		hql = "from PatientAllergy as pa where (pa.patient.id =:patId  and pa.isCurrentlyActiveAllergy = 1 and pa.isRIE is null)";
+
+		/* TODO MSSQL case - hql = "from PatientAllergy as pa where (pa.patient.id =:patId  and pa.isCurrentlyActiveAllergy = 1 and pa.isRIE is null)"; */
+		hql = "from PatientAllergy as pa where (pa.patient.id =:patId  and pa.isCurrentlyActiveAllergy = true and pa.isRIE is null)";
+
 		find = df.find(hql, "patId", pat.getID_Patient());
 		if (find != null && find.size() > 0)
 		{

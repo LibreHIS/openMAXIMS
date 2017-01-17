@@ -114,7 +114,8 @@ public class SessionManagementImpl extends BaseSessionManagementImpl
 		if (profileName == null || profileName.length() == 0)
 			throw new CodingRuntimeException("Cannot search on a null ProfileName");
 
-		String query = "SELECT profile FROM Sch_Profile AS profile WHERE upper(profile.name) like :ProfileName and profile.isActive = 1 and (profile.profileType.id = :OUTPATIENT_THEATRE) ORDER BY UPPER(profile.name) ASC";
+		/* TODO MSSQL case - String query = "SELECT profile FROM Sch_Profile AS profile WHERE upper(profile.name) like :ProfileName and profile.isActive = 1 and (profile.profileType.id = :OUTPATIENT_THEATRE) ORDER BY UPPER(profile.name) ASC"; */
+		String query = "SELECT profile FROM Sch_Profile AS profile WHERE upper(profile.name) like :ProfileName and profile.isActive = true and (profile.profileType.id = :OUTPATIENT_THEATRE) ORDER BY UPPER(profile.name) ASC";
 
 		return ProfileLiteVoAssembler.createProfileLiteVoCollectionFromSch_Profile(getDomainFactory().find(query, new String[] { "ProfileName", "OUTPATIENT_THEATRE" }, new Object[] { profileName.toUpperCase() + "%", SchProfileType.OUTPATIENT.getID() }));
 	}
@@ -245,7 +246,8 @@ public class SessionManagementImpl extends BaseSessionManagementImpl
 
 				hql += " left join sess.listOwners as owners ";
 
-				condStr.append(andStr + " owners.hcp.id in ( " + ownersIDs + " )  and owners.listOwner = 1 "); //WDEV-20479
+				/* TODO  MSSQL case - condStr.append(andStr + " owners.hcp.id in ( " + ownersIDs + " )  and owners.listOwner = 1 "); */
+				condStr.append(andStr + " owners.hcp.id in ( " + ownersIDs + " )  and owners.listOwner = true ");
 
 				andStr = " and ";
 			}
@@ -602,8 +604,7 @@ public class SessionManagementImpl extends BaseSessionManagementImpl
 		
 	}
 
-	//WDEV-20588
-	public BookingAppointmentForSessionManagementVoCollection getCancelledAppointmentsForSession(Sch_SessionRefVo session) 
+	public BookingAppointmentForSessionManagementVoCollection getCancelledAppointmentsForSession(Sch_SessionRefVo session)
 	{
 		if (session == null || session.getID_Sch_Session() == null)
 			return null;
@@ -613,7 +614,9 @@ public class SessionManagementImpl extends BaseSessionManagementImpl
 		ArrayList<Object> values = new ArrayList<Object>();
 
 		StringBuffer hql = new StringBuffer();
-		hql.append("select appt from Booking_Appointment as appt left join appt.session as sess left join appt.currentStatusRecord as currentStatus left join currentStatus.status as status where sess.id = :sessionID and status.id = :statusID and appt.requiresRebook = 1");
+
+		/* TODO MSSQL case - hql.append("select appt from Booking_Appointment as appt left join appt.session as sess left join appt.currentStatusRecord as currentStatus left join currentStatus.status as status where sess.id = :sessionID and status.id = :statusID and appt.requiresRebook = 1"); */
+		hql.append("select appt from Booking_Appointment as appt left join appt.session as sess left join appt.currentStatusRecord as currentStatus left join currentStatus.status as status where sess.id = :sessionID and status.id = :statusID and appt.requiresRebook = true");
 
 		markers.add("sessionID");
 		values.add(session.getID_Sch_Session());

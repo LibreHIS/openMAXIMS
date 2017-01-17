@@ -159,7 +159,8 @@ public class OutpatientClinicListImpl extends BaseOutpatientClinicListImpl
 
 	public ServiceLiteVoCollection listServices(String name)
 	{
-		List<?> services = getDomainFactory().find("select srv from Service as srv where srv.isActive = 1 and srv.upperName like :servName", new String[]{"servName"}, new Object[]{name.toUpperCase() + "%"});
+		/* TODO MSSQL case - List<?> services = getDomainFactory().find("select srv from Service as srv where srv.isActive = 1 and srv.upperName like :servName", new String[]{"servName"}, new Object[]{name.toUpperCase() + "%"}); */
+		List<?> services = getDomainFactory().find("select srv from Service as srv where srv.isActive = true and srv.upperName like :servName", new String[]{"servName"}, new Object[]{name.toUpperCase() + "%"});
 		
 		if (services == null || services.isEmpty())
 			return null;

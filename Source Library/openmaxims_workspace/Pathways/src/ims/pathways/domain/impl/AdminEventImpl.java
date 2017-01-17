@@ -147,8 +147,6 @@ public class AdminEventImpl extends BaseAdminEventImpl implements IEndOfCareCats
 		
 		if(Boolean.TRUE.equals(domReferral.isRTTClockImpact()))
 		{
-			//WDEV-23274
-//			initialClock = domReferral.getJourney().getCurrentClock();
 			initialClock = (domReferral != null && domReferral.getJourney() != null && domReferral.getJourney().getCurrentClock() != null) ? domReferral.getJourney().getCurrentClock() : null; //WDEV-23274
 			wasClockStarted = initialClock != null && initialClock.getStartDate() != null;
 			wasClockStopped = initialClock != null && initialClock.getStopDate() != null;
@@ -677,7 +675,9 @@ public class AdminEventImpl extends BaseAdminEventImpl implements IEndOfCareCats
 		if (rttStatusPoint == null)
 			return null;
 
-		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.active = 1";
+		/* TODO MSSQL case - String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.active = 1"; */
+		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.active = TRUE";
+
 		List<?> listRTTMap = getDomainFactory().find(query, new String[] { "RTTStatusPoint" }, new Object[] { rttStatusPoint.getId() });
 
 		if (listRTTMap != null && listRTTMap.size() > 0 && listRTTMap.get(0) instanceof RTTStatusEventMap)
@@ -694,7 +694,9 @@ public class AdminEventImpl extends BaseAdminEventImpl implements IEndOfCareCats
 		if (domainAdminEvent == null)
 			return null;
 
-		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.encounterType as encType left join rttMap.encounterInstance as encInstance where encType.id = :eventType and encInstance.id = :encounterInstance and rttMap.active = 1";
+		/* TODO MSSQL case - String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.encounterType as encType left join rttMap.encounterInstance as encInstance where encType.id = :eventType and encInstance.id = :encounterInstance and rttMap.active = 1"; */
+		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.encounterType as encType left join rttMap.encounterInstance as encInstance where encType.id = :eventType and encInstance.id = :encounterInstance and rttMap.active = TRUE";
+
 		List<?> listRTTMap = getDomainFactory().find(query, new String[] { "eventType", "encounterInstance" }, new Object[] { EventEncounterType.ADMIN_EVENT.getID(), domainAdminEvent.getOutcome().getId() });
 
 		if (listRTTMap != null && listRTTMap.size() > 0 && listRTTMap.get(0) instanceof RTTStatusEventMap)
@@ -705,15 +707,16 @@ public class AdminEventImpl extends BaseAdminEventImpl implements IEndOfCareCats
 		return null;
 	}
 
-	//WDEV-18468
 	public Boolean areFutureTCIsForReferral(CatsReferralRefVo referralRef)
 	{
 		if (referralRef == null)
 			throw new CodingRuntimeException("Cannot get PatientElectiveList on null referralRef");
 		
 		DomainFactory factory = getDomainFactory();
-		
-		String patientElectiveListQuery = "select count(electiveList.id) from PatientElectiveList as electiveList left join electiveList.referral as cats left join electiveList.tCIDetails as tciDet left join electiveList.electiveAdmissionType as admType where cats.id = :CatsId and tciDet.isActive = 1 and tciDet.tCIDate > :Date and (admType.id = :WaitingListId or admType.id = :BookedListId) ";
+
+		/* TODO MSSQL case - String patientElectiveListQuery = "select count(electiveList.id) from PatientElectiveList as electiveList left join electiveList.referral as cats left join electiveList.tCIDetails as tciDet left join electiveList.electiveAdmissionType as admType where cats.id = :CatsId and tciDet.isActive = 1 and tciDet.tCIDate > :Date and (admType.id = :WaitingListId or admType.id = :BookedListId) "; */
+		String patientElectiveListQuery = "select count(electiveList.id) from PatientElectiveList as electiveList left join electiveList.referral as cats left join electiveList.tCIDetails as tciDet left join electiveList.electiveAdmissionType as admType where cats.id = :CatsId and tciDet.isActive = TRUE and tciDet.tCIDate > :Date and (admType.id = :WaitingListId or admType.id = :BookedListId) ";
+
 		List<?> electiveList = factory.find(patientElectiveListQuery, new String[] {"CatsId", "Date", "WaitingListId", "BookedListId"}, new Object[] {referralRef.getID_CatsReferral(), new java.util.Date(), ElectiveAdmissionType.ELECTIVE_TYPE11.getID(), ElectiveAdmissionType.BOOKED_TYPE12.getID()});
 		
 

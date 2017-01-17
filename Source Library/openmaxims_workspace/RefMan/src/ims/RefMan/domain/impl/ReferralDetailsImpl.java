@@ -1405,7 +1405,9 @@ public class ReferralDetailsImpl extends BaseReferralDetailsImpl implements IRec
 			return null;
 		
 		DomainFactory fatory = getDomainFactory();
-		String query = "select ev from PatientEvent as pe left join pe.event as ev where pe.id in (" + patientEventIds + ") and ev.endsPathway = 1 ";
+
+		/* TODO MSSQL case - String query = "select ev from PatientEvent as pe left join pe.event as ev where pe.id in (" + patientEventIds + ") and ev.endsPathway = 1 "; */
+		String query = "select ev from PatientEvent as pe left join pe.event as ev where pe.id in (" + patientEventIds + ") and ev.endsPathway = true ";
 		
 		List eventsLis = fatory.find(query);
 		
@@ -1942,7 +1944,9 @@ public class ReferralDetailsImpl extends BaseReferralDetailsImpl implements IRec
 		
 		StringBuilder query = new StringBuilder("SELECT rttMap ");
 		query.append(" FROM RTTStatusEventMap AS rttMap LEFT JOIN rttMap.encounterType AS encType LEFT JOIN rttMap.encounterInstance AS encInstance ");
-		query.append(" WHERE encType.id = :EncounterType AND encInstance.id = :EncounterInstance AND rttMap.active = 1");
+
+		/* TODO MSSQL case - query.append(" WHERE encType.id = :EncounterType AND encInstance.id = :EncounterInstance AND rttMap.active = 1"); */
+		query.append(" WHERE encType.id = :EncounterType AND encInstance.id = :EncounterInstance AND rttMap.active = true");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
@@ -1966,8 +1970,9 @@ public class ReferralDetailsImpl extends BaseReferralDetailsImpl implements IRec
 		if (event == null || event.getID_Event() == null)
 			return null;
 		
-		
-		String query = "SELECT map FROM RTTStatusEventMap AS map LEFT JOIN map.event AS event WHERE map.active = 1 AND event.id = :EVENT_ID AND (map.isRIE = 0 OR map.isRIE is null)";
+		/* TODO MSSQL case - String query = "SELECT map FROM RTTStatusEventMap AS map LEFT JOIN map.event AS event WHERE map.active = 1 AND event.id = :EVENT_ID AND (map.isRIE = 0 OR map.isRIE is null)"; */
+		String query = "SELECT map FROM RTTStatusEventMap AS map LEFT JOIN map.event AS event WHERE map.active = true AND event.id = :EVENT_ID AND (map.isRIE = false OR map.isRIE is null)";
+
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
 		

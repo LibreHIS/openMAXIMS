@@ -92,8 +92,10 @@ public class FutureAppointmentWorklistImpl extends BaseFutureAppointmentWorklist
 	{
 		if (service == null || service.getID_Service() == null)
 			return null; 
-		
-		List list = getDomainFactory().find("select servFunct from ServiceFunction as servFunct left join servFunct.service as serv where servFunct.isActive = 1 and serv.id = :serviceID", 
+
+		/* TODO MSSQL case - List list = getDomainFactory().find("select servFunct from ServiceFunction as servFunct left join servFunct.service as serv where servFunct.isActive = 1 and serv.id = :serviceID",
+				new String[] {"serviceID"}, new Object[] {service.getID_Service()}); */
+		List list = getDomainFactory().find("select servFunct from ServiceFunction as servFunct left join servFunct.service as serv where servFunct.isActive = true and serv.id = :serviceID",
 				new String[] {"serviceID"}, new Object[] {service.getID_Service()});
 		
 		if (list != null && list.size() > 0)
@@ -233,19 +235,23 @@ public class FutureAppointmentWorklistImpl extends BaseFutureAppointmentWorklist
 				if (Boolean.TRUE.equals(searchCriteria.getConsultant()))
 				{
 					atLeastOneAdded = true;
-				    condStr.append(andStr + " ( toSee.consultant = 1 ");
+
+					/* TODO MSSQL case -  condStr.append(andStr + " ( toSee.consultant = 1 "); */
+				    condStr.append(andStr + " ( toSee.consultant = true ");
 				}
 				
 				if (Boolean.TRUE.equals(searchCriteria.getAssociateSpecialist()))
 				{
 					if (!atLeastOneAdded)
 					{
-						condStr.append(andStr + " ( toSee.associateSpecialist = 1 ");
+						/* TODO MSSQL case - condStr.append(andStr + " ( toSee.associateSpecialist = 1 "); */
+						condStr.append(andStr + " ( toSee.associateSpecialist = true ");
 						atLeastOneAdded = true;
 					}
 					else
 					{
-						condStr.append(" or toSee.associateSpecialist = 1 ");
+						/* TODO MSSQL case - condStr.append(" or toSee.associateSpecialist = 1 "); */
+						condStr.append(" or toSee.associateSpecialist = true ");
 					}
 				}
 				
@@ -253,12 +259,14 @@ public class FutureAppointmentWorklistImpl extends BaseFutureAppointmentWorklist
 				{
 					if (!atLeastOneAdded)
 					{
-						condStr.append(andStr + " ( toSee.sPR = 1 ");
+						/* TODO MSSQL case - condStr.append(andStr + " ( toSee.sPR = 1 "); */
+						condStr.append(andStr + " ( toSee.sPR = true ");
 						atLeastOneAdded = true;
 					}
 					else
 					{
-						condStr.append(" or toSee.sPR = 1 ");
+						/* TODO MSSQL case - condStr.append(" or toSee.sPR = 1 "); */
+						condStr.append(" or toSee.sPR = true ");
 					}
 				}
 				
@@ -266,12 +274,14 @@ public class FutureAppointmentWorklistImpl extends BaseFutureAppointmentWorklist
 				{
 					if (!atLeastOneAdded)
 					{
-						condStr.append(andStr + " ( toSee.anyDoctorToSee = 1 ");
+						/* TODO MSSQL case - condStr.append(andStr + " ( toSee.anyDoctorToSee = 1 "); */
+						condStr.append(andStr + " ( toSee.anyDoctorToSee = true ");
 						atLeastOneAdded = true;
 					}
 					else
 					{
-						condStr.append(" or toSee.anyDoctorToSee = 1 ");
+						/* TODO MSSQL case - condStr.append(" or toSee.anyDoctorToSee = 1 "); */
+						condStr.append(" or toSee.anyDoctorToSee = true ");
 					}
 				}
 				
@@ -382,8 +392,10 @@ public class FutureAppointmentWorklistImpl extends BaseFutureAppointmentWorklist
 	{
 		if (service == null || service.getID_Service() == null || function == null)
 			return null;
-		
-		List list = getDomainFactory().find("select servFunct from ServiceFunction as servFunct left join servFunct.service as serv left join servFunct.function as func where servFunct.isActive = 1 and serv.id = :serviceID and func.id = :functionID", 
+
+		/* TODO MSSQL case - List list = getDomainFactory().find("select servFunct from ServiceFunction as servFunct left join servFunct.service as serv left join servFunct.function as func where servFunct.isActive = 1 and serv.id = :serviceID and func.id = :functionID",
+				new String[] {"serviceID", "functionID"}, new Object[] {service.getID_Service(), function.getID()}); */
+		List list = getDomainFactory().find("select servFunct from ServiceFunction as servFunct left join servFunct.service as serv left join servFunct.function as func where servFunct.isActive = true and serv.id = :serviceID and func.id = :functionID",
 				new String[] {"serviceID", "functionID"}, new Object[] {service.getID_Service(), function.getID()});
 		
 		if (list != null && list.size() > 0)

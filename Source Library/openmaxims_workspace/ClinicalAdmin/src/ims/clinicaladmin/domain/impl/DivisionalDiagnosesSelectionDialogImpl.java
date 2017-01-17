@@ -45,7 +45,8 @@ public class DivisionalDiagnosesSelectionDialogImpl extends BaseDivisionalDiagno
 
 		StringBuffer hql = new StringBuffer();
 
-		hql.append(" select diag from Diagnosis as diag where diag.isActive = 1");
+		/* TODO MSSQL case - hql.append(" select diag from Diagnosis as diag where diag.isActive = 1"); */
+		hql.append(" select diag from Diagnosis as diag where diag.isActive = TRUE");
 
 		if (ids != "")
 		{

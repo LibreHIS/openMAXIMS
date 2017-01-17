@@ -125,7 +125,6 @@ public class RadioTherapyDetailsImpl extends BaseRadioTherapyDetailsImpl
 		return locSite.listLocSite(locationName);
 	}
 
-	//WDEV-19532
 	public LocSiteLiteVoCollection listHospitals(String locationName)
 	{
 		OrganisationAndLocation impl = (OrganisationAndLocation) getDomainImpl(OrganisationAndLocationImpl.class);
@@ -136,7 +135,9 @@ public class RadioTherapyDetailsImpl extends BaseRadioTherapyDetailsImpl
 	public DiseaseStatusCollection listDiseaseStatus() 
 	{
 		DomainFactory factory = getDomainFactory();
-		String query = "from LookupInstance as l where l.type.id = :LookupId and l.parent is null and l.active = 1 order by l.order";
+
+		/* TODO MSSQL case - String query = "from LookupInstance as l where l.type.id = :LookupId and l.parent is null and l.active = 1 order by l.order"; */
+		String query = "from LookupInstance as l where l.type.id = :LookupId and l.parent is null and l.active = TRUE order by l.order";
 		
 		List<?> list = factory.find(query, new String[] {"LookupId"}, new Object[] {new Integer(DiseaseStatus.TYPE_ID)});
 		
@@ -163,7 +164,9 @@ public class RadioTherapyDetailsImpl extends BaseRadioTherapyDetailsImpl
 			throw new CodingRuntimeException("Can not list DiseaseStatus childrens for null DiseaseStatus parent.");
 		
 		DomainFactory factory = getDomainFactory();
-		String query = "from LookupInstance as l where l.type.id = :LookupId and l.parent.id = :Parent and l.active = 1 order by l.order";
+
+		/* TODO MSSQL case - String query = "from LookupInstance as l where l.type.id = :LookupId and l.parent.id = :Parent and l.active = 1 order by l.order"; */
+		String query = "from LookupInstance as l where l.type.id = :LookupId and l.parent.id = :Parent and l.active = TRUE order by l.order";
 		
 		List<?> list = factory.find(query, new String[] {"LookupId", "Parent"}, new Object[] {new Integer(DiseaseStatus.TYPE_ID), diseaseParent.getID()});
 		

@@ -240,24 +240,24 @@ public class SessionAdminImpl extends DomainImpl implements ims.scheduling.domai
 		return SessionShortVoAssembler.createSessionShortVoCollectionFromSch_Session(factory.find(hql, markers, values)).sort();
 	}
 
-	// 	WDEV-15190
 	public ProfileLiteVoCollection listProfile(String profileName)
 	{
 		if(profileName == null || profileName.length() == 0)
 			throw new CodingRuntimeException("Cannot search on a null ProfileName");
-		
-		String query = "SELECT profile FROM Sch_Profile AS profile WHERE upper(profile.name) like :ProfileName and profile.isActive = 1 ORDER BY UPPER(profile.name) ASC";
+
+		/* TODO MSSQL case - String query = "SELECT profile FROM Sch_Profile AS profile WHERE upper(profile.name) like :ProfileName and profile.isActive = 1 ORDER BY UPPER(profile.name) ASC"; */
+		String query = "SELECT profile FROM Sch_Profile AS profile WHERE upper(profile.name) like :ProfileName and profile.isActive = true ORDER BY UPPER(profile.name) ASC";
 		
 		return ProfileLiteVoAssembler.createProfileLiteVoCollectionFromSch_Profile(getDomainFactory().find(query, new String[] {"ProfileName"}, new Object[] {profileName.toUpperCase() + "%"}));
 	}
 
-	// 	WDEV-15190
 	public ims.scheduling.vo.DirectoryOfServiceLiteVoCollection listDos(String dosName)
 	{
 		if(dosName == null || dosName.length() == 0)
 			throw new CodingRuntimeException("Cannot search on a null DosName");
-		
-		String query = "SELECT dos FROM DirectoryofService AS dos WHERE upper(dos.doSName) like :DosName and dos.isActive = 1 order by upper(dos.doSName) asc";
+
+		/* TODO MSSQL case - String query = "SELECT dos FROM DirectoryofService AS dos WHERE upper(dos.doSName) like :DosName and dos.isActive = 1 order by upper(dos.doSName) asc"; */
+		String query = "SELECT dos FROM DirectoryofService AS dos WHERE upper(dos.doSName) like :DosName and dos.isActive = true order by upper(dos.doSName) asc";
 		
 		return DirectoryOfServiceLiteVoAssembler.createDirectoryOfServiceLiteVoCollectionFromDirectoryofService(getDomainFactory().find(query, new String[] {"DosName"}, new Object[] {dosName.toUpperCase() + "%"}));
 	}
@@ -1838,7 +1838,8 @@ public class SessionAdminImpl extends DomainImpl implements ims.scheduling.domai
 
 	public AppRoleShortVoCollection listRoles()
 	{
-		String query = "SELECT role FROM AppRole AS role WHERE role.isActive = 1 ORDER BY UPPER(role.name) ASC";
+		/* TODO MSSQL case - String query = "SELECT role FROM AppRole AS role WHERE role.isActive = 1 ORDER BY UPPER(role.name) ASC"; */
+		String query = "SELECT role FROM AppRole AS role WHERE role.isActive = true ORDER BY UPPER(role.name) ASC";
 
 		return AppRoleShortVoAssembler.createAppRoleShortVoCollectionFromAppRole(getDomainFactory().find(query));
 	}
@@ -1848,8 +1849,7 @@ public class SessionAdminImpl extends DomainImpl implements ims.scheduling.domai
 		updateCatsReferralAdditionalInvStatus(catsReferral, null);
 	}
 
-	//WDEV-23545 - this method can be called with appointment parameter = null only for CAB functionality.
-	//WDEV-6050
+	// This method can be called with appointment parameter = null only for CAB functionality.
 	public void updateCatsReferralAdditionalInvStatus(CatsReferralRefVo catsReferral, Booking_AppointmentRefVo appointment) throws StaleObjectException
 	{
 		if (catsReferral == null || catsReferral.getID_CatsReferral() == null)
@@ -1859,7 +1859,7 @@ public class SessionAdminImpl extends DomainImpl implements ims.scheduling.domai
 
 		CatsReferral doCatsReferral = (CatsReferral) factory.getDomainObject(catsReferral);
 		
-		// WDEV-19909 check the appointment has the Cancelled Status and it's the one from CatsReferral.ConsultationAppt
+		// Check the appointment has the Cancelled Status and it's the one from CatsReferral.ConsultationAppt
 		if (appointment != null)
 		{
 			Booking_Appointment doAppointment = (Booking_Appointment) factory.getDomainObject(appointment);

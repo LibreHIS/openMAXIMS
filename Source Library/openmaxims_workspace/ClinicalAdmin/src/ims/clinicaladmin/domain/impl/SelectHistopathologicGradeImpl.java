@@ -42,7 +42,8 @@ public class SelectHistopathologicGradeImpl extends BaseSelectHistopathologicGra
 	*/
 	public ims.clinicaladmin.vo.HistopathologicGradeVoCollection listHistopathologicGrade()
 	{
-		String query = " from HistopathologicGrade as histoGrade where histoGrade.isActive = 1";
+		/* TODO MSSQL case - String query = " from HistopathologicGrade as histoGrade where histoGrade.isActive = 1"; */
+		String query = " from HistopathologicGrade as histoGrade where histoGrade.isActive = true";
 		
 		return HistopathologicGradeVoAssembler.createHistopathologicGradeVoCollectionFromHistopathologicGrade(getDomainFactory().find(query));
 	}

@@ -188,57 +188,17 @@ public class A13VoMapper extends VoMapper
 		renderPatientVoToPID(patient,message.getPID(),event.getProviderSystem());
 
 		PD1 pd1=message.getPD1();
-		//WDEV-20993
-//		renderGPDetailsToPD1(patient,pd1);
-		renderGPDetailsToPD1(patient, pd1, event.getProviderSystem());
-		renderPatientDetailsToPD1(patient, pd1, event.getProviderSystem()); //WDEV-22624
 
-		//WDEV-22006 Comment out following code and replace by calling a single method
-//		NK1 nk1 = message.getNK1();
-//		//WDEV-20335
-//		Boolean isConfidential = patient.getIsConfidential();
-//		
-//		//WDEV-20336 Populate NK1 from PDSRelative object first. If object is Null then use Next of Kin VO
-//		int NK1Iteration = 0;
-//		
-//		if(patient.getPDSrelativesIsNotNull()
-//				&& patient.getPDSrelatives().size() > 0)
-//		{
-//			for (int i=0; i < patient.getPDSrelatives().size(); i++)
-//			{
-//				PatRelative patRelative = patient.getPDSrelatives().get(i);
-//				renderPatRelativeVoToNK1(patRelative, nk1, event.getProviderSystem(), isConfidential);
-//				NK1Iteration ++;
-//			}
-//		} 
-//		else
-//		{
-//			renderNextOfKinVoToNK1(patient.getNok(), nk1, event.getProviderSystem(), isConfidential);
-//			NK1Iteration ++;
-//		}
-//		
-//		if(patient.getSupportNetworkFamilyIsNotNull() && ConfigFlag.HL7.HL7_INCLUDE_FAMILY_SUPPORT.getValue())
-//		{
-//			for (int i=0; i < patient.getSupportNetworkFamily().size(); i++)
-//			{
-//				NK1 sfn = message.getNK1(NK1Iteration);
-//				if(patient.getSupportNetworkFamily().get(i).getInactivatingDateTime() == null)
-//				{
-//					renderSupportNetworkFamilyVoToNK1(patient.getSupportNetworkFamily().get(i), sfn, event.getProviderSystem(), isConfidential);
-//					NK1Iteration++;
-//				}
-//			}
-//		} //WDEV-20336
+		renderGPDetailsToPD1(patient, pd1, event.getProviderSystem());
+		renderPatientDetailsToPD1(patient, pd1, event.getProviderSystem());
 
 		renderPatientVoToNK1(patient, message, event.getProviderSystem());
-		//WDEV-22006
+
 
 		return message;
 	}
 
-	//WDEV-20112
-//	private Message processCancelDischarge(Message msg, ProviderSystemVo providerSystem) throws HL7Exception
-	private EventResponse processCancelDischarge(Message msg, ProviderSystemVo providerSystem, EventResponse response) throws HL7Exception //WDEV-20112
+	private EventResponse processCancelDischarge(Message msg, ProviderSystemVo providerSystem, EventResponse response) throws HL7Exception
 	{
 		
 		PV1 pv1 = (PV1) msg.get("PV1");

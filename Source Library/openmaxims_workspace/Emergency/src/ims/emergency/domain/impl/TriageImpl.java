@@ -221,8 +221,10 @@ public class TriageImpl extends BaseTriageImpl
 			return null;
 		
 		DomainFactory factory = getDomainFactory();
-		
-		String query = "select cp from ClinicalProblem as cp left join cp.keywords as k where (upper(cp.pCName) like :ClinicalProblemSearchText or upper(k.keyword) like :ClinicalProblemSearchText) and cp.isActive = 1 order by upper(cp.pCName) asc";
+
+		/* TODO MSSQL case - String query = "select cp from ClinicalProblem as cp left join cp.keywords as k where (upper(cp.pCName) like :ClinicalProblemSearchText or upper(k.keyword) like :ClinicalProblemSearchText) and cp.isActive = 1 order by upper(cp.pCName) asc"; */
+		String query = "select cp from ClinicalProblem as cp left join cp.keywords as k where (upper(cp.pCName) like :ClinicalProblemSearchText or upper(k.keyword) like :ClinicalProblemSearchText) and cp.isActive = true order by upper(cp.pCName) asc";
+
 		List<?> clinicalProblemsList = factory.find(query, new String[] {"ClinicalProblemSearchText"}, new Object[] {searchText + "%"});
 
 		return ClinicalProblemShortVoAssembler.createClinicalProblemShortVoCollectionFromClinicalProblem(clinicalProblemsList);
@@ -236,7 +238,7 @@ public class TriageImpl extends BaseTriageImpl
 		return TrackingForTriageVoAssembler.create((Tracking) getDomainFactory().getDomainObject(Tracking.class, trackingId.getID_Tracking()));
 	}
 
-	public TrackingForTriageVo saveTracking(TrackingForTriageVo tracking, SeenByHCPVo seenByHCP) throws StaleObjectException     //wdev-15930  //WDEV-16816
+	public TrackingForTriageVo saveTracking(TrackingForTriageVo tracking, SeenByHCPVo seenByHCP) throws StaleObjectException
 	{
 		if(tracking == null)
 			throw new CodingRuntimeException("Cannot save a null Tracking record.");
@@ -245,8 +247,7 @@ public class TriageImpl extends BaseTriageImpl
 			throw new CodingRuntimeException("Tracking record is not validated.");
 		
 		DomainFactory factory = getDomainFactory();
-		//wdev-15930
-		//WDEV-16816
+
 		SeenByHCP doSeenBy = null;
 		if( seenByHCP != null ) 
 		{
@@ -257,13 +258,11 @@ public class TriageImpl extends BaseTriageImpl
 				
 			}
 		}
-			
-		//-------------wdev-15930------------
 		
 		Tracking doTracking = TrackingForTriageVoAssembler.extractTracking(factory, tracking);
-		if( doSeenBy != null ) //wdev-15930 //WDEV-16816
+		if( doSeenBy != null )
 		{
-			doTracking.setSeenBy(doSeenBy); //WDEV-16816
+			doTracking.setSeenBy(doSeenBy);
 		}
 		
 		factory.save(doTracking);

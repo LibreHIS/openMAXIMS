@@ -49,10 +49,11 @@ public class CloseBlockReOpenBayOrWardDlgImpl extends BaseCloseBlockReOpenBayOrW
 	{
 		if(location == null )
 			throw new DomainRuntimeException("Invalid ILocation");
-		
-		String hql = "from Location loc where loc.type = " + LocationType.BAY.getId() + " and loc.isActive = 1 and loc.parentLocation.id = " + location.getID();		
+
+		/* TODO MSSQL case - String hql = "from Location loc where loc.type = " + LocationType.BAY.getId() + " and loc.isActive = 1 and loc.parentLocation.id = " + location.getID(); */
+		String hql = "from Location loc where loc.type = " + LocationType.BAY.getId() + " and loc.isActive = true and loc.parentLocation.id = " + location.getID();
+
 		return LocationLiteVoAssembler.createLocationLiteVoCollectionFromLocation(getDomainFactory().find(hql));
-	
 	}
 
 	public WardBayConfigForWardViewVo getWardBayConfigForWard(LocationRefVo loc)

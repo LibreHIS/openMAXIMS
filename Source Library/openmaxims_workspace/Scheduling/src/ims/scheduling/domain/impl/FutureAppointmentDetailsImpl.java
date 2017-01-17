@@ -91,7 +91,9 @@ public class FutureAppointmentDetailsImpl extends BaseFutureAppointmentDetailsIm
 			return null;
 		
 		DomainFactory factory = getDomainFactory();
-		String hql = "select servfunc from ServiceFunction servfunc where servfunc.service.id = :serviceid and servfunc.isActive = 1 order by UPPER(servfunc.function.text) asc";
+
+		/* TODO MSSQL case - String hql = "select servfunc from ServiceFunction servfunc where servfunc.service.id = :serviceid and servfunc.isActive = 1 order by UPPER(servfunc.function.text) asc"; */
+		String hql = "select servfunc from ServiceFunction servfunc where servfunc.service.id = :serviceid and servfunc.isActive = true order by UPPER(servfunc.function.text) asc";
 	
 		List servFuncList = factory.find(hql, new String[]{"serviceid"}, new Object[]{service.getID_Service()});
 		return ServiceFunctionLiteVoAssembler.createServiceFunctionLiteVoCollectionFromServiceFunction(servFuncList);
@@ -188,7 +190,9 @@ public class FutureAppointmentDetailsImpl extends BaseFutureAppointmentDetailsIm
 			return false;
 		
 		DomainFactory factory = getDomainFactory();
-		String query = "select hcp.id from Hcp as hcp left join hcp.serviceFunction as sf where hcp.id = :HCPId and sf.service.id = :ServiceID and hcp.isHCPaResponsibleHCP = 1";
+
+		/* TODO MSSQL case - String query = "select hcp.id from Hcp as hcp left join hcp.serviceFunction as sf where hcp.id = :HCPId and sf.service.id = :ServiceID and hcp.isHCPaResponsibleHCP = 1"; */
+		String query = "select hcp.id from Hcp as hcp left join hcp.serviceFunction as sf where hcp.id = :HCPId and sf.service.id = :ServiceID and hcp.isHCPaResponsibleHCP = true";
 		
 		List<?> listHCP = factory.find(query, new String[] {"HCPId", "ServiceID"}, new Object[] {hcp.getID_Hcp(), service.getID_Service()});
 		

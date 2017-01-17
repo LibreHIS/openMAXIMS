@@ -74,10 +74,17 @@ public class ConsultantProcedureCategoryConfigurationImpl extends BaseConsultant
 	{
 		if (nameFilter==null)
 			throw new DomainInterfaceException("NameFilter must be not null");
-		String query = "select h1_1 from Hcp as h1_1 left join h1_1.mos as m1_1 " +
+
+		/* TODO MSSQL case -  String query = "select h1_1 from Hcp as h1_1 left join h1_1.mos as m1_1 " +
 				"where (h1_1.id not in (select c1_1.performingHCP.id from ConsultantProcedureCategory as c1_1) " +
 				"and h1_1.isActive = 1 and m1_1.name.upperSurname like :nameFilter) " +
+				"order by m1_1.name.upperSurname asc, m1_1.name.upperForename asc "; */
+
+		String query = "select h1_1 from Hcp as h1_1 left join h1_1.mos as m1_1 " +
+				"where (h1_1.id not in (select c1_1.performingHCP.id from ConsultantProcedureCategory as c1_1) " +
+				"and h1_1.isActive = true and m1_1.name.upperSurname like :nameFilter) " +
 				"order by m1_1.name.upperSurname asc, m1_1.name.upperForename asc ";
+
 		List results = getDomainFactory().find(query, "nameFilter", nameFilter.toUpperCase() + "%"); //WDEV-11739
 		if (results == null | results.size() == 0)
 			return null;

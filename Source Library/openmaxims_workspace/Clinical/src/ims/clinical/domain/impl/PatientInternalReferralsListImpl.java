@@ -58,7 +58,9 @@ public class PatientInternalReferralsListImpl extends BasePatientInternalReferra
 			throw new CodingRuntimeException("Invalid service name search parameter.");
 		
 		DomainFactory factory = getDomainFactory();
-		String hql = "select refservice from ServiceConfigIntReferral as refservice left join refservice.service as serv where refservice.active = 1 and serv.isActive = 1 and serv.upperName like :SERV_NAME order by serv.upperName asc"; //WDEV-20219 UPPER(serv.serviceName)
+
+		/* TODO MSSQL case - String hql = "select refservice from ServiceConfigIntReferral as refservice left join refservice.service as serv where refservice.active = 1 and serv.isActive = 1 and serv.upperName like :SERV_NAME order by serv.upperName asc"; */
+		String hql = "select refservice from ServiceConfigIntReferral as refservice left join refservice.service as serv where refservice.active = true and serv.isActive = true and serv.upperName like :SERV_NAME order by serv.upperName asc";
 		
 		List<?> serviceList = factory.find(hql,"SERV_NAME",serviceName.trim().toUpperCase() + "%");
 

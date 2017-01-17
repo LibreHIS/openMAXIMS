@@ -204,10 +204,10 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
-		
-		query.append("WHERE dos.isActive = 1 and doSName like :dosName");
 
-		//WDEV-20930
+		/* TODO MSSQL case - query.append("WHERE dos.isActive = 1 and doSName like :dosName"); */
+		query.append("WHERE dos.isActive = TRUE and doSName like :dosName");
+
 		paramNames.add("dosName");
 		paramValues.add(searchCriteria + "%");	
 		
@@ -605,7 +605,9 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 		if (hqlJoin != "")
 			hql += hqlJoin;
 
-		sb.append(andStr + " catsref.redirectCAB = 1 ");
+		/* TODO MSSQL case - sb.append(andStr + " catsref.redirectCAB = 1 "); */
+		sb.append(andStr + " catsref.redirectCAB = TRUE ");
+
 		sb.append(" and catsref.isRIE is null order by refDetails.dateOfReferral asc, refDetails.id asc");
 		
 		hql += " where ";
@@ -621,8 +623,10 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 			hql += hqlJoin;
 
 		hql += " where ";
-		
-		sb.append(andStr + " catsref.hasRebookingSubsequentActivity = 1");
+
+		/* TODO MSSQL case - sb.append(andStr + " catsref.hasRebookingSubsequentActivity = 1"); */
+		sb.append(andStr + " catsref.hasRebookingSubsequentActivity = TRUE");
+
 		sb.append(" and catsref.isRIE is null order by refDetails.dateOfReferral asc, refDetails.id asc");
 		
 		hql += sb.toString();
@@ -638,8 +642,10 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 			hql += hqlJoin;
 
 		hql += " where ";
-		
-		sb.append(andStr + " catsref.hasDNAorNotSeenActivity = 1");
+
+		/* TODO MSSQL case - sb.append(andStr + " catsref.hasDNAorNotSeenActivity = 1"); */
+		sb.append(andStr + " catsref.hasDNAorNotSeenActivity = TRUE");
+
 		sb.append(" and catsref.isRIE is null order by refDetails.dateOfReferral asc, refDetails.id asc");
 		
 		hql += sb.toString();
@@ -662,16 +668,16 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 		return sb.append(")").toString();		
 	}
 
-	//WDEV-20643
 	private List<?> domListReferralConsultationActivityRequiredrefList(String hql, StringBuffer sb, ArrayList<String> markers, ArrayList<Serializable> values, String andStr, String hqlJoin)
 	{
 		if (hqlJoin != "")
 			hql += hqlJoin;
 
-		sb.append(andStr + " catsref.consultationActivityRequired = 1 and catsref.patient.dod is null and catsref.currentStatus.referralStatus.id not in (:ID1, :ID2, :ID3, :ID4, :ID5)");
+		/* TODO MSSQL case - sb.append(andStr + " catsref.consultationActivityRequired = 1 and catsref.patient.dod is null and catsref.currentStatus.referralStatus.id not in (:ID1, :ID2, :ID3, :ID4, :ID5)"); */
+		sb.append(andStr + " catsref.consultationActivityRequired = TRUE and catsref.patient.dod is null and catsref.currentStatus.referralStatus.id not in (:ID1, :ID2, :ID3, :ID4, :ID5)");
+
 		sb.append(" and catsref.isRIE is null order by refDetails.dateOfReferral asc, refDetails.id asc");
-		
-		//WDEV-23047
+
 		markers.add("ID1");
 		values.add(ReferralApptStatus.END_OF_CARE.getID());
 		markers.add("ID2");
@@ -763,25 +769,20 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 
 	private String getBaseSelectQuery(Boolean includeICPColumn, Boolean includeELEColumn) 
 	{
-		//WDEV-19621
 		String name = ims.configuration.ConfigFlag.UI.DISPLAY_PATID_TYPE.getValue();
 		ims.core.vo.lookups.PatIdType displayPatIDType = ims.core.vo.lookups.PatIdType.getNegativeInstance(name);
 		
-		//wdev-15109
 		String hqlSB = "select new ims.RefMan.helper.CatsReferralManualClass( catsref.id, title1.text, pat1.name.surname, pat1.name.forename, " +
-		//" (select max(p21_1.value) from Patient as p11_1 left join p11_1.identifiers as p21_1 where (p21_1.type = -9 and p11_1.id = catsref.patient)) as ANY_NHS, " +
-		//" (select max(p211_1.value) from Patient as p111_1 left join p111_1.identifiers as p211_1 where (p211_1.type = -9 and p211_1.verified = 1 and p111_1.id = catsref.patient)) as VERIFIED_NHS," +
-		" (select max(p21_1.value) from Patient as p11_1 left join p11_1.identifiers as p21_1 where (p21_1.type = " + displayPatIDType.getID() + " and p11_1.id = catsref.patient)) , " + //WDEV-19621
+		" (select max(p21_1.value) from Patient as p11_1 left join p11_1.identifiers as p21_1 where (p21_1.type = " + displayPatIDType.getID() + " and p11_1.id = catsref.patient)) , " +
 		" pat1.dod, ";
-		//wdev-15109
 
 		if (includeICPColumn)
-			hqlSB+="(select max(icp.careContext.id) from PatientICP as icp where icp.careContext.id = catsref.careContext.id),";//WDEV-12965
+			hqlSB+="(select max(icp.careContext.id) from PatientICP as icp where icp.careContext.id = catsref.careContext.id),";
 		else
 			hqlSB+= "catsref.id, ";
 		
 		if (includeELEColumn)
-			hqlSB+="(select max(ele.id) from PatientElectiveList as ele where ele.referral.id = catsref.id),";//WDEV-18389
+			hqlSB+="(select max(ele.id) from PatientElectiveList as ele where ele.referral.id = catsref.id),";
 		else
 			hqlSB+= "catsref.id, ";
 			
@@ -791,7 +792,7 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 		"refDetails.endDateKPI, ur.id, ur.text, triageOutcomeStatus.id, triageOutcomeStatus.text, " +
 		"(select max(triagePendingDiagnosticResult.id) from TriageOutcome as triageOutcome left join triageOutcome.triagePendingDiagnosticResult as triagePendingDiagnosticResult where "
 			+ "(triageOutcome.catsReferral.id= catsref.id))"
-		+ ", catsref.rTTClockImpact,ICABDetails.uBRN) ";	//wdev-19673 //WDEV-20880
+		+ ", catsref.rTTClockImpact,ICABDetails.uBRN) ";
 		return hqlSB;
 	}
 

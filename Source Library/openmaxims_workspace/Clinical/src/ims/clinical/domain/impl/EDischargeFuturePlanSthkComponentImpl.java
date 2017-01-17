@@ -149,14 +149,15 @@ public class EDischargeFuturePlanSthkComponentImpl extends BaseEDischargeFutureP
 	{
 		if (locationName == null || locationName.length() < 3)
 			throw new DomainInterfaceException("Please enter at least 3 characters to search upon.");
-		
-		String query = " from Location as loc where loc.upperName like :NAME AND loc.isVirtual = 0 AND loc.isActive = 1 AND loc.type.id <> :ID_SURGERY ORDER BY loc.upperName asc";
+
+		/* TODO MSSQL case - String query = " from Location as loc where loc.upperName like :NAME AND loc.isVirtual = 0 AND loc.isActive = 1 AND loc.type.id <> :ID_SURGERY ORDER BY loc.upperName asc"; */
+		String query = " from Location as loc where loc.upperName like :NAME AND loc.isVirtual = false AND loc.isActive = true AND loc.type.id <> :ID_SURGERY ORDER BY loc.upperName asc";
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
 
 		paramNames.add("NAME");
-		paramValues.add("%"+locationName.toUpperCase()+"%");//WDEV-12041
+		paramValues.add("%"+locationName.toUpperCase()+"%");
 		
 		paramNames.add("ID_SURGERY");
 		paramValues.add(LocationType.SURGERY.getID());

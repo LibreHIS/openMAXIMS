@@ -875,7 +875,8 @@ public class ClinicListwithICPActionsImpl extends BaseClinicListWithICPActionsIm
 		if (rttStatusPoint == null || rttStatusPoint.getId() == null)	
 			return null;
 
-		String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = 1 and rttstat.nationalCode = :natCode and event.encounterType is null ";
+		/* TODO MSSQL case - String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = 1 and rttstat.nationalCode = :natCode and event.encounterType is null "; */
+		String hql = "select event from RTTStatusEventMap as event left join event.currentRTTStatus as rttstat where event.active = true and rttstat.nationalCode = :natCode and event.encounterType is null ";
 
 		DomainFactory factory = getDomainFactory();
 
@@ -1011,12 +1012,13 @@ public class ClinicListwithICPActionsImpl extends BaseClinicListWithICPActionsIm
 		return Boolean.FALSE;
 	}
 
-	//WDEV-19320
 	public ServiceLiteVoCollection listServices(String strVal)
 	{
 		if (strVal == null || strVal.length() == 0)
 			throw new CodingRuntimeException("The search string filter cannot be null or empty.");
-		List<?> services = getDomainFactory().find("select srv from Service as srv where srv.isActive = 1 and srv.upperName like :servName", new String[]{"servName"}, new Object[]{strVal.toUpperCase() + "%"}); //WDEV-20219 upper(srv.serviceName)
+
+		/* TODO MSSQL case - List<?> services = getDomainFactory().find("select srv from Service as srv where srv.isActive = 1 and srv.upperName like :servName", new String[]{"servName"}, new Object[]{strVal.toUpperCase() + "%"}); //WDEV-20219 upper(srv.serviceName) */
+		List<?> services = getDomainFactory().find("select srv from Service as srv where srv.isActive = true and srv.upperName like :servName", new String[]{"servName"}, new Object[]{strVal.toUpperCase() + "%"});
 		
 		if (services == null || services.isEmpty())
 			return null;
@@ -1025,14 +1027,12 @@ public class ClinicListwithICPActionsImpl extends BaseClinicListWithICPActionsIm
 	}
 
 	
-	//wdev-19503
-	public LocationLiteVoCollection listOutpatientlocationsByHospital(LocationRefVo hospital) //WDEV-21222
+	public LocationLiteVoCollection listOutpatientlocationsByHospital(LocationRefVo hospital)
 	{
 		OrganisationAndLocation impl = (OrganisationAndLocation)getDomainImpl(OrganisationAndLocationImpl.class);
 		return impl.listOutpatientlocationsByHospital(hospital);
 	}
 
-	//wdev-19504
 	public SessionServiceAndSlotActivityVo getServiceAndActivityByAppt(Booking_AppointmentRefVo appt, Boolean isFlexible)
 	{
 		if(appt == null || appt.getID_Booking_Appointment() == null)

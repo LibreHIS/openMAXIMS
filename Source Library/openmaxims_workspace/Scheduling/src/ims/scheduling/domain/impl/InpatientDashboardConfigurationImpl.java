@@ -72,7 +72,8 @@ public class InpatientDashboardConfigurationImpl extends BaseInpatientDashboardC
 		
 		if (Boolean.TRUE.equals(active))
 		{
-			hql += " where inpDash.isActive = 1 ";
+			/* TODO MSSQL case - hql += " where inpDash.isActive = 1 "; */
+			hql += " where inpDash.isActive = true ";
 		}
 		
 		hql +=" order by inpDash.sequenceNo asc ";
@@ -86,7 +87,9 @@ public class InpatientDashboardConfigurationImpl extends BaseInpatientDashboardC
 	{
 		DomainFactory factory = getDomainFactory();
 
-		String hql = " from Location loc where loc.isActive = 1 and loc.type.id = :locTypeID  and loc.id not in " +
+		/* TODO MSSQL case - String hql = " from Location loc where loc.isActive = 1 and loc.type.id = :locTypeID  and loc.id not in " +
+				"(select wardloc.id from InpatientDashboardConfig as inpDash left join inpDash.wardLocations as wardloc ) "; */
+		String hql = " from Location loc where loc.isActive = true and loc.type.id = :locTypeID  and loc.id not in " +
 				"(select wardloc.id from InpatientDashboardConfig as inpDash left join inpDash.wardLocations as wardloc ) ";
 		
 		StringBuffer condStr = new StringBuffer();

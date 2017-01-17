@@ -39,7 +39,9 @@ public class SelecPrognosticPSAImpl extends BaseSelecPrognosticPSAImpl
 
 	public ims.clinicaladmin.vo.PSAConfigVoCollection listPSA()
 	{
-		String query = " from PSAConfig as psaconfig where psaconfig.isActive = 1 order by psaconfig.pSAName asc";
+	    /* TODO MSSQL case - String query = " from PSAConfig as psaconfig where psaconfig.isActive = 1 order by psaconfig.pSAName asc"; */
+		String query = " from PSAConfig as psaconfig where psaconfig.isActive = true order by psaconfig.pSAName asc";
+
 		return PSAConfigVoAssembler.createPSAConfigVoCollectionFromPSAConfig(getDomainFactory().find(query));
 	}
 

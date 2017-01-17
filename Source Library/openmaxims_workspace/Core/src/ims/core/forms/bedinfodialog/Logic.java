@@ -3462,42 +3462,7 @@ public class Logic extends BaseLogic
 		
 		return bayConfig != null && WardBayStatus.BLOCKED.equals(bayConfig.getBayAvailabilityStatus());
 	}
-	/*
-	private boolean isBayOutOfOpeningHours(LocationLiteVo selectedBay)
-	{
-		BayConfigLiteVo bayConfig = getBayConfig(selectedBay);
-		
-		Calendar calendar = Calendar.getInstance();
-		Date lastReopenDate = getMostRecentReopenDate(bayConfig);
-		
-		boolean isCurrentDayWeekDay =  (Calendar.SUNDAY != calendar.get(Calendar.DAY_OF_WEEK) && Calendar.SATURDAY != calendar.get(Calendar.DAY_OF_WEEK));
-		boolean isBayOutOfHours = (bayConfig.getOpeningTimeIsNotNull() && new Time().isLessThan(bayConfig.getOpeningTime())) || (bayConfig.getClosingTimeIsNotNull() && new Time().isGreaterThan(bayConfig.getClosingTime()));
-		boolean wasReopenedToday = new Date().equals(lastReopenDate);
-		
-		if (isBayOutOfHours && wasReopenedToday)
-			return false;
-		
-		if (Boolean.TRUE.equals(bayConfig.getWeekdaysOnly()) && !isCurrentDayWeekDay)
-			return true;
-		return isBayOutOfHours;
-	}
-	
-	private Date getMostRecentReopenDate(BayConfigLiteVo tempVo)
-	{
-		if (tempVo.getReOpenOutOfHours() == null)
-			return null;
-		
-		ArrayList<Date> dates = new ArrayList<Date>();
-		for (int i=0;i<tempVo.getReOpenOutOfHours().size();i++)
-		{
-			if (tempVo.getReOpenOutOfHours().get(i) != null && tempVo.getReOpenOutOfHours().get(i).getReopenDateIsNotNull())
-				dates.add(tempVo.getReOpenOutOfHours().get(i).getReopenDate());
-		}
-		return dates.size() > 0 ? Collections.max(dates) : null;
-		
-	}
-	*/
-	//WDEV-20224 --
+
 	private String validateTransferOutWard(LocationLiteVo ward)
 	{
 		WardConfigLiteVo wardConfig = domain.getWardConfig(ward);

@@ -668,8 +668,9 @@ public class BookAppointmentImpl extends DomainImpl implements ims.scheduling.do
 			throw new CodingRuntimeException("service parameter null or id not provided for listSessionLiteByService");
 
 		DomainFactory factory = getDomainFactory();
-		
-		String query = "SELECT prof FROM Sch_Profile AS prof LEFT JOIN prof.service AS service WHERE service.id = :ID_SERVICE AND ((prof.isActive = 1) OR (prof.lastGenDate is not null AND prof.lastGenDate >= :DATE_PARAMETER))";
+
+		/* TODO MSSQL case - String query = "SELECT prof FROM Sch_Profile AS prof LEFT JOIN prof.service AS service WHERE service.id = :ID_SERVICE AND ((prof.isActive = 1) OR (prof.lastGenDate is not null AND prof.lastGenDate >= :DATE_PARAMETER))"; */
+		String query = "SELECT prof FROM Sch_Profile AS prof LEFT JOIN prof.service AS service WHERE service.id = :ID_SERVICE AND ((prof.isActive = true) OR (prof.lastGenDate is not null AND prof.lastGenDate >= :DATE_PARAMETER))";
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
@@ -812,24 +813,26 @@ public class BookAppointmentImpl extends DomainImpl implements ims.scheduling.do
 		DomainFactory factory = getDomainFactory();
 		SessionShortVoCollection voCollSessionShort = new SessionShortVoCollection();
 		
-		//WDEV-9395
 		String activityDurationCriteria = "0";
 		if(activity.getTmReqIsNotNull())
 			activityDurationCriteria = "'" + activity.getTmReq() + "' ";
 		
-		//WDEV-8793
 		String overBookCriteria = "";
-		//WDEV-11731
 		String flexibleCriteria = "";
 		if(!allowOverBook)
 		{
-			overBookCriteria = " and (session.remainingTime >= " + activityDurationCriteria + " or session.remainingTime = null or session.remainingTime <= 0)"; 	//WDEV-12209
-			flexibleCriteria = " and ((session.isFixed = 0 and (session.maxContinuousAvailableMins >= " + activityDurationCriteria + "  or session.maxContinuousAvailableMins is null or session.maxContinuousAvailableMins = 0)) or (session.isFixed = 1 or session.isFixed is null)) ";	//	WDEV-12209
+			overBookCriteria = " and (session.remainingTime >= " + activityDurationCriteria + " or session.remainingTime = null or session.remainingTime <= 0)";
+
+			/* TODO MSSQL case - flexibleCriteria = " and ((session.isFixed = 0 and (session.maxContinuousAvailableMins >= " + activityDurationCriteria + "  or session.maxContinuousAvailableMins is null or session.maxContinuousAvailableMins = 0)) or (session.isFixed = 1 or session.isFixed is null)) "; */
+			flexibleCriteria = " and ((session.isFixed = false and (session.maxContinuousAvailableMins >= " + activityDurationCriteria + "  or session.maxContinuousAvailableMins is null or session.maxContinuousAvailableMins = 0)) or (session.isFixed = true or session.isFixed is null)) ";
 		}
 
+		/* TODO MSSQL case - List sessions = factory.find(" Select distinct session from Sch_Session as session " +
+			" left join session.sessionSlots as slot left join session.sessionActivities as sessAct " + listOwnerJoin + " where ( slot.activity.id = :activityId or sessAct.activity.id = :activityId) " +
+			listOwnerCriteria + " and session.sessionDate >= :startDate and session.sessionDate <= :endDate " + serviceCriteria + profileCriteria + locationCriteria + " and session.sessionStatus = :open" + overBookCriteria + flexibleCriteria + " and (slot.isActive = 1 or sessAct.isActive = 1) ", markers, values, 1000); */
 		List sessions = factory.find(" Select distinct session from Sch_Session as session " + 
 			" left join session.sessionSlots as slot left join session.sessionActivities as sessAct " + listOwnerJoin + " where ( slot.activity.id = :activityId or sessAct.activity.id = :activityId) " + 
-			listOwnerCriteria + " and session.sessionDate >= :startDate and session.sessionDate <= :endDate " + serviceCriteria + profileCriteria + locationCriteria + " and session.sessionStatus = :open" + overBookCriteria + flexibleCriteria + " and (slot.isActive = 1 or sessAct.isActive = 1) ", markers, values, 1000); //wdev-11757		
+			listOwnerCriteria + " and session.sessionDate >= :startDate and session.sessionDate <= :endDate " + serviceCriteria + profileCriteria + locationCriteria + " and session.sessionStatus = :open" + overBookCriteria + flexibleCriteria + " and (slot.isActive = true or sessAct.isActive = true) ", markers, values, 1000);
 			
 		voCollSessionShort = SessionShortVoAssembler.createSessionShortVoCollectionFromSch_Session(sessions);
 		

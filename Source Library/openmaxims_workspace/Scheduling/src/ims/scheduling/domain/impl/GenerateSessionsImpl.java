@@ -1369,8 +1369,10 @@ public class GenerateSessionsImpl extends DomainImpl implements ims.scheduling.d
 		DomainFactory factory = getDomainFactory();
 		
 		int numSessionsAffected=0, totalNumSessionsAffected=0;
-		
-		StringBuffer hql = new StringBuffer(" Select ripple from ProfileRipple ripple where ripple.active = 1 order by ripple.dateTimeRequested ");
+
+		/* TODO MSSQL case - StringBuffer hql = new StringBuffer(" Select ripple from ProfileRipple ripple where ripple.active = 1 order by ripple.dateTimeRequested "); */
+		StringBuffer hql = new StringBuffer(" Select ripple from ProfileRipple ripple where ripple.active = true order by ripple.dateTimeRequested ");
+
 		List profiles = factory.find(hql.toString());
 
 		ArrayList<String> auditItemsRemoved = pauseSessionAuditing();

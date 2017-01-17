@@ -384,11 +384,13 @@ public class MoveSessionDialogImpl extends BaseMoveSessionDialogImpl
 			
 		if (Boolean.TRUE.equals(isTheatre)) //Theatre Appointment
 		{
-			hql += " and cr.tCITheatre = 1 ";
+			/* TODO MSSQL case - hql += " and cr.tCITheatre = 1 "; */
+			hql += " and cr.tCITheatre = true ";
 		}
 		else //Outpatient or Ward Attenders appointment
 		{
-			hql += " and cr.outpatients = 1 ";
+			/* TODO MSSQL case - hql += " and cr.outpatients = 1 "; */
+			hql += " and cr.outpatients = true ";
 		}
 			
 		List<?> cancelReasons = factory.find(hql, new String[]{"cancelType", "reasonID"}, new Object[]{getDomLookup(Status_Reason.HOSPITALCANCELLED), cancellationReason.getId()});
@@ -399,7 +401,6 @@ public class MoveSessionDialogImpl extends BaseMoveSessionDialogImpl
 		return  true;
 	}
 	
-	//WDEV-22845
 	private void cancelTCIAndReferralEROD(CatsReferralRefVo catsReferral, Booking_AppointmentRefVo apptRef, CancelAppointmentReason cancellationReason, String cancellationComment, Boolean isProviderCancellation , Boolean isPatientCancellation, Boolean cancelledForNonmedicalReason) throws StaleObjectException //WDEV-18249
 	{
 		TheatreSessionManagement impl = (TheatreSessionManagement) getDomainImpl(TheatreSessionManagementImpl.class);

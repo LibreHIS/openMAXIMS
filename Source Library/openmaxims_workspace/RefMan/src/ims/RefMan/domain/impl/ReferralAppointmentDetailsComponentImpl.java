@@ -500,8 +500,10 @@ public class ReferralAppointmentDetailsComponentImpl extends BaseReferralAppoint
 	{
 		if (service == null || service.getID_Service() == null || function == null)
 			return null;
-		
-		List list = getDomainFactory().find("select servFunct from ServiceFunction as servFunct left join servFunct.service as serv left join servFunct.function as func where servFunct.isActive = 1 and serv.id = :serviceID and func.id = :functionID", 
+
+		/* TODO MSSQL case - List list = getDomainFactory().find("select servFunct from ServiceFunction as servFunct left join servFunct.service as serv left join servFunct.function as func where servFunct.isActive = 1 and serv.id = :serviceID and func.id = :functionID",
+				new String[] {"serviceID", "functionID"}, new Object[] {service.getID_Service(), function.getID()}); */
+		List list = getDomainFactory().find("select servFunct from ServiceFunction as servFunct left join servFunct.service as serv left join servFunct.function as func where servFunct.isActive = true and serv.id = :serviceID and func.id = :functionID",
 				new String[] {"serviceID", "functionID"}, new Object[] {service.getID_Service(), function.getID()});
 		
 		if (list != null && list.size() > 0)

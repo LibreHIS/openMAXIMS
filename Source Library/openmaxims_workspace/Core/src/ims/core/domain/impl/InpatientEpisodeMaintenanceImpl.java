@@ -960,7 +960,9 @@ public class InpatientEpisodeMaintenanceImpl extends BaseInpatientEpisodeMainten
 	
 	public ServiceLiteVoCollection getServices()
 	{
-		String query = "SELECT serv FROM Service AS serv  WHERE serv.isActive = 1 AND serv.specialty is not null";
+	    /* TODO MSSQL case - String query = "SELECT serv FROM Service AS serv  WHERE serv.isActive = 1 AND serv.specialty is not null"; */
+		String query = "SELECT serv FROM Service AS serv  WHERE serv.isActive = true AND serv.specialty is not null";
+
 		return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(getDomainFactory().find(query));
 	}
 	
@@ -1277,12 +1279,11 @@ public class InpatientEpisodeMaintenanceImpl extends BaseInpatientEpisodeMainten
 		OrganisationAndLocation impl = (OrganisationAndLocation) getDomainImpl(OrganisationAndLocationImpl.class);
 		return impl.getHospitalLiteForLocation(iLocation);	
 	}
-	//WDEV-20878 -- END 
-
 
 	public CancellationTypeReasonVo getDeferredReason(CancelAppointmentReason reason)
 	{
-		String query = "SELECT reasonConfig FROM CancellationTypeReason AS reasonConfig left join reasonConfig.cancellationType as ctype where ctype.id = :PROVIDER_CANCELLATION and (reasonConfig.tCITheatre = 1  OR reasonConfig.outpatients  <> 1) and reasonConfig.cancellationReason.id = :REASON";
+		/* TODO MSSQL case - String query = "SELECT reasonConfig FROM CancellationTypeReason AS reasonConfig left join reasonConfig.cancellationType as ctype where ctype.id = :PROVIDER_CANCELLATION and (reasonConfig.tCITheatre = 1  OR reasonConfig.outpatients  <> 1) and reasonConfig.cancellationReason.id = :REASON"; */
+		String query = "SELECT reasonConfig FROM CancellationTypeReason AS reasonConfig left join reasonConfig.cancellationType as ctype where ctype.id = :PROVIDER_CANCELLATION and (reasonConfig.tCITheatre = true  OR reasonConfig.outpatients  <> true) and reasonConfig.cancellationReason.id = :REASON";
 		
 		List<?> results = getDomainFactory().find(query,new String[]{"PROVIDER_CANCELLATION", "REASON"},new Object[] {Status_Reason.HOSPITALCANCELLED.getID(),reason.getID()});
 		if (results == null || results.isEmpty())
@@ -1292,7 +1293,7 @@ public class InpatientEpisodeMaintenanceImpl extends BaseInpatientEpisodeMainten
 	}
 
 
-	/*
+	/**
 	 * Copied from RTT Management move once RTT manamgement is checked in(non-Javadoc)
 	 * @see ims.core.domain.InpatientEpisodeMaintenance#undoRTTEvent(ims.RefMan.vo.RTTManagementGridValueVo)
 	 */

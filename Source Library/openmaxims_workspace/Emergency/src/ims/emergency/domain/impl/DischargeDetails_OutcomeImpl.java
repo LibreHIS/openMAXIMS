@@ -282,13 +282,16 @@ public class DischargeDetails_OutcomeImpl extends BaseDischargeDetails_OutcomeIm
 	 */
 	public Boolean hasDiagnosesTreatmentsInterventionsOrInvestigations(PatientRefVo patient, CareContextRefVo careContext)
 	{
-		String queryDiagnoses = "SELECT COUNT (pDiag.id) FROM PatientDiagnosis AS pDiag WHERE pDiag.careContext.id = :CARE_CONTEXT AND (pDiag.isRIE is null OR pDiag.isRIE = 0)";
+	    /* TODO MSSQL case - String queryDiagnoses = "SELECT COUNT (pDiag.id) FROM PatientDiagnosis AS pDiag WHERE pDiag.careContext.id = :CARE_CONTEXT AND (pDiag.isRIE is null OR pDiag.isRIE = 0)"; */
+		String queryDiagnoses = "SELECT COUNT (pDiag.id) FROM PatientDiagnosis AS pDiag WHERE pDiag.careContext.id = :CARE_CONTEXT AND (pDiag.isRIE is null OR pDiag.isRIE = false)";
 		long countDiagnoses = getDomainFactory().countWithHQL(queryDiagnoses, new String[] {"CARE_CONTEXT"}, new Object[] {careContext.getID_CareContext()});
 		
 		String queryInterventionTreatment = "SELECT COUNT (interventionTreatAttend.id) FROM InterventionsTreatmentsForAttendence AS interventionTreatAttend LEFT JOIN interventionTreatAttend.interventionTreatments AS interventionTreat WHERE interventionTreatAttend.attendance.id = :CARE_CONTEXT AND interventionTreat.id is not null";
 		long countInterventionTreatment = getDomainFactory().countWithHQL(queryInterventionTreatment, new String[] {"CARE_CONTEXT"}, new Object[] {careContext.getID_CareContext()});
-		
-		String queryInvestigationAttendance = "SELECT COUNT (invAttend.id) FROM InvestigationsForAttend as invForAttend left join invForAttend.investigations AS invAttend WHERE invForAttend.attendance.id = :CARE_CONTEXT AND invAttend.active = 1";
+
+		/* TODO MSSQL case - String queryInvestigationAttendance = "SELECT COUNT (invAttend.id) FROM InvestigationsForAttend as invForAttend left join invForAttend.investigations AS invAttend WHERE invForAttend.attendance.id = :CARE_CONTEXT AND invAttend.active = 1"; */
+		String queryInvestigationAttendance = "SELECT COUNT (invAttend.id) FROM InvestigationsForAttend as invForAttend left join invForAttend.investigations AS invAttend WHERE invForAttend.attendance.id = :CARE_CONTEXT AND invAttend.active = true";
+
 		long countInvestigationAttendance = getDomainFactory().countWithHQL(queryInvestigationAttendance, new String[] {"CARE_CONTEXT"}, new Object[] {careContext.getID_CareContext()});
 		
 		CareContext careContextDO = (CareContext) getDomainFactory().getDomainObject(CareContext.class, careContext.getID_CareContext());
@@ -297,35 +300,37 @@ public class DischargeDetails_OutcomeImpl extends BaseDischargeDetails_OutcomeIm
 		if (endDateTime == null) endDateTime = new Date();
 		String queryOrderInvestigations = "SELECT COUNT (ordInv.id) FROM OrderInvestigation AS ordInv LEFT JOIN ordInv.orderDetails AS ordDet WHERE ordDet.patient.id = :PATIENT_ID AND ordInv.systemInformation.creationDateTime BETWEEN :START_DATE AND :END_DATE";
 		long countOrderInvestigation = getDomainFactory().countWithHQL(queryOrderInvestigations, new String[] {"PATIENT_ID", "START_DATE", "END_DATE"}, new Object[] {patient.getID_Patient(), startDateTime, endDateTime});
-		
-		//WDEV-19059
-		String queryInvestigationsNotRecorded = "SELECT attendDiagInvTreatStatus  from AttendDiagInvTreatStatus as attendDiagInvTreatStatus left join attendDiagInvTreatStatus.attendance as at where (at.id = :AttendenceId and (attendDiagInvTreatStatus.investigationNotRecorded = 1 or attendDiagInvTreatStatus.noInvestigations = 1) and (attendDiagInvTreatStatus.isRIE is null OR attendDiagInvTreatStatus.isRIE = 0) ) ";
+
+		/* TODO MSSQL case - String queryInvestigationsNotRecorded = "SELECT attendDiagInvTreatStatus  from AttendDiagInvTreatStatus as attendDiagInvTreatStatus left join attendDiagInvTreatStatus.attendance as at where (at.id = :AttendenceId and (attendDiagInvTreatStatus.investigationNotRecorded = 1 or attendDiagInvTreatStatus.noInvestigations = 1) and (attendDiagInvTreatStatus.isRIE is null OR attendDiagInvTreatStatus.isRIE = 0) ) "; */
+		String queryInvestigationsNotRecorded = "SELECT attendDiagInvTreatStatus  from AttendDiagInvTreatStatus as attendDiagInvTreatStatus left join attendDiagInvTreatStatus.attendance as at where (at.id = :AttendenceId and (attendDiagInvTreatStatus.investigationNotRecorded = true or attendDiagInvTreatStatus.noInvestigations = true) and (attendDiagInvTreatStatus.isRIE is null OR attendDiagInvTreatStatus.isRIE = false) ) ";
+
 		List<?> list1 = getDomainFactory().find(queryInvestigationsNotRecorded, new String[] {"AttendenceId"}, new Object[] {careContext.getID_CareContext()});
 		boolean noKnownInvestigationSaved = ((list1!=null && list1.size()>0) ? true : false);
-		
-		String queryTreatmentNotRecorded = "SELECT attendDiagInvTreatStatus  from AttendDiagInvTreatStatus as attendDiagInvTreatStatus left join attendDiagInvTreatStatus.attendance as at where (at.id = :AttendenceId and (attendDiagInvTreatStatus.treatmentsNotRecorded = 1 or attendDiagInvTreatStatus.noTreatments = 1) and (attendDiagInvTreatStatus.isRIE is null OR attendDiagInvTreatStatus.isRIE = 0) ) ";
+
+		/* TODO MSSQL case - String queryTreatmentNotRecorded = "SELECT attendDiagInvTreatStatus  from AttendDiagInvTreatStatus as attendDiagInvTreatStatus left join attendDiagInvTreatStatus.attendance as at where (at.id = :AttendenceId and (attendDiagInvTreatStatus.treatmentsNotRecorded = 1 or attendDiagInvTreatStatus.noTreatments = 1) and (attendDiagInvTreatStatus.isRIE is null OR attendDiagInvTreatStatus.isRIE = 0) ) "; */
+		String queryTreatmentNotRecorded = "SELECT attendDiagInvTreatStatus  from AttendDiagInvTreatStatus as attendDiagInvTreatStatus left join attendDiagInvTreatStatus.attendance as at where (at.id = :AttendenceId and (attendDiagInvTreatStatus.treatmentsNotRecorded = true or attendDiagInvTreatStatus.noTreatments = true) and (attendDiagInvTreatStatus.isRIE is null OR attendDiagInvTreatStatus.isRIE = false) ) ";
+
 		List<?> list2 = getDomainFactory().find(queryTreatmentNotRecorded, new String[] {"AttendenceId"}, new Object[] {careContext.getID_CareContext()});
 		boolean noKnownInterventionTreatmentSaved = ((list2!=null && list2.size()>0) ? true : false);
-		
-		String queryDiagnosisNotRecorded = "SELECT attendDiagInvTreatStatus  from AttendDiagInvTreatStatus as attendDiagInvTreatStatus left join attendDiagInvTreatStatus.attendance as at where (at.id = :AttendenceId and (attendDiagInvTreatStatus.diagnosesNotRecorded = 1 or attendDiagInvTreatStatus.noDiagnoses = 1) and (attendDiagInvTreatStatus.isRIE is null OR attendDiagInvTreatStatus.isRIE = 0) ) ";
+
+		/* TODO MSSQL case - String queryDiagnosisNotRecorded = "SELECT attendDiagInvTreatStatus  from AttendDiagInvTreatStatus as attendDiagInvTreatStatus left join attendDiagInvTreatStatus.attendance as at where (at.id = :AttendenceId and (attendDiagInvTreatStatus.diagnosesNotRecorded = 1 or attendDiagInvTreatStatus.noDiagnoses = 1) and (attendDiagInvTreatStatus.isRIE is null OR attendDiagInvTreatStatus.isRIE = 0) ) "; */
+		String queryDiagnosisNotRecorded = "SELECT attendDiagInvTreatStatus  from AttendDiagInvTreatStatus as attendDiagInvTreatStatus left join attendDiagInvTreatStatus.attendance as at where (at.id = :AttendenceId and (attendDiagInvTreatStatus.diagnosesNotRecorded = true or attendDiagInvTreatStatus.noDiagnoses = true) and (attendDiagInvTreatStatus.isRIE is null OR attendDiagInvTreatStatus.isRIE = false) ) ";
+
 		List<?> list3 = getDomainFactory().find(queryDiagnosisNotRecorded, new String[] {"AttendenceId"}, new Object[] {careContext.getID_CareContext()});
 		boolean noKnownDiagnosisSaved = ((list3!=null && list3.size()>0) ? true : false);
-		
-		//WDEV-17806
-		if ((countDiagnoses >0 || noKnownDiagnosisSaved) && (countInterventionTreatment >0 || noKnownInterventionTreatmentSaved) && ( (countInvestigationAttendance + countOrderInvestigation > 0) || noKnownInvestigationSaved )) //WDEV-19059
+
+		if ((countDiagnoses >0 || noKnownDiagnosisSaved) && (countInterventionTreatment >0 || noKnownInterventionTreatmentSaved) && ( (countInvestigationAttendance + countOrderInvestigation > 0) || noKnownInvestigationSaved ))
 			return Boolean.TRUE;
 		
 		return Boolean.FALSE;
 	}
 
-	//WDEV-17615
 	public LocationLiteVo getCurrentHospital(ILocation currentLocation)
 	{
 		IEmergencyHelper impl = (IEmergencyHelper)getDomainImpl(EmergencyHelper.class);
 		return impl.getCurrentHospital(currentLocation);
 	}
 
-	//WDEV-17822
 	public Boolean dischargePlanningAdviceHasComments(CareContextRefVo careContextRef)
 	{
 		String query = "SELECT COUNT (dsaa.id) FROM DischargeServicesAndAdvice AS dsaa WHERE dsaa.attendance.id = :CARE_CONTEXT AND (dsaa.isRIE is null OR dsaa.isRIE = 0) AND dsaa.comments is not null";

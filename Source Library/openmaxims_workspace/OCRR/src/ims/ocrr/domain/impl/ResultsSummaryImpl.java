@@ -64,7 +64,8 @@ public class ResultsSummaryImpl extends BaseResultsSummaryImpl
 
 	public ims.core.vo.ServiceLiteVoCollection listDiscipline()
 	{
-		return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(getDomainFactory().find("from Service as srv where srv.isActive = 1 and srv.serviceCategory.id in ( " + getIdStringForPathRad() + " ) order by srv.serviceName"));
+		/* TODO MSSQL case - return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(getDomainFactory().find("from Service as srv where srv.isActive = 1 and srv.serviceCategory.id in ( " + getIdStringForPathRad() + " ) order by srv.serviceName")); */
+		return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(getDomainFactory().find("from Service as srv where srv.isActive = TRUE and srv.serviceCategory.id in ( " + getIdStringForPathRad() + " ) order by srv.serviceName"));
 	}
 
 	private String getIdStringForPathRad()

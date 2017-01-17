@@ -187,7 +187,10 @@ public class MuscleJointConfigurationImpl extends DomainImpl implements ims.core
 		String strSQL = new String();
 		StringBuffer condStr = new StringBuffer();
 		String andStr = " ";
-		strSQL = "select m2_1 from MskGroups as m1_1 left join m1_1.groupType as l1_1 join m1_1.joints as m2_1 where m1_1.isActive = 1";
+
+		/* TODO MSSQL case - strSQL = "select m2_1 from MskGroups as m1_1 left join m1_1.groupType as l1_1 join m1_1.joints as m2_1 where m1_1.isActive = 1"; */
+		strSQL = "select m2_1 from MskGroups as m1_1 left join m1_1.groupType as l1_1 join m1_1.joints as m2_1 where m1_1.isActive = true";
+
 		if (isDigitType.equals(Boolean.TRUE))
 		{
 			andStr = " and ";

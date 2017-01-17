@@ -128,19 +128,6 @@ public class HourlyFluidBalanceDetailsImpl extends BaseFluidBalanceDetailsImpl i
 		ArrayList<Object> values = new ArrayList<Object>();
 		String andStr = " ";
 
-/*		
-		from DailyFluidBalance as d1_1 left join d1_1.clinicalContact as c1_1 left
-		join d1_1.fluidBalanceInstances as f1_1 left join d1_1.shiftDetails as
-		s1_1 left join d1_1.careContext as c2_1
-
-		where
-
-		(d1_1.clinicalContact = 1 and c2_1.id = 2 and f1_1.fluidBalanceDate = '06
-		Sep 2006 00:00:00' and s1_1.startDateTime >= '06 Sep 2006 00:00:00' and
-		s1_1.endDateTime <= '06 Sep 2006 00:00:00')
-
-		 and d1_1.isRIE is null
-*/		 
 		if (contextRefVo != null)
 		{
 			hql.append(andStr + " dfb.careContext.id = :cc");

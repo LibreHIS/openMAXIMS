@@ -85,7 +85,9 @@ public class DEDAdminImpl extends BaseDEDAdminImpl
 		if (Boolean.TRUE.equals(active))
 		{
 			query.append(aux);
-			query.append(" ded.isActive = 1 ");
+
+			/* TODO MSSQL case - query.append(" ded.isActive = 1 "); */
+			query.append(" ded.isActive = TRUE ");
 		}
 
 		return DEDLiteVoAssembler.createDEDLiteVoCollectionFromDED(factory.find(query.toString(), paramNames, paramValues));

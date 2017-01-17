@@ -257,15 +257,16 @@ public class CaseNotesWorklistImpl extends BaseCaseNotesWorklistImpl
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
-		
-		String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE mos.name.upperSurname LIKE :NAME AND hcp.isActive = 1 ORDER BY mos.name.upperSurname";
+
+		/* TODO MSSQL case - String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE mos.name.upperSurname LIKE :NAME AND hcp.isActive = 1 ORDER BY mos.name.upperSurname"; */
+		String query = "SELECT hcp FROM Hcp AS hcp LEFT JOIN hcp.mos AS mos WHERE mos.name.upperSurname LIKE :NAME AND hcp.isActive = true ORDER BY mos.name.upperSurname";
 		
 		paramNames.add("NAME");
-		paramValues.add(getNameStr(name, true)); //WDEV-22880
+		paramValues.add(getNameStr(name, true));
 		
 		return HcpLiteVoAssembler.createHcpLiteVoCollectionFromHcp(getDomainFactory().find(query.toString(), paramNames, paramValues));
 	}
-	//WDEV-22880
+
 	private String getNameStr(String name, boolean containsMatch)
 	{
 		if (name == null)

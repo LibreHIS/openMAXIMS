@@ -39,7 +39,8 @@ public class EDClinicDetailsImpl extends BaseEDClinicDetailsImpl
 
 	public ims.core.vo.ServiceShortVoCollection listServices()
 	{
-		String hql = " from Service service where service.isActive=1 order by service.upperName asc "; //WDEV-20219 upper(service.serviceName)
+		/* TODO MSSQL case - String hql = " from Service service where service.isActive=1 order by service.upperName asc "; */
+		String hql = " from Service service where service.isActive = TRUE order by service.upperName asc ";
 		
 		List<?> services = getDomainFactory().find(hql);
 		return ServiceShortVoAssembler.createServiceShortVoCollectionFromService(services);

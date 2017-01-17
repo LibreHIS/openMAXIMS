@@ -120,7 +120,8 @@ public class NursingNotesComponentImpl extends BaseNursingNotesComponentImpl
 
 		StringBuffer sql = new StringBuffer();
 
-		sql.append("select a.id, a.medication from core_medication2 a LEFT OUTER JOIN core_medication2_keywords k ON a.id = k.id where (k.keyword like ? or a.medication like ?) and a.isactive = 1 ");
+		/* TODO MSSQL case - sql.append("select a.id, a.medication from core_medication2 a LEFT OUTER JOIN core_medication2_keywords k ON a.id = k.id where (k.keyword like ? or a.medication like ?) and a.isactive = 1 "); */
+		sql.append("select a.id, a.medication from core_medication2 a LEFT OUTER JOIN core_medication2_keywords k ON a.id = k.id where (k.keyword like ? or a.medication like ?) and a.isactive = true ");
 
 		if (ignored != null && ignored.trim().length() > 0)
 		{
@@ -171,8 +172,8 @@ public class NursingNotesComponentImpl extends BaseNursingNotesComponentImpl
 
 		StringBuffer sql = new StringBuffer();
 
-		//        sql.append("select a.id, a.diagnosisn from shcl_diagnosishotli as s1 LEFT OUTER JOIN shcl_diagnosishotl2 as s2 ON s1.id = s2.shcl_diagnosishotli_hotlistite LEFT OUTER JOIN core_diagnosis a ON s2.diagnosis = a.id LEFT OUTER JOIN core_diagnosis_keywords k ON a.id = k.id where k.keyword like ? and a.isactive = 1 and s1.lkp_specialty = -1522 ");
-		sql.append("select a.id, a.diagnosisn from core_diagnosis a LEFT OUTER JOIN core_diagnosis_keywords k ON a.id = k.id where (k.keyword like ? or a.diagnosisn like ?) and a.isactive = 1 ");
+		/* TODO MSSQL case - sql.append("select a.id, a.diagnosisn from core_diagnosis a LEFT OUTER JOIN core_diagnosis_keywords k ON a.id = k.id where (k.keyword like ? or a.diagnosisn like ?) and a.isactive = 1 "); */
+		sql.append("select a.id, a.diagnosisn from core_diagnosis a LEFT OUTER JOIN core_diagnosis_keywords k ON a.id = k.id where (k.keyword like ? or a.diagnosisn like ?) and a.isactive = true ");
 
 		if (ignored != null && ignored.trim().length() > 0)
 		{
@@ -223,7 +224,8 @@ public class NursingNotesComponentImpl extends BaseNursingNotesComponentImpl
 
 		StringBuffer sql = new StringBuffer();
 
-		sql.append("select a.id, a.allergenna, type.id , type.text from core_allergen a LEFT OUTER JOIN core_allergen_keywords k ON a.id = k.id LEFT OUTER JOIN applookup_instance type ON a.lkp_allergenty = type.id where (k.keyword like ? or a.allergenna like ?) and a.isactive = 1 ");
+		/* TODO MSSQL case - sql.append("select a.id, a.allergenna, type.id , type.text from core_allergen a LEFT OUTER JOIN core_allergen_keywords k ON a.id = k.id LEFT OUTER JOIN applookup_instance type ON a.lkp_allergenty = type.id where (k.keyword like ? or a.allergenna like ?) and a.isactive = 1 "); */
+		sql.append("select a.id, a.allergenna, type.id , type.text from core_allergen a LEFT OUTER JOIN core_allergen_keywords k ON a.id = k.id LEFT OUTER JOIN applookup_instance type ON a.lkp_allergenty = type.id where (k.keyword like ? or a.allergenna like ?) and a.isactive = true ");
 
 		if (ignored != null && ignored.trim().length() > 0)
 		{

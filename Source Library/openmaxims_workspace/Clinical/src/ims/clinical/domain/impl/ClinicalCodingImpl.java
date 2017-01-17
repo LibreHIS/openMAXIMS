@@ -174,8 +174,8 @@ public class ClinicalCodingImpl extends BaseClinicalCodingImpl
 		//wdev-19500
 		if( outpatonly != null && Boolean.TRUE.equals(outpatonly))
 		{
-			hql.append(" and proc.outpatientOnlyProcedure = 1");
-				
+			/* TODO MSSQL case - hql.append(" and proc.outpatientOnlyProcedure = 1"); */
+			hql.append(" and proc.outpatientOnlyProcedure = true");
 		}
 		//----------
 		List hits = Keywords.searchByKeywords(factory, procedureName, hql.toString(), names, values);		
@@ -200,11 +200,10 @@ public class ClinicalCodingImpl extends BaseClinicalCodingImpl
 		names.add("isActive");
 		values.add(Boolean.TRUE);
 		
-		//wdev-19500
 		if( outpatonly != null && Boolean.TRUE.equals(outpatonly))
 		{
-			hql.append(" and proc.outpatientOnlyProcedure = 1");
-				
+		    /* TODO MSSQL case - hql.append(" and proc.outpatientOnlyProcedure = 1"); */
+			hql.append(" and proc.outpatientOnlyProcedure = true");
 		}
 		//----------
 		
@@ -765,14 +764,16 @@ public class ClinicalCodingImpl extends BaseClinicalCodingImpl
 			//wdev-19500
 			if( outpatientOnly != null && Boolean.TRUE.equals(outpatientOnly))
 			{
-				hql.append(" and proc.outpatientOnlyProcedure = 1");
+			    /* TODO MSSQL case - hql.append(" and proc.outpatientOnlyProcedure = 1"); */
+				hql.append(" and proc.outpatientOnlyProcedure = true");
 					
 			}
 			if( isMedication != null)
 			{
 				if( Boolean.TRUE.equals(isMedication))
 				{
-					hql.append(" and proc.medicalWL = 1");
+				    /* TODO MSSQL case - hql.append(" and proc.medicalWL = 1"); */
+					hql.append(" and proc.medicalWL = true");
 				}
 				else
 				{
@@ -783,7 +784,8 @@ public class ClinicalCodingImpl extends BaseClinicalCodingImpl
 			{
 				if( Boolean.TRUE.equals(isEndoscopy))
 				{
-					hql.append(" and proc.isEndoscopy = 1");
+				    /* TODO MSSQL case - hql.append(" and proc.isEndoscopy = 1"); */
+					hql.append(" and proc.isEndoscopy = true");
 					
 				}
 				else
@@ -815,14 +817,16 @@ public class ClinicalCodingImpl extends BaseClinicalCodingImpl
     		//wdev-19500
     		if( outpatientOnly != null && Boolean.TRUE.equals(outpatientOnly))
     		{
-    			hql.append(" and proc.outpatientOnlyProcedure = 1");
-    				
+    		    /* TODO MSSQL case - hql.append(" and proc.outpatientOnlyProcedure = 1"); */
+    			hql.append(" and proc.outpatientOnlyProcedure = true");
     		}
+
     		if( isMedication != null)
     		{
     			if( Boolean.TRUE.equals(isMedication))
     			{
-    				hql.append(" and proc.medicalWL = 1");
+    			    /* TODO MSSQL case - hql.append(" and proc.medicalWL = 1"); */
+    				hql.append(" and proc.medicalWL = true");
     			}
     			else
     			{
@@ -833,8 +837,8 @@ public class ClinicalCodingImpl extends BaseClinicalCodingImpl
     		{
     			if( Boolean.TRUE.equals(isEndoscopy))
     			{
-    				hql.append(" and proc.isEndoscopy = 1");
-    				
+    			    /* TODO MSSQL case - hql.append(" and proc.isEndoscopy = 1"); */
+    				hql.append(" and proc.isEndoscopy = true");
     			}
     			else
     			{

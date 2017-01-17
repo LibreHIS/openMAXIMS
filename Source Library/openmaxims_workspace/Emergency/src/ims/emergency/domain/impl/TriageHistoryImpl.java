@@ -58,8 +58,10 @@ public class TriageHistoryImpl extends BaseTriageHistoryImpl
 	{
 		if (patient == null || careContext == null)
 			throw new CodingRuntimeException("Parameters patient and careContext are mandatory");
-		
-		String query = "SELECT tp FROM TriageProtocolAssessment AS tp LEFT JOIN tp.patient AS pat LEFT JOIN tp.attendance AS attend WHERE tp.isMain = 1 AND pat.id = :PAT_ID AND attend.id = :CONTEXT_ID ORDER BY tp.assessmentDateTime DESC";
+
+		/* TODO MSSQL case - String query = "SELECT tp FROM TriageProtocolAssessment AS tp LEFT JOIN tp.patient AS pat LEFT JOIN tp.attendance AS attend WHERE tp.isMain = 1 AND pat.id = :PAT_ID AND attend.id = :CONTEXT_ID ORDER BY tp.assessmentDateTime DESC"; */
+		String query = "SELECT tp FROM TriageProtocolAssessment AS tp LEFT JOIN tp.patient AS pat LEFT JOIN tp.attendance AS attend WHERE tp.isMain = true AND pat.id = :PAT_ID AND attend.id = :CONTEXT_ID ORDER BY tp.assessmentDateTime DESC";
+
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
 		
@@ -130,7 +132,8 @@ public class TriageHistoryImpl extends BaseTriageHistoryImpl
 
 	private TriageProtocolAssessmentShortVo getPreviousProtocolAssessment(CareContextRefVo careContext, DateTime assessmentDateTime, TriageProtocolAssessmentRefVo currentTriageProtocol)
 	{
-		String query = "SELECT tp FROM TriageProtocolAssessment AS tp LEFT JOIN tp.attendance AS attend WHERE (tp.isRIE is null OR tp.isRIE = 0) AND tp.isMain = 1 AND tp.id <> :PROTOCOL_ID AND attend.id = :CONTEXT_ID AND tp.assessmentDateTime <= :PROT_DATETIME ORDER BY tp.assessmentDateTime DESC";
+		/* TODO MSSQL case - String query = "SELECT tp FROM TriageProtocolAssessment AS tp LEFT JOIN tp.attendance AS attend WHERE (tp.isRIE is null OR tp.isRIE = 0) AND tp.isMain = 1 AND tp.id <> :PROTOCOL_ID AND attend.id = :CONTEXT_ID AND tp.assessmentDateTime <= :PROT_DATETIME ORDER BY tp.assessmentDateTime DESC"; */
+		String query = "SELECT tp FROM TriageProtocolAssessment AS tp LEFT JOIN tp.attendance AS attend WHERE (tp.isRIE is null OR tp.isRIE = false) AND tp.isMain = true AND tp.id <> :PROTOCOL_ID AND attend.id = :CONTEXT_ID AND tp.assessmentDateTime <= :PROT_DATETIME ORDER BY tp.assessmentDateTime DESC";
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();

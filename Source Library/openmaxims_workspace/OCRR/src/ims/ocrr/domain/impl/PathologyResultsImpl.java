@@ -235,14 +235,19 @@ public class PathologyResultsImpl extends BasePathologyResultsImpl
 	}	
 	public ServiceLiteVoCollection listDiscipline()
 	{
+		/* TODO MSSQL case - return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(
+				getDomainFactory().find("from Service as srv where srv.isActive = 1 and srv.serviceCategory = :category order by srv.serviceName",
+						new String[] { "category" },
+						new Object[] { getDomLookup(ServiceCategory.PATHOLOGY_DISCIPLINE) })); */
 		return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(
-				getDomainFactory().find("from Service as srv where srv.isActive = 1 and srv.serviceCategory = :category order by srv.serviceName", 
+				getDomainFactory().find("from Service as srv where srv.isActive = TRUE and srv.serviceCategory = :category order by srv.serviceName",
 						new String[] { "category" }, 
 						new Object[] { getDomLookup(ServiceCategory.PATHOLOGY_DISCIPLINE) }));
 	}
 	public ChartTypeShortVoCollection listChartTypes()
 	{
-		return ChartTypeShortVoAssembler.createChartTypeShortVoCollectionFromChartType(getDomainFactory().find("from ChartType as ct where ct.isActive = 1 order by ct.name"));
+		/* TODO MSSQL case - return ChartTypeShortVoAssembler.createChartTypeShortVoCollectionFromChartType(getDomainFactory().find("from ChartType as ct where ct.isActive = 1 order by ct.name")); */
+		return ChartTypeShortVoAssembler.createChartTypeShortVoCollectionFromChartType(getDomainFactory().find("from ChartType as ct where ct.isActive = TRUE order by ct.name"));
 	}
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public ChartResultVoCollection listChartResults(PatientRefVo patient, ChartTypeRefVo chartType, Date startDate, Date endDate, Boolean isTabularView) throws ims.domain.exceptions.DomainInterfaceException

@@ -165,8 +165,10 @@ public class WardViewImpl extends DTODomainImplementation implements ims.core.do
 	{
 		if(location == null )
 			throw new DomainRuntimeException("Invalid ILocation");
-		
-		String hql = "from Location loc where loc.type = " + LocationType.BAY.getId() + " and loc.isActive = 1 and loc.parentLocation.id = " + location.getID();		
+
+		/* TODO MSSQL case - String hql = "from Location loc where loc.type = " + LocationType.BAY.getId() + " and loc.isActive = 1 and loc.parentLocation.id = " + location.getID(); */
+		String hql = "from Location loc where loc.type = " + LocationType.BAY.getId() + " and loc.isActive = true and loc.parentLocation.id = " + location.getID();
+
 		return LocationLiteVoAssembler.createLocationLiteVoCollectionFromLocation(getDomainFactory().find(hql));
 	}
 	
@@ -581,13 +583,15 @@ public class WardViewImpl extends DTODomainImplementation implements ims.core.do
 		query.append("LEFT JOIN pel.electiveListStatus AS els LEFT JOIN els.electiveListStatus AS elStatus ");
 		query.append("LEFT JOIN pel.tCIDetails AS tci LEFT JOIN tci.tCIWard AS ward ");
 		query.append("LEFT JOIN pel.patient AS patient ");
-		
-		query.append("WHERE ward.id = :WARD AND elStatus.id = :TCI_GIVEN AND tci.isActive = 1 AND tci.currentOutcome is null ");
+
+		/* TODO MSSQL case - query.append("WHERE ward.id = :WARD AND elStatus.id = :TCI_GIVEN AND tci.isActive = 1 AND tci.currentOutcome is null "); */
+		query.append("WHERE ward.id = :WARD AND elStatus.id = :TCI_GIVEN AND tci.isActive = true AND tci.currentOutcome is null ");
+
 		paramNames.add("WARD");
 		paramValues.add(ward.getID_Location());
 		paramNames.add("TCI_GIVEN");
 		paramValues.add(WaitingListStatus.TCI_GIVEN.getId());
-		if( tcidate != null)	//wdev-19115
+		if( tcidate != null)
 		{
 			query.append(" AND tci.tCIDate = :CURRENT_DATE");
 			paramNames.add("CURRENT_DATE");

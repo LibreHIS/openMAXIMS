@@ -93,8 +93,10 @@ public class PatientsOutpatientAppointmentsImpl extends BasePatientsOutpatientAp
 		String hql;
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
-		
-		hql = "select pd from PatientApptDiary pd where active = 1 and "; 
+
+		/* TODO MSSQL case - hql = "select pd from PatientApptDiary pd where active = 1 and "; */
+		hql = "select pd from PatientApptDiary pd where active = TRUE and ";
+
 		StringBuffer condStr = new StringBuffer();
 		String andStr = " and ";
 		

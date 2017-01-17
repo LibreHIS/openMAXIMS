@@ -372,9 +372,9 @@ public class Logic extends BaseLogic
 
 	private QuestionAnswerTypeVoCollection getAnswerTypes() 
 	{
-		//Get the active ones - from the grid 
+		// Get the active ones - from the grid
 		QuestionAnswerTypeVoCollection voColl = form.grdAnswerType().getValues();
-		//Add the inactive ones
+		// Add the inactive ones
 		QuestionAnswerTypeVoCollection voInactiveColl = form.getLocalContext().getInactiveAnswerTypes();
 		QuestionAnswerTypeVo voQAnswType;
 		if(voInactiveColl != null)
@@ -388,153 +388,10 @@ public class Logic extends BaseLogic
 		return voColl;
 	}
 
-	/*private boolean doSaveLookupInstances() 
-	{
-		LookupTypeCacheVoCollection voColl = form.getGlobalContext().Core.getLookupTypeCache();
-		
-		removeUnusedLkpTypes(voColl);
-				
-		for (int i = 0; voColl != null && i < voColl.size(); i++) 
-		{
-			if(voColl.get(i).getLookupTypeIsNotNull())
-			{
-				for (int j = 0; voColl.get(i).getLookupInstancesIsNotNull() && j < voColl.get(i).getLookupInstances().size(); j++) 
-				{
-					if(saveLookupInstance(voColl.get(i).getLookupType(), voColl.get(i).getLookupInstances().getIndex(j)) == false)
-					{
-						//skip the save for the same LookupType if one fails
-						break;
-					}
-				}
-			}
-		}
-	
-		return true;
-	}*/
-
-/*	private void removeUnusedLkpTypes(LookupTypeCacheVoCollection voColl) 
-	{
-		//Save only the lookups having an Lookup Type that has been saved (remove the lookup instances from
-		//the cache where it's lookup type have not been saved
-		boolean lkpTypeUsed = true;
-		while(lkpTypeUsed)
-		{
-			lkpTypeUsed = false;
-			for (int i = 0; voColl != null && i < voColl.size(); i++) 
-			{
-				if(isLookupTypeUsed(voColl.get(i).getLookupType()) == false)
-				{
-					voColl.remove(i);
-					lkpTypeUsed = true;
-					break;
-				}
-			}
-		}
-	}*/
-
-	/*private boolean isLookupTypeUsed(LookupTypeVo lookupType) 
-	{
-		QuestionInformationVo voQI = form.getGlobalContext().Admin.getSelectedQuestion();
-		if(voQI != null && lookupType != null)
-		{
-			for(int i=0; voQI.getAnswerTypesIsNotNull() && i<voQI.getAnswerTypes().size(); i++)
-			{
-				if(lookupType.getId() == voQI.getAnswerTypes().get(i).getLookupType().getId())
-					return true;
-			}
-		}
-		return false;
-	}*/
-
-	/*private boolean saveLookupInstance(LookupTypeVo lookupType, LookupInstVo voLkpInst) 
-	{
-		if(lookupType == null)
-			return false;
-		
-		String[] errors = voLkpInst.validate();
-		if(errors != null)
-		{
-			engine.showErrors(errors);
-			return false;
-		}
-		
-		//Clear the temporary negative id
-		if(voLkpInst.getId() <0)
-			voLkpInst.setId(0);
-		
-		try 
-		{
-			domain.saveLookupInstance(lookupType, voLkpInst);
-		} 
-		catch(StaleObjectException ex) 
-		{
-			engine.showMessage(ims.configuration.gen.ConfigFlag.UI.STALE_OBJECT_MESSAGE.getValue());
-			return false;
-		}		
-		catch (DomainInterfaceException ex)
-		{
-			engine.showMessage(ex.getMessage());
-			return false;
-		}	
-		return true;
-	}
-*/
 	private boolean checkMandatory() 
 	{
-		/*//Check the classification
-		if(isClassificationSelected() == false)
-		{
-			engine.showMessage("Please select a Classification");
-			return false;
-		}*/
-		
-/*s*/
-		
-/*		//Check if we have lookup instances then lookup type has to be entered
-		if(form.grdAnswerType().getRows().size() > 0 && form.qmbLookupType().getValue() == null)
-		{
-			engine.showMessage("Please select Lookup Type");
-			form.qmbLookupType().setFocus();
-			return false;
-		}*/
-		
-		/*//Check if there is a new record then the status should not be inactive
-		PreActiveActiveInactiveStatus status = form.cmbStatus().getValue();
-		if(isNewQuestion() && status != null && status.equals(PreActiveActiveInactiveStatus.INACTIVE))
-		{
-			engine.showMessage("Status cannot be set to inactive for a new record.");
-			form.cmbStatus().setFocus();
-			return false;
-		}
-		
-		//For an active record we should not inactivate it
-		if(status != null && status.equals(PreActiveActiveInactiveStatus.INACTIVE) && isRecordActive())
-		{
-			engine.showMessage("Status cannot be changed to inactive for an active record.");
-			form.cmbStatus().setFocus();
-			return false;
-		}*/
-			
 		return true;
 	}
-
-	/*private boolean isClassificationSelected() 
-	{
-		TreeNode parentNode, childNode;
-		for(int i=0; i<form.treClassification().getNodes().size(); i++)
-		{
-			parentNode = form.treClassification().getNodes().get(i);
-			if(parentNode.isChecked())
-				return true;
-			for(int j=0; parentNode != null && j<parentNode.getNodes().size(); j++)
-			{
-				childNode = parentNode.getNodes().get(j);
-				if(childNode.isChecked())
-					return true;
-			}
-		}
-		return false;
-	}*/
 
 	private void loadData() 
 	{

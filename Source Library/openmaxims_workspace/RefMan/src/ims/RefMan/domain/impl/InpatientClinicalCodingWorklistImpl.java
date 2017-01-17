@@ -500,7 +500,10 @@ public class InpatientClinicalCodingWorklistImpl extends BaseInpatientClinicalCo
 			names.add("name");
 			values.add(name.toUpperCase() + "%");
 		}
-		hql += (" and loc.isVirtual = :virtual and loc.isActive = 1) order by loc.upperName asc");
+
+		/* TODO MSSQL case - hql += (" and loc.isVirtual = :virtual and loc.isActive = 1) order by loc.upperName asc"); */
+		hql += (" and loc.isVirtual = :virtual and loc.isActive = true) order by loc.upperName asc");
+
 		names.add("virtual");
 		values.add(Boolean.FALSE);
 		
@@ -510,7 +513,6 @@ public class InpatientClinicalCodingWorklistImpl extends BaseInpatientClinicalCo
 
 	public LocationLiteVoCollection listCaseNoteFolderLocations(LocationRefVo hospital, String searchLoc)
 	{
-		//WDEV-20395
 		OrganisationAndLocation orgLoc = (OrganisationAndLocation) getDomainImpl(OrganisationAndLocationImpl.class);
 		return orgLoc.listLocationsByTheParentLocation(null, hospital, Boolean.TRUE, null, null,Boolean.TRUE, searchLoc);//WDEV-22088
 	}

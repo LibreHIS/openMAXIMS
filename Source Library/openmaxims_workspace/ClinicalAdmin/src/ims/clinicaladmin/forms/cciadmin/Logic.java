@@ -855,156 +855,9 @@ public class Logic extends BaseLogic
 		
 	}
 
-	/*WDEV-11921
-	//WDEV-11836
-	private void populateRoutesGrid(MedicationRouteCollection routes) 
-	{
-		if(routes == null || routes.size() == 0)
-			return;
-		
-		form.lyrDetails().tabRoutes().dyngrdRoutes().getRows().clear();
-		
-		for(int i=0; i<routes.size(); i++)
-		{
-			if(routes.get(i) == null)
-				continue;
-			
-			DynamicGridRow row = form.lyrDetails().tabRoutes().dyngrdRoutes().getRows().newRow();
-			
-			DynamicGridColumn column = null;
-			DynamicGridCell cell = null;
-			
-			column = form.lyrDetails().tabRoutes().dyngrdRoutes().getColumns().getByIdentifier(COL_UNIT);
-			cell = row.getCells().newCell(column, DynamicCellType.ENUMERATION);
-			cell.setTooltip("");
-			cell.setAutoPostBack(true);
-			cell.setReadOnly(false);
-			
-			cell.getItems().newItem(routes.get(i));
-			populateUnselectedRoutesItems(cell, routes);
-			
-			cell.setValue(routes.get(i));
-			row.setValue(routes.get(i));
-		}
-	}
-
-	private void populateUnselectedRoutesItems(DynamicGridCell cell, MedicationRouteCollection routes) 
-	{
-		if(cell == null || routes == null || routes.size() == 0)
-			return;
-		
-		MedicationRouteCollection allRoutes = ims.core.vo.lookups.LookupHelper.getMedicationRoute(this.domain.getLookupService());
-		
-		for(int i = 0; i < allRoutes.size(); i++)
-		{
-			if(routes.contains(allRoutes.get(i)))
-				continue;
-			
-			cell.getItems().newItem(allRoutes.get(i));
-		}
-	}
-
-	//WDEV-11836
-	private void populateFormsGrid(DoseFormIndicatorCollection forms) 
-	{
-		if(forms == null || forms.size() == 0)
-			return;
-		
-		form.lyrDetails().tabForms().dyngrdForms().getRows().clear();
-		
-		for(int i=0; i<forms.size(); i++)
-		{
-			if(forms.get(i) == null)
-				continue;
-			
-			DynamicGridRow row = form.lyrDetails().tabForms().dyngrdForms().getRows().newRow();
-			
-			DynamicGridColumn column = null;
-			DynamicGridCell cell = null;
-			
-			column = form.lyrDetails().tabForms().dyngrdForms().getColumns().getByIdentifier(COL_UNIT);
-			cell = row.getCells().newCell(column, DynamicCellType.ENUMERATION);
-			cell.setTooltip("");
-			cell.setAutoPostBack(true);
-			cell.setReadOnly(false);
-			
-			cell.getItems().newItem(forms.get(i));
-			populateUnselectedFormsItems(cell, forms);
-			
-			cell.setValue(forms.get(i));
-			row.setValue(forms.get(i));
-		}
-	}
-
-	//WDEV-11836
-	private void populateUnselectedFormsItems(DynamicGridCell cell, DoseFormIndicatorCollection forms) 
-	{
-		if(cell == null || forms == null || forms.size() == 0)
-			return;
-		
-		DoseFormIndicatorCollection allForms = ims.clinical.vo.lookups.LookupHelper.getDoseFormIndicator(this.domain.getLookupService());
-		
-		for(int i = 0; i < allForms.size(); i++)
-		{
-			if(forms.contains(allForms.get(i)))
-				continue;
-			
-			cell.getItems().newItem(allForms.get(i));
-		}
-	}
-
-	//WDEV-11836
-	private void populateUnitsGrid(MedicationDoseUnitCollection units) 
-	{
-		if(units == null || units.size() == 0)
-			return;
-		
-		form.lyrDetails().tabUnits().dyngrdUnits().getRows().clear();
-		
-		for(int i=0; i<units.size(); i++)
-		{
-			if(units.get(i) == null)
-				continue;
-			
-			DynamicGridRow row = form.lyrDetails().tabUnits().dyngrdUnits().getRows().newRow();
-			
-			DynamicGridColumn column = null;
-			DynamicGridCell cell = null;
-			
-			column = form.lyrDetails().tabUnits().dyngrdUnits().getColumns().getByIdentifier(COL_UNIT);
-			cell = row.getCells().newCell(column, DynamicCellType.ENUMERATION);
-			cell.setTooltip("");
-			cell.setAutoPostBack(true);
-			cell.setReadOnly(false);
-			
-			cell.getItems().newItem(units.get(i));
-			populateUnselectedUnitsItems(cell, units);
-			
-			cell.setValue(units.get(i));
-			row.setValue(units.get(i));
-		}
-	}
-
-	//WDEV-11836
-	private void populateUnselectedUnitsItems(DynamicGridCell cell, MedicationDoseUnitCollection units) 
-	{
-		if(cell == null || units == null || units.size() == 0)
-			return;
-		
-		MedicationDoseUnitCollection allUnits = ims.core.vo.lookups.LookupHelper.getMedicationDoseUnit(this.domain.getLookupService());
-		
-		for(int i = 0; i < allUnits.size(); i++)
-		{
-			if(units.contains(allUnits.get(i)))
-				continue;
-			
-			cell.getItems().newItem(allUnits.get(i));
-		}
-	}
-	WDEV-11921*/
 	/**
 	 * Gets the hotlists associated with a given object name, based on the current ccitype
-	 * @param String
+	 * @param cciID
 	 * @return void
 	 */
 	private void populateHotlists(Integer cciID) 
@@ -1016,7 +869,7 @@ public class Logic extends BaseLogic
 			form.getLocalContext().setIHotlistShorts(collIHotlistShort);
 			SpecialtyCollection specialties = new SpecialtyCollection();
 			
-			// loop through results adding each associated specialty to a collection
+			// Loop through results adding each associated specialty to a collection
 			for (int i = 0; i < collIHotlistShort.length; i++ )
 			{
 				if (collIHotlistShort[i].getISpecialtyIsNotNull().booleanValue())
@@ -1542,74 +1395,20 @@ public class Logic extends BaseLogic
 		return result;
 	}
 
-	/*WDEV-11921
-	//WDEV - 11836
-	private MedicationRouteCollection getRoutesFromGrid() 
-	{
-		MedicationRouteCollection routes = new MedicationRouteCollection();
-		
-		for(int i=0; i<form.lyrDetails().tabRoutes().dyngrdRoutes().getRows().size(); i++)
-		{
-			if(form.lyrDetails().tabRoutes().dyngrdRoutes().getRows().get(i).getValue() instanceof MedicationRoute)
-			{
-				MedicationRoute route = (MedicationRoute) form.lyrDetails().tabRoutes().dyngrdRoutes().getRows().get(i).getValue();
-				routes.add(route);
-			}
-		}
-		
-		return routes.size() > 0 ? routes : null;
-	}
-	
-	//WDEV - 11836
-	private DoseFormIndicatorCollection getFormsFromGrid() 
-	{
-		DoseFormIndicatorCollection forms = new DoseFormIndicatorCollection();
-		
-		for(int i=0; i<form.lyrDetails().tabForms().dyngrdForms().getRows().size(); i++)
-		{
-			if(form.lyrDetails().tabForms().dyngrdForms().getRows().get(i).getValue() instanceof DoseFormIndicator)
-			{
-				DoseFormIndicator formDose = (DoseFormIndicator) form.lyrDetails().tabForms().dyngrdForms().getRows().get(i).getValue();
-				forms.add(formDose);
-			}
-		}
-		
-		return forms.size() > 0 ? forms : null;
-	}
-	
-	//WDEV - 11836
-	private MedicationDoseUnitCollection getUnitsFromGrid() 
-	{
-		MedicationDoseUnitCollection units = new MedicationDoseUnitCollection();
-		
-		for(int i=0; i<form.lyrDetails().tabUnits().dyngrdUnits().getRows().size(); i++)
-		{
-			if(form.lyrDetails().tabUnits().dyngrdUnits().getRows().get(i).getValue() instanceof MedicationDoseUnit)
-			{
-				MedicationDoseUnit unit = (MedicationDoseUnit) form.lyrDetails().tabUnits().dyngrdUnits().getRows().get(i).getValue();
-				units.add(unit);
-			}
-		}
-		
-		return units.size() > 0 ? units : null;
-	}
-	WDEV-11921
-	*/
-
 	/**
 	 * Returns a TaxonomyMapCollection of all the mappings onscreen. 
 	 * @param void
 	 * @return TaxonomyMapCollection
 	 */
-	private ITaxonomyMapCollection getMappings(boolean isProcedure) //http://jira/browse/WDEV-20066
+	private ITaxonomyMapCollection getMappings(boolean isProcedure)
 	{
 		ITaxonomyMapCollection voTaxonomyMapCollection;
 		if(!isProcedure)
 		{
 			voTaxonomyMapCollection =  new TaxonomyMapCollection();
-			for (int i = 0; i < form.lyrDetails().tabMappings().grdMappings().getRows().size(); i++)//WDEV-11921
+			for (int i = 0; i < form.lyrDetails().tabMappings().grdMappings().getRows().size(); i++)
 			{
-				grdMappingsRow row = form.lyrDetails().tabMappings().grdMappings().getRows().get(i);//WDEV-11921
+				grdMappingsRow row = form.lyrDetails().tabMappings().grdMappings().getRows().get(i);
 				TaxonomyMap voTaxonomyMap = row.getValue() != null?row.getValue():new TaxonomyMap();
 				voTaxonomyMap.setTaxonomyCode(row.getcolCode());			
 				voTaxonomyMap.setTaxonomyName(row.getcolExtCodeType());

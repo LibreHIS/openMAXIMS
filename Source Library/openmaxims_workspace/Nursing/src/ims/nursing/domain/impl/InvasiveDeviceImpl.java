@@ -87,7 +87,8 @@ public class InvasiveDeviceImpl extends BaseInvasiveDeviceImpl
 	public InvasiveDeviceConfigVoCollection listFull() 
 	{
 		DomainFactory factory = getDomainFactory();
-		String hql = "from InvasiveDeviceConfig dsp where dsp.isActive = 1";
+		/* TODO MSSQL case - String hql = "from InvasiveDeviceConfig dsp where dsp.isActive = 1"; */
+		String hql = "from InvasiveDeviceConfig dsp where dsp.isActive = TRUE";
 		
 		return InvasiveDeviceConfigVoAssembler.createInvasiveDeviceConfigVoCollectionFromInvasiveDeviceConfig(factory.find(hql));
 	}

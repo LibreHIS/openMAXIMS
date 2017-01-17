@@ -104,18 +104,8 @@ public class Logic extends BaseLogic
 		if (dates != null && dates.length > 0)
 		{
 			form.getGlobalContext().Core.setVentilationChartDateTime(dates);
-			// For each date, populate it into the all Records combo
-			/*
-			form.cmbAllRecords().clear();
-			for (int i=0; i<dates.length; i++)
-			{
-				DateTime curDate = dates[i];
-				form.cmbAllRecords().newRow(curDate.getDate(), curDate.getDate().toString());
-			}
-			*/
-		
+
 			// Set the combo value to the latest one
-			//form.cmbAllRecords().setValue(dates[dates.length-1].getDate());
 			if(shiftDetailsColl.size()>0)
 				form.cmbAllRecords().setValue(shiftDetailsColl.get(0));
 			
@@ -127,7 +117,7 @@ public class Logic extends BaseLogic
 				form.btnUpdate().setEnabled(false);
 			}
 			else
-				form.cmbRecordToUpdate().clear();  //wdev-13637
+				form.cmbRecordToUpdate().clear();
 				
 		}
 		

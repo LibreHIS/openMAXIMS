@@ -42,7 +42,8 @@ public class SelectPrognosticRiskAssessmentImpl extends BaseSelectPrognosticRisk
 	{
 		DomainFactory factory = getDomainFactory();
 
-		String query = "from PrognosticRiskConfiguration as prsk where prsk.isActive = 1 order by riskName";
+		/* TODO MSSQL case - String query = "from PrognosticRiskConfiguration as prsk where prsk.isActive = 1 order by riskName"; */
+		String query = "from PrognosticRiskConfiguration as prsk where prsk.isActive = true order by riskName";
 
 		return PrognosticRiskConfigVoAssembler.createPrognosticRiskConfigVoCollectionFromPrognosticRiskConfiguration(factory.find(query));
 	}

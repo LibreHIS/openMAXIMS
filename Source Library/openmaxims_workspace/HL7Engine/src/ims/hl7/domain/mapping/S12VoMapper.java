@@ -217,25 +217,6 @@ public class S12VoMapper extends VoMapper
 			ail.getLocationResourceID().getFacility().getNamespaceID().setValue(apptDetails.getFacilityCode());
 			ail.getLocationTypeAIL().getIdentifier().setValue(apptDetails.getLocationTypeCode());
 
-			//WDEV-21000
-//			aip.getSetIDAIP().setValue("1");
-//			String mosType=null;
-//			if(apptDetails.getMos()!=null)
-//			{
-//				for (int i=0;i<apptDetails.getMos().size();i++)
-//				{
-//					renderMemberOfStaffShortVoToXCNX(apptDetails.getMos().get(i), aip, apptVo.getProviderSystem());
-//
-//					if(apptDetails.getMos().get(i).getStaffType()!=null)
-//					{
-//						mosType=svc.getRemoteLookup(apptDetails.getMos().get(i).getStaffType().getID(), apptVo.getProviderSystem().getCodeSystem().getText());
-//					}
-//				}
-//			}
-//			if(mosType!=null)
-//				aip.getResourceRole().getIdentifier().setValue(mosType);
-
-			
 			ais.getSetIDAIS().setValue("1");
 			ais.getUniversalServiceIdentifier().getIdentifier().setValue(apptDetails.getServiceCode());
 			ais.getPlacerSupplementalServiceInformation(0).getIdentifier().setValue(apptDetails.getDoSId());
@@ -243,12 +224,8 @@ public class S12VoMapper extends VoMapper
 
 			populateMSH( event.getProviderSystem(),  message.getMSH(),Long.toString( new java.util.Date().getTime()),"SIU","S12");
 			renderPatientVoToPID(apptDetails.getPatient(),pid,event.getProviderSystem());
-			//WDEV-20993
-//			renderGPDetailsToPD1(apptDetails.getPatient(),pd1);
 			renderGPDetailsToPD1(apptDetails.getPatient(), pd1, event.getProviderSystem());
-			
-			
-			//WDEV-21000
+
 			/*
 			 * Construct AIP segment(s)
 			 * 
@@ -565,45 +542,6 @@ public class S12VoMapper extends VoMapper
 
 	protected final void renderMemberOfStaffShortVoToXCNX(MemberOfStaffShortVo mos, AIP aip, ProviderSystemVo providerSystem) throws HL7Exception
 	{
-		
-		//WDEV-21000 Following logic is wrong - replaced below.
-		
-//		int startPos=0;
-//		
-//		if (aip.getPersonnelResourceID().length > 0)
-//		{
-//			startPos = aip.getPersonnelResourceID().length-1;
-//		}
-//
-//		if (mos.getCodeMappings() != null)
-//		{
-//			for (int i = 0; i < mos.getCodeMappings().size(); i++)
-//			{
-//				ims.core.vo.TaxonomyMap map = mos.getCodeMappings().get(i);
-//				if (map.getTaxonomyName().equals(providerSystem.getCodeSystem()))
-//				{
-//					XCN xcnNew = aip.getPersonnelResourceID(startPos);
-//					xcnNew.getGivenName().setValue(mos.getName().getForename());
-//					xcnNew.getFamilyName().getSurname().setValue(mos.getName().getSurname());
-//					xcnNew.getIDNumber().setValue(map.getTaxonomyCode());
-//					//WDEV-21000
-//					TaxonomyType taxonomyType = map.getTaxonomyName();
-//					if (taxonomyType != null)
-//					{
-//						String taxTypeText = svc.getRemoteLookup(taxonomyType.getID(), providerSystem.getCodeSystem().getText());
-//						if (taxTypeText != null)
-//						{
-//							xcnNew.getAssigningAuthority().getNamespaceID().setValue(map.getTaxonomyName().toString());
-//						}
-//					}
-//					
-//					startPos++;
-//				}
-//				
-//			}
-//		}
-//	}
-
 		LOG.debug("VoMapper renderMemberOfStaffShortVoToXCNX: entry");
 	
 		if (mos != null)

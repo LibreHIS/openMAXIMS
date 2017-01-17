@@ -356,10 +356,7 @@ public class TransferElectiveListDialogImpl extends BaseTransferElectiveListDial
 		if (listIdHcp!=null && listIdHcp.length()>0)
 		{	
 			hqlConditions.append(andStr);
-			hqlConditions.append("  hcp.id in "+ listIdHcp); //WDEV-22386
-			//and listOwners.defaultForHCP=1
-			//markers.add("ID_List");
-			//values.add(listIdHcp);
+			hqlConditions.append("  hcp.id in "+ listIdHcp);
 			andStr = " and ";
 		}
 		
@@ -373,7 +370,10 @@ public class TransferElectiveListDialogImpl extends BaseTransferElectiveListDial
 		}
 
 		hqlConditions.append(andStr);
-		hqlConditions.append(" eLC.isActive = 1");
+
+		/* TODO MSSQL case - hqlConditions.append(" eLC.isActive = 1"); */
+		hqlConditions.append(" eLC.isActive = TRUE");
+
 		andStr = " and ";
 
 		

@@ -401,7 +401,7 @@ public class Logic extends BaseLogic
 							 }
 						}
 					}
-					//24/01/2004 - clear the New Appointment time selected in the grid
+					// clear the New Appointment time selected in the grid
 					//Check the appt_id
 					if(furtherAppointment() == false)
 					{
@@ -410,9 +410,9 @@ public class Logic extends BaseLogic
 							if(actionSession.getAppt_id().equals("") == false && actionSession.getAppt_id().equals(form.MainGrid().getRows().get(k).getValue().Appt_id))
 							{
 								String newAppt = form.MainGrid().getRows().get(i).getNewAppointment();
-								//Clear only the time but leave the date - the date has 10 characters (e.g. 10/02/2005)
+								// Clear only the time but leave the date - the date has 10 characters (e.g. 10/02/2005)
 								form.MainGrid().getRows().get(i).setNewAppointment((newAppt != null && newAppt.length() > 10)?newAppt.substring(0,10):"");
-								//31/01/2004 - Clear the time as well - from the 
+								// lear the time as well - from the
 								clearTime(actionSession.getSessionDate(), actionSession.getAppt_id()); 
 								break;
 							}
@@ -422,29 +422,12 @@ public class Logic extends BaseLogic
 					{
 						//Delete the records -- how? Delete the data and populate again?
 						//TODO - for further appointments - don't forget to use break when you found the date
-						
 					}
-					
-					//------------------------------------------------
+
 				}
 			}
-			//------end clear slots time----------------------------------
-			
-			/*//Delete the dates having the same action as the selected one
-			do{
-				bDeleted = false; 
-				for(int i=0; i<selectedDates.size(); i++)
-				{
-					actionSession = (ActionSession)selectedDates.get(i);
-					if(actionSession.getAction().equals(getCurrentActionSelected(actionSession.getSessionDate())))
-					{
-						selectedDates.remove(i);
-						bDeleted = true;
-						break;
-					}
-				}
-			}while(bDeleted);*/
-			//Set the time required
+
+			// Set the time required
 			for(int i=0; i<selectedDates.size(); i++)
 			{
 				actionSession = (ActionSession)selectedDates.get(i);
@@ -452,7 +435,7 @@ public class Logic extends BaseLogic
 				actionSession.setIntervalTimeRequired(GetIntervalTimeRequired(actionSession));
 			}
 			
-			//If the action has changed for the date selected, refresh the Slots
+			// If the action has changed for the date selected, refresh the Slots
 			if(sessionDate != null)
 				OnDateSelected(sessionDate);
 			
@@ -461,7 +444,7 @@ public class Logic extends BaseLogic
 		else if(formName.equals(form.getForms().CcoSched.ResourceAvailabilty) && result.equals(DialogResult.OK))
 		{
 			ArrayList ar = form.getGlobalContext().CcoSched.Booking.getDefaultTime();//Context.ContextBooking.DefaultTime;
-			//23/12/2004 - Array list of times - if different from the default time
+			// Array list of times - if different from the default time
 			ArrayList newTimes = new ArrayList();
 			if (ar.size() > 0)
 			{	
@@ -483,8 +466,6 @@ public class Logic extends BaseLogic
 							ok = true;
 						else
 						{
-							//23/12/2005
-							//apply the +- 10 mins rule (the flag - ims.configuration.gen.ConfigFlag.DTO.SCHEDULER_APPT_INTERVAL.getValue())
 							Time newTime = GetRoundedTime((String)ar.get(j), slotsAvailable);
 							if(newTime != null)
 							{
@@ -492,15 +473,7 @@ public class Logic extends BaseLogic
 								ok = true;
 							}
 						}
-						/*for(int k=0; k<slotsAvailable.size(); k++)
-						{
-							String s = (String)slotsAvailable.get(k);
-							if (s.equals(a))
-							{
-								ok = true;
-								break;
-							}
-						}*/
+
 						if (!ok)
 						{
 							engine.showMessage("The slot selected is not available for the date " + date.toString(DateFormat.STANDARD));
@@ -516,7 +489,8 @@ public class Logic extends BaseLogic
 				{
 					Date date = (Date)form.Calendar().getSelectedDates().get(i);
 					String appt_id = "";
-					//26/01/2005 - Pass the appointment ID if any
+
+					// Pass the appointment ID if any
 					if(furtherAppointment() && i<form.MainGrid().getRows().size())
 						appt_id = form.MainGrid().getRows().get(i).getValue().Appt_id;
 					GetAlreadyBookedSlots(date, appt_id);
@@ -1414,27 +1388,11 @@ public class Logic extends BaseLogic
 				tmpArr.add(excludedPeriods.get(j));
 				
 			excludedPeriods.clear();
-			
-//			for(int j=0; j<tmpArr.size(); j++)
-//			{
-//				Time[] excludedPeriod = (Time[]) tmpArr.get(j);
-//				if (s.isGreaterThan(excludedPeriod[1]) || e.isLessThan(excludedPeriod[0]))
-//					excludedPeriods.add(excludedPeriod);
-//				else if (s.isGreaterOrEqualThan(excludedPeriod[0]) && s.isLessOrEqualThan(excludedPeriod[1]) && e.isGreaterThan(excludedPeriod[1]))
-//					excludedPeriods.add(new Time[]{excludedPeriod[1], e});
-//				else if (s.isLessThan(excludedPeriod[0]) && e.isGreaterOrEqualThan(excludedPeriod[0]) && e.isLessOrEqualThan(excludedPeriod[1]))
-//					excludedPeriods.add(new Time[]{s, excludedPeriod[0]});
-//				else if (s.isGreaterThan(excludedPeriod[0]) && s.isLessThan(excludedPeriod[1]) && e.isGreaterThan(excludedPeriod[0]) && e.isLessThan(excludedPeriod[1]))
-//				{
-//					excludedPeriods.add(new Time[]{excludedPeriod[0], s});
-//					excludedPeriods.add(new Time[]{e, excludedPeriod[1]});
-//				}
-//			}
-			
+
 			for(int j=0; j<tmpArr.size(); j++)
 			{
 				Time[] excludedPeriod = (Time[])tmpArr.get(j);
-				// exclusion times typically start on the hour 
+				// Exclusion times typically start on the hour
 				if (CompareTimes(s, excludedPeriod[1]) >= 0 || CompareTimes(e, excludedPeriod[0]) <= 0)
 					excludedPeriods.add(excludedPeriod);
 				else if (CompareTimes(s,excludedPeriod[0]) >= 0 && CompareTimes(s, excludedPeriod[1]) <= 0 && CompareTimes(e, excludedPeriod[1]) > 0)
@@ -1450,7 +1408,7 @@ public class Logic extends BaseLogic
 			
 		}
 //		#endregion
-//
+
 //		#region 4. find HCP period
 		Time startTimeListOwner = null;
 		Time endTimeListOwner = null;
@@ -2286,32 +2244,13 @@ public class Logic extends BaseLogic
 			form.getLocalContext().setCheckedDate(null);//UIEngine.Context.Remove("10020:Checked date");
 			data[1] = minDate;
 			
-			//Fill Session Details - 07.06.2004 -----------------------------------------
+			//Fill Session Details -----------------------------------------
 			Hashtable ht = form.getGlobalContext().CcoSched.Booking.getSelectedSessions();
 			if (ht != null)
 				form.getGlobalContext().CcoSched.Booking.getSelectedSessions().remove(date.toString(DateFormat.ISO));
-
-//			ArrayList ds = form.getGlobalContext().CcoSched.Booking.getDateSessionSlotsList();
-//			if (ds != null)
-//			{
-//				ArrayList ar = new ArrayList();
-//				for(int i=0; i<ds.size(); i++)
-//				{
-//					DateSessionSlotsClass d = (DateSessionSlotsClass)ds.get(i); 
-//					if(d.getDate().equals(date))
-//						ar.add(d);
-//				}
-//				
-//				for(int i=0; i<ar.size(); i++)
-//					ds.remove(ar.get(i));
-//
-//
-//				if(form.getGlobalContext().CcoSched.Booking.getSelectedDate() != null && date.equals(form.getGlobalContext().CcoSched.Booking.getSelectedDate()))
-//					SetSlots();
-//			}
 			//End fill details ----------------------------------------------------------
 			
-//			07/01/2005 - Remove the date from the ActionSession if is there
+//			Remove the date from the ActionSession if is there
 			ArrayList selectedDates = form.getGlobalContext().CcoSched.Booking.getCalendarSelectedDates();
 			if(selectedDates != null)
 			{
@@ -2321,8 +2260,8 @@ public class Logic extends BaseLogic
 					{
 						if(furtherAppointment() == false)
 						{
-							//Add extra checking if not opened from further assessment
-							//Check the appt_id
+							// Add extra checking if not opened from further assessment
+							// Check the appt_id
 							if(((ActionSession)selectedDates.get(i)).getAppt_id().equals(form.MainGrid().getRows().get(rowDataIndex).getValue().Appt_id))
 							{
 								selectedDates.remove(i);
@@ -2621,25 +2560,9 @@ public class Logic extends BaseLogic
 		form.getLocalContext().setGroupId(groupID);
 		form.getLocalContext().setActivityID(activityID);
 
-		//Code refactoring - replace the code below, with the method
 		if(loadListOwner(groupID, activityID) == false)
 			return;
-//		Sd_activstaff activstaff = (Sd_activstaff) domain.getDTOInstance(Sd_activstaff.class);
-//		activstaff.Filter.clear();
-//		activstaff.Filter.Grp_id = groupID;
-//		activstaff.Filter.Activ_id = activityID;
-//		activstaff.Filter.Act_indstf = "Y";
-//		result = activstaff.list();
-//		if (result != null)
-//		{
-//			ShowMessage(result.getMessage());
-//			return;
-//		}
-//
-//		for(int i=0; i<activstaff.DataCollection.count(); i++)
-//			form.ListOwner().newRow(activstaff.DataCollection.get(i), activstaff.DataCollection.get(i).Staff_name);
 
-		//WDEV-16945
 		
 //		#region Populate Resources
 		String actionID = GetActionID(form.MainGrid().getValue().Appt_id);
@@ -2733,57 +2656,14 @@ public class Logic extends BaseLogic
 			Integer di = tpa.getTl_dose();
 			form.Dose().setValue(di);
 
-			//The Fractions are now equal with a count on appointments
-//			di = GetIntegerFromString(tpa.DataCollection.get(0).Tl_fractions);
-//			form.Fractions().setValue(di);
-
 			di = tpa.getTl_duration();
 			form.Duration().setValue(di);
-			
-//			Go_ptplact tpa = (Go_ptplact) domain.getDTOInstance(Go_ptplact.class);
-//			tpa.Filter.clear();
-//			tpa.Filter.Pt_act_id = s;
-//
-//			result = tpa.get();
-//			if (result != null)
-//			{
-//				ShowMessage(result.getMessage());
-//				return;
-//			}
-//			if (tpa.DataCollection.count() == 0)
-//			{
-//				ShowMessage("Internal error: failed to get treatment plan action.");
-//				return;
-//			}
-//
-//			// set default value
-//			String str = ((String)(data[4])).equals("") ? tpa.DataCollection.get(0).Act_consult : (String)data[5];
-//			
-//			for(int i=0; i<form.ListOwner().getValues().size(); i++)
-//			{
-//				Sd_activstaff.Sd_activstaffRecord tmp = (Sd_activstaff.Sd_activstaffRecord)form.ListOwner().getValues().get(i);
-//				if (tmp.Staff_no.equals(str))
-//				{
-//					form.ListOwner().setValue(tmp);
-//					OnListOwner(m_ManualEvents);
-//					data[5] = str;
-//					data[7] = tmp.Staffactiv_id;
-//					SetDataInGlobalContext(data, form.MainGrid().getSelectedRowIndex());
-//					break;
-//				}
-//			}
-//			Integer di = GetIntegerFromString(tpa.DataCollection.get(0).Tl_dose);
-//			form.Dose().setValue(di);
-//
-//			//The Fractions are now equal with a count on appointments
-////			di = GetIntegerFromString(tpa.DataCollection.get(0).Tl_fractions);
-////			form.Fractions().setValue(di);
-//
-//			di = GetIntegerFromString(tpa.DataCollection.get(0).Tl_dur);
-//			form.Duration().setValue(di);
+
 		}
 //		#endregion
+
 		ShowExternalBeem(activityID.equals("-202") || activityID.equals("-207"));
+
 //		#region Modality
 		if (activityID.equals("-202") || activityID.equals("-207"))
 		{
@@ -2834,108 +2714,15 @@ public class Logic extends BaseLogic
 				}
 			}
 		}
-//		#endregion
-	
-//		if (activityID.equals("-202") || activityID.equals("-207"))
-//		{
-//			Sd_modactmc modactmc = (Sd_modactmc) domain.getDTOInstance(Sd_modactmc.class);
-//			modactmc.Filter.clear();
-//			modactmc.Filter.Modal_type_id = form.Modality().getValue();
-//			modactmc.Filter.Energy = form.Energy().getValue() != null?form.Energy().getValue().toString():"";
-//			modactmc.Filter.Energy_unit = form.EnergyUnit().getValue();
-//			modactmc.Filter.Action_id = actionID;
-//			result = modactmc.list();
-//			if (result != null)
-//			{
-//				ShowMessage(result.getMessage());
-//				return;
-//			}
-//			for (int i = 0; i < modactmc.DataCollection.count(); i++)
-//			{
-//				boolean exist = false;
-//				for(int j=0; j<form.Resource().getValues().size(); j++)
-//				{
-//					if (modactmc.DataCollection.get(i).Mc_id.equals(((Sd_modactmc.Sd_modactmcRecord)form.Resource().getValues().get(j)).Mc_id))
-//						exist = true;						
-//				}
-//				if (!exist)
-//				{
-//					form.Resource().newRow(modactmc.DataCollection.get(i), modactmc.DataCollection.get(i).Mc_nm);
-//					if (modactmc.DataCollection.get(i).Mc_id.equals(selectedResourceID))
-//					{
-//						form.Resource().setValue(modactmc.DataCollection.get(i));
-//						OnResource(m_ManualEvents);
-//					}
-//				}
-//			}
-//		}
-//		else
-//		{
-//			Sd_mc_act resource_act = (Sd_mc_act) domain.getDTOInstance(Sd_mc_act.class);
-//			resource_act.Filter.clear();
-//			resource_act.Filter.Group_id = groupID;
-//			resource_act.Filter.Activity_id = activityID;
-//			resource_act.Filter.Action_id = actionID;
-//			result = resource_act.list();
-//			if (result != null)
-//			{
-//				ShowMessage(result.getMessage());
-//				return;
-//			}
-//			for (int i = 0; i < resource_act.DataCollection.count(); i++)
-//			{
-//				boolean exist = false;
-//				for(int j=0; j<form.Resource().getValues().size(); j++)
-//				{
-//					if (resource_act.DataCollection.get(i).Mc_id.equals(((Sd_mc_act.Sd_mc_actRecord)form.Resource().getValues().get(j)).Mc_id))
-//						exist = true;						
-//				}
-//				if (!exist)
-//				{
-//					form.Resource().newRow(resource_act.DataCollection.get(i), resource_act.DataCollection.get(i).Mc_name);
-//					if (resource_act.DataCollection.get(i).Mc_id.equals(selectedResourceID))
-//					{
-//						form.Resource().setValue(resource_act.DataCollection.get(i));
-//						OnResource(m_ManualEvents);
-//					}
-//				}
-//			}
-//		}
-//
-//		#endregion
-		//Refactoring loading the Time Required and Interval Required
+
+		// Refactoring loading the Time Required and Interval Required
 		loadTimeIntervalRequired(groupID, activityID, actionID);
-		
-//		#region Time Required and Interval Required
-//		Sd_activity_action activityAction = (Sd_activity_action) domain.getDTOInstance(Sd_activity_action.class);
-//		activityAction.Filter.clear();
-//		activityAction.Filter.Grp_id = groupID;
-//		activityAction.Filter.Activ_id = activityID;
-//
-//		result = activityAction.list();
-//		if (result != null)
-//		{
-//			ShowMessage(result.getMessage());
-//			return;
-//		}
-//
-//		for(int j=0; j<activityAction.DataCollection.count(); j++)
-//		{
-//			Sd_activity_action.Sd_activity_actionRecord a = activityAction.DataCollection.get(j);
-//			if (a.Action_id.equals(actionID))
-//			{
-//				Integer i = GetIntegerFromString(a.Int_req);
-//				form.getGlobalContext().CcoSched.Booking.setIntervalRequired(i ==null ? new Integer(0) : i);
-//				i = GetIntegerFromString(a.Tim_req);
-//				form.getGlobalContext().CcoSched.Booking.setTimeRequired(i ==null? new Integer(0) : i);		
-//			}
-//		}
-//		#endregion
+
 
 		if (!((String)data[4]).equals(""))
 		{
 			form.Calendar().setSelectedDay((Date)data[1]);
-			//17/01/2005 - call manually OnDateSelected
+			// Call manually OnDateSelected
 			OnDateSelected((Date)data[1]);
 			//----------------------
 			boolean m_Fire = false;
@@ -3669,25 +3456,11 @@ public class Logic extends BaseLogic
 				tmpArr.add(excludedPeriods.get(j));
 
 			excludedPeriods.clear();
-//			for(int j=0; j<tmpArr.size(); j++)
-//			{
-//				Time[] excludedPeriod = (Time[])tmpArr.get(j);
-//				if (CompareTimes(s, excludedPeriod[1]) > 0 || CompareTimes(e, excludedPeriod[0]) < 0)
-//					excludedPeriods.add(excludedPeriod);
-//				else if (CompareTimes(s, excludedPeriod[0]) >= 0 && CompareTimes(s, excludedPeriod[1]) <= 0 && CompareTimes(e, excludedPeriod[1]) > 0)
-//					excludedPeriods.add(new Time[]{excludedPeriod[1], e});
-//				else if (CompareTimes(s, excludedPeriod[0]) < 0 && CompareTimes(e, excludedPeriod[0]) >= 0 && CompareTimes(e, excludedPeriod[1]) <= 0)
-//					excludedPeriods.add(new Time[]{s, excludedPeriod[0]});
-//				else if (CompareTimes(s, excludedPeriod[0]) > 0 && CompareTimes(s, excludedPeriod[1]) < 0 && CompareTimes(e, excludedPeriod[0]) > 0 && CompareTimes(e, excludedPeriod[1]) < 0)
-//				{
-//					excludedPeriods.add(new Time[]{excludedPeriod[0], s});
-//					excludedPeriods.add(new Time[]{e, excludedPeriod[1]});
-//				}
-//			}
+//
 			for(int j=0; j<tmpArr.size(); j++)
 			{
 				Time[] excludedPeriod = (Time[])tmpArr.get(j);
-				// exclusion times typically start on the hour 
+				// Exclusion times typically start on the hour
 				if (CompareTimes(s, excludedPeriod[1]) >= 0 || CompareTimes(e, excludedPeriod[0]) <= 0)
 					excludedPeriods.add(excludedPeriod);
 				else if (CompareTimes(s,excludedPeriod[0]) >= 0 && CompareTimes(s, excludedPeriod[1]) <= 0 && CompareTimes(e, excludedPeriod[1]) > 0)
@@ -4388,74 +4161,25 @@ public class Logic extends BaseLogic
 				}
 			}
 
-			//Load Resource class
+			// Load Resource class
 			Resource resource = new Resource();
 			resource.setGroupID(groupID);
 			resource.setActivityID(activityID);
 			resource.setActionID(actionID);
 			resource.setManualEvents(false);
 			resource.setSelectedResourceID("");
-			//Loading the resources
+
+			// Loading the resources
 			loadResource(resource);
-			//Loading the Time and Interval Required
+
+			// Loading the Time and Interval Required
 			loadTimeIntervalRequired(groupID, activityID, actionID);
-			//Code added - 11/10/04
+
+			// Code added
 			ShowSequence(0);
 			GetAvailability();
 		}
-		
-//		if(form.getGlobalContext().CcoSched.TreatmentPlan.getTreatmentPlanActionsIsNotNull())
-//		{
-//			Go_ptplactRecord go_ptplact = form.getGlobalContext().CcoSched.TreatmentPlan.getTreatmentPlanActions();
-//			int dose = 0, fractions = 0, duration = 0;
-//			String groupID = go_ptplact.Activitygrp, activityID = go_ptplact.Activity_id, actionID = go_ptplact.Action_id; 
-//			Go_ptplact.Go_ptplactDose_seqRecord doseRecord;
-//			ShowExternalBeem(true);
-//			ArrayList aData = new ArrayList();
-//			for(int i=0; i<go_ptplact.Dose_seqCollection.count(); i++)
-//			{
-//				doseRecord = go_ptplact.Dose_seqCollection.get(i);
-//				//Active + NotBooked
-//				if(doseRecord.Ed_dose_astat.equals(ACTIVE) && !doseRecord.Ed_isbooked.equalsIgnoreCase("Y"))
-//				{
-//					if(doseRecord.Eb_dose != null)
-//						dose 	  += GetIntegerFromString(doseRecord.Eb_dose) != null?GetIntegerFromString(doseRecord.Eb_dose).intValue():0;
-//					if(doseRecord.Eb_fractions != null)
-//						fractions += GetIntegerFromString(doseRecord.Eb_fractions) != null?GetIntegerFromString(doseRecord.Eb_fractions).intValue():0; 
-//					if(doseRecord.Eb_dur  != null)
-//						duration  += GetIntegerFromString(doseRecord.Eb_dur) != null?GetIntegerFromString(doseRecord.Eb_dur).intValue():0;
-//				}
-//			}
-//			
-//			form.Dose().setValue(new Integer(dose));
-//			form.Fractions().setValue(new Integer(fractions));
-//			form.Duration().setValue(new Integer(duration));
-//            form.Modality().setValue(go_ptplact.Modality_id);
-//			if(go_ptplact.Modality_enrgy != null && !go_ptplact.Modality_enrgy.equals(""))
-//				form.Energy().setValue(Float.valueOf(go_ptplact.Modality_enrgy));
-//            form.EnergyUnit().setValue(go_ptplact.Modalty_unit_id);
-//			
-//			form.getLocalContext().setGroupId(groupID);
-//			form.getLocalContext().setActivityID(activityID);
-//			
-//			//Load List Owner
-//			loadListOwner(groupID, activityID);
-//
-//			//Load Resource class
-//			Resource resource = new Resource();
-//			resource.setGroupID(groupID);
-//			resource.setActivityID(activityID);
-//			resource.setActionID(actionID);
-//			resource.setManualEvents(false);
-//			resource.setSelectedResourceID("");
-//			//Loading the resources
-//			loadResource(resource);
-//			//Loading the Time and Interval Required
-//			loadTimeIntervalRequired(groupID, activityID, actionID);
-//			//Code added - 11/10/04
-//			ShowSequence(0);
-//			GetAvailability();
-//		}
+
 	}
 	private boolean loadListOwner(String groupID, String activityID)
 	{

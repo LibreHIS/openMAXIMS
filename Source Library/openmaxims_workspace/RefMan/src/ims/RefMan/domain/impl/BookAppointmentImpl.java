@@ -377,7 +377,8 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 
 	public ims.core.vo.ServiceLiteVoCollection listActiveCanBeScheduledService()
 	{
-		return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(getDomainFactory().find("from Service service where (service.isActive = 1 and service.canBeScheduled = 1 and service.serviceCategory.id != '" + ServiceCategory.RADIOLOGY_MODALITY.getID() + "') order by service.serviceName asc"));   //wdev-20862
+		/* TODO MSSQL case - return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(getDomainFactory().find("from Service service where (service.isActive = 1 and service.canBeScheduled = 1 and service.serviceCategory.id != '" + ServiceCategory.RADIOLOGY_MODALITY.getID() + "') order by service.serviceName asc"));  */
+		return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(getDomainFactory().find("from Service service where (service.isActive = true and service.canBeScheduled = true and service.serviceCategory.id != '" + ServiceCategory.RADIOLOGY_MODALITY.getID() + "') order by service.serviceName asc"));
 	}
 
 	/**
@@ -386,7 +387,7 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 	 */
 	public Sch_BookingVo saveBooking(Sch_BookingVo voBooking, CatsReferralRefVo catsRef, Boolean isRebook) throws DomainInterfaceException, StaleObjectException
 	{
-		return saveBooking(voBooking, catsRef, isRebook, null, null, null, null); //WDEV-19543
+		return saveBooking(voBooking, catsRef, isRebook, null, null, null, null);
 	}
 	
 	private List createdReferralERODCollection(DomainFactory factory, List outpatientEROD, ReferralERODForBookAppointmentVoCollection outpatientERODCollection, HashMap objMap)
@@ -1097,14 +1098,15 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 		
 		return pathwayRTTStatus;
 	}
-	//WDEV-23223 - ends here
-	
+
 	private RTTStatusEventMapVo getRTTStatusEventMap(RTTStatusPoint rttStatusPoint)
 	{
 		if(rttStatusPoint == null)
 			return null;
-		
-		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = 1";
+
+		/* TODO MSSQL case - String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = 1"; */
+		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = true";
+
 		List<?> listRTTMap = getDomainFactory().find(query, new String[] {"RTTStatusPoint"}, new Object[] {rttStatusPoint.getId()});
 		
 		if(listRTTMap != null && listRTTMap.size() > 0 && listRTTMap.get(0) instanceof RTTStatusEventMap)
@@ -1115,7 +1117,7 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 		return null;
 	}
 	
-	// WDEV-23646 - Ensure the correct event Date Time is used when creating a new RTT Status
+	// Ensure the correct event Date Time is used when creating a new RTT Status
 	private PathwayRTTStatus createPathwayRTTStatus(CatsReferral record, Boolean isBasedOnHardCodedEvent, java.util.Date eventDateTime)
 	{
 		if(!ConfigFlag.DOM.RTT_STATUS_POINT_FUNCTIONALITY.getValue())
@@ -1183,7 +1185,8 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 	
 	private RTTStatusPoint getRTTStatusPointForBookedAppt(int bookedApptEventId)
 	{
-		String query = "select trs from RTTStatusEventMap as rsem left join rsem.targetRTTStatus as trs left join rsem.event as e where e.id =:eventID and rsem.active = 1 ";
+		/* TODO MSSQL case - String query = "select trs from RTTStatusEventMap as rsem left join rsem.targetRTTStatus as trs left join rsem.event as e where e.id =:eventID and rsem.active = 1 "; */
+		String query = "select trs from RTTStatusEventMap as rsem left join rsem.targetRTTStatus as trs left join rsem.event as e where e.id =:eventID and rsem.active = true ";
 		
 		List<?> rttList = getDomainFactory().find(query, new String[] {"eventID"}, new Object[] {bookedApptEventId});
 		
@@ -1679,8 +1682,10 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 		markers.add("CAB_TYPE");		
 		values.add(SchedCABSlotType.CAB.getID());
 
-		List<?> sessions = factory.find(" Select distinct session from Sch_Session as session " + " left join session.sessionSlots as slot " + clinicTypeJoin + listOwnerJoin + urgencyJoin + " where ( slot.activity.id = :activityId) " + " and session.sessionDate >= :startDate and session.sessionDate <= :endDate " + serviceCriteria + locationCriteria + clinicTypeCriteria + listOwnerCriteria + listtypeCriteria + urgencyCriteria + " and session.isFixed = 1 and session.sessionStatus = :open " +
-				"and (session.sessionProfileType.id = :OUTPATIENT_SESSION) and session.isRIE is null AND (slot.directAccessSlot.id != :CAB_TYPE OR slot.directAccessSlot is null)", markers, values, 1000); //wdev-19419
+		/* TODO MSSQL case - List<?> sessions = factory.find(" Select distinct session from Sch_Session as session " + " left join session.sessionSlots as slot " + clinicTypeJoin + listOwnerJoin + urgencyJoin + " where ( slot.activity.id = :activityId) " + " and session.sessionDate >= :startDate and session.sessionDate <= :endDate " + serviceCriteria + locationCriteria + clinicTypeCriteria + listOwnerCriteria + listtypeCriteria + urgencyCriteria + " and session.isFixed = 1 and session.sessionStatus = :open " +
+				"and (session.sessionProfileType.id = :OUTPATIENT_SESSION) and session.isRIE is null AND (slot.directAccessSlot.id != :CAB_TYPE OR slot.directAccessSlot is null)", markers, values, 1000);  */
+		List<?> sessions = factory.find(" Select distinct session from Sch_Session as session " + " left join session.sessionSlots as slot " + clinicTypeJoin + listOwnerJoin + urgencyJoin + " where ( slot.activity.id = :activityId) " + " and session.sessionDate >= :startDate and session.sessionDate <= :endDate " + serviceCriteria + locationCriteria + clinicTypeCriteria + listOwnerCriteria + listtypeCriteria + urgencyCriteria + " and session.isFixed = true and session.sessionStatus = :open " +
+				"and (session.sessionProfileType.id = :OUTPATIENT_SESSION) and session.isRIE is null AND (slot.directAccessSlot.id != :CAB_TYPE OR slot.directAccessSlot is null)", markers, values, 1000);
 		
 		
 		if (sessions == null || sessions.size() == 0)
@@ -1734,16 +1739,16 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 		DomainFactory factory = getDomainFactory();
 		String query = null;
 		
-		// WDEV-22672
 		Long noConsultationActivityRequiredForReferral = factory.countWithHQL("select count(cats.id) from CatsReferral as cats where cats.id = :CatsReferralId and (cats.consultationActivityRequired = 0 or cats.consultationActivityRequired is null) ", new String[] {"CatsReferralId"}, new Object[] {catsReferral.getID_CatsReferral()});
 		
-		if (noConsultationActivityRequiredForReferral == null || noConsultationActivityRequiredForReferral == 0) //WDEV-22672
+		if (noConsultationActivityRequiredForReferral == null || noConsultationActivityRequiredForReferral == 0)
 		{
 			List appointments  = factory.find("select appts.id from CatsReferral as cats right join cats.appointments as appts where appts.theatreBooking is null and cats.id = :CatsReferralId", new String[] {"CatsReferralId"}, new Object[] {catsReferral.getID_CatsReferral()});
 
 			if(appointments == null || appointments.size() == 0)
 			{
-				query = "select act from ServiceActivity as servActivity left join servActivity.activity as act left join servActivity.service as serv where serv.id = :serviceID and act.activityType = :actType and servActivity.isActive = :isActive  and (act.firstAppointment = 1 or act.diagnostic = 1) order by act.name asc";
+				/* TODO MSSQL case - query = "select act from ServiceActivity as servActivity left join servActivity.activity as act left join servActivity.service as serv where serv.id = :serviceID and act.activityType = :actType and servActivity.isActive = :isActive  and (act.firstAppointment = 1 or act.diagnostic = 1) order by act.name asc"; */
+				query = "select act from ServiceActivity as servActivity left join servActivity.activity as act left join servActivity.service as serv where serv.id = :serviceID and act.activityType = :actType and servActivity.isActive = :isActive  and (act.firstAppointment = true or act.diagnostic = true) order by act.name asc";
 			}
 			else
 			{
@@ -1972,16 +1977,17 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 		voReferralBooking.setCurrentAppointments(BookingAppointmentLiteVoAssembler.createBookingAppointmentLiteVoCollectionFromBooking_Appointment(currentAppts));
 
 		// Appts Requiring Rebook for Referral
-		List rebookAppts = factory.find("select appt from CatsReferral as catsRef join catsRef.appointments as appt where (catsRef.id = :idCatsRef and appt.requiresRebook = 1  and appt.theatreBooking is null )", new String[]{"idCatsRef"}, new Object[]{catsReferral.getID_CatsReferral()});
+		/* TODO MSSQL case - List rebookAppts = factory.find("select appt from CatsReferral as catsRef join catsRef.appointments as appt where (catsRef.id = :idCatsRef and appt.requiresRebook = 1  and appt.theatreBooking is null )", new String[]{"idCatsRef"}, new Object[]{catsReferral.getID_CatsReferral()}); */
+		List rebookAppts = factory.find("select appt from CatsReferral as catsRef join catsRef.appointments as appt where (catsRef.id = :idCatsRef and appt.requiresRebook = true  and appt.theatreBooking is null )", new String[]{"idCatsRef"}, new Object[]{catsReferral.getID_CatsReferral()});
+
 		voReferralBooking.setAppointmentsRequiringRebook(BookingAppointmentLiteVoAssembler.createBookingAppointmentLiteVoCollectionFromBooking_Appointment(rebookAppts));
 
-		//Theatre Appts - WDEV-7653
+		//Theatre Appts
 		List theatreAppts = factory.find("select appt from CatsReferral as catsRef join catsRef.appointments as appt where (catsRef.id = :idCatsRef and appt.theatreBooking <> null )", new String[]{"idCatsRef"}, new Object[]{catsReferral.getID_CatsReferral()});
 		voReferralBooking.setOtherAppointments(BookingAppointmentLiteVoAssembler.createBookingAppointmentLiteVoCollectionFromBooking_Appointment(theatreAppts));
 		
 		// Invs Requiring an appt - For the CatsReferral - orderInvestigations
-		// that are in the InvestigationOrders Collection and not in the
-		// collection of OrderInvAppt
+		// that are in the InvestigationOrders Collection and not in the collection of OrderInvAppt
 		List ordInvs = listInvsRequiringAppt(catsReferral, factory);
 		voReferralBooking.setOrdersRequiringAppt(OrderInvestigationBookingVoAssembler.createOrderInvestigationBookingVoCollectionFromOrderInvestigation(ordInvs));
 		
@@ -1993,14 +1999,15 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 		}
 		
 		voReferralBooking.setIsCAB(doCatsRef.isIsCAB());
-		
-		List tciColl = factory.find("select pel.tCIDetails	from PatientElectiveList as pel left join pel.referral as cats left join pel.tCIDetails as tcid where cats.id = :idCatsRef and tcid.isActive = 1", new String[]{"idCatsRef"}, new Object[]{catsReferral.getID_CatsReferral()});
+
+		/* TODO MSSQL case - List tciColl = factory.find("select pel.tCIDetails	from PatientElectiveList as pel left join pel.referral as cats left join pel.tCIDetails as tcid where cats.id = :idCatsRef and tcid.isActive = 1", new String[]{"idCatsRef"}, new Object[]{catsReferral.getID_CatsReferral()}); */
+		List tciColl = factory.find("select pel.tCIDetails	from PatientElectiveList as pel left join pel.referral as cats left join pel.tCIDetails as tcid where cats.id = :idCatsRef and tcid.isActive = true", new String[]{"idCatsRef"}, new Object[]{catsReferral.getID_CatsReferral()});
+
 		voReferralBooking.setCurrentTCIs(TCIForReferralBookingVoAssembler.createTCIForReferralBookingVoCollectionFromTCIForPatientElectiveList(tciColl));
 		
 		return voReferralBooking;
 	}
 
-	//WDEV-20181
 	private ContractServiceLocationsConfigVo getContractServiceLocConf(ContractConfigRefVo contract, ServiceRefVo service)
 	{
 		ContractConfiguration impl = (ContractConfiguration) getDomainImpl(ContractConfigurationImpl.class);
@@ -2009,11 +2016,12 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 
 	
 	// Invs Requiring an appt - For the CatsReferral - orderInvestigations that
-	// are in the InvestigationOrders Collection and not in the collection of
-	// OrderInvAppt
+	// are in the InvestigationOrders Collection and not in the collection of OrderInvAppt
 	private List listInvsRequiringAppt(ims.RefMan.vo.CatsReferralRefVo catsReferral, DomainFactory factory)
 	{
-		String hql = "select ordInv from CatsReferral as catsRef " + "join catsRef.investigationOrders as ocsOrder join ocsOrder.investigations as ordInv left join ordInv.investigation.providerService as provService left join provService.locationService.service as service " + "where (catsRef.id = :idCatsRef and (service.canBeScheduled = 1  ) " + "and ordInv.id not in " + "(select ordInv1.id from CatsReferral as catsRef1 " + "join  catsRef1.orderInvAppts as ordInvAppt " + "join ordInvAppt.orderInvestigation as ordInv1" + " where catsRef1.id = :idCatsRef) and ordInv.ordInvCurrentStatus.ordInvStatus.id not in (:cancelled,:cancelledrequest))";
+		/* TODO MSSQL case - String hql = "select ordInv from CatsReferral as catsRef " + "join catsRef.investigationOrders as ocsOrder join ocsOrder.investigations as ordInv left join ordInv.investigation.providerService as provService left join provService.locationService.service as service " + "where (catsRef.id = :idCatsRef and (service.canBeScheduled = 1  ) " + "and ordInv.id not in " + "(select ordInv1.id from CatsReferral as catsRef1 " + "join  catsRef1.orderInvAppts as ordInvAppt " + "join ordInvAppt.orderInvestigation as ordInv1" + " where catsRef1.id = :idCatsRef) and ordInv.ordInvCurrentStatus.ordInvStatus.id not in (:cancelled,:cancelledrequest))"; */
+		String hql = "select ordInv from CatsReferral as catsRef " + "join catsRef.investigationOrders as ocsOrder join ocsOrder.investigations as ordInv left join ordInv.investigation.providerService as provService left join provService.locationService.service as service " + "where (catsRef.id = :idCatsRef and (service.canBeScheduled = true  ) " + "and ordInv.id not in " + "(select ordInv1.id from CatsReferral as catsRef1 " + "join  catsRef1.orderInvAppts as ordInvAppt " + "join ordInvAppt.orderInvestigation as ordInv1" + " where catsRef1.id = :idCatsRef) and ordInv.ordInvCurrentStatus.ordInvStatus.id not in (:cancelled,:cancelledrequest))";
+
 		return factory.find(hql, new String[]{"idCatsRef", "cancelled", "cancelledrequest"}, new Object[]{catsReferral.getID_CatsReferral(), OrderInvStatus.CANCELLED.getID(), OrderInvStatus.CANCEL_REQUEST.getID()});
 	}
 
@@ -3139,8 +3147,10 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 					return true;
 				else
 				{
-					String query = "select appt from CatsReferral as cats left join cats.appointments as appt left join appt.pathwayClock as apptClock left join cats.journey as catsJourney left join catsJourney.currentClock as catsCurrentClock left join appt.apptStatus as apptStatus left join appt.sessionSlot as apptSessionSlot left join apptSessionSlot.activity as apptActivity where cats.id = :CatsReferralId and (apptStatus.id not in (" + Status_Reason.CANCELLED.getID() + "," + Status_Reason.DNA.getID() + ") and not (apptStatus.id = " + Status_Reason.ARRIVAL.getID() + " and appt.outcome is not null)) and catsCurrentClock.id = apptClock.id and apptActivity.firstAppointment = 1";
-					List<?> apptList = factory.find(query, new String[] {"CatsReferralId"}, new Object[] {catsReferral.getID_CatsReferral()}); 
+					/* TODO MSSQL case - String query = "select appt from CatsReferral as cats left join cats.appointments as appt left join appt.pathwayClock as apptClock left join cats.journey as catsJourney left join catsJourney.currentClock as catsCurrentClock left join appt.apptStatus as apptStatus left join appt.sessionSlot as apptSessionSlot left join apptSessionSlot.activity as apptActivity where cats.id = :CatsReferralId and (apptStatus.id not in (" + Status_Reason.CANCELLED.getID() + "," + Status_Reason.DNA.getID() + ") and not (apptStatus.id = " + Status_Reason.ARRIVAL.getID() + " and appt.outcome is not null)) and catsCurrentClock.id = apptClock.id and apptActivity.firstAppointment = 1"; */
+					String query = "select appt from CatsReferral as cats left join cats.appointments as appt left join appt.pathwayClock as apptClock left join cats.journey as catsJourney left join catsJourney.currentClock as catsCurrentClock left join appt.apptStatus as apptStatus left join appt.sessionSlot as apptSessionSlot left join apptSessionSlot.activity as apptActivity where cats.id = :CatsReferralId and (apptStatus.id not in (" + Status_Reason.CANCELLED.getID() + "," + Status_Reason.DNA.getID() + ") and not (apptStatus.id = " + Status_Reason.ARRIVAL.getID() + " and appt.outcome is not null)) and catsCurrentClock.id = apptClock.id and apptActivity.firstAppointment = true";
+
+					List<?> apptList = factory.find(query, new String[] {"CatsReferralId"}, new Object[] {catsReferral.getID_CatsReferral()});
 					
 					return apptList != null && apptList.size() > 0;
 				}
@@ -3150,7 +3160,6 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 		return false;
 	}
 
-	//WDEV-18411 
 	public HcpLiteVoCollection listClinicsListOwners(HcpFilter filter)
 	{
 		SessionDetailsEdit impl = (SessionDetailsEdit) getDomainImpl(ims.scheduling.domain.impl.SessionAdminImpl.class);
@@ -3349,8 +3358,10 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 	{
 		if (service == null || service.getID_Service() == null)
 			throw new CodingRuntimeException("service is null or id not provided for method listServiceFunctionsLite");
-		
-		List<?> list = getDomainFactory().find("select servFunct from ServiceFunction as servFunct left join servFunct.service as serv where servFunct.isActive = 1 and serv.id = :serviceID", 
+
+		/* TODO MSSQL case - List<?> list = getDomainFactory().find("select servFunct from ServiceFunction as servFunct left join servFunct.service as serv where servFunct.isActive = 1 and serv.id = :serviceID",
+				new String[] {"serviceID"}, new Object[] {service.getID_Service()}); */
+		List<?> list = getDomainFactory().find("select servFunct from ServiceFunction as servFunct left join servFunct.service as serv where servFunct.isActive = true and serv.id = :serviceID",
 				new String[] {"serviceID"}, new Object[] {service.getID_Service()});
 		
 		if (list != null && list.size() > 0)
@@ -3363,8 +3374,10 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 	{
 		if (activityRef == null || serviceRef == null || activityRef.getID_Activity() == null || serviceRef.getID_Service() == null)
 			return false;
-		
-		List<?> list = getDomainFactory().find("select ServActivity from ServiceActivity as ServActivity left join ServActivity.activity as act left join ServActivity.service as serv where ServActivity.isActive = 1 and ServActivity.isFlexible = 1 and act.id = :activityID and serv.id = :serviceID", 
+
+		/* TODO MSSQL case - List<?> list = getDomainFactory().find("select ServActivity from ServiceActivity as ServActivity left join ServActivity.activity as act left join ServActivity.service as serv where ServActivity.isActive = 1 and ServActivity.isFlexible = 1 and act.id = :activityID and serv.id = :serviceID",
+				new String[] {"serviceID","activityID"}, new Object[] {serviceRef.getID_Service(), activityRef.getID_Activity()}); */
+		List<?> list = getDomainFactory().find("select ServActivity from ServiceActivity as ServActivity left join ServActivity.activity as act left join ServActivity.service as serv where ServActivity.isActive = true and ServActivity.isFlexible = true and act.id = :activityID and serv.id = :serviceID",
 				new String[] {"serviceID","activityID"}, new Object[] {serviceRef.getID_Service(), activityRef.getID_Activity()});
 		
 		if (list != null && list.size() > 0)
@@ -3373,7 +3386,6 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 		return false;
 	}
 
-	//WDEV-20333
 	public SessionShortVoCollection listFlexibleSessions(Date startDate, Date endDate, ActivityVo activity, ServiceRefVo service, LocationRefVo location, HcpLiteVo listOwner, ServiceFunctionRefVo clinicType, LocationRefVoCollection locationList, ProfileListType listType, LookupInstVo urgency, Boolean isWardAttendance)
 	{
 		// all params must be set
@@ -3635,13 +3647,14 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 	}
 	
 
-	//start WDEV-20279
 	public Integer countFirstActivityAppointmentsForServices(CatsReferralRefVo referral, ServiceRefVoCollection services)
 	{
 		if (referral == null || referral.getID_CatsReferral() == null)
 			throw new CodingRuntimeException("Cats Referral parameter is mandatory.");
-		
-		String cabQuery = "select cats from CatsReferral as cats where cats.id = :CATS_ID and cats.isCAB = 1 and cats.consultationActivityRequired = 1";
+
+		/* TODO MSSQL case - String cabQuery = "select cats from CatsReferral as cats where cats.id = :CATS_ID and cats.isCAB = 1 and cats.consultationActivityRequired = 1"; */
+		String cabQuery = "select cats from CatsReferral as cats where cats.id = :CATS_ID and cats.isCAB = true and cats.consultationActivityRequired = true";
+
 		List listCABReferral = getDomainFactory().find(cabQuery, new String[] {"CATS_ID"}, new Object[] {referral.getID_CatsReferral()});
 		
 		if(listCABReferral != null && listCABReferral.size() > 0)
@@ -3659,8 +3672,9 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 		query.append(" LEFT JOIN appt.currentStatusRecord AS currentStatus LEFT JOIN currentStatus.status AS status ");
 		
 		query.append(" WHERE ");
-		
-		query.append(" referral.id = :CATS_ID AND activity.firstAppointment = 1 AND status.id <> :APPT_CANCELLED AND status.id <> :APPT_DNA");
+
+		/* TODO MSSQL case - query.append(" referral.id = :CATS_ID AND activity.firstAppointment = 1 AND status.id <> :APPT_CANCELLED AND status.id <> :APPT_DNA"); */
+		query.append(" referral.id = :CATS_ID AND activity.firstAppointment = true AND status.id <> :APPT_CANCELLED AND status.id <> :APPT_DNA");
 		
 		paramNames.add("CATS_ID");					paramValues.add(referral.getID_CatsReferral());
 		paramNames.add("APPT_CANCELLED");			paramValues.add(Status_Reason.CANCELLED.getID());

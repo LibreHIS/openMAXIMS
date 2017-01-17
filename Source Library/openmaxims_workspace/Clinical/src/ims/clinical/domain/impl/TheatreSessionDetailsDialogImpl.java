@@ -96,9 +96,14 @@ public class TheatreSessionDetailsDialogImpl extends BaseTheatreSessionDetailsDi
 	public ims.core.vo.NurseLiteVoCollection listNurseLiteVo(String name)
 	{
 		DomainFactory factory = getDomainFactory();
+
+		/* TODO MSSQL case - List nurses = factory.find("select nurseAlias from Nurse as nurseAlias left join nurseAlias.mos as mosAlias " +
+				"where nurseAlias.hcpType.id =:idHcpDisType and nurseAlias.isActive = 1 and mosAlias.name.upperSurname like :nurseName",
+				new String[] {"idHcpDisType","nurseName"}, new Object[] {HcpDisType.NURSING.getID(), "%" + name.toUpperCase() + "%"}); */
 		List nurses = factory.find("select nurseAlias from Nurse as nurseAlias left join nurseAlias.mos as mosAlias " +
-				"where nurseAlias.hcpType.id =:idHcpDisType and nurseAlias.isActive = 1 and mosAlias.name.upperSurname like :nurseName", 
+				"where nurseAlias.hcpType.id =:idHcpDisType and nurseAlias.isActive = true and mosAlias.name.upperSurname like :nurseName",
 				new String[] {"idHcpDisType","nurseName"}, new Object[] {HcpDisType.NURSING.getID(), "%" + name.toUpperCase() + "%"});
+
 		//TODO maybe use HcpDisType.CirculatingNurse?
 		
 		return NurseLiteVoAssembler.createNurseLiteVoCollectionFromNurse(nurses);

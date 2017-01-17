@@ -64,7 +64,9 @@ public class DischargePlanning_AdviceMobilityEquipmentImpl extends BaseDischarge
 		
 		query.append("SELECT advice FROM AdviceLeafletsConfig AS advice LEFT JOIN advice.problems AS problem ");
 		query.append("LEFT JOIN advice.template AS template ");
-		query.append("WHERE advice.isGenericAdviceLeaflet = 1 ");
+
+		/* TODO MSSQL case - query.append("WHERE advice.isGenericAdviceLeaflet = 1 "); */
+		query.append("WHERE advice.isGenericAdviceLeaflet = true ");
 		
 		if (clinicalProblem != null && clinicalProblem.getID_ClinicalProblem() != null)
 		{
@@ -202,8 +204,7 @@ public class DischargePlanning_AdviceMobilityEquipmentImpl extends BaseDischarge
 		return null;
 	}
 
-	//wdev-17075
-	public TreatmentInterventionForAdviceLeafletVo getTreatmentIntervention(TaxonomyType taxonomyType, String taxonomyCode) 
+	public TreatmentInterventionForAdviceLeafletVo getTreatmentIntervention(TaxonomyType taxonomyType, String taxonomyCode)
 	{
 	
 		if( taxonomyType == null && taxonomyCode == null)
@@ -212,8 +213,8 @@ public class DischargePlanning_AdviceMobilityEquipmentImpl extends BaseDischarge
 		DomainFactory factory = getDomainFactory();
 		StringBuffer hql = new StringBuffer();
 		
-		
-		hql.append("select t1_1	from TreatmentIntervention as t1_1 left join t1_1.taxonomyMap as t2_1 left join t2_1.taxonomyName as l1_1 where	(t2_1.taxonomyCode = :taxonomyCode and l1_1.id = :taxonomyType and t1_1.isActive = 1)");
+		/* TODO MSSQL case - hql.append("select t1_1	from TreatmentIntervention as t1_1 left join t1_1.taxonomyMap as t2_1 left join t2_1.taxonomyName as l1_1 where	(t2_1.taxonomyCode = :taxonomyCode and l1_1.id = :taxonomyType and t1_1.isActive = 1)"); */
+		hql.append("select t1_1	from TreatmentIntervention as t1_1 left join t1_1.taxonomyMap as t2_1 left join t2_1.taxonomyName as l1_1 where	(t2_1.taxonomyCode = :taxonomyCode and l1_1.id = :taxonomyType and t1_1.isActive = true)");
 	
 		List<?> list = factory.find(hql.toString(), new String[] {"taxonomyCode","taxonomyType"}, new Object[] {taxonomyCode,taxonomyType.getID()});
 		
@@ -224,7 +225,6 @@ public class DischargePlanning_AdviceMobilityEquipmentImpl extends BaseDischarge
 		return null;
 	}
 	
-	//WDEV-19375
 	public EmergencyAttendanceForDischargeLetterVo getEmergencyAttendance(CareContextRefVo careContextRef)
 	{
 		if(careContextRef == null)
@@ -235,13 +235,13 @@ public class DischargePlanning_AdviceMobilityEquipmentImpl extends BaseDischarge
 		return EmergencyAttendanceForDischargeLetterVoAssembler.create((EmergencyAttendance)attendances);
 	}
 
-	//WDEV-19375
 	public String[] getSystemReportAndTemplate(Integer imsId)
 	{
 		String[] result = null;		
 		DomainFactory factory = getDomainFactory();
-		
-		List lst = factory.find("select r1_1.reportXml, t1_1.templateXml, r1_1.reportName, r1_1.reportDescription, t1_1.name, t1_1.description from ReportBo as r1_1 left join r1_1.templates as t1_1 where (r1_1.imsId= :imsid and t1_1.isActive = 1) order by t1_1.name", new String[] {"imsid"}, new Object[] {imsId});//wdev-21262
+
+		/* TODO MSSQL case - List lst = factory.find("select r1_1.reportXml, t1_1.templateXml, r1_1.reportName, r1_1.reportDescription, t1_1.name, t1_1.description from ReportBo as r1_1 left join r1_1.templates as t1_1 where (r1_1.imsId= :imsid and t1_1.isActive = 1) order by t1_1.name", new String[] {"imsid"}, new Object[] {imsId}); */
+		List lst = factory.find("select r1_1.reportXml, t1_1.templateXml, r1_1.reportName, r1_1.reportDescription, t1_1.name, t1_1.description from ReportBo as r1_1 left join r1_1.templates as t1_1 where (r1_1.imsId= :imsid and t1_1.isActive = true) order by t1_1.name", new String[] {"imsid"}, new Object[] {imsId});
 		
 		if(lst.iterator().hasNext())
 		{
@@ -252,7 +252,7 @@ public class DischargePlanning_AdviceMobilityEquipmentImpl extends BaseDischarge
 		
 		return result;
 	}
-	//WDEV-19401
+
 	public PatientDocumentVo savePatientDocument(PatientDocumentVo patDocVo, EmergencyAttendanceForDischargeLetterVo emergencyAttendance) throws StaleObjectException
 	{
 		if (patDocVo == null)

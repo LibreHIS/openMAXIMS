@@ -341,32 +341,7 @@ public class Logic extends BaseLogic
 			form.imbMerge().setEnabled(false);
 		}
 	}
-	
-//	private void setPatientForRecord(ValueObject voRecord, PatientShort patient) 
-//	{
-//		if(voRecord instanceof CaseReferralMergeVo)
-//		{
-//			CaseReferralMergeVo voCase = (CaseReferralMergeVo) voRecord;
-//			voCase.setPatient(patient);
-//			for(int i=0;i<voCase.getAssociatedCases().size();i++)
-//				setPatientForRecord(voCase.getAssociatedCases().get(i), patient);
-//		}
-//		else if(voRecord instanceof InvoiceMergeVo)
-//		{
-//			InvoiceMergeVo voInvoice = (InvoiceMergeVo) voRecord;
-//			voInvoice.setPatient(patient);
-//		}
-//		else if(voRecord instanceof OutlierMergeVo)
-//		{
-//			OutlierMergeVo voOutlier = (OutlierMergeVo) voRecord;
-//			voOutlier.setPatient(patient);
-//		}
-//		else if(voRecord instanceof LocallMergeVo)
-//		{
-//			LocallMergeVo voLocall = (LocallMergeVo) voRecord;
-//			voLocall.setPatient(patient);
-//		}
-//	}
+
 	@Override
 	protected void onImbToClearClick() throws ims.framework.exceptions.PresentationLogicException
 	{

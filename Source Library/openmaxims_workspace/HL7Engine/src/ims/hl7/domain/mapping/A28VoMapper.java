@@ -88,61 +88,11 @@ public class A28VoMapper extends VoMapper
 			pid.getIdentityReliabilityCode(0).setValue(fullPatient.getSCN().toString());
 		PV1 pv = a28Msg.getPV1();
 		pv.getPatientClass().setValue("U");  // Unknown - only mandatory item
-		
-		
-		//WDEV-22006 Comment out following code and replace by calling a single method
-		
-//		NK1 nk1 = a28Msg.getNK1();
-//		//WDEV-20335
-//		Boolean isConfidential = fullPatient.getIsConfidential();
-//		
-//		//WDEV-20336 Populate NK1 from PDSRelative object first. If object is Null then use Next of Kin VO
-//		int NK1Iteration = 0;
-//		
-//		if(fullPatient.getPDSrelatives() != null
-//				&& fullPatient.getPDSrelatives().size() > 0)
-//		{
-//			for (int i=0; i < fullPatient.getPDSrelatives().size(); i++)
-//			{
-//				PatRelative patRelative = fullPatient.getPDSrelatives().get(i);
-//				renderPatRelativeVoToNK1(patRelative, nk1, providerSystem, isConfidential);
-//				NK1Iteration ++;
-//			}
-//		}
-//		else
-//		{
-//			renderNextOfKinVoToNK1(fullPatient.getNok(), nk1, providerSystem, isConfidential);
-//			NK1Iteration ++;
-//		}//WDEV-20336
-//		
-//		// WDEV-19988
-//		// If config flag HL7_INCLUDE_FAMILY_SUPPORT  is true and 
-//		// any support family network contact details exist, then add these as NK1 segments (within a loop)
-//		if(fullPatient.getSupportNetworkFamilyIsNotNull() 
-//				&& ConfigFlag.HL7.HL7_INCLUDE_FAMILY_SUPPORT.getValue())
-//		{
-//			
-//			for (int i=0; i<fullPatient.getSupportNetworkFamily().size(); i++)
-//			{
-//				NK1 sfn = a28Msg.getNK1(NK1Iteration);
-//				if(fullPatient.getSupportNetworkFamily().get(i).getInactivatingDateTime()==null)
-//				{
-//					//WDEV-20335
-//					renderSupportNetworkFamilyVoToNK1(fullPatient.getSupportNetworkFamily().get(i), sfn, providerSystem, isConfidential); //WDEV-20335
-//					NK1Iteration++;
-//				}
-//			}
-//		}
 
 		renderPatientVoToNK1(fullPatient, a28Msg, providerSystem);
-		//WDEV-22006
-		
-		//
+
 		PD1 pd1=a28Msg.getPD1();
-		
-		//GP
-		//WDEV-20993
-//		renderGPDetailsToPD1(fullPatient,pd1);
+
 		renderGPDetailsToPD1(fullPatient, pd1, providerSystem);
 		
 		IN1 in1 = a28Msg.getADT_A05_IN1IN2IN3ROL().getIN1();
