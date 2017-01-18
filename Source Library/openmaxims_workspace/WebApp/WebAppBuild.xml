@@ -207,7 +207,7 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${libdir}QueryBuilder3.jar;${libdir}commons-io-1.4.jar;${libdir}commons-httpclient-3.0.jar;${libdir}quartz.jar;${libdir}quartz-modified.jar;${libdir}xstream-1.2.2.jar;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}ClinicalAdmin/bin/;${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}Clinical/bin/;${workspace}Scheduling/bin/;${workspace}Pathways/bin/;${workspace}OCS_IF/bin/;${workspace}OCRR/bin/;${workspace}Assessment/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}RefMan/bin/" srcdir="${workspace}RefMan/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${libdir}QueryBuilder3.jar;${libdir}commons-io-1.4.jar;${libdir}commons-httpclient-3.0.jar;${libdir}quartz.jar;${libdir}quartz-modified.jar;${libdir}xstream-1.2.2.jar;${libdir}javax.servlet-api-4.0.0-b01.jar;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}ClinicalAdmin/bin/;${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}Clinical/bin/;${workspace}Scheduling/bin/;${workspace}Pathways/bin/;${workspace}OCS_IF/bin/;${workspace}OCRR/bin/;${workspace}Assessment/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}RefMan/bin/" srcdir="${workspace}RefMan/src/"  includes="**/*.java" />
 	</target>
 
 	<!-- Compile Scheduling-->
@@ -272,7 +272,7 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${libdir}hapi.jar;${libdir}hl7utils.jar;${libdir}ImsServer.jar;${libdir}joda-time-2.3.jar;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Assessment/bin/;${workspace}Pathways/bin/;${workspace}Core/bin/;${workspace}OCS_IF/bin/;${workspace}Assessment/bin/;${workspace}Clinical/bin/;${workspace}Base/bin/;" destdir="${workspace}HL7Engine/bin/" srcdir="${workspace}HL7Engine/src/" includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${libdir}hapi.jar;${libdir}hl7utils.jar;${libdir}ImsServer.jar;${libdir}joda-time-2.3.jar;${libdir}javax.servlet-api-4.0.0-b01.jar;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Assessment/bin/;${workspace}Pathways/bin/;${workspace}Core/bin/;${workspace}OCS_IF/bin/;${workspace}Assessment/bin/;${workspace}Clinical/bin/;${workspace}Base/bin/;" destdir="${workspace}HL7Engine/bin/" srcdir="${workspace}HL7Engine/src/" includes="**/*.java" />
 	</target>
 
 	<!-- Compile Billing -->
