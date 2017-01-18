@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping
+	PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="ims.domain.lookups.Lookup" table="applookup" lazy="false">
+		<cache usage="nonstrict-read-write" />
+		<id name="id" type="integer" unsaved-value="null" access="field">
+			<generator class="assigned"/>
+		</id>
+		<property name="name" type="string" access="field">
+			<column name="name"  not-null="true" unique="true"  />
+		</property>
+		<property name="description" type="string" access="field"/>
+		<set name="instances" access="field" inverse="true" order-by="c_order asc" cascade="all" lazy="true">
+			<cache usage="nonstrict-read-write" />
+			<key foreign-key="lookup_instance_type_fk" column="type"/>
+			<one-to-many class="ims.domain.lookups.LookupInstance"/>
+		</set>
+		<property name="active" type="boolean" not-null="true" access="field"/>
+		<property name="hierarchical" type="boolean" not-null="true"  access="field"/>
+		<property name="systemType" column="systemtype" not-null="true"  type="boolean" access="field"/>
+	</class>
+</hibernate-mapping>

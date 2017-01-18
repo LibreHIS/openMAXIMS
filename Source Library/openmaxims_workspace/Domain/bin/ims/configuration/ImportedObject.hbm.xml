@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping
+	PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+	 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="ims.configuration.ImportedObject" table="appimport" lazy="true">
+		<id name="id" access="field" type="integer" unsaved-value="null">
+			<column name="id" sql-type="numeric(10,0)"/>
+			<generator class="native"/>
+		</id>
+		<version name="version" column="vstp" access="field"/>
+		<property name="externalId" type="integer" access="field" >
+			<column name="external_id" not-null="true" unique-key='appimport_unq1' />
+		</property>			
+		<property name="externalSource" type="string" access="field" >
+			<column name="external_source" not-null="true" length="100" unique-key='appimport_unq1' />
+		</property>			
+		<property name="className" type="string" access="field" >
+			<column name="class_name" not-null="true" length="200" unique-key='appimport_unq1' />
+		</property>			
+		<property name="localId" type="integer" access="field" >
+			<column name="local_id" not-null="true" />
+		</property>			
+		<property name="importDate" type="timestamp" access="field">
+			<column name="import_date" />
+		</property>
+		<property name="updateDate" type="timestamp" access="field">
+			<column name="update_date" />
+		</property>
+	</class>
+</hibernate-mapping>

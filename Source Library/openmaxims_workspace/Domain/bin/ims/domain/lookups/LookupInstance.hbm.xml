@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping
+	PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+	 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="ims.domain.lookups.LookupInstance" table="applookup_instance" lazy="false">
+		<cache usage="nonstrict-read-write" />
+		<id name="id" type="integer" unsaved-value="null" access="field">
+			<column name="id" sql-type="numeric(10,0)"/>
+			<generator class="assigned"/>
+		</id>
+		
+		<many-to-one name="type" class="ims.domain.lookups.Lookup" foreign-key="lookup_instance_type_fk" access="field">
+			<column name="type" not-null="true" />
+		</many-to-one>
+
+		<property name="active" type="boolean"  not-null="true" access="field"/>
+		<property name="text" type="string" not-null="true" access="field" />
+		
+		<many-to-one name="image" class="ims.core.configuration.domain.objects.AppImage" foreign-key="lookup_instance_imagefile_fk" access="field">
+			<column name="imagefile" sql-type="numeric(10,0)" not-null="false" unique="false"   />
+		</many-to-one>
+
+		<component name="color" class="ims.framework.utils.Color" >
+			<property name="name" type="string" access="field" update="true">
+				<column name="color"  not-null="false" unique="false"  length="60" />
+			</property>
+		</component>
+		
+		<!-- List mappings -->
+		<set name="mappings" table="applookup_instance_mapping" lazy="true" access="field">
+			<cache usage="nonstrict-read-write" />
+			<key>
+				<column name="lkp_instance" sql-type="numeric(10,0)" />
+			</key>
+			<composite-element class="ims.domain.lookups.LookupMapping">
+				<parent name="lookupInstance"/>
+
+				<property name="extSystem" access="field"  type="string" >				
+					<column name="extsystem" length="100" not-null="true" />
+				</property>
+				<property name="extCode" access="field" type="string" >
+					<column name="extcode" length="30" not-null="true" />
+				</property>
+			</composite-element>
+		</set>
+		<!-- A one-to-one relationship using a foreign-key is mapping as a
+			many-to-one with a uniqueness contraint -->
+		<many-to-one name="parent" class="ims.domain.lookups.LookupInstance" unique="true" access="field">
+			<column name="parent" sql-type="numeric(10,0)" />
+		</many-to-one>
+		<property name="order" column="c_order" type="integer"  not-null="true" access="field"/>
+	</class>
+</hibernate-mapping>

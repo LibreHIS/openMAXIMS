@@ -8,7 +8,7 @@
 	<property name="servletlibs" value="${tomcatdir}jasper-runtime.jar;${tomcatdir}jsp-api.jar;${tomcatdir}servlet-api.jar;" />
 	<property name="newservletlibs" value="${newtomcatdir}jasper-runtime.jar;${newtomcatdir}jsp-api.jar;${newtomcatdir}servlet-api.jar;" />
 	<property name="jdbclibs" value="${libdir}SQLServerJdbc.jar;${libdir}OracleJdbc.jar;${libdir}hsqldb.jar" />
-	<property name="framework.jars" value="${libdir}framework.jar;${libdir}base.jar;${libdir}domain.jar;${libdir}configflag.jar" />
+	<property name="framework.jars" value="${libdir}framework.jar;${libdir}base.jar;${libdir}configflag.jar" />
 	<property name="ant_classpath" value="${classpath};${framework.jars};${libdir}dto.jar;${libdir}mail.jar;${libdir}activation.jar;${libdir}dom4j.jar;${libdir}log4j.jar;${jdbclibs};${libdir}ImsQueryBuilderClient.jar;${servletlibs};${newservletlibs};${libdir}hibernate3.jar;${libdir}hapi.jar;${libdir}flatpack-3.1.1.jar;${libdir}itext.jar;${libdir}hl7utils.jar;${libdir}commons-io-1.4.jar;${libdir}jamon-2.2.jar;" />
 	<property name="soap_classpath" value="${libdir}axis.jar;${libdir}saaj.jar;${libdir}jaxrpc.jar;" />
 	<property name="last.schema.location" value="\\Webapps\LastSchemas" />
@@ -578,7 +578,6 @@
 
 	<fileset dir="${workspace}WebApp/WEB-INF/lib" id="WebApp.lib.content">
 		<include name="framework.jar" />
-		<include name="domain.jar" />
 		<include name="base.jar" />
 		<include name="configflag.jar" />
 		<include name="dto.jar" />

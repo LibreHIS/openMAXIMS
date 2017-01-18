@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping
+	PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+	 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="ims.configuration.CachedClass" table="appcache" lazy="false" discriminator-value="null" >
+		<id name="boClassName" type="string" unsaved-value="null" access="field" length="100" >
+			<column name="class_name" not-null="true" length="100" />
+			<generator class="assigned"/>
+		</id>		
+		<many-to-one name="cacheUsage" class="ims.domain.lookups.LookupInstance" access="field">
+			<column name="cache_usage" sql-type="numeric(10,0)" not-null="true" unique="false"   />
+		</many-to-one>
+		<property name="isCollection" type="boolean" access="field" update="true">
+			<column name="is_collection"  not-null="true" unique="false"  />
+		</property>
+	</class>
+</hibernate-mapping>

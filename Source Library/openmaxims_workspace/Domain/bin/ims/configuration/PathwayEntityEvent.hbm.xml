@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping
+        PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="ims.configuration.PathwayEntityEvent" table="appentitievent" lazy="false">
+
+        <id name="id" access="field" type="integer" unsaved-value="null">
+            <!-- Workaround for DDL creation (works for Sybase only) -->
+            <column name="id" sql-type="numeric(10,0)"/>
+            <generator class="native"/>
+        </id>
+
+		<version name="version" column="vstp" access="field"/>
+
+		<property name="entityName" type="string"  >
+			<column name="entityName" length="200"/>
+		</property>
+
+		<property name="event" access="field" >
+			<column name="event" sql-type="int" />
+		</property>
+
+		<property name="active" type="boolean"  >
+			<column name="active" />
+		</property>
+
+		<property name="rule" type="string"  >
+			<column name="rulestr" length="200"/>
+		</property>
+
+		<property name="description" type="string"  >
+			<column name="description" length="200"/>
+		</property>
+
+		<property name="scheduledDateField" type="string"  >
+			<column name="schDateField" length="100"/>
+		</property>
+
+		<property name="targetMethod" type="string"  >
+			<column name="targetMethod" length="200"/>
+		</property>
+
+    </class>
+</hibernate-mapping>

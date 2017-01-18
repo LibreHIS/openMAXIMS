@@ -84,7 +84,7 @@
 
     <!-- Place configuration for your caches following -->
 
-    <!-- Classes mapped in domain.jar -->
+    <!-- Classes mapped in Domain module -->
     <cache name="ims.domain.lookups.Lookup"
            maxElementsInMemory="5000"
            eternal="true"

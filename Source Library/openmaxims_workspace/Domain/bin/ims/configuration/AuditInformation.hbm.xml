@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping
+	PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="ims.configuration.AuditInformation" table="appaudit" lazy="false" >
+		<id name="id" access="field" type="integer" unsaved-value="null">
+			<!-- workaround for DDL creation (works for Sybase only) -->
+			<column name="id" sql-type="numeric(10,0)"/>
+			<generator class="sequence"><param name="sequence">AUDIT_SEQUENCE</param></generator>
+		</id>
+		<property name="auditDateTime" type="timestamp" access="field" index='datetime_idx'>
+			<column name="aud_datetime" />
+		</property>	
+		<property name="auditUser" type="string" access="field" index='datetime_idx' >
+			<column name="aud_user" length="30" />
+		</property>	
+		<property name="auditRoleId" type="integer" access="field" >
+			<column name="aud_userrole" />
+		</property>		
+		<property name="auditUserLocation" type="integer" access="field" >
+			<column name="aud_userloc" />
+		</property>		
+		<property name="auditHost" type="string" access="field" >
+			<column name="aud_host" length="50" />
+		</property>				
+		<property name="auditAction" type="string" access="field" >
+			<column name="aud_action" length="20" />
+		</property>
+		<property name="diffString" type="text" access="field" >
+			<column name="diff_str" />
+		</property>
+		<property name="className" type="string" access="field" index='class_idx'>
+			<column name="class_name" length="100"/>
+		</property>
+		<property name="classIdentifier" type="integer" access="field" index='class_idx'>
+			<column name="class_id" />
+		</property>			
+		<property name="patientId" type="integer" access="field" index='patient_idx'>
+			<column name="patient_id" />
+		</property>		
+		<property name="careContextId" type="integer" access="field" index='patient_idx'>
+			<column name="context_id" />
+		</property>	
+		<property name="contactId" type="integer" access="field" index='patient_idx'>
+			<column name="contact_id" />
+		</property>		
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping
+	PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+	 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="ims.configuration.BusinessObjectReference" table="appboreference" lazy="false" discriminator-value="null" >
+		<composite-id> 
+        
+        <key-property name="businessObjectId" column="boid" type="integer" /> 
+        <key-property name="namespaceId" column="nmId" type="integer"/> 
+        
+       </composite-id> 
+		
+		<property name="businessObjectName" type="string" access="field"  >
+			<column name="boname" length="130" />
+		</property>	
+		<property name="tableName" type="string" access="field" >
+			<column name="tablename" length="60" />
+		</property>		
+		<property name="configuration" type="boolean" access="field" update="true">
+			<column name="configuration"  not-null="false" unique="false"  />
+		</property>
+	</class>
+</hibernate-mapping>

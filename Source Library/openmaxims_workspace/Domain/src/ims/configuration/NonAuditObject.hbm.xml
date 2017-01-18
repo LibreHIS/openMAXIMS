@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping
+	PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+	 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="ims.configuration.NonAuditObject" table="appnonaudit" lazy="false" discriminator-value="null" >
+		<id name="boClassName" type="string" unsaved-value="null" access="field" length="100" >
+			<column name="class_name" not-null="true" length="100" />
+			<generator class="assigned"/>
+		</id>		
+	</class>
+</hibernate-mapping>
