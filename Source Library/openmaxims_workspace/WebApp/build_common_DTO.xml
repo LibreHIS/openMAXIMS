@@ -6,7 +6,7 @@
 	<property name="tomcatdir" value="${env.TOMCAT_HOME}/common/lib/" />
 	<property name="servletlibs" value="${tomcatdir}jasper-runtime.jar;${tomcatdir}jsp-api.jar;${tomcatdir}servlet-api.jar;" />
 	<property name="jdbclibs" value="${libdir}SQLServerJdbc.jar;${libdir}OracleJdbc.jar;" />
-	<property name="framework.jars" value="${libdir}framework.jar;${libdir}base.jar;" />
+	<property name="framework.jars" value="${libdir}framework.jar;" />
 	<property name="ant_classpath" value="${classpath};${framework.jars};${libdir}dto.jar;${libdir}mail.jar;${libdir}activation.jar;${libdir}dom4j.jar;${libdir}log4j.jar;${jdbclibs};${libdir}ImsQueryBuilderClient.jar;${servletlibs};" />
 	<property name="soap_classpath" value="${libdir}axis.jar;${libdir}saaj.jar;${libdir}jaxrpc.jar;" />
 
@@ -128,7 +128,6 @@
 
 	<fileset dir="${workspace}WebApp/WEB-INF/lib" id="WebApp.lib.content">
 		<include name="framework.jar" />
-		<include name="base.jar" />
 		<include name="dto.jar" />
 		<include name="asm.jar" />
 		<include name="antlr.jar" />

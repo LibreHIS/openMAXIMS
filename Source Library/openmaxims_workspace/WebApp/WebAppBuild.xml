@@ -21,7 +21,7 @@
 	<import file="build_common.xml"/>
 
 	<!-- Compile Rules -->
-	<target name="Rules" depends="Admin, Domain" >
+	<target name="Rules" depends="Admin, Domain, Base" >
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}Rules/bin">
 				<patternset>
@@ -35,11 +35,11 @@
 				<include name="**/*.drl"/>
 			</fileset>
 		</copy>
-		<javac debug="on" classpath="${ant_classpath};${libdir}xercesImpl.jar;${workspace}Admin/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;" destdir="${workspace}Rules/bin/" srcdir="${workspace}Rules/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${libdir}xercesImpl.jar;${workspace}Admin/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}Rules/bin/" srcdir="${workspace}Rules/src/"  includes="**/*.java" />
 	</target>
 
 	<!-- Compile Correspondence -->
-	<target name="Correspondence" depends="Core, Domain" >
+	<target name="Correspondence" depends="Core, Domain, Base" >
 		<mkdir dir="${workspace}Correspondence/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}Correspondence/bin">
@@ -48,7 +48,7 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${libdir}jodconverter-core-3.0-beta-3.jar;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Clinical/bin/;${workspace}Alerts/bin/;${workspace}Core/bin/;${workspace}DTOClients/bin/;${workspace}Domain/bin/;" destdir="${workspace}Correspondence/bin/" srcdir="${workspace}Correspondence/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${libdir}jodconverter-core-3.0-beta-3.jar;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Clinical/bin/;${workspace}Alerts/bin/;${workspace}Core/bin/;${workspace}DTOClients/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}Correspondence/bin/" srcdir="${workspace}Correspondence/src/"  includes="**/*.java" />
 	</target>
 
 	<!-- Compile Assessment -->
@@ -65,7 +65,7 @@
 	</target>
 
 	<!-- Compile Clinical-->
-	<target name="Clinical" depends="Core, Assessment, Pathways, Scheduling, Domain" >
+	<target name="Clinical" depends="Core, Assessment, Pathways, Scheduling, Domain, Base" >
 		<mkdir dir="${workspace}Clinical/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}Clinical/bin">
@@ -74,11 +74,11 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${libdir}velocity-1.4.jar;${libdir}commons-httpclient-3.0.jar;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Alerts/bin/;${workspace}Core/bin/;${workspace}Assessment/bin/;${workspace}ClinicalAdmin/bin/;${workspace}Scheduling/bin/;${workspace}Pathways/bin/;${workspace}Domain/bin/;" destdir="${workspace}Clinical/bin/" srcdir="${workspace}Clinical/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${libdir}velocity-1.4.jar;${libdir}commons-httpclient-3.0.jar;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Alerts/bin/;${workspace}Core/bin/;${workspace}Assessment/bin/;${workspace}ClinicalAdmin/bin/;${workspace}Scheduling/bin/;${workspace}Pathways/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}Clinical/bin/" srcdir="${workspace}Clinical/src/"  includes="**/*.java" />
 	</target>
 
 	<!-- Compile Nursing -->
-	<target name="Nursing" depends="Core, Assessment, Domain" >
+	<target name="Nursing" depends="Core, Assessment, Domain, Base" >
 		<mkdir dir="${workspace}Nursing/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}Nursing/bin">
@@ -87,14 +87,14 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}ClinicalAdmin/bin/;${workspace}Alerts/bin/;${workspace}Core/bin/;${workspace}Assessment/bin/;${workspace}Domain/bin/;" destdir="${workspace}Nursing/bin/" srcdir="${workspace}Nursing/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}ClinicalAdmin/bin/;${workspace}Alerts/bin/;${workspace}Core/bin/;${workspace}Assessment/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}Nursing/bin/" srcdir="${workspace}Nursing/src/"  includes="**/*.java" />
 		<copy  todir="${workspace}Nursing/bin" >
 			<fileset dir="${workspace}Nursing/src" includes="**/*.xml"/>
 		</copy>
 	</target>
 
 	<!-- Compile COE -->
-	<target name="COE" depends="Admin, Core, Clinical, ClinicalAdmin, Nursing, Domain" >
+	<target name="COE" depends="Admin, Core, Clinical, ClinicalAdmin, Nursing, Domain, Base" >
 		<mkdir dir="${workspace}COE/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}COE/bin">
@@ -103,11 +103,11 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}Clinical/bin/;${workspace}ClinicalAdmin/bin/;${workspace}Nursing/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;" destdir="${workspace}COE/bin/" srcdir="${workspace}COE/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}Clinical/bin/;${workspace}ClinicalAdmin/bin/;${workspace}Nursing/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}COE/bin/" srcdir="${workspace}COE/src/"  includes="**/*.java" />
 	</target>
 
 	<!-- Compile EAS -->
-	<target name="EAS" depends="Core,Admin,OCRR, Domain" >
+	<target name="EAS" depends="Core,Admin,OCRR, Domain, Base" >
 		<mkdir dir="${workspace}EAS/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}EAS/bin">
@@ -116,12 +116,12 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}OCRR/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;" destdir="${workspace}EAS/bin/" srcdir="${workspace}EAS/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}OCRR/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}EAS/bin/" srcdir="${workspace}EAS/src/"  includes="**/*.java" />
 	</target>
 
 
 	<!-- Compile Oncology -->
-	<target name="Oncology" depends="Admin, Core, Clinical, ClinicalAdmin, EAS, Domain" >
+	<target name="Oncology" depends="Admin, Core, Clinical, ClinicalAdmin, EAS, Domain, Base" >
 		<mkdir dir="${workspace}Oncology/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}Oncology/bin">
@@ -130,11 +130,11 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}Clinical/bin/;${workspace}ClinicalAdmin/bin/;${workspace}Assessment/bin/;${workspace}EAS/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;" destdir="${workspace}Oncology/bin/" srcdir="${workspace}Oncology/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}Clinical/bin/;${workspace}ClinicalAdmin/bin/;${workspace}Assessment/bin/;${workspace}EAS/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}Oncology/bin/" srcdir="${workspace}Oncology/src/"  includes="**/*.java" />
 	</target>
 
 	<!-- Compile OCS_IF -->
-	<target name="OCS_IF" depends="Core, Domain" >
+	<target name="OCS_IF" depends="Core, Domain, Base" >
 		<mkdir dir="${workspace}OCS_IF/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}OCS_IF/bin">
@@ -143,11 +143,11 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;" destdir="${workspace}OCS_IF/bin/" srcdir="${workspace}OCS_IF/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}OCS_IF/bin/" srcdir="${workspace}OCS_IF/src/"  includes="**/*.java" />
 	</target>
 
 	<!-- Compile Therapies -->
-	<target name="Therapies" depends="Core, Clinical, Domain" >
+	<target name="Therapies" depends="Core, Clinical, Domain, Base" >
 		<mkdir dir="${workspace}Therapies/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}Therapies/bin">
@@ -156,11 +156,11 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}Clinical/bin/;${workspace}ClinicalAdmin/bin/;${workspace}Domain/bin/;" destdir="${workspace}Therapies/bin/" srcdir="${workspace}Therapies/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}Clinical/bin/;${workspace}ClinicalAdmin/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}Therapies/bin/" srcdir="${workspace}Therapies/src/"  includes="**/*.java" />
 	</target>
 
 	<!-- Compile SpinalInjuries -->
-	<target name="SpinalInjuries" depends="Nursing,Clinical,ClinicalAdmin, Domain" >
+	<target name="SpinalInjuries" depends="Nursing,Clinical,ClinicalAdmin, Domain, Base" >
 		<mkdir dir="${workspace}SpinalInjuries/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}SpinalInjuries/bin">
@@ -169,11 +169,11 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Nursing/bin/;${workspace}Core/bin/;${workspace}Assessment/bin/;${workspace}Clinical/bin/;${workspace}ClinicalAdmin/bin/;${workspace}Domain/bin/;" destdir="${workspace}SpinalInjuries/bin/" srcdir="${workspace}SpinalInjuries/src/" includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Nursing/bin/;${workspace}Core/bin/;${workspace}Assessment/bin/;${workspace}Clinical/bin/;${workspace}ClinicalAdmin/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}SpinalInjuries/bin/" srcdir="${workspace}SpinalInjuries/src/" includes="**/*.java" />
 	</target>
 
 	<!-- Compile Pathways  -->
-	<target name="Pathways" depends="Admin, Core, Domain" >
+	<target name="Pathways" depends="Admin, Core, Domain, Base" >
 		<mkdir dir="${workspace}Pathways/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}Pathways/bin">
@@ -182,7 +182,7 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;" destdir="${workspace}Pathways/bin/" srcdir="${workspace}Pathways/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}Pathways/bin/" srcdir="${workspace}Pathways/src/"  includes="**/*.java" />
 	</target>
 
 	<!-- Compile ClinicalAdmin-->
@@ -198,7 +198,7 @@
 		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;" destdir="${workspace}ClinicalAdmin/bin/" srcdir="${workspace}ClinicalAdmin/src/"  includes="**/*.java" />
 	</target>
 	<!-- Compile RefMan-->
-	<target name="RefMan" depends="Admin, Core, Scheduling,OCS_IF, OCRR, ClinicalAdmin, Assessment, Pathways, Domain" >
+	<target name="RefMan" depends="Admin, Core, Scheduling,OCS_IF, OCRR, ClinicalAdmin, Assessment, Pathways, Domain, Base" >
 		<mkdir dir="${workspace}RefMan/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}RefMan/bin">
@@ -207,11 +207,11 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${libdir}QueryBuilder3.jar;${libdir}commons-io-1.4.jar;${libdir}commons-httpclient-3.0.jar;${libdir}quartz.jar;${libdir}quartz-modified.jar;${libdir}xstream-1.2.2.jar;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}ClinicalAdmin/bin/;${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}Clinical/bin/;${workspace}Scheduling/bin/;${workspace}Pathways/bin/;${workspace}OCS_IF/bin/;${workspace}OCRR/bin/;${workspace}Assessment/bin/;${workspace}Domain/bin/;" destdir="${workspace}RefMan/bin/" srcdir="${workspace}RefMan/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${libdir}QueryBuilder3.jar;${libdir}commons-io-1.4.jar;${libdir}commons-httpclient-3.0.jar;${libdir}quartz.jar;${libdir}quartz-modified.jar;${libdir}xstream-1.2.2.jar;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}ClinicalAdmin/bin/;${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}Clinical/bin/;${workspace}Scheduling/bin/;${workspace}Pathways/bin/;${workspace}OCS_IF/bin/;${workspace}OCRR/bin/;${workspace}Assessment/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}RefMan/bin/" srcdir="${workspace}RefMan/src/"  includes="**/*.java" />
 	</target>
 
 	<!-- Compile Scheduling-->
-	<target name="Scheduling" depends="Admin,Core,Pathways, Domain" >
+	<target name="Scheduling" depends="Admin,Core,Pathways, Domain, Base" >
 		<mkdir dir="${workspace}Scheduling/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}Scheduling/bin">
@@ -220,11 +220,11 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${libdir}/commons-io-1.3.1.jar;${libdir}/xstream-1.2.2.jar;${libdir}/ImsServer.jar;${libdir}/quartz.jar;${libdir}/quartz-modified.jar;${libdir}/commons-httpclient-3.0.jar;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Pathways/bin/;${workspace}Alerts/bin/;${workspace}Core/bin/;${workspace}Domain/bin/;" destdir="${workspace}Scheduling/bin/" srcdir="${workspace}Scheduling/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${libdir}/commons-io-1.3.1.jar;${libdir}/xstream-1.2.2.jar;${libdir}/ImsServer.jar;${libdir}/quartz.jar;${libdir}/quartz-modified.jar;${libdir}/commons-httpclient-3.0.jar;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Pathways/bin/;${workspace}Alerts/bin/;${workspace}Core/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}Scheduling/bin/" srcdir="${workspace}Scheduling/src/"  includes="**/*.java" />
 	</target>
 
 	<!-- Compile ICP-->
-	<target name="ICP" depends="Admin,Rules,Assessment, Domain" >
+	<target name="ICP" depends="Admin,Rules,Assessment, Domain, Base" >
 		<mkdir dir="${workspace}ICP/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}ICP/bin">
@@ -233,11 +233,11 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${libdir}itext.jar;${workspace}Core/bin/;${workspace}Rules/bin/;${workspace}Assessment/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;" destdir="${workspace}ICP/bin/" srcdir="${workspace}ICP/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${libdir}itext.jar;${workspace}Core/bin/;${workspace}Rules/bin/;${workspace}Assessment/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}ICP/bin/" srcdir="${workspace}ICP/src/"  includes="**/*.java" />
 	</target>
 
 	<!-- Compile OCRR -->
-	<target name="OCRR" depends="Core, Clinical,Assessment,Scheduling,OCS_IF, Domain" >
+	<target name="OCRR" depends="Core, Clinical,Assessment,Scheduling,OCS_IF, Domain, Base" >
 		<mkdir dir="${workspace}OCRR/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}OCRR/bin">
@@ -246,11 +246,11 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}Assessment/bin/;${workspace}Core/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Clinical/bin/;${workspace}Scheduling/bin/;${workspace}OCS_IF/bin;${workspace}Domain/bin/;" destdir="${workspace}OCRR/bin/" srcdir="${workspace}OCRR/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}Assessment/bin/;${workspace}Core/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Clinical/bin/;${workspace}Scheduling/bin/;${workspace}OCS_IF/bin;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}OCRR/bin/" srcdir="${workspace}OCRR/src/"  includes="**/*.java" />
 	</target>
 
 	<!-- Compile Emergency -->
-	<target name="Emergency" depends="Core, Clinical,Admin, OCRR, ICP, Domain" >
+	<target name="Emergency" depends="Core, Clinical,Admin, OCRR, ICP, Domain, Base" >
 		<mkdir dir="${workspace}Emergency/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}Emergency/bin">
@@ -259,11 +259,11 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}ICP/bin/;${workspace}Clinical/bin/;${workspace}Core/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;" destdir="${workspace}Emergency/bin/" srcdir="${workspace}Emergency/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}ICP/bin/;${workspace}Clinical/bin/;${workspace}Core/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}Emergency/bin/" srcdir="${workspace}Emergency/src/"  includes="**/*.java" />
 	</target>
 
 	<!-- Compile HL7Engine -->
-	<target name="HL7Engine" depends="Core,OCS_IF,Assessment,Admin,Pathways,Clinical" >
+	<target name="HL7Engine" depends="Core,OCS_IF,Assessment,Admin,Pathways,Clinical, Base" >
 		<mkdir dir="${workspace}HL7Engine/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}HL7Engine/bin">
@@ -272,11 +272,11 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${libdir}hapi.jar;${libdir}hl7utils.jar;${libdir}ImsServer.jar;${libdir}joda-time-2.3.jar;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Assessment/bin/;${workspace}Pathways/bin/;${workspace}Core/bin/;${workspace}OCS_IF/bin/;${workspace}Assessment/bin/;${workspace}Clinical/bin/;" destdir="${workspace}HL7Engine/bin/" srcdir="${workspace}HL7Engine/src/" includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${libdir}hapi.jar;${libdir}hl7utils.jar;${libdir}ImsServer.jar;${libdir}joda-time-2.3.jar;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Assessment/bin/;${workspace}Pathways/bin/;${workspace}Core/bin/;${workspace}OCS_IF/bin/;${workspace}Assessment/bin/;${workspace}Clinical/bin/;${workspace}Base/bin/;" destdir="${workspace}HL7Engine/bin/" srcdir="${workspace}HL7Engine/src/" includes="**/*.java" />
 	</target>
 
 	<!-- Compile Billing -->
-	<target name="Billing" depends="Core, Domain" >
+	<target name="Billing" depends="Core, Domain, Base" >
 		<mkdir dir="${workspace}Billing/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}Billing/bin">
@@ -285,11 +285,11 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${workspace}Core/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;" destdir="${workspace}Billing/bin/" srcdir="${workspace}Billing/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${workspace}Core/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}Billing/bin/" srcdir="${workspace}Billing/src/"  includes="**/*.java" />
 	</target>
 
 	<!-- Compile Racpc -->
-	<target name="Racpc" depends="Core, Clinical,Admin, Domain" >
+	<target name="Racpc" depends="Core, Clinical,Admin, Domain, Base" >
 		<mkdir dir="${workspace}Racpc/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}Racpc/bin">
@@ -298,12 +298,12 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}Alerts/bin/;${workspace}Core/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Clinical/bin/;${workspace}Domain/bin/;" destdir="${workspace}Racpc/bin/" srcdir="${workspace}Racpc/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}Alerts/bin/;${workspace}Core/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Clinical/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}Racpc/bin/" srcdir="${workspace}Racpc/src/"  includes="**/*.java" />
 	</target>
 
 
 	<!-- Gather all War File dependencies -->
-	<target name="WarDependencies" depends="Core,ICP,Assessment,RefMan,Nursing,EAS,COE,OCRR,OCS_IF,Therapies,Racpc,SpinalInjuries,Oncology,HL7Engine,Clinical,ClinicalAdmin,Correspondence,Pathways,Scheduling,Emergency,Billing,MappingFiles,WebAppFiles,WebAppSource" >
+	<target name="WarDependencies" depends="Core,ICP,Assessment,RefMan,Nursing,EAS,COE,OCRR,OCS_IF,Therapies,Racpc,SpinalInjuries,Oncology,HL7Engine,Clinical,ClinicalAdmin,Correspondence,Pathways,Scheduling,Emergency,Billing,MappingFiles,WebAppFiles,WebAppSource, Domain, Base" >
 		<echo>All War File Dependencies have now been executed</echo>
 	</target>
 
@@ -374,6 +374,7 @@
 			<classes dir="${workspace}HL7Engine/bin" />
 			<classes dir="${workspace}Rules/bin" />
 			<classes dir="${workspace}Domain/bin" />
+			<classes dir="${workspace}Base/bin" />
 		</war>
 	</target>
 
