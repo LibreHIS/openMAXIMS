@@ -1827,7 +1827,9 @@
 		<form id="114141" name="UpdateProfileNameDescription" description="Update Profile Name Description" caption="Update Profile Name Description" isDialog="true" logic="ims.scheduling.forms.updateprofilenamedescription.Logic" domainlogic="ims.scheduling.domain.impl.UpdateProfileNameDescriptionImpl" />
 		<form id="114175" name="MoveSessionToLocationDialog" description="Move Session" caption="Move Session" isDialog="true" logic="ims.scheduling.forms.movesessiontolocationdialog.Logic" domainlogic="ims.scheduling.domain.impl.MoveSessionToLocationDialogImpl" />
 	</forms>
+
 	<navigation name="Default" startUpForm="102100" patientSearchForm="102100">
+
 		<rootGroup id="1" text="Patient Lists" >
 			<navForm id="2" text="Patient Search" form="102100" />
 			<navForm id="3" text="New Results" form="116127" />
@@ -1838,18 +1840,22 @@
 			<navForm id="8" text="Pathology Orders" form="116139" />
 			<navForm id="9" text="Radiology Orders" form="116138" />
 		</rootGroup>
+
 		<rootGroup id="10" text="Phlebotomy" >
 			<secGroup id="11" text="Inpatient" >
 				<navForm id="12" text="Work List" form="122170" />
 				<navForm id="13" text="Collection Details" form="122168" />
 			</secGroup>
+
 			<secGroup id="14" text="Outpatient" >
 				<navForm id="15" text="Details" form="122169" />
 			</secGroup>
 		</rootGroup>
+
 		<rootGroup id="16" text="Ward Collection" >
 			<navForm id="17" text="Collection Details" form="116133" />
 		</rootGroup>
+
 		<rootGroup id="18" text="Patient Details" >
 			<navForm id="19" text="Demographics" form="102101" />
 			<navForm id="20" text="Patient Summary" form="123118" />
@@ -1865,6 +1871,7 @@
 			<navForm id="29" text="Data view" form="103155" />
 			<navForm id="30" text="Community Services" form="102140" />
 		</rootGroup>
+
 		<rootGroup id="31" text="I/P Medical Noting" >
 			<secGroup id="32" text="Medical Assessment" >
 				<navForm id="33" text="Family History" form="123103" />
@@ -1880,10 +1887,12 @@
 				<navForm id="42" text="Discharge Document" form="122140" />
 			</secGroup>
 		</rootGroup>
+
 		<rootGroup id="43" text="OP Medical Noting" >
 			<navForm id="44" text="Medication in OPD" form="122163" />
 			<navForm id="45" text="OPD Correspondence" form="122177" />
 		</rootGroup>
+
 		<rootGroup id="46" text="CDI" >
 			<navForm id="47" text="Allergies" form="101154" />
 			<navForm id="48" text="Patient Problems" form="123120" />
@@ -1892,9 +1901,11 @@
 			<navForm id="51" text="Social History" form="102159" />
 			<navForm id="52" text="Presenting Problems" form="122125" />
 		</rootGroup>
+
 		<rootGroup id="53" text="Assessments" >
 			<navForm id="54" text="Patient Assessments" form="102205" />
 		</rootGroup>
+
 		<rootGroup id="55" text="Nursing" >
 			<navForm id="56" text="Admission" form="100112" />
 			<navForm id="57" text="Property Checklist" form="100114" />
@@ -1912,6 +1923,7 @@
 			<navForm id="69" text="Nursing Discharge" form="127110" />
 			<navForm id="70" text="Nursing Discharge Planning" form="127111" />
 		</rootGroup>
+
 		<rootGroup id="71" text="Observations" >
 			<navForm id="72" text="Vital Signs Monitoring" form="100115" />
 			<navForm id="73" text="Vital Signs" form="102121" />
@@ -1922,6 +1934,7 @@
 			<navForm id="78" text="Total Fluid Balance" form="102242" />
 			<navForm id="79" text="Stool Scale" form="100102" />
 		</rootGroup>
+
 		<rootGroup id="80" text="Therapies Assessment" >
 			<secGroup id="81" text="Sensory/Motor" >
 				<navForm id="82" text="Motor Chart" form="112145" />
@@ -1949,6 +1962,7 @@
 			<navForm id="99" text="Range of Movement" form="112142" />
 			<navForm id="100" text="SOAP Note" form="112101" />
 		</rootGroup>
+
 		<rootGroup id="101" text="Therapies Treatment" >
 			<secGroup id="102" text="Sensory/Motor" >
 				<navForm id="103" text="Gait" form="112146" />
@@ -1963,6 +1977,7 @@
 				<navForm id="111" text="Respiratory Treatment" form="105160" />
 			</secGroup>
 		</rootGroup>
+
 		<rootGroup id="112" text="Clinical Admin" >
 			<navForm id="113" text="CCI Admin" form="104115" />
 			<navForm id="114" text="Allergen Reactions" form="104107" />
@@ -1979,6 +1994,7 @@
 			<navForm id="125" text="DPP Groupings Config" form="127100" />
 			<navForm id="126" text="Invasive Device Config" form="104116" />
 		</rootGroup>
+
 		<rootGroup id="127" text="Assessment Config" >
 			<navForm id="128" text="Questions/Information" form="102215" />
 			<navForm id="129" text="Images Admin" form="103121" />
@@ -1988,6 +2004,7 @@
 			<navForm id="133" text="Structured Assessments" form="102183" />
 			<navForm id="134" text="User Defined Forms" form="102186" />
 		</rootGroup>
+
 		<rootGroup id="135" text="Admin" >
 			<navForm id="136" text="Lookups" form="102130" />
 			<navForm id="137" text="Session Admin" form="103107" />
@@ -2020,6 +2037,7 @@
 			</secGroup>
 			<navForm id="162" text="Report Runner" form="102196" />
 		</rootGroup>
+
 		<rootGroup id="163" text="OCS Configuration" >
 			<navForm id="164" text="Investigations" form="116103" />
 			<navForm id="165" text="Profiles" form="116106" />
@@ -2038,16 +2056,20 @@
 				<navForm id="177" text="Data Set Types" form="102232" />
 			</secGroup>
 		</rootGroup>
+
 		<rootGroup id="178" text="Interface" >
 			<navForm id="179" text="HL7 Test Harness" form="103131" />
 		</rootGroup>
+
 		<rootGroup id="180" text="Screening Config" >
 			<navForm id="181" text="Screening Profile Configuration" form="127119" />
 			<navForm id="182" text="Screening Overview" form="127121" />
 		</rootGroup>
 		<rootGroup id="183" text="ED Configuration" >
 		</rootGroup>
+
 	</navigation>
+
 	<images>
 		<image id="103226" path="Images/Admin/access_blocking_48.png" />
 		<image id="103227" path="Images/Admin/access_blocking_cancel_48.png" />

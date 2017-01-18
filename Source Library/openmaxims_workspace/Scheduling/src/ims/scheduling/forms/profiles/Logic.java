@@ -1186,22 +1186,21 @@ public class Logic extends BaseLogic
 				profile.setProfileSlots(coll);
 			}
 		}
-		else if( GroupProfileTypeEnumeration.rdoTheatre.equals(form.lyrDetails().tabGeneralDetails().GroupProfileType().getValue())
+		else if ( GroupProfileTypeEnumeration.rdoTheatre.equals(form.lyrDetails().tabGeneralDetails().GroupProfileType().getValue()) )
 		{
 			profile.setIsFixed(true);
 			
-			//WDEV-12918
-			if(form.lyrDetails().tabGeneralDetails().chklistAnaesthetictype().getValues() != null && form.lyrDetails().tabGeneralDetails().chklistAnaesthetictype().getValues().length > 0)
+			if (form.lyrDetails().tabGeneralDetails().chklistAnaesthetictype().getValues() != null && form.lyrDetails().tabGeneralDetails().chklistAnaesthetictype().getValues().length > 0)
 			{
 				AnaestheticType[] collAnaes = form.lyrDetails().tabGeneralDetails().chklistAnaesthetictype().getValues();
 				profile.setAnaestheticType(new AnaestheticTypeCollection());
-				for(int i=0;i<collAnaes.length;i++)
+				for (int i=0;i<collAnaes.length;i++)
 					profile.getAnaestheticType().add(collAnaes[i]);
 			}
-			else //WDEV-19854 
+			else
 				profile.setAnaestheticType(null);
 				
-			//populate theatre detail
+			// Populate theatre detail
 			TheatreDetailLiteVoCollection voCollTheatre = profile.getTheatreDetails();
 			if(voCollTheatre == null)
 				voCollTheatre = new TheatreDetailLiteVoCollection();

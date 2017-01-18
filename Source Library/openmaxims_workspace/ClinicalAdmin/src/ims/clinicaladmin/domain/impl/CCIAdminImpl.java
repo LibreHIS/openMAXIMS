@@ -441,50 +441,50 @@ public class CCIAdminImpl extends BaseCCIAdminImpl
 		
 		if (cciType.equals(CciType.PROBLEM))
 		{
-			String hql = " select h from ProblemHotlist h join h.hotlistItem as items where items.problem.id like :pcid ";
+			String hql = " select h from ProblemHotlist h join h.hotlistItem as items where items.problem.id = :pcid ";
 			markers.add("pcid");
 			values.add(cciID);
 			return ProblemHotlistShortVoAssembler.createProblemHotlistShortVoCollectionFromProblemHotlist(factory.find(hql, markers, values)).sort().toIHotlistShortArray();
 		}
 		else if (cciType.equals(CciType.DIAGNOSIS))
 		{
-			String hql = " select h from DiagnosisHotlist h join h.hotListItem as items where items.diagnosis.id like :did ";
+			String hql = " select h from DiagnosisHotlist h join h.hotListItem as items where items.diagnosis.id = :did ";
 			markers.add("did");
 			values.add(cciID);
 			return DiagnosisHotListShortVoAssembler.createDiagnosisHotListShortVoCollectionFromDiagnosisHotlist(factory.find(hql, markers, values)).sort().toIHotlistShortArray();
 		}
 		else if (cciType.equals(CciType.PROCEDURE))
 		{
-			String hql = " select h from ProcedureHotlist h join h.hotlistItem as items where items.procedure.id like :pid ";
+			String hql = " select h from ProcedureHotlist h join h.hotlistItem as items where items.procedure.id = :pid ";
 			markers.add("pid");
 			values.add(cciID);
 			return ProcedureHotlistShortVoAssembler.createProcedureHotlistShortVoCollectionFromProcedureHotlist(factory.find(hql, markers, values)).sort().toIHotlistShortArray();
 		}
 		else if (cciType.equals(CciType.CANCERIMAGE))
 		{
-			String hql = " select h from CancerImagingHotlist h join h.hotListItem as items where items.cancerImagingEvent.id like :cid ";
+			String hql = " select h from CancerImagingHotlist h join h.hotListItem as items where items.cancerImagingEvent.id = :cid ";
 			markers.add("cid");
 			values.add(cciID);
 			return CancerImagingHotlistShortVoAssembler.createCancerImagingHotlistShortVoCollectionFromCancerImagingHotlist(factory.find(hql, markers, values)).sort().toIHotlistShortArray();
 		}
 		else if (cciType.equals(CciType.MEDICATION))
 		{
-			String hql = " select h from MedicationHotlist h join h.hotListItem as items where items.medication.id like :mid and h.specialty is not null";//WDEV-11888
+			String hql = " select h from MedicationHotlist h join h.hotListItem as items where items.medication.id = :mid and h.specialty is not null";
 			markers.add("mid");
 			values.add(cciID);
 			return MedicationHotlistShortVoAssembler.createMedicationHotlistShortVoCollectionFromMedicationHotlist(factory.find(hql, markers, values)).sort().toIHotlistShortArray();
 		}
 		else if (cciType.equals(CciType.PRESENTING_ISSUE))
 		{
-			String hql = " select h from PresentingComplaintHotlist h join h.hotListItem as items where items.presentingComplaint.id like :mid ";
+			String hql = " select h from PresentingComplaintHotlist h join h.hotListItem as items where items.presentingComplaint.id = :mid ";
 			markers.add("mid");
 			values.add(cciID);
 			return PresentingComplainHotlistVoAssembler.createPresentingComplainHotlistVoCollectionFromPresentingComplaintHotlist(factory.find(hql, markers, values)).sort().toIHotlistShortArray();
 		}
-		//WDEV-17060
+
 		else if (cciType.equals(CciType.TREATMENT_INTERVENTION))
 		{
-			String hql = " select h from TreatmentInterventionHotlist h join h.hotListItem as items where items.treatmentIntervention.id like :tid ";
+			String hql = " select h from TreatmentInterventionHotlist h join h.hotListItem as items where items.treatmentIntervention.id = :tid ";
 			markers.add("tid");
 			values.add(cciID);
 			return TreatmentInterventionHotlistShortVoAssembler.createTreatmentInterventionHotlistShortVoCollectionFromTreatmentInterventionHotlist(factory.find(hql, markers, values)).sort().toIHotlistShortArray();

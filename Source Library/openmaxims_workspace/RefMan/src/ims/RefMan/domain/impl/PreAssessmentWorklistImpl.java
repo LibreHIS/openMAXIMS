@@ -184,11 +184,11 @@ public class PreAssessmentWorklistImpl extends BasePreAssessmentWorklistImpl
 		
 		StringBuffer hqlConditionsOR = new StringBuffer();
 		String orStr = "";
-		if (searchCriteria.getPreAssessmentRequired()) //those that does not have preAssessmentOutcome saved and no PreAssessment Booked
+		if (searchCriteria.getPreAssessmentRequired()) // Those that does not have preAssessmentOutcome saved and no PreAssessment Booked
 		{
 			hqlConditionsOR.append(orStr);
 			hqlJoins.append(" left join patElective.preAssessmentOutcome as preAssessmentOutcome ");
-			hqlConditionsOR.append(" (patElective.preAssessmentOutcome is null AND patElective.preAssessmentAppointment is null) "); //WDEV-21037
+			hqlConditionsOR.append(" (patElective.preAssessmentOutcome is null AND patElective.preAssessmentAppointment is null) ");
 			orStr = " OR ";
 		}
 		

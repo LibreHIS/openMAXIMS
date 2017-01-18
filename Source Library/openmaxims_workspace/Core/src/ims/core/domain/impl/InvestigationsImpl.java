@@ -79,7 +79,7 @@ public class InvestigationsImpl extends DomainImpl implements ims.core.domain.In
 		ArrayList values = new ArrayList();
 		String andStr = " ";
 
-		hql.append(andStr + " t.careContext.id like :rcc");
+		hql.append(andStr + " t.careContext.id = :rcc");
 		markers.add("rcc");
 		values.add(voCareContextRef.getID_CareContext());
 		andStr = " and ";

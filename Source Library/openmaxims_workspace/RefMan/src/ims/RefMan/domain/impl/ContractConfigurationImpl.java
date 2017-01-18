@@ -91,7 +91,7 @@ public class ContractConfigurationImpl extends BaseContractConfigurationImpl imp
 		String and = "";
 		if (contractId !=null && contractId.length()>0)
 		{
-			hqlBuilder.append("cc.contractId like :cID ");
+			hqlBuilder.append("cc.contractId = :cID ");
 			and = "and ";
 			paramNames.add("cID");
 			paramValues.add("%"+contractId+"%");

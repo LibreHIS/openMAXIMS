@@ -613,14 +613,6 @@ public class ElectiveListAddLaterDialogImpl extends BaseElectiveListAddLaterDial
 			andStr = " and ";
 		}
 		
-		/*if( medicType != null)
-		{
-			hqlConditions.append(andStr + " medic.medicType.id =:idMedicType");
-			markers.add("idMedicType");
-			values.add(getDomLookup(medicType).getId());
-			andStr = " and ";
-		}*/
-		
 		
 		hqlConditions.append(" and medic.isHCPaResponsibleHCP = :isRespHcp");
 		markers.add("isRespHcp");

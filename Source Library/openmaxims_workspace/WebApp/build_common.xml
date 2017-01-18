@@ -7,7 +7,7 @@
     <property name="tomcatdir" value="${env.TOMCAT_HOME}/common/lib/" />
     <property name="servletlibs" value="${tomcatdir}jasper-runtime.jar;${tomcatdir}jsp-api.jar;${tomcatdir}servlet-api.jar;" />
     <property name="newservletlibs" value="${newtomcatdir}jasper-runtime.jar;${newtomcatdir}jsp-api.jar;${newtomcatdir}servlet-api.jar;" />
-    <property name="jdbclibs" value="${libdir}SQLServerJdbc.jar;${libdir}OracleJdbc.jar;${libdir}hsqldb.jar;${libdir}postgresql-9.3-1104-jdbc41.jar" />
+    <property name="jdbclibs" value="${libdir}SQLServerJdbc.jar;${libdir}OracleJdbc.jar;${libdir}hsqldb.jar;${libdir}postgresql.jar" />
     <property name="framework.jars" value="${libdir}framework.jar;${libdir}configflag.jar" />
     <property name="ant_classpath" value="${classpath};${framework.jars};${libdir}dto.jar;${libdir}mail.jar;${libdir}activation.jar;${libdir}dom4j.jar;${libdir}log4j.jar;${jdbclibs};${libdir}ImsQueryBuilderClient.jar;${servletlibs};${newservletlibs};${libdir}hibernate3.jar;${libdir}hapi.jar;${libdir}flatpack-3.1.1.jar;${libdir}itext.jar;${libdir}hl7utils.jar;${libdir}commons-io-1.4.jar;${libdir}jamon-2.2.jar;${libdir}xstream-1.2.2.jar;${libdir}quartz.jar;${libdir}commons-codec-1.3.jar" />
     <property name="soap_classpath" value="${libdir}axis.jar;${libdir}saaj.jar;${libdir}jaxrpc.jar;" />
@@ -186,22 +186,22 @@
 
     <!-- Compile DomainObjects -->
     <target name="DomainObjects" depends="init, Domain, Base" >
-        <javac debug="on" classpath="${ant_classpath}" destdir="${workspace}DomainObjects/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" srcdir="${workspace}DomainObjects/src/" includes="**/*.java" />
+        <javac debug="on" classpath="${ant_classpath};${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}DomainObjects/bin/" srcdir="${workspace}DomainObjects/src/" includes="**/*.java" />
     </target>
 
     <!-- Compile ValueObjects -->
-    <target name="ValueObjects" depends="DomainObjects" >
-        <javac debug="on" classpath="${ant_classpath};${libdir}hibernate3.jar;${workspace}DomainObjects/bin/" destdir="${workspace}ValueObjects/bin/" srcdir="${workspace}ValueObjects/src/" includes="**/*.java"/>
+    <target name="ValueObjects" depends="DomainObjects, Domain, Base" >
+        <javac debug="on" classpath="${ant_classpath};${libdir}hibernate3.jar;${workspace}DomainObjects/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}ValueObjects/bin/" srcdir="${workspace}ValueObjects/src/" includes="**/*.java"/>
     </target>
 
     <!-- Compile Alerts -->
-    <target name="Alerts" depends="init" >
-        <javac debug="on" classpath="${ant_classpath}" destdir="${workspace}Alerts/bin/" srcdir="${workspace}Alerts/src/" includes="**/*.java" />
+    <target name="Alerts" depends="init, Base" >
+        <javac debug="on" classpath="${ant_classpath};${workspace}Base/bin/;" destdir="${workspace}Alerts/bin/" srcdir="${workspace}Alerts/src/" includes="**/*.java" />
     </target>
 
     <!-- Compile DTOClients -->
-    <target name="DTOClients" depends="init" >
-        <javac debug="on" classpath="${ant_classpath}" destdir="${workspace}DTOClients/bin/" srcdir="${workspace}DTOClients/src/" includes="**/*.java" />
+    <target name="DTOClients" depends="init, Base, Domain" >
+        <javac debug="on" classpath="${ant_classpath};${workspace}Base/bin/;${workspace}Domain/bin/;" destdir="${workspace}DTOClients/bin/" srcdir="${workspace}DTOClients/src/" includes="**/*.java" />
     </target>
 
     <!-- Compile Admin -->
@@ -214,19 +214,14 @@
         <javadoc packagenames="ims.admin.*" source="1.4" sourcepath="${workspace}Admin/src" destdir="${workspace}Admin/doc" use="true" author="false" version="true"> </javadoc>
     </target>
 
-    <!-- Compile ClinicalAdmin-->
-    <target name="ClinicalAdmin" depends="Admin, Domain" >
-        <javac debug="on" classpath="${ant_classpath};${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Domain/bin/;" destdir="${workspace}ClinicalAdmin/bin/" srcdir="${workspace}ClinicalAdmin/src/"  includes="**/*.java" />
-    </target>
-
     <!-- Compile Core -->
-    <target name="Core" depends="Alerts, ClinicalAdmin" >
-        <javac debug="on" classpath="${ant_classpath};${libdir}jai_codec.jar;${libdir}jai_core.jar;${libdir}joda-time-2.3.jar;${libdir}jaxrpc.jar;${libdir}saaj.jar;${libdir}wsdl4j.jar;${libdir}axis.jar;${libdir}jdom.jar;${libdir}mime-util-2.1.2.jar;${libdir}/quartz.jar;${libdir}jodconverter-core-3.0-beta-3.jar;${libdir}ImsServer.jar;${libdir}log4j.jar;${libdir}itext.jar;${libdir}plugin.jar;${libdir}capscan.jar;${libdir}j-interopdeps.jar;${libdir}jcifs-1.2.19.jar;${libdir}j-interop.jar;${libdir}Esendex.jar;${libdir}resolver.jar;${libdir}xbean.jar;${libdir}xbean_xpath.jar;${libdir}xmlbeans-qname.jar;${libdir}xmlpublic.jar;${libdir}pdsschema.jar;${libdir}pdsschema_src.jar;${libdir}commons-httpclient-3.0.jar;${workspace}ClinicalAdmin/bin/;${workspace}Admin/bin/;${workspace}Alerts/bin/;${workspace}DomainObjects/bin/;${workspace}DTOClients/bin/;${workspace}ValueObjects/bin/;" destdir="${workspace}Core/bin/" srcdir="${workspace}Core/src/" includes="**/*.java" />
+    <target name="Core" depends="Alerts, ClinicalAdmin, Domain, Base" >
+        <javac debug="on" classpath="${ant_classpath};${libdir}jai_codec.jar;${libdir}jai_core.jar;${libdir}joda-time-2.3.jar;${libdir}jaxrpc.jar;${libdir}saaj.jar;${libdir}wsdl4j.jar;${libdir}axis.jar;${libdir}jdom.jar;${libdir}mime-util-2.1.2.jar;${libdir}/quartz.jar;${libdir}jodconverter-core-3.0-beta-3.jar;${libdir}ImsServer.jar;${libdir}log4j.jar;${libdir}itext.jar;${libdir}plugin.jar;${libdir}capscan.jar;${libdir}j-interopdeps.jar;${libdir}jcifs-1.2.19.jar;${libdir}j-interop.jar;${libdir}Esendex.jar;${libdir}resolver.jar;${libdir}xbean.jar;${libdir}xbean_xpath.jar;${libdir}xmlbeans-qname.jar;${libdir}xmlpublic.jar;${libdir}pdsschema.jar;${libdir}pdsschema_src.jar;${libdir}commons-httpclient-3.0.jar;${workspace}ClinicalAdmin/bin/;${workspace}Admin/bin/;${workspace}Alerts/bin/;${workspace}DomainObjects/bin/;${workspace}DTOClients/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}Core/bin/" srcdir="${workspace}Core/src/" includes="**/*.java" />
     </target>
 
     <!-- Compile Domain -->
-    <target name="Domain">
-        <javac debug="on" classpath="${ant_classpath};${libdir}capscan.jar;${libdir}axis.jar;${libdir}WebJContextor.jar;${libdir}commons-pool.jar;${libdir}drools-core-5.5.0.Final.jar;${libdir}xercesImpl.jar;${libdir}drools-compiler-5.5.0.Final.jar;${libdir}apns-0.1.5.jar;${libdir}knowledge-api-5.5.0.Final.jar;" destdir="${workspace}Domain/bin/" srcdir="${workspace}Domain/src/" includes="**/*.java"/>
+    <target name="Domain" depends="Base">
+        <javac debug="on" classpath="${ant_classpath};${libdir}capscan.jar;${libdir}axis.jar;${libdir}WebJContextor.jar;${libdir}commons-pool.jar;${libdir}drools-core-5.5.0.Final.jar;${libdir}xercesImpl.jar;${libdir}drools-compiler-5.5.0.Final.jar;${libdir}apns-0.1.5.jar;${libdir}knowledge-api-5.5.0.Final.jar;${workspace}Base/bin/;" destdir="${workspace}Domain/bin/" srcdir="${workspace}Domain/src/" includes="**/*.java"/>
     </target>
 
     <!-- Compile Base -->

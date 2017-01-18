@@ -395,14 +395,14 @@ public class MedAdmisSummImpl extends DomainImpl implements ims.spinalinjuries.d
 		
 		if (careContext != null)
 		{
-			condStr.append(andStr + " t.careContext.id like :cc");
+			condStr.append(andStr + " t.careContext.id = :cc");
 			markers.add("cc");
 			values.add(careContext.getID_CareContext());
 			andStr = " and ";
 		}
 		else if (clinicalContact != null)
 		{
-			condStr.append(andStr + " t.clinicalContact.id like :cc");
+			condStr.append(andStr + " t.clinicalContact.id = :cc");
 			markers.add("cc");
 			values.add(clinicalContact.getID_ClinicalContact());
 			andStr = " and ";

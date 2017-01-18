@@ -79,7 +79,7 @@ public class WardSelectionImpl extends BaseWardSelectionImpl
 		query.append(" hospital.id = :HOSP_ID ");
 
 		/* TODO MSSQL case - query.append(" AND location.isActive = 1 AND location.caseNoteFolderLocation = 1 "); */
-		query.append(" AND location.isActive = true AND location.caseNoteFolderLocation = true ");
+		query.append(" AND location.isActive = TRUE AND location.caseNoteFolderLocation = TRUE ");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
@@ -99,14 +99,12 @@ public class WardSelectionImpl extends BaseWardSelectionImpl
 		return LocationLiteVoAssembler.createLocationLiteVoCollectionFromLocation(getDomainFactory().find(query.toString(), paramNames, paramValues));
 	}
 
-	//WDEV-20395
 	public LocationLiteVoCollection listBuildings(LocationRefVo locationRef, LocationType locationType, String searchText)
 	{
 		OrganisationAndLocation orgLoc = (OrganisationAndLocation) getDomainImpl(OrganisationAndLocationImpl.class);
 		return orgLoc.listLocationsByTheParentLocation(LocationType.BUILDING, locationRef, Boolean.TRUE, null, null,null, searchText);
 	}
 
-	//WDEV-23039
 	@Override
 	public LocationLiteVoCollection listWards(LocationRefVo hospital, String wardName)
 	{
@@ -114,14 +112,12 @@ public class WardSelectionImpl extends BaseWardSelectionImpl
 		return orgLoc.listActiveWardsForHospitalByNameLite(hospital, wardName);
 	}
 
-	//WDEV-23039
 	@Override
 	public LocationLiteVoCollection listHospitals()
 	{
 		return listLocations(null, LocationType.HOSP);
 	}
 	
-	//WDEV-23039
 	private LocationLiteVoCollection listLocations(String name, LocationType locType)
 	{
 		ArrayList<String> names = new ArrayList<String>();
@@ -139,7 +135,7 @@ public class WardSelectionImpl extends BaseWardSelectionImpl
 		}
 
 		/* TODO MSSQL case - hql += (" and loc.isVirtual = :virtual and loc.isActive = 1) order by loc.upperName asc"); */
-		hql += (" and loc.isVirtual = :virtual and loc.isActive = true) order by loc.upperName asc");
+		hql += (" and loc.isVirtual = :virtual and loc.isActive = TRUE) order by loc.upperName asc");
 
 		names.add("virtual");
 		values.add(Boolean.FALSE);

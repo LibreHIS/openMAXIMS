@@ -3,8 +3,8 @@
 
 	<!-- Properties set by DevEnv before writing script to file -->
 	<!-- POINT THE WORKSPACE TO YOUR SOURCE DIRECTORY -->
-	<property name="workspace" value="D:\IdeaProjects\openMAXIMS\Source Library\openmaxims_workspace\" />
-	<property name="project.name" value="openMAXIMS" />
+	<property name="workspace" value="D:\IdeaProjects\librehis\Source Library\openmaxims_workspace\" />
+	<property name="project.name" value="librehis" />
 	<property name="dbtype" value="PGSQL" />
 	<property name="hib.version" value="3" />
 
@@ -52,7 +52,7 @@
 	</target>
 
 	<!-- Compile Assessment -->
-	<target name="Assessment" depends="Admin, Core, Domain" >
+	<target name="Assessment" depends="Admin, Core, Domain, Base" >
 		<mkdir dir="${workspace}Assessment/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}Assessment/bin">
@@ -61,7 +61,7 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;" destdir="${workspace}Assessment/bin/" srcdir="${workspace}Assessment/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}Assessment/bin/" srcdir="${workspace}Assessment/src/"  includes="**/*.java" />
 	</target>
 
 	<!-- Compile Clinical-->
@@ -118,7 +118,6 @@
 		</delete>
 		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}Core/bin/;${workspace}OCRR/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}EAS/bin/" srcdir="${workspace}EAS/src/"  includes="**/*.java" />
 	</target>
-
 
 	<!-- Compile Oncology -->
 	<target name="Oncology" depends="Admin, Core, Clinical, ClinicalAdmin, EAS, Domain, Base" >
@@ -186,7 +185,7 @@
 	</target>
 
 	<!-- Compile ClinicalAdmin-->
-	<target name="ClinicalAdmin" depends="Admin" >
+	<target name="ClinicalAdmin" depends="Admin, Domain, Base" >
 		<mkdir dir="${workspace}ClinicalAdmin/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}Pathways/bin">
@@ -195,8 +194,9 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;" destdir="${workspace}ClinicalAdmin/bin/" srcdir="${workspace}ClinicalAdmin/src/"  includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${workspace}Admin/bin/;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Domain/bin/;${workspace}Base/bin/;" destdir="${workspace}ClinicalAdmin/bin/" srcdir="${workspace}ClinicalAdmin/src/"  includes="**/*.java" />
 	</target>
+
 	<!-- Compile RefMan-->
 	<target name="RefMan" depends="Admin, Core, Scheduling,OCS_IF, OCRR, ClinicalAdmin, Assessment, Pathways, Domain, Base" >
 		<mkdir dir="${workspace}RefMan/bin" />
@@ -263,7 +263,7 @@
 	</target>
 
 	<!-- Compile HL7Engine -->
-	<target name="HL7Engine" depends="Core,OCS_IF,Assessment,Admin,Pathways,Clinical, Base" >
+	<target name="HL7Engine" depends="Core,OCS_IF,Assessment,Admin,Pathways,Clinical, Base, Domain" >
 		<mkdir dir="${workspace}HL7Engine/bin" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${workspace}HL7Engine/bin">
@@ -272,7 +272,7 @@
 				</patternset>
 			</fileset>
 		</delete>
-		<javac debug="on" classpath="${ant_classpath};${libdir}hapi.jar;${libdir}hl7utils.jar;${libdir}ImsServer.jar;${libdir}joda-time-2.3.jar;${libdir}javax.servlet-api-4.0.0-b01.jar;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Assessment/bin/;${workspace}Pathways/bin/;${workspace}Core/bin/;${workspace}OCS_IF/bin/;${workspace}Assessment/bin/;${workspace}Clinical/bin/;${workspace}Base/bin/;" destdir="${workspace}HL7Engine/bin/" srcdir="${workspace}HL7Engine/src/" includes="**/*.java" />
+		<javac debug="on" classpath="${ant_classpath};${libdir}hapi.jar;${libdir}hl7utils.jar;${libdir}ImsServer.jar;${libdir}joda-time-2.3.jar;${libdir}javax.servlet-api-4.0.0-b01.jar;${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Admin/bin/;${workspace}Assessment/bin/;${workspace}Pathways/bin/;${workspace}Core/bin/;${workspace}OCS_IF/bin/;${workspace}Assessment/bin/;${workspace}Clinical/bin/;${workspace}Base/bin/;${workspace}Domain/bin/;" destdir="${workspace}HL7Engine/bin/" srcdir="${workspace}HL7Engine/src/" includes="**/*.java" />
 	</target>
 
 	<!-- Compile Billing -->
@@ -343,6 +343,7 @@
 				<include name="wsdl4j.jar"/>
 				<include name="itext.jar"/>
 				<include name="MaximsICAB.jar"/>
+				<include name="postgresql.jar"/>
 			</lib>
 
 			<classes dir="${workspace}WebApp/WEB-INF/classes" />

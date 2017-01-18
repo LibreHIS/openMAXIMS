@@ -82,7 +82,7 @@ public class ReferralServiceSelectionDialogImpl extends BaseReferralServiceSelec
 		DomainFactory factory = getDomainFactory();
 
 		/* TODO MSSQL case - StringBuffer hql = new StringBuffer("select serv from Service as serv left join serv.serviceCategory as servCateg left join serv.specialty as spec where serv.isActive = 1 "); */
-		StringBuffer hql = new StringBuffer("select serv from Service as serv left join serv.serviceCategory as servCateg left join serv.specialty as spec where serv.isActive = true ");
+		StringBuffer hql = new StringBuffer("select serv from Service as serv left join serv.serviceCategory as servCateg left join serv.specialty as spec where serv.isActive = TRUE ");
 	
 		ArrayList markers = new ArrayList();
 		ArrayList values = new ArrayList();

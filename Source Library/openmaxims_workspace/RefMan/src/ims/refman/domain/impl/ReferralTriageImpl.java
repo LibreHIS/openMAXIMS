@@ -162,7 +162,7 @@ public class ReferralTriageImpl extends BaseReferralTriageImpl
 			return null;
 
 		/* TODO MSSQL case - String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = 1 and rttMap.encounterType is null"; */
-		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = true and rttMap.encounterType is null";
+		String query = "select rttMap from RTTStatusEventMap as rttMap left join rttMap.currentRTTStatus as rtt where rtt.id = :RTTStatusPoint and rttMap.event is not null and rttMap.active = TRUE and rttMap.encounterType is null";
 
 		List<?> listRTTMap = getDomainFactory().find(query, new String[] {"RTTStatusPoint"}, new Object[] {rttStatusPoint.getId()});
 		
@@ -174,7 +174,7 @@ public class ReferralTriageImpl extends BaseReferralTriageImpl
 		return null;
 	}
 	
-	// WDEV-23646 - Ensure the correct event Date Time is used when creating a new RTT Status
+	// Ensure the correct event Date Time is used when creating a new RTT Status
 	private PathwayRTTStatus createPathwayRTTStatus(CatsReferral record, java.util.Date eventDateTime) throws DomainInterfaceException
 	{
 		if(!ConfigFlag.DOM.RTT_STATUS_POINT_FUNCTIONALITY.getValue())
@@ -415,7 +415,7 @@ public class ReferralTriageImpl extends BaseReferralTriageImpl
 	public ServiceLiteVoCollection listReferralServices()
 	{
 		/* TODO MSSQL case - String query = "select s from ReferralService as rs left join rs.referralServices as s where s.isActive = 1 order by s.upperName asc "; */
-		String query = "select s from ReferralService as rs left join rs.referralServices as s where s.isActive = true order by s.upperName asc ";
+		String query = "select s from ReferralService as rs left join rs.referralServices as s where s.isActive = TRUE order by s.upperName asc ";
 		DomainFactory factory = getDomainFactory();
 		
 		List services = factory.find(query);
@@ -1292,13 +1292,13 @@ public class ReferralTriageImpl extends BaseReferralTriageImpl
 		query += " left join h.serviceFunction as servf left join servf.service as serv ";
 
 		/* TODO MSSQL case - query += " where h.isActive = 1 and (h.mos.name.upperSurname like :NAME or h.mos.name.upperForename like :NAME) "; */
-		query += " where h.isActive = true and (h.mos.name.upperSurname like :NAME or h.mos.name.upperForename like :NAME) ";
+		query += " where h.isActive = TRUE and (h.mos.name.upperSurname like :NAME or h.mos.name.upperForename like :NAME) ";
 
-		/* TODO MSSQL case -  */
-		query += " AND h.isHCPaResponsibleHCP = true ";
+		/* TODO MSSQL case - query += " AND h.isHCPaResponsibleHCP = 1 "; */
+		query += " AND h.isHCPaResponsibleHCP = TRUE ";
 
-		/* TODO MSSQL case -  */
-		query += " AND serv.id = :serviceID and servf.isActive = true ";
+		/* TODO MSSQL case - query += " AND serv.id = :serviceID and servf.isActive = 1 "; */
+		query += " AND serv.id = :serviceID and servf.isActive = TRUE ";
 
 		paramNames.add("NAME");
 		paramValues.add(value.toUpperCase() + "%");

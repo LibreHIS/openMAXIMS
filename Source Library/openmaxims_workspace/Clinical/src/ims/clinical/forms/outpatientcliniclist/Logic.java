@@ -111,7 +111,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import sun.misc.Sort;
 
 public class Logic extends BaseLogic
 {
@@ -121,7 +120,6 @@ public class Logic extends BaseLogic
 	private static final String	COLUMN_OUTCOME			    = "0";
 	private static final String	COLUMN_ICAB                 = "1";
 	private static final String	COLUMN_IDENTIFIER     	    = "2";
-	//private static final String	COLUMN_CLINIC_NAME		    = "3";
 	private static final String	COLUMN_SURNAME     		    = "3";
 	private static final String	COLUMN_FORENAME   		    = "4";
 	private static final String COLUMN_SEX 		            = "5";

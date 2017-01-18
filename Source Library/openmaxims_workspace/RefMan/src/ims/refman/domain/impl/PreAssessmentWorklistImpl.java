@@ -198,7 +198,7 @@ public class PreAssessmentWorklistImpl extends BasePreAssessmentWorklistImpl
 			hqlJoins.append(" left join patElective.preAssessmentOutcome as preAssessmentOutcome ");
 
 			/* TODO MSSQL case - hqlConditionsOR.append(" (preAssessmentOutcome.fitToProceed = 0) "); */
-			hqlConditionsOR.append(" (preAssessmentOutcome.fitToProceed = false) ");
+			hqlConditionsOR.append(" (preAssessmentOutcome.fitToProceed = FALSE) ");
 
 			orStr = " OR ";
 		}
@@ -209,7 +209,7 @@ public class PreAssessmentWorklistImpl extends BasePreAssessmentWorklistImpl
 			hqlJoins.append(" left join patElective.preAssessmentOutcome as preAssessmentOutcome ");
 
 			/* TODO MSSQL case - hqlConditionsOR.append(" (preAssessmentOutcome.fitToProceed = 1) "); */
-			hqlConditionsOR.append(" (preAssessmentOutcome.fitToProceed = true) ");
+			hqlConditionsOR.append(" (preAssessmentOutcome.fitToProceed = TRUE) ");
 
 			orStr = " OR ";
 		}
@@ -222,7 +222,7 @@ public class PreAssessmentWorklistImpl extends BasePreAssessmentWorklistImpl
     			hqlJoins.append(" left join patElective.preAssessmentOutcome as preAssessmentOutcome left join preAssessmentOutcome.waitingForDetails as waitingForDet left join waitingForDet.informationToBeReceived as infoReceived");
 
 				/* TODO MSSQL case - hqlConditionsOR.append(" (preAssessmentOutcome is not null AND preAssessmentOutcome.fitToProceed is null AND (infoReceived.id in (" + getWaitingForIDs(searchCriteria.getWaitingFor()) + ") AND (waitingForDet.received is null OR waitingForDet.received = 0))) "); */
-    			hqlConditionsOR.append(" (preAssessmentOutcome is not null AND preAssessmentOutcome.fitToProceed is null AND (infoReceived.id in (" + getWaitingForIDs(searchCriteria.getWaitingFor()) + ") AND (waitingForDet.received is null OR waitingForDet.received = FALSE))) ");
+				hqlConditionsOR.append(" (preAssessmentOutcome is not null AND preAssessmentOutcome.fitToProceed is null AND (infoReceived.id in (" + getWaitingForIDs(searchCriteria.getWaitingFor()) + ") AND (waitingForDet.received is null OR waitingForDet.received = FALSE))) ");
 
 				orStr = " OR ";
 			}
@@ -233,6 +233,7 @@ public class PreAssessmentWorklistImpl extends BasePreAssessmentWorklistImpl
 
 				/* TODO MSSQL case - hqlConditionsOR.append(" (preAssessmentOutcome.detailsOutstanding=1 AND preAssessmentOutcome.fitToProceed is null)"); */
     			hqlConditionsOR.append(" (preAssessmentOutcome.detailsOutstanding = TRUE AND preAssessmentOutcome.fitToProceed is null)");
+
     			orStr = " OR ";
 			}
 		}

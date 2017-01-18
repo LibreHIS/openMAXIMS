@@ -3,6 +3,9 @@
 # Ignore classes folder
 /Source Library/openmaxims_workspace/WebApp/WEB-INF/classes
 
+# Ignore bin folder
+/Source Library/openmaxims_workspace/*/bin/
+
 # Ignore Intellij IDEA configuration files
 .idea
 *.iml

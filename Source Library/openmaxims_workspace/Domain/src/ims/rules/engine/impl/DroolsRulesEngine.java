@@ -44,16 +44,15 @@ public class DroolsRulesEngine extends RulesEngine
 	@Override
 	public synchronized void initialize() throws RulesEngineException, RulesEngineCompilationException 
 	{
-		//PackageBuilderConfiguration packageConfiguration = new PackageBuilderConfiguration();		
-		//JavaDialectConfiguration javaConf = (JavaDialectConfiguration)packageConfiguration.getDialectConfiguration("java");
-		//javaConf.setCompiler(JavaDialectConfiguration.JANINO);
-		
-		builder = new PackageBuilder();//packageConfiguration);
+		builder = new PackageBuilder(); // packageConfiguration);
 		
 		if(configuration.getInternalRules().size() > 0 || configuration.getUserRules().size() > 0)
 		{		
 			LOG.warn("Starting Drools rules engine...");
-			createSystemLogEntry(SystemLogLevel.INFORMATION, "Drools rules engine is starting");
+
+			/* TODO */
+			LOG.warn("Drools rules engine is starting");
+			// createSystemLogEntry(SystemLogLevel.INFORMATION, "Drools rules engine is starting");
 			
 			List<Reader> internalRulesList = configuration.getInternalRules();
 			int internalRulesCount = internalRulesList.size();			
@@ -111,7 +110,10 @@ public class DroolsRulesEngine extends RulesEngine
 			}			
 			
 			LOG.warn("Compiling all rules...");
-			builder.compileAll();				
+
+			/* TODO  */
+			/* builder.compileAll();
+
 			PackageBuilderErrors errors = builder.getErrors();
 			if(errors.size() > 0)
 			{
@@ -131,7 +133,7 @@ public class DroolsRulesEngine extends RulesEngine
 				String message = "Drools rules engine was started with " + internalRulesCount + " internal rule(s) and " + userRulesCount + " user rule(s)";
 				createSystemLogEntry(SystemLogLevel.INFORMATION, message);
 				LOG.warn(message);
-			}
+			}*/
 		}
 	}
 	

@@ -489,7 +489,7 @@ public class MDTNotesImpl extends BaseMDTNotesImpl
 					summaryVo.setFirstAdmissionDate(collCareContextVo.get(i).getStartDateTime().getDate());
 			}
 		
-		//MRSA record.
+		// MRSA record
 		MRSASitesResultsVoCollection collMRSAVo = new MRSASitesResultsVoCollection();
 		hql = "select siteres from MRSAAssessment t join t.sitesAndResults as siteres ";
 		condStr = new StringBuffer();
@@ -500,14 +500,14 @@ public class MDTNotesImpl extends BaseMDTNotesImpl
 
 		if (careContext != null)
 		{
-			condStr.append(andStr + " t.careContext.id like :cc");
+			condStr.append(andStr + " t.careContext.id = :cc");
 			markers.add("cc");
 			values.add(careContext.getID_CareContext());
 			andStr = " and ";
 		}
 		else if (clinicalContact != null)
 		{
-			condStr.append(andStr + " t.clinicalContact.id like :cc");
+			condStr.append(andStr + " t.clinicalContact.id = :cc");
 			markers.add("cc");
 			values.add(clinicalContact.getID_ClinicalContact());
 			andStr = " and ";

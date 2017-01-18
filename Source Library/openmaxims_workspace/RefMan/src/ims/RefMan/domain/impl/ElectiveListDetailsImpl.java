@@ -462,9 +462,7 @@ public class ElectiveListDetailsImpl extends BaseElectiveListDetailsImpl
 		}
 		
 		factory.save(domainPatElectiveList);
-		
 
-		
 		if (saveReferral)
 			factory.save(doCatsReferral);
 		

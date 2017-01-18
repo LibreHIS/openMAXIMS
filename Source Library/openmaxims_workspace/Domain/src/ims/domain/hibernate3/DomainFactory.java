@@ -249,18 +249,10 @@ public class DomainFactory implements ims.domain.DomainFactory, Serializable
 			return -1;
 		
 		ims.rules.engine.RulesEngine rulesEngine = null;
-		
-		/*try
-		{*/
-			rulesEngine = RulesEngineFactory.getInstance();
-			if(rulesEngine == null)
-				return -1;
-			
-		/*}
-		catch (RulesEngineException e)
-		{
-			throw new CallbackException(e);			
-		}*/
+
+		rulesEngine = RulesEngineFactory.getInstance();
+		if (rulesEngine == null)
+			return -1;
 				
 		HashMap<String, Serializable> global = new HashMap<String, Serializable>();
 		global.put("engine", new RulesRuntimeEngine(rulesEngine, this, domainSession, entityId));
@@ -305,7 +297,6 @@ public class DomainFactory implements ims.domain.DomainFactory, Serializable
 				
 				Integer id = (Integer) staleException.getIdentifier();
 				String className = staleException.getEntityName();
-				//Class domainClass = staleException.getPersistentClass();
 				ims.domain.DomainObject domainObject = null;
 				try 
 				{
@@ -315,13 +306,14 @@ public class DomainFactory implements ims.domain.DomainFactory, Serializable
 				}
 				catch (Exception secondary) 
 				{
-					// suppress secondary exception
+					// Suppress secondary exception
 				}
-				//Use this whether domainObject is null or not.
-				//If domainObject is null, will indicate object no longer exists.
+
+				// Use this whether domainObject is null or not.
+				// If domainObject is null, will indicate object no longer exists.
 				throw new StaleObjectException(domainObject, e);
 			}
-			else if (e instanceof ConstraintViolationException || e instanceof SQLGrammarException) //Not sure if this needs to work on getCause()
+			else if (e instanceof ConstraintViolationException || e instanceof SQLGrammarException) // Not sure if this needs to work on getCause()
 			{
 				int errorCode;
 				if (e instanceof ConstraintViolationException)
@@ -331,9 +323,9 @@ public class DomainFactory implements ims.domain.DomainFactory, Serializable
 				
 				if (errorCode == ORACLE_UNQ_VIOLATION_ERROR || errorCode == SYBASE_UNQ_VIOLATION_ERROR || errorCode == SQLSERVER_UNQ_VIOLATION_ERROR)
 				{
-					//JME: 20051128: Want to handle the discarding of the transaction here, so
-					//Impl code can catch the UnqConstraintViolationException, and execute further
-					//database calls within the catch block to ascertain more details of the error situation.
+					// JME: 20051128: Want to handle the discarding of the transaction here, so
+					// Impl code can catch the UnqConstraintViolationException, and execute further
+					// database calls within the catch block to ascertain more details of the error situation.
 					if (transaction != null)
 					{
 						try 

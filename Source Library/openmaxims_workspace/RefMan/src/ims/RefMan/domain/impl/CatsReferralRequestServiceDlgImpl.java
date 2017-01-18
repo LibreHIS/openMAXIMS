@@ -271,7 +271,7 @@ public class CatsReferralRequestServiceDlgImpl extends BaseCatsReferralRequestSe
 		
 		DomainFactory factory = getDomainFactory();
 
-		/* TODO MSSQL Case - String query = "select s from ContractConfig as cc left join cc.serviceLocations as sl left join sl.service as s where cc.id = :ContractConfig and s.isActive=1 order by s.serviceName asc  "; */
+		/* TODO MSSQL case - String query = "select s from ContractConfig as cc left join cc.serviceLocations as sl left join sl.service as s where cc.id = :ContractConfig and s.isActive=1 order by s.serviceName asc  "; */
 		String query = "select s from ContractConfig as cc left join cc.serviceLocations as sl left join sl.service as s where cc.id = :ContractConfig and s.isActive = TRUE order by s.serviceName asc  ";
 		
 		List doServices = factory.find(query, new String[] {"ContractConfig"}, new Object[] {contractRef.getID_ContractConfig()});

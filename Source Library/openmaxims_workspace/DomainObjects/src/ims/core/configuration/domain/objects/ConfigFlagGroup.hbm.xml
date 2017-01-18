@@ -6,16 +6,21 @@
 <hibernate-mapping>
 	<class name="ims.core.configuration.domain.objects.ConfigFlagGroup" table="core_configflaggrou" lazy="true" discriminator-value="null" >
 		<cache usage="nonstrict-read-write" />
+
 		<id name="id" access="field" type="integer" unsaved-value="null">
 			<!-- workaround for DDL creation (works for Sybase only) -->
 			<column name="id" sql-type="numeric(10,0)"/>
 			<generator class="native"/>
 		</id>
+
 		<discriminator not-null="false" length="4"/>
+
 		<version name="version" column="vstp" access="field"/>
+
 		<property name="isRIE" type="boolean" access="field" update="true">
 			<column name="rie"  not-null="false" unique="false"  />
 		</property>
+
 		<component name="systemInformation" class="ims.domain.SystemInformation"  access="field" >
 			<property name="creationDateTime" type="timestamp" access="field">
 				<column name="sys_creation_datetime" />
@@ -30,6 +35,7 @@
 				<column name="sys_lastupdate_user" length="30" />
 			</property>
 		</component>
+
 <!-- debug: hibernateClassContent -->
 <!-- debug: name -->
 <!-- debug: flags -->
@@ -42,11 +48,12 @@
 			
 			<one-to-many class="ims.core.configuration.domain.objects.ConfigFlag"/>
 		</set>
-<!-- debug: !IsAssociation && !IsCollection -->
 
+<!-- debug: !IsAssociation && !IsCollection -->
 <!-- debug: !IsLookup -->
 		<property name="name" type="string" access="field" update="true" > 
 			<column name="name" length="255"  not-null="true" unique="true"  />
 		</property>
+
 	</class>
 </hibernate-mapping>
