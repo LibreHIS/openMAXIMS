@@ -116,8 +116,10 @@ public class PatientJourneyImpl extends BasePatientJourneyImpl
 		markers.add("referral");
 		ArrayList<Object> values = new ArrayList<Object>();
 		values.add(referral.getID_Referral());
-		//WDEV-21176  exclude RIE
-		return PatientJourneyShortVoAssembler.createPatientJourneyShortVoCollectionFromPatientPathwayJourney((factory.find("from PatientPathwayJourney pj where (pj.isRIE is null OR pj.isRIE = 0) and pj.referral.id = :referral", markers, values)));		
+
+		// Exclude RIE
+		/* TODO MSSQL case - return PatientJourneyShortVoAssembler.createPatientJourneyShortVoCollectionFromPatientPathwayJourney((factory.find("from PatientPathwayJourney pj where (pj.isRIE is null OR pj.isRIE = 0) and pj.referral.id = :referral", markers, values))); */
+		return PatientJourneyShortVoAssembler.createPatientJourneyShortVoCollectionFromPatientPathwayJourney((factory.find("from PatientPathwayJourney pj where (pj.isRIE is null OR pj.isRIE = FALSE) and pj.referral.id = :referral", markers, values)));
 	}	
 	
 	public PatientJourneyShortVoCollection listPatientJourneyShortByPathway(PathwayRefVo voRef) 
@@ -433,7 +435,8 @@ public class PatientJourneyImpl extends BasePatientJourneyImpl
 
 		StringBuffer hql = new StringBuffer();
 
-		hql.append(" select count(breachReason.id) from PatientPathwayJourney as PatientPathwayJourney left join PatientPathwayJourney.patientJourneyBreachReason as breachReason where (breachReason.isRIE is null or breachReason.isRIE = 0) and PatientPathwayJourney.id = :journeyID ");
+		/* TODO MSSQL case - hql.append(" select count(breachReason.id) from PatientPathwayJourney as PatientPathwayJourney left join PatientPathwayJourney.patientJourneyBreachReason as breachReason where (breachReason.isRIE is null or breachReason.isRIE = 0) and PatientPathwayJourney.id = :journeyID "); */
+		hql.append(" select count(breachReason.id) from PatientPathwayJourney as PatientPathwayJourney left join PatientPathwayJourney.patientJourneyBreachReason as breachReason where (breachReason.isRIE is null or breachReason.isRIE = FALSE) and PatientPathwayJourney.id = :journeyID ");
 
 		 Object[] count = factory.find(hql.toString(), new String[] { "journeyID" }, new Object[] {patientJourneyID}).toArray();
 		
@@ -445,8 +448,7 @@ public class PatientJourneyImpl extends BasePatientJourneyImpl
 		return false;
 	}
 
-	// WDEV-20385
-	public PatientJourneyBreachReasonListVo getBreachReasons(PatientPathwayJourneyRefVo commentRef) 
+	public PatientJourneyBreachReasonListVo getBreachReasons(PatientPathwayJourneyRefVo commentRef)
 	{
 		if (commentRef == null)
 			return null;
@@ -456,7 +458,8 @@ public class PatientJourneyImpl extends BasePatientJourneyImpl
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
 
-		String hql = "select reason from PatientPathwayJourney as journey left join journey.patientJourneyBreachReason as reason where journey.id = :journeyID and (reason.isRIE is null OR reason.isRIE = 0) order by reason.breachReasonDate desc";
+		/* TODO MSSQL case - String hql = "select reason from PatientPathwayJourney as journey left join journey.patientJourneyBreachReason as reason where journey.id = :journeyID and (reason.isRIE is null OR reason.isRIE = 0) order by reason.breachReasonDate desc"; */
+		String hql = "select reason from PatientPathwayJourney as journey left join journey.patientJourneyBreachReason as reason where journey.id = :journeyID and (reason.isRIE is null OR reason.isRIE = FALSE) order by reason.breachReasonDate desc";
 
 		markers.add("journeyID");
 		values.add(commentRef.getID_PatientPathwayJourney());

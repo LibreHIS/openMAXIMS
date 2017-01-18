@@ -517,51 +517,33 @@ public class Logic extends BaseLogic
 				{
 					DynamicGridRow serviceRow = patientRow.getRows().get(k);
 					
-					if(serviceRow.equals(row))
+					if (serviceRow.equals(row))
 						break;
 
 					DynamicGridCell cell = serviceRow.getCells().get(form.dyngrdCollect().getColumns().getByIdentifier(PHLEBOTOMIST_COLUMN));
 					
-					if(cell == null || !cell.getType().equals(DynamicCellType.QUERYCOMBOBOX))
+					if (cell == null || !cell.getType().equals(DynamicCellType.QUERYCOMBOBOX))
 						continue;
 
-					if(cell.getValue() instanceof Hcp)
+					if (cell.getValue() instanceof Hcp)
 						previousRow = serviceRow;
-					/*
-					else if(cell.getValue() instanceof String)
-					{
-						Integer collectingMos = ((SpecimenWorkListitemCustomVo)previousRow.getValue()).getCollectingMos();
-						
-						if(collectingMos != null)
-							previousRow = serviceRow;
-					}
-					*/
+
 				}
 			}
 		}
-
-		/*
-		for (int i = 0; i < row.getParent().getRows().size(); i++)
-		{
-			if(row.getParent().getRows().get(i).equals(row))
-				break;
-			
-			previousRow = row.getParent().getRows().get(i);
-		}
-		*/
 		
-		if(previousRow == null)
+		if (previousRow == null)
 			return null;
 		
 		DynamicGridCell cell = previousRow.getCells().get(form.dyngrdCollect().getColumns().getByIdentifier(PHLEBOTOMIST_COLUMN));
 		
-		if(cell == null || !cell.getType().equals(DynamicCellType.QUERYCOMBOBOX))
+		if (cell == null || !cell.getType().equals(DynamicCellType.QUERYCOMBOBOX))
 			return null;
 		
-		if(cell.getValue() instanceof Hcp)
+		if (cell.getValue() instanceof Hcp)
 			return (Hcp) cell.getValue();
 		
-		if(cell.getValue() instanceof String)
+		if (cell.getValue() instanceof String)
 		{
 			Integer collectingMos = ((SpecimenWorkListitemCustomVo)previousRow.getValue()).getCollectingMos();
 			

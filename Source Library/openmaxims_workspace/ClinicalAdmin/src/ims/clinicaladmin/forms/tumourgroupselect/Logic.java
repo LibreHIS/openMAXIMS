@@ -110,43 +110,5 @@ public class Logic extends BaseLogic
 
 		engine.close(DialogResult.OK);
 		
-/*		try 
-		{
-			for (int i = 0 ; i < form.grdTumourGroup().getRows().size() ; i++)
-			{
-				//for each tumour group check to see if this classification is in its Otherclassifications list
-				//if it is not and selected add it, save
-				//if it is and not selected remove it, save
-				//else do nothing
-				boolean bFoundClass = false;
-				
-				grdTumourGroupRow row = form.grdTumourGroup().getRows().get(i);
-				if (row.getValue().getOtherClassifications().contains(form.getGlobalContext().getSelectedStagingClassificationVo()))
-					bFoundClass = true;
-
-				if (bFoundClass && ! row.getColSelect())
-				{
-					row.getValue().getOtherClassifications().remove(form.getGlobalContext().getSelectedStagingClassificationVo());
-					if (row.getValue().getOtherClassifications().size() == 0)
-						row.getValue().setHasOtherClassifications(false);
-					
-					domain.saveTumourGroup(row.getValue());
-				}
-				if (! bFoundClass && row.getColSelect())
-				{
-					row.getValue().setHasOtherClassifications(true);
-					row.getValue().getOtherClassifications().add(form.getGlobalContext().getSelectedStagingClassificationVo());
-					
-					domain.saveTumourGroup(row.getValue());
-				}
-			}
-			
-		} 
-		catch (StaleObjectException e) 
-		{
-			engine.showMessage(ims.configuration.gen.ConfigFlag.UI.STALE_OBJECT_MESSAGE.getValue());
-			return;
-		}
-*/		
 	}
 }

@@ -761,12 +761,6 @@ public class Logic extends BaseLogic
 
 	}
 
-	/*
-	 * private void listAvailableDigitJoints() { MskJointVoCollection voCollConfiguredJoints = domain.listDigitJoints(); if (voCollConfiguredJoints == null) return;
-	 * 
-	 * for (int i = 0; i < voCollConfiguredJoints.size(); i++) form.ctnDetails().lyrDetails().tabDetails().cmbJoint().newRow(voCollConfiguredJoints.get(i), voCollConfiguredJoints.get(i).getName()); }
-	 */
-
 	private void populateTree(HandRangeOfMovementVo voHandRangeOfMovement)
 	{
 		if (voHandRangeOfMovement.getDetails() != null)
@@ -776,7 +770,7 @@ public class Logic extends BaseLogic
 	private void populateGrid(RangeOfMovementDetailVoCollection voCollRangeOfMovementDetails)
 	{
 		form.grdMovement().getRows().clear();
-		// Add Left and Right Lateralitites..
+		// Add Left and Right Lateralitites
 		nodeLateralityPopulate(LateralityLRonly.LEFT);
 		nodeLateralityPopulate(LateralityLRonly.RIGHT);
 

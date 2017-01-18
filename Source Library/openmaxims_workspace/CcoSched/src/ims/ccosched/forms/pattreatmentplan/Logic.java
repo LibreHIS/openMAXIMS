@@ -1427,7 +1427,6 @@ public class Logic extends BaseLogic
 			return 0;
 		}
 	}
-	//end WDEV-13998
 	
 //	TODO replace with Domain BO calls
 //	private String getTechniqueText(String lkupId)

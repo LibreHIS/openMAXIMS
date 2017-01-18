@@ -71,9 +71,10 @@ public class PrescriptionDialogImpl extends BasePrescriptionDialogImpl
         	sql.append(" and a.id not in ("+ignored+")");
 		}
         
-        if (Boolean.TRUE.equals(excludeControlledDrugs)) //WDEV-18980
+        if (Boolean.TRUE.equals(excludeControlledDrugs))
         {
-        	sql.append(" and (a.iscontroll is null OR a.iscontroll = 0)");
+			/* TODO MSSQL case - sql.append(" and (a.iscontroll is null OR a.iscontroll = 0)"); */
+        	sql.append(" and (a.iscontroll is null OR a.iscontroll = FALSE)");
         }
         
         sql.append(" order by upper(a.medication)");

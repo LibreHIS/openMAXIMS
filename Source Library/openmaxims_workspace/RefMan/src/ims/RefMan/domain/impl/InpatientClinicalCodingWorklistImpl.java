@@ -86,7 +86,9 @@ public class InpatientClinicalCodingWorklistImpl extends BaseInpatientClinicalCo
 		String and = " and ";
 		
 		hqlJoins.append("select dischargeEpis from DischargedEpisode as dischargeEpis left join dischargeEpis.admissionDetail as admissionDet left join admissionDet.pasEvent as pasEvent ");
-		hqlConditions.append(" where (dischargeEpis.isRIE is null or dischargeEpis.isRIE = 0) and (admissionDet.isRIE is null or admissionDet.isRIE = 0) ");	
+
+		/* TODO MSSQL case - hqlConditions.append(" where (dischargeEpis.isRIE is null or dischargeEpis.isRIE = 0) and (admissionDet.isRIE is null or admissionDet.isRIE = 0) "); */
+		hqlConditions.append(" where (dischargeEpis.isRIE is null or dischargeEpis.isRIE = FALSE) and (admissionDet.isRIE is null or admissionDet.isRIE = FALSE) ");
 					
 		if (criteria.getSpecialty() != null)
 		{

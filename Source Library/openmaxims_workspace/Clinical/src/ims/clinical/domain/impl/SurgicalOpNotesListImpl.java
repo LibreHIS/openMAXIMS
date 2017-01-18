@@ -106,7 +106,7 @@ public class SurgicalOpNotesListImpl extends BaseSurgicalOpNotesListImpl
 		"(UPPER(l1_1.name) like :nameFilter and l1_1.isActive = 1 and l1_1.isVirtual = 0 and l1_1.type.id = :hospTypeId) "+
 		"order by l1_1.name asc"; */
 		String hql = "from Location as l1_1 where "+
-		"(UPPER(l1_1.name) like :nameFilter and l1_1.isActive = true and l1_1.isVirtual = false and l1_1.type.id = :hospTypeId) "+
+		"(UPPER(l1_1.name) like :nameFilter and l1_1.isActive = TRUE and l1_1.isVirtual = FALSE and l1_1.type.id = :hospTypeId) "+
 		"order by l1_1.name asc";
 
 		List<?> result = getDomainFactory().find(hql,new String[]{"nameFilter","hospTypeId"},
@@ -134,15 +134,18 @@ public class SurgicalOpNotesListImpl extends BaseSurgicalOpNotesListImpl
 		boolean firstParameterAdded = false;
 		if (filter.getProcedureIsNotNull())		
 		{
-				sql.append("p4_1.procedure.id = :Procedure_id and ( p4_1.isRIE is null or p4_1.isRIE = 0 ) ");  //wdev-16092
-				paramNames.add("Procedure_id");
-				paramValues.add(filter.getProcedure().getID_Procedure());
-				firstParameterAdded = true;
+			/* TODO MSSQL case - sql.append("p4_1.procedure.id = :Procedure_id and ( p4_1.isRIE is null or p4_1.isRIE = 0 ) "); */
+			sql.append("p4_1.procedure.id = :Procedure_id and ( p4_1.isRIE is null or p4_1.isRIE = FALSE ) ");
+
+			paramNames.add("Procedure_id");
+			paramValues.add(filter.getProcedure().getID_Procedure());
+			firstParameterAdded = true;
 		}
 		if (filter.getDiagnosisIsNotNull())
 		{
 			if (firstParameterAdded)
 				sql.append("and ");
+
 			sql.append("p5_1.diagnosis.id = :Diagnosis_id ");
 			paramNames.add("Diagnosis_id");
 			paramValues.add(filter.getDiagnosis().getID_Diagnosis());

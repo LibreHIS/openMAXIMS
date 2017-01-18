@@ -139,11 +139,13 @@ public class PendingElectiveAdmissionsListELComponentImpl extends BasePendingEle
 		String strSearchSurname = "";
 		String strSearchForename = "";
 		
-		//WDEV-20809 mandatory conditions for search
-		sb.append(andStr + " pel.tCIDetails is not null AND pel.tCIDetails.tCIDate is not null AND pel.tCIDetails.isActive = :ACTIVE AND pel.tCIDetails.currentOutcome is null AND"); //WDEV-20328
+		// Mandatory conditions for search
+		sb.append(andStr + " pel.tCIDetails is not null AND pel.tCIDetails.tCIDate is not null AND pel.tCIDetails.isActive = :ACTIVE AND pel.tCIDetails.currentOutcome is null AND");
 		markers.add("ACTIVE");
 		values.add(Boolean.TRUE);
-		sb.append (" (pel.isRIE is null OR pel.isRIE = 0) AND "); //WDEV-20902 //WDEV-22642
+
+		/* TODO MSSQL case - sb.append (" (pel.isRIE is null OR pel.isRIE = 0) AND "); */
+		sb.append (" (pel.isRIE is null OR pel.isRIE = FALSE) AND ");
 		
 		if (searchFilter.getHospNumIsNotNull())
 		{
@@ -151,18 +153,18 @@ public class PendingElectiveAdmissionsListELComponentImpl extends BasePendingEle
 			
 			String idVal = searchFilter.getHospNum().trim();			
 			if (searchFilter.getIDType().equals(PatIdType.NHSN))
-				idVal = searchFilter.getHospNum().replace(" ", "");//wdev-7305
-			if (!isCaseSensitivePatIdSearch)	//WDEV-18817
+				idVal = searchFilter.getHospNum().replace(" ", "");
+			if (!isCaseSensitivePatIdSearch)
 			{	
 				idVal = idVal.toUpperCase();
 			}
 			if (searchFilter.getIDType().equals(PatIdType.NHSN))
 			{
-				sb.append(andStr + (!isCaseSensitivePatIdSearch ? " UPPER(ids.value)" : " ids.value") + " like :idnum"); //WDEV-18817 
+				sb.append(andStr + (!isCaseSensitivePatIdSearch ? " UPPER(ids.value)" : " ids.value") + " like :idnum");
 				idVal += "%";
 			}
 			else
-				sb.append(andStr + (!isCaseSensitivePatIdSearch ? " UPPER(ids.value)" : " ids.value") + " = :idnum"); //WDEV-18817
+				sb.append(andStr + (!isCaseSensitivePatIdSearch ? " UPPER(ids.value)" : " ids.value") + " = :idnum");
 
 			markers.add("idnum");
 			values.add(idVal);

@@ -66,7 +66,10 @@ public class SpecialtyOutlierInpatientListImpl extends BaseSpecialtyOutlierInpat
 
 		hql.append(" WHERE pendTrans.id is null ");
 		hql.append(" AND inpat.pasEvent.location.id = :WARD_ID");
-		hql.append(" AND (inpat.isReadyToLeave is null OR inpat.isReadyToLeave = 0)");
+
+		/* TODO MSSQL case - hql.append(" AND (inpat.isReadyToLeave is null OR inpat.isReadyToLeave = 0)"); */
+		hql.append(" AND (inpat.isReadyToLeave is null OR inpat.isReadyToLeave = FALSE)");
+
 		hql.append(" AND (inpatSpecialty is null OR inpatSpecialty.id NOT IN (");
 
 		hql.append("SELECT wardSpecialty.id FROM WardBayConfig AS wardConfig LEFT JOIN wardConfig.ward AS ward LEFT JOIN wardConfig.specialties AS spec LEFT JOIN spec.instance AS wardSpecialty WHERE ward.id = :WARD_ID ");

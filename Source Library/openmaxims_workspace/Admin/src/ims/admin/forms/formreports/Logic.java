@@ -189,25 +189,6 @@ public class Logic extends BaseLogic
 		}
 	}
 
-
-
-	/*
-	private void clearReportSelection(Integer formId) 
-	{
-		form.grdReportList().getRows().clear();
-		ReportVoCollection validReps = getValidReps(formId);
-		populateReports(validReps);
-		
-		int numRows = form.grdReportList().getRows().size();
-		for (int i = 0; i < numRows; i++)
-		{
-			GenForm.grdReportListRow row = form.grdReportList().getRows().get(i);
-			//row.setRepAssign(false);
-		}
-	}
-	*/
-	
-	//WDEV-2254 
 	protected void onFormModeChanged()
 	{
 	}

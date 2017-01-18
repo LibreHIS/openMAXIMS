@@ -555,28 +555,6 @@ public class Logic extends BaseLogic
 		long toDateInMillis = toDate.getJavaDate().getTime();
 		return (int)(((toDateInMillis - fromDateInMillis)/1000)/60);
 	}
-	
-	/*
-	private ims.core.vo.PatientId getDisplayID(PatientForDementiaVo patient)
-	{
-		String configFlagIDType = ims.configuration.ConfigFlag.UI.DISPLAY_PATID_TYPE.getValue();
-		ims.core.vo.lookups.PatIdType type = ims.core.vo.lookups.PatIdType.getNegativeInstance(configFlagIDType);
-
-		if (type == null)
-			type = ims.core.vo.lookups.PatIdType.HOSPNUM;
-
-		for (int i = 0; i < patient.getIdentifiers().size(); i++)
-		{
-			ims.core.vo.PatientId id = patient.getIdentifiers().get(i);
-			if (id.getType().equals(type))
-			{
-				return id;
-			}
-		}
-
-		return null;
-	}
-	*/
 
 	private DynamicGridColumn getColumnDynGrid(Integer identifier)
 	{

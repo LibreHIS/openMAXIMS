@@ -65,13 +65,14 @@ public class TransportImpl extends BaseTransportImpl
 		StringBuilder hqlQuery = new StringBuilder("SELECT DISTINCT appointment FROM Booking_Appointment AS appointment LEFT JOIN appointment.apptStatus AS status");
 
 		/* TODO MSSQL case - hqlQuery.append(" WHERE appointment.isTransportRequired = 1 "); */
-		hqlQuery.append(" WHERE appointment.isTransportRequired = true ");
+		hqlQuery.append(" WHERE appointment.isTransportRequired = TRUE ");
 		
 		if (!displayBookedAppointments) {
-            hqlQuery.append(" AND (appointment.isTransportBooked is null OR appointment.isTransportBooked = 0) AND status.id = -1469 ");
+			/* TODO MSSQL case - hqlQuery.append(" AND (appointment.isTransportBooked is null OR appointment.isTransportBooked = 0) AND status.id = -1469 "); */
+            hqlQuery.append(" AND (appointment.isTransportBooked is null OR appointment.isTransportBooked = FALSE) AND status.id = -1469 ");
         } else {
 		    /* TODO MSSQL case - hqlQuery.append(" AND appointment.isTransportBooked = 1 AND status.id = -1469"); */
-            hqlQuery.append(" AND appointment.isTransportBooked = true AND status.id = -1469");
+            hqlQuery.append(" AND appointment.isTransportBooked = TRUE AND status.id = -1469");
         }
 		
 		ArrayList<String> paramNames = new ArrayList<String>();

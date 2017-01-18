@@ -268,13 +268,15 @@ public class DocumentWorklistImpl extends BaseDocumentWorklistImpl
 			
 		}
 		
-		if (searchCriteria.getDocumentType() == null)//WDEV-13634
+		if (searchCriteria.getDocumentType() == null)
 		{
 			hqlJoins.append(" left join pd.category as cat ");
 		}
-		hqlConditions.append(" and cat.id not in (" + DocumentCategory.HISTORICAL.getID() + "," + DocumentCategory.ASSESSMENT.getID() + "," + DocumentCategory.RACPCSUMMARY.getID() + ")");//WDEV-13634
-		
-		hqlConditions.append(" ) and (pd.isRIE is null or pd.isRIE = 0) order by pd.documentDate desc");//	WDEV-15417
+		hqlConditions.append(" and cat.id not in (" + DocumentCategory.HISTORICAL.getID() + "," + DocumentCategory.ASSESSMENT.getID() + "," + DocumentCategory.RACPCSUMMARY.getID() + ")");
+
+		/* TODO MSSQL case - hqlConditions.append(" ) and (pd.isRIE is null or pd.isRIE = 0) order by pd.documentDate desc"); */
+		hqlConditions.append(" ) and (pd.isRIE is null or pd.isRIE = FALSE) order by pd.documentDate desc");
+
 		List<?> dos = getDomainFactory().find(hqlJoins.append(hqlConditions.toString()).toString(),paramNames,paramValues);
 		if (dos == null || dos.size() == 0)
 			return null;
@@ -285,7 +287,7 @@ public class DocumentWorklistImpl extends BaseDocumentWorklistImpl
 	public ims.core.vo.ClinicLiteVoCollection listClinicsforLocation(ILocation location, String strClinicName)
 	{
 		ClinicAdmin clinicAdmin = (ClinicAdmin)getDomainImpl(ClinicAdminImpl.class);
-		return clinicAdmin.listClinicsForLocationByClinicName( new LocationRefVo(location.getID(),0),strClinicName, true);	//WDEV-12511
+		return clinicAdmin.listClinicsForLocationByClinicName( new LocationRefVo(location.getID(),0),strClinicName, true);
 	}
 
 	public ILocation[] listActiveHospitalsLite()
@@ -420,8 +422,10 @@ public class DocumentWorklistImpl extends BaseDocumentWorklistImpl
 	{
 		if(appFormId == null)
 			return null;
-		
-		String query = "select dcf from DocumentCategoryToFormCfg as dcf left join dcf.appForm as af where af.id = :AppFormId and (dcf.isRIE is null  or dcf.isRIE = 0) ";
+
+		/* TODO MSSQL case - String query = "select dcf from DocumentCategoryToFormCfg as dcf left join dcf.appForm as af where af.id = :AppFormId and (dcf.isRIE is null  or dcf.isRIE = 0) "; */
+		String query = "select dcf from DocumentCategoryToFormCfg as dcf left join dcf.appForm as af where af.id = :AppFormId and (dcf.isRIE is null  or dcf.isRIE = FALSE) ";
+
 		List<?> list = getDomainFactory().find(query, new String[] {"AppFormId"}, new Object[] {appFormId});
 		
 		if(list != null && list.size() > 0)

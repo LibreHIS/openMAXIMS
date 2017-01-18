@@ -184,7 +184,8 @@ public class HL7QueryImpl extends BaseHL7QueryImpl
 			
 			if(Boolean.TRUE.equals(viewFailedByProviderSystem))
 			{
-				query += " and hli.successfulOutcome = 0";
+				/* TODO MSSQL case - query += " and hli.successfulOutcome = 0"; */
+				query += " and hli.successfulOutcome = FALSE";
 			}	
 		}
 		
@@ -202,7 +203,7 @@ public class HL7QueryImpl extends BaseHL7QueryImpl
 		StringBuffer hql = new StringBuffer();
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
-		boolean isCaseSensitivePatIdSearch = ConfigFlag.DOM.CASE_SENSITIVE_PATID.getValue();  //WDEV-18817
+		boolean isCaseSensitivePatIdSearch = ConfigFlag.DOM.CASE_SENSITIVE_PATID.getValue();
 		
 		String query = "select hlo from HL7Outbound as hlo";
 		
@@ -285,7 +286,8 @@ public class HL7QueryImpl extends BaseHL7QueryImpl
 			
 			if(Boolean.TRUE.equals(viewFailedByProviderSystem))
 			{
-				query += " and hlo.successfulOutcome = 0";
+				/* TODO MSSQL case - query += " and hlo.successfulOutcome = 0"; */
+				query += " and hlo.successfulOutcome = FALSE";
 			}	
 		}
 		

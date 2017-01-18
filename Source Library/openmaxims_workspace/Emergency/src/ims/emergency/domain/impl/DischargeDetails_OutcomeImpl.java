@@ -333,7 +333,9 @@ public class DischargeDetails_OutcomeImpl extends BaseDischargeDetails_OutcomeIm
 
 	public Boolean dischargePlanningAdviceHasComments(CareContextRefVo careContextRef)
 	{
-		String query = "SELECT COUNT (dsaa.id) FROM DischargeServicesAndAdvice AS dsaa WHERE dsaa.attendance.id = :CARE_CONTEXT AND (dsaa.isRIE is null OR dsaa.isRIE = 0) AND dsaa.comments is not null";
+		/* TODO MSSQL case - String query = "SELECT COUNT (dsaa.id) FROM DischargeServicesAndAdvice AS dsaa WHERE dsaa.attendance.id = :CARE_CONTEXT AND (dsaa.isRIE is null OR dsaa.isRIE = 0) AND dsaa.comments is not null"; */
+		String query = "SELECT COUNT (dsaa.id) FROM DischargeServicesAndAdvice AS dsaa WHERE dsaa.attendance.id = :CARE_CONTEXT AND (dsaa.isRIE is null OR dsaa.isRIE = FALSE) AND dsaa.comments is not null";
+
 		long count = getDomainFactory().countWithHQL(query, new String[] {"CARE_CONTEXT"}, new Object[] {careContextRef.getID_CareContext()});
 		
 		if (count==0)
@@ -342,7 +344,6 @@ public class DischargeDetails_OutcomeImpl extends BaseDischargeDetails_OutcomeIm
 		return true;
 	}
 
-	//WDEV-19013
 	public Boolean isCodingRequiredForDischarge(AttendanceOutcome lookup)
 	{
 		if (lookup == null )

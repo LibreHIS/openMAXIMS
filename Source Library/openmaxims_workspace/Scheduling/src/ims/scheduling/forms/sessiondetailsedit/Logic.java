@@ -1172,43 +1172,21 @@ public class Logic extends BaseLogic
 		return errors.size()>0 ? errors.toArray(new String[0]) : null;
 	}
 
-	private SessionVo populateDataFromScreen(SessionVo voSession)  //WDEV-21137
+	private SessionVo populateDataFromScreen(SessionVo voSession)
 	{
-		// general Details
+		// General Details
 		voSession.setDescription(form.lyrSessEdit().tabGeneral().txtDescription().getValue());
-		//WDEV-18453
+
 		voSession.setConsMediaType(form.lyrSessEdit().tabGeneral().cmbConsMedia().getValue());
 		voSession.setStartTm(form.lyrSessEdit().tabGeneral().timStart().getValue());
 		voSession.setEndTm(form.lyrSessEdit().tabGeneral().timEnd().getValue());
-		//WDEV-19518
+
 		voSession.setCaseNoteFolderNotRequired(form.lyrSessEdit().tabGeneral().chkCaseNotesNotRequired().getValue());
-		//WDEV-19208
+
 		voSession.setSessionComment(form.txtSessionComment().getValue());
 
 		if (SchProfileType.THEATRE.equals(voSession.getSessionProfileType()))
 		{
-			/*
-			SessionTheatreProceduresRemainingVo voTheatreProcsRemaining = voSession.getTheatreProceduresRemaining();
-			if(voTheatreProcsRemaining == null || voTheatreProcsRemaining.getProcedureDetails() == null)
-				throw new CodingRuntimeException("Generated Session with no Theatre Procedures found");
-			
-			voTheatreProcsRemaining.getProcedureDetails().clear();
-			GenForm.lyrSessEditLayer.tabTheatreProceduresContainer.grdTheatreRow tRow = null;
-			for (int i = 0; i < form.lyrSessEdit().tabTheatreProcedures().grdTheatre().getRows().size(); i++)
-			{
-				tRow = form.lyrSessEdit().tabTheatreProcedures().grdTheatre().getRows().get(i);
-
-				TheatreProcedureLiteVo voTheatreProc = tRow.getValue();
-				voTheatreProc.setIsLimited(tRow.getcolIsLimited());
-				
-				voTheatreProc.setNumberOfProceduresLeft(tRow.getcolIsLimited() ? tRow.getcolNumberLeft() : null);
-				
-				voTheatreProc.setProcedure((ProcedureLiteVo)tRow.getcolProcedure().getValue());
-				voTheatreProcsRemaining.getProcedureDetails().add(voTheatreProc);
-			}
-			*/
-			
-			//WDEV-12918
 			if(voSession.getParentChildSlotsIsNotNull())
 			{
 				voSession.getParentChildSlots().clear();

@@ -248,8 +248,7 @@ public class Logic extends BaseLogic
 		}	
 	}
 
-	//WDEV-11901
-	private String getNumberOfDaysPostOp(DateTime surgeryStartTime) 
+	private String getNumberOfDaysPostOp(DateTime surgeryStartTime)
 	{
 		if(surgeryStartTime == null)
 			return "";

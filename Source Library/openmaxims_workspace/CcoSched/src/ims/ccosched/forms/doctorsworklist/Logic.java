@@ -106,7 +106,6 @@ public class Logic extends BaseLogic
 	{
 		setPID();
 		setPIDTooltip();
-		//form.btnPrint().setEnabled(form.grdDoctorsList().getSelectedRowIndex() >= 0);
 		if(form.grdDoctorsList().getValue() instanceof Sd_comp_plan_lstRecord)
 		{
 			form.getGlobalContext().CcoSched.ComputerPlanning.setPlanDto((Sd_comp_plan_lstRecord)form.grdDoctorsList().getValue());

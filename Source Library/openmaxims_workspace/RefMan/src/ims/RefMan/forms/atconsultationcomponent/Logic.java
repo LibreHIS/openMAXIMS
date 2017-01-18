@@ -534,33 +534,6 @@ public class Logic extends BaseLogic
 			row.getcolProcedure().showOpened();
 	}
 
-	/*@Override
-	protected void onGrdDiagnosisGridQueryComboBoxTextSubmited(int column, grdDiagnosisRow row, String text) throws PresentationLogicException 
-	{
-		DiagLiteVoCollection voColl;
-		try 
-		{
-			voColl = domain.listActiveDiagnosis(text);
-		} 
-		catch (DomainInterfaceException e) 
-		{
-			engine.showMessage(e.toString());
-			return;
-		}
-		
-		for (int i = 0 ; i < voColl.size() ; i++)
-		{
-			row.getcolDiagnosis().newRow(voColl.get(i), voColl.get(i).getDiagnosisName());
-		}
-
-		if (voColl.size() == 1)
-		{
-			row.getcolDiagnosis().setValue(voColl.get(0));
-		}
-		else
-			row.getcolDiagnosis().showOpened();
-	}
-*/
 	public Boolean anyDataToSave() 
 	{
 		if (form.grdDiagnosis().getRows().size() == 0			

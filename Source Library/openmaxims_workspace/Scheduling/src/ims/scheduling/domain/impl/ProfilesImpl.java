@@ -810,12 +810,12 @@ public class ProfilesImpl extends DomainImpl implements ims.scheduling.domain.Pr
 		if( Boolean.TRUE.equals(isFlexible))
 		{
 			/* TODO MSSQL case - hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.service as s2_1 left join s1_1.activity as a1_1 where (s1_1.isActive = 1 and s2_1.id = :serviceId  and s1_1.isFlexible = 1 and a1_1.isActive = 1)";  */
-			hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.service as s2_1 left join s1_1.activity as a1_1 where (s1_1.isActive = true and s2_1.id = :serviceId  and s1_1.isFlexible = true and a1_1.isActive = true)";
+			hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.service as s2_1 left join s1_1.activity as a1_1 where (s1_1.isActive = TRUE and s2_1.id = :serviceId  and s1_1.isFlexible = TRUE and a1_1.isActive = TRUE)";
 		}
 		else
 		{
 			/* TODO MSSQL case - hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.service as s2_1 left join s1_1.activity as a1_1 where (s1_1.isActive = 1 and s2_1.id = :serviceId  and s1_1.isFlexible = 0 and a1_1.isActive = 1)"; */
-			hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.service as s2_1 left join s1_1.activity as a1_1 where (s1_1.isActive = true and s2_1.id = :serviceId  and s1_1.isFlexible = false and a1_1.isActive = true)";
+			hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.service as s2_1 left join s1_1.activity as a1_1 where (s1_1.isActive = TRUE and s2_1.id = :serviceId  and s1_1.isFlexible = FALSE and a1_1.isActive = TRUE)";
 		}
 		List lst = factory.find(hql, new String[]{"serviceId"}, new Object[]{new Integer(serviceRef.getID_Service())});
 		
@@ -832,11 +832,8 @@ public class ProfilesImpl extends DomainImpl implements ims.scheduling.domain.Pr
 	{
 		OrganisationAndLocation impl = (OrganisationAndLocation) getDomainImpl(OrganisationAndLocationImpl.class);
 		return impl.getCaseNoteFolderLocationByParent(locRef, value, type).sort(true);
-//		List locations = listLocationsByParentLocation(type,locRef,Boolean.TRUE,null,null,value,true);
-//		return LocShortVoAssembler.createLocShortVoCollectionFromLocation(locations);
 	}
 
-	//wdev-20074
 	public HcpLiteVoCollection listHcpLiteBySerbiceFunction(HcpFilter filter, ServiceRefVo service, ServiceFunctionCollection functions)
 	{
 		

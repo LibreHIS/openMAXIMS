@@ -386,23 +386,9 @@ public class Logic extends BaseLogic
 		form.ctnCoMorbidityControls().imbInfoCoMorbidity().setTooltip(tooltip.toString());
 		
 		form.ctnCoMorbidityControls().ccComorbAuthoring().setValue(voPatDiag.getAuthoringInfo());
-
-//		WDEV-20098
-//		form.ctnCoMorbidityControls().chkPrimCoMorbidity().setValue(false);
 		
-		form.ctnCoMorbidityControls().chkDiagnosedOnAdmissionComorb().setValue(voPatDiag.getDiagnosedOnAdmissionIsNotNull() ? voPatDiag.getDiagnosedOnAdmission() : false); //WDEV-19860
+		form.ctnCoMorbidityControls().chkDiagnosedOnAdmissionComorb().setValue(voPatDiag.getDiagnosedOnAdmissionIsNotNull() ? voPatDiag.getDiagnosedOnAdmission() : false);
 
-//		WDEV-20098
-//		if (voPatDiag.getPrimaryForCareSpellsIsNotNull())
-//		{
-//			for (int i = 0; i < voPatDiag.getPrimaryForCareSpells().size(); i++)
-//			{
-//				if ((voPatDiag.getPrimaryForCareSpells().get(i).getCareContextIsNotNull()) && (voPatDiag.getPrimaryForCareSpells().get(i).getCareContext().getEpisodeOfCareIsNotNull()) && (form.getGlobalContext().Core.getCurrentCareContextIsNotNull()) && (form.getGlobalContext().Core.getCurrentCareContext().getEpisodeOfCareIsNotNull()) && (voPatDiag.getPrimaryForCareSpells().get(i).getCareContext().getEpisodeOfCare().getID_EpisodeOfCare().equals(form.getGlobalContext().Core.getCurrentCareContext().getEpisodeOfCare().getID_EpisodeOfCare())))
-//					form.ctnCoMorbidityControls().chkPrimCoMorbidity().setValue(true);
-//			}
-//		}
-//------------------------------------
-				
 		form.getLocalContext().setSelectedPatientDiagnosisVo(voPatDiag);
 
 		updateContextMenus();
@@ -410,7 +396,7 @@ public class Logic extends BaseLogic
 
 	private void updateViewComplicationInstance(boolean bEdit)
 	{
-		if (grdComplicationSelectionChanged()) //WDEV-20511
+		if (grdComplicationSelectionChanged())
 		{
 			showHideContainersCurrDiagComrComp(false, false, false, true);
 			form.setMode(bEdit ? FormMode.EDIT : FormMode.VIEW);
@@ -1615,56 +1601,6 @@ public class Logic extends BaseLogic
 		}
 		return voDD;
 	}
-
-	/* WDEV-18627
-	private String[] validateUIRulesDiagnosis(DischargeDetailsVo voDD)
-	{
-		ArrayList<String> errorList = new ArrayList<String>();
-
-		PartialDate diagnosedate = form.ctnDiagnosisControls().pdtDiagnosed().getValue();
-		PartialDate dobPatient = form.getGlobalContext().Core.getPatientShort().getDob();
-
-		if (diagnosedate != null && dobPatient != null)
-		{
-			if (diagnosedate.getDay() == null && diagnosedate.getMonth() == null)
-			{
-				diagnosedate = new PartialDate(diagnosedate.getYear() != null ? diagnosedate.getYear() : new Integer(2000), diagnosedate.getMonth() != null ? diagnosedate.getMonth() : new Integer(1), diagnosedate.getDay() != null ? diagnosedate.getDay() : new Integer(1));
-				// form.ctnDiagnosisControls().pdtDiagnosed().setValue(diagnosedate);
-
-			}
-			else if (diagnosedate.getDay() == null)
-			{
-				diagnosedate = new PartialDate(diagnosedate.getYear() != null ? diagnosedate.getYear() : new Integer(2000), diagnosedate.getMonth() != null ? diagnosedate.getMonth() : new Integer(1), diagnosedate.getDay() != null ? diagnosedate.getDay() : new Integer(1));
-				// form.ctnDiagnosisControls().pdtDiagnosed().setValue(diagnosedate);
-
-			}
-			if (diagnosedate.isLessThan(dobPatient))
-			{
-				errorList.add("Date Diagnosted entered is before Patient's DOB");
-			}
-		}
-
-		if (form.ctnDiagnosisControls().dteDiagOnset().getValue() != null && form.ctnDiagnosisControls().dteDiagOnset().getValue().isGreaterThan(new Date()))
-		{
-			errorList.add("Onset Date cannot be set into future");
-		}
-
-		int errorCount = errorList.size();
-		if (errorCount == 0)
-		{
-			return null;
-		}
-
-		String[] errors = new String[errorCount];
-
-		for (int i = 0; i < errors.length; i++)
-		{
-			errors[i] = errorList.get(i);
-		}
-
-		return errors;
-	}
-	*/
 	
 	private PatientDiagnosisEDischargeListVo saveComplication()
 	{
@@ -1684,49 +1620,13 @@ public class Logic extends BaseLogic
 			return null;
 		}
 		
-		/*
-		String[] errors = null;
-		PartialDate diagnosedate = form.ctnComplicationsControls().pdtCompDDiagnosed().getValue();
-		PartialDate dobPatient = form.getGlobalContext().Core.getPatientShort().getDob();
-
-		
-		if (diagnosedate != null && dobPatient != null)
-		{
-			if (diagnosedate.getDay() == null && diagnosedate.getMonth() == null)
-			{
-				diagnosedate = new PartialDate(diagnosedate.getYear() != null ? diagnosedate.getYear() : new Integer(2000), diagnosedate.getMonth() != null ? diagnosedate.getMonth() : new Integer(1), diagnosedate.getDay() != null ? diagnosedate.getDay() : new Integer(1));
-				// form.ctnComplicationsControls().pdtCompDDiagnosed().setValue(diagnosedate);
-
-			}
-			else if (diagnosedate.getDay() == null)
-			{
-				diagnosedate = new PartialDate(diagnosedate.getYear() != null ? diagnosedate.getYear() : new Integer(2000), diagnosedate.getMonth() != null ? diagnosedate.getMonth() : new Integer(1), diagnosedate.getDay() != null ? diagnosedate.getDay() : new Integer(1));
-				// form.ctnComplicationsControls().pdtCompDDiagnosed().setValue(diagnosedate);
-
-			}
-			if (diagnosedate.isLessThan(dobPatient))
-			{
-				errors = new String[] { " Date Diagnosed entered is before Patient's DOB" };
-			}
-		}
-		
-		
-		if (errors != null)
-
-		{
-			engine.showErrors(errors);
-			return null;
-		}
-		*/
-		
 		PatientDiagnosisEDischargeListVo voPatientComplication = populateDataFromScreen(ITS_COMPLICATION);
 
 		if (voPatientComplication.getDiagnosedDate() != null)
 		{
 			if (voPatientComplication.getDiagnosedDate().isGreaterThan(new Date()))
 			{
-				engine.showMessage("The Date Diagnosed cannot be in the future"); //WDEV-17969 
-				//form.ctnComplicationsControls().pdtCompDDiagnosed().setFocus();
+				engine.showMessage("The Date Diagnosed cannot be in the future");
 				return null;
 			}
 		}
@@ -1736,9 +1636,6 @@ public class Logic extends BaseLogic
 			if (voPatientComplication.getDateOnset().isGreaterThan(new Date()))
 			{
 				engine.showMessage("The onset date cannot be in the future");
-				//form.ctnComplicationsControls().dteCompOnset().setValue(null);
-				//form.ctnComplicationsControls().dteCompOnset().setFocus();
-
 				return null;
 			}
 		}

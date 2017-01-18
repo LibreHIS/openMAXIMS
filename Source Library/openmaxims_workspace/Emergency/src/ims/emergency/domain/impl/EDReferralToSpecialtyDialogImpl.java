@@ -279,7 +279,9 @@ public class EDReferralToSpecialtyDialogImpl extends BaseEDReferralToSpecialtyDi
 		DomainFactory factory = getDomainFactory();
 
 		StringBuffer hql = new StringBuffer();
-		hql.append("select allRefSpecTeam from ReferralToSpecTeam as allRefSpecTeam where allRefSpecTeam.attendance.id = :attID and allRefSpecTeam.completionDateTime is null and ( allRefSpecTeam.notAccepted is null or allRefSpecTeam.notAccepted = 0) order by allRefSpecTeam.referredDateTime desc ");
+
+		/* TODO MSSQL case - hql.append("select allRefSpecTeam from ReferralToSpecTeam as allRefSpecTeam where allRefSpecTeam.attendance.id = :attID and allRefSpecTeam.completionDateTime is null and ( allRefSpecTeam.notAccepted is null or allRefSpecTeam.notAccepted = 0) order by allRefSpecTeam.referredDateTime desc "); */
+		hql.append("select allRefSpecTeam from ReferralToSpecTeam as allRefSpecTeam where allRefSpecTeam.attendance.id = :attID and allRefSpecTeam.completionDateTime is null and ( allRefSpecTeam.notAccepted is null or allRefSpecTeam.notAccepted = FALSE) order by allRefSpecTeam.referredDateTime desc ");
 
 		List<?> list = factory.find(hql.toString(), new String[] { "attID" }, new Object[] { careContextRef.getID_CareContext() });
 
@@ -296,7 +298,7 @@ public class EDReferralToSpecialtyDialogImpl extends BaseEDReferralToSpecialtyDi
 		StringBuffer hql = new StringBuffer();
 
 		/* TODO MSSQL case - hql.append("select lookInst from Lookup as look left join look.instances as lookInst left join lookInst.mappings as mappings where (look.id = 621 and mappings.extSystem = 'MAXIMS' and mappings.extCode like 'EDREFER%' and lookInst.active = 1)"); */
-		hql.append("select lookInst from Lookup as look left join look.instances as lookInst left join lookInst.mappings as mappings where (look.id = 621 and mappings.extSystem = 'MAXIMS' and mappings.extCode like 'EDREFER%' and lookInst.active = true)");
+		hql.append("select lookInst from Lookup as look left join look.instances as lookInst left join lookInst.mappings as mappings where (look.id = 621 and mappings.extSystem = 'MAXIMS' and mappings.extCode like 'EDREFER%' and lookInst.active = TRUE)");
 
 		List<?> list = factory.find(hql.toString());
 
@@ -361,11 +363,12 @@ public class EDReferralToSpecialtyDialogImpl extends BaseEDReferralToSpecialtyDi
 		return null;
 	}
 
-	//wdev-22313
 	public ReferToSpecialtyConfigVo getReferToSpecialtyConfigVo()
 	{
 		DomainFactory factory = getDomainFactory();
-		List<?> refertospec =  factory.find("select r1_1 from ReferToSpecialtyConfig as r1_1 where (r1_1.isRIE = 0 or r1_1.isRIE is null ) ");
+
+		/* TODO MSSQL case - List<?> refertospec =  factory.find("select r1_1 from ReferToSpecialtyConfig as r1_1 where (r1_1.isRIE = 0 or r1_1.isRIE is null ) "); */
+		List<?> refertospec =  factory.find("select r1_1 from ReferToSpecialtyConfig as r1_1 where (r1_1.isRIE = FALSE or r1_1.isRIE is null ) ");
 		
 		if( refertospec != null && refertospec.size() > 0 )
 		{
@@ -378,7 +381,6 @@ public class EDReferralToSpecialtyDialogImpl extends BaseEDReferralToSpecialtyDi
 		return null;
 	}
 
-	//WDEV-23527
 	public PatIdType getPrimaryIDFromProviderSystem(Category category)
 	{
 		ims.emergency.domain.Tracking impl = (ims.emergency.domain.Tracking )getDomainImpl(TrackingImpl.class);

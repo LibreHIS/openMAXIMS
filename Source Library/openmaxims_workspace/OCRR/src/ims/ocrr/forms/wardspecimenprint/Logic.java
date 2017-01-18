@@ -63,25 +63,14 @@ public class Logic extends BaseLogic
 			}
 		}	
 	}
-/*	private void addPrinters(String[] printers)
-	{
-		if(printers != null && printers.length > 0)
-		{
-			for (int i = 0; i < printers.length; i++)
-			{
-				form.cmbPrinter().newRow(printers[i], printers[i]);
-			}
-		}
-		if(printers != null && printers.length > 0)
-			form.cmbPrinter().setValue(printers[0]);
-	}
-*/	protected void onBtnCancelClick() throws ims.framework.exceptions.PresentationLogicException
+
+	protected void onBtnCancelClick() throws ims.framework.exceptions.PresentationLogicException
 	{
 		engine.close(DialogResult.CANCEL);
 	}
 	protected void onBtnPrintClick() throws ims.framework.exceptions.PresentationLogicException
 	{
-		if(form.cmbPrinter().getValue() == null)
+		if (form.cmbPrinter().getValue() == null)
 		{
 			engine.showMessage("Please select a printer!");
 			return;
@@ -91,9 +80,9 @@ public class Logic extends BaseLogic
 
 	protected void onFormDialogClosed(FormName formName, DialogResult result) throws PresentationLogicException
 	{
-		if(formName.equals(form.getForms().Core.Reports) && result.equals(DialogResult.OK))
+		if (formName.equals(form.getForms().Core.Reports) && result.equals(DialogResult.OK))
 		{
-			if(printWorkListItemCollection());
+			if (printWorkListItemCollection());
 				engine.close(DialogResult.OK);
 		}
 		else

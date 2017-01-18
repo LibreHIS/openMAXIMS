@@ -78,47 +78,11 @@ public class Logic extends BaseLogic
 		
 		
 	}
-	/*private boolean checkIfServiceWasInactivated(ServiceVoLiteVo service,ContractServiceLocationsConfigVoCollection existColl)
-	{
-		boolean flag = true;
-		if(service != null || service.getID_ServiceIsNotNull())
-		{
-			for(int j = 0; j < existColl.size();j++)
-			{
-				if(service.getID_Service().equals(existColl.get(j).getService().getID_Service()))
-					flag = false;
-			}
-			if(flag == true)
-				return false;
-		}
-		
-		
-		flag = true;
-	
-		if(service != null || service.getID_ServiceIsNotNull())
-		{
-			
-			for(int i = 0; i < existColl.size();i++)
-			{
-				if(service.getID_Service().equals(existColl.get(i).getService().getID_Service()))
-				{	
-					if(Boolean.TRUE.equals(existColl.get(i).getIsActive()))
-						flag = false;
-				}
-					
-			}
-		}
-		else
-			flag = false;
-		
-		return flag;
-		
-		
-	}*/
+
 	
 	protected void onBtnAddToListClick() throws ims.framework.exceptions.PresentationLogicException
 	{
-		ServiceLiteVoCollection voColl = new ServiceLiteVoCollection(); //WDEV-20945
+		ServiceLiteVoCollection voColl = new ServiceLiteVoCollection();
 		boolean deleted = true;
 		while(deleted)
 		{

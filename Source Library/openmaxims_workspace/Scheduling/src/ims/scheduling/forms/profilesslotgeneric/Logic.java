@@ -756,15 +756,6 @@ public class Logic extends BaseLogic
 	@Override
 	protected void onGrdDOSGridCheckBoxClicked(int column, grdDOSRow row, boolean isChecked) throws PresentationLogicException
 	{
-		//cmbTypeValueChanged();
-		/*for( int i = 0; i < form.grdDOS().getRows().size();i++)
-		{
-			grdDOSRow rowtemp = form.grdDOS().getRows().get(i);
-			if( !row.getColDOS().equals(rowtemp.getColDOS()))
-			{
-				rowtemp.setColSelect(false);
-			}
-		}*/
 	}
 
 	@Override
@@ -775,8 +766,6 @@ public class Logic extends BaseLogic
 			form.intNoSlots().setValue(null);
 		form.getLocalContext().setbWasSlotNoUserSet(false);
 		form.getLocalContext().setbWasEndTimeUserSet( isEndTimeSet ? true : false);
-		//form.imbCalculate().setTooltip(isEndTimeSet ? "Calculate No. of Slots" : "Calculate End Time");	//wdev-20074
-		
 	}
 
 	@Override
@@ -787,11 +776,8 @@ public class Logic extends BaseLogic
 			form.timEnd().setValue(null);
 		form.getLocalContext().setbWasEndTimeUserSet(false);
 		form.getLocalContext().setbWasSlotNoUserSet(isNoOfSlotsSet ? true : false);
-		//form.imbCalculate().setTooltip(isNoOfSlotsSet ? "Calculate End Time" : "Calculate No. of Slots");	//wdev-20074
-		
 	}
 
-	//wdev-20074
 	protected void onBtnCalculateNrOfSlotsEndTimeClick() throws PresentationLogicException
 	{
 		calculate(form.timStart().getValue(),form.timEnd().getValue(), form.intNoSlots().getValue(), form.intSlotInterval().getValue());

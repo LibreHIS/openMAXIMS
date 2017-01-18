@@ -1297,7 +1297,6 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 		values.add(ReferralApptStatus.REFERRAL_ACCEPTED.getID());
 
 
-		//isSuitableForSurgery = TRUE and isFitrForSurgery = TRUE and hasTheatreAppt = NULL or FALSE 
 		sb.append(" and catsref.isCAB = :isCAB ");
 		markers.add("isCAB");
 		values.add(Boolean.TRUE);
@@ -1305,9 +1304,9 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 		sb.append(" and catsref.isAcceptedOnCAB = :accCAB ");
 		markers.add("accCAB");
 		values.add(Boolean.FALSE);
-		
-		//WDEV-23000
-		sb.append(" and (catsref.consultationActivityRequired is null or catsref.consultationActivityRequired = 0) ");
+
+		/* TODO MSSQL case - sb.append(" and (catsref.consultationActivityRequired is null or catsref.consultationActivityRequired = 0) "); */
+		sb.append(" and (catsref.consultationActivityRequired is null or catsref.consultationActivityRequired = FALSE) ");
 		
 		sb.append(" and catsref.isRIE is null order by refDetails.dateOfReferral asc, refDetails.id asc");
 	
@@ -1346,8 +1345,10 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 
 	private List<?> domListReviewCancelledAppointments(String hql, StringBuffer sb, ArrayList<String> markers, ArrayList<Serializable> values, String andStr, String hqlJoin) 
 	{
+		/* TODO MSSQL case - sb.append(andStr + " catsref.currentStatus.referralStatus not in (:id1, :id2, :id3, :id4) " +
+		" and catsref.hasCancelledApptsForReview = :isTRUE and ( catsref.consultationActivityRequired = 0  or catsref.consultationActivityRequired is null) "); */
 		sb.append(andStr + " catsref.currentStatus.referralStatus not in (:id1, :id2, :id3, :id4) " +
-		" and catsref.hasCancelledApptsForReview = :isTRUE and ( catsref.consultationActivityRequired = 0  or catsref.consultationActivityRequired is null) ");	//wdev-21213
+		" and catsref.hasCancelledApptsForReview = :isTRUE and ( catsref.consultationActivityRequired = FALSE or catsref.consultationActivityRequired is null) ");
 
 		markers.add("id1");
 		values.add(getDomLookup(ReferralApptStatus.DISCHARGED));
@@ -1943,13 +1944,14 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 		if (hqlJoin != "")
 			hql += hqlJoin;
 
-		sb.append(andStr + " catsref.currentStatus.referralStatus.id = :id1 and (catsref.redirectCAB is null or catsref.redirectCAB = 0) ");
+		/* TODO MSSQL case - sb.append(andStr + " catsref.currentStatus.referralStatus.id = :id1 and (catsref.redirectCAB is null or catsref.redirectCAB = 0) "); */
+		sb.append(andStr + " catsref.currentStatus.referralStatus.id = :id1 and (catsref.redirectCAB is null or catsref.redirectCAB = FALSE) ");
 	
 		markers.add("id1");
 		values.add(ReferralApptStatus.AWAITING_TRIAGE.getID());
 	
 		sb.append(" and catsref.isRIE is null order by refDetails.dateOfReferral asc, refDetails.id asc");
-		sb.append(" order by refDetails.end18WW asc");//WDEV-11795
+		sb.append(" order by refDetails.end18WW asc");
 		
 		hql += " where ";
 		
@@ -3007,7 +3009,6 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 		return ServiceShortVoAssembler.createServiceShortVoCollectionFromService(serviceList);
 	}
 	
-	//wdev-20721 //WDEV-23092 
 	public Boolean isALinkedReferral(Integer catsRef)
 	{
 		if (catsRef == null)
@@ -3015,7 +3016,9 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 		
 		StringBuilder query = new StringBuilder("SELECT count(p1_1.id) FROM");
 		query.append(" CatsReferral as p1_1 left join p1_1.linkedReferrals as l1_1");
-		query.append(" WHERE l1_1.referral.id = :childCatsReferralID and (l1_1.referral.isRIE = 0 OR l1_1.referral.isRIE is null)");
+
+		/* TODO MSSQL case - query.append(" WHERE l1_1.referral.id = :childCatsReferralID and (l1_1.referral.isRIE = 0 OR l1_1.referral.isRIE is null)"); */
+		query.append(" WHERE l1_1.referral.id = :childCatsReferralID and (l1_1.referral.isRIE = FALSE OR l1_1.referral.isRIE is null)");
 				
 		long count = getDomainFactory().countWithHQL(query.toString(), new String[]{"childCatsReferralID"}, new Object[] {catsRef});
 		
@@ -3047,7 +3050,6 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 		
 	}
 	
-	//WDEV-23092
 	public Boolean hasCatsReferralTransferOfCareChild(Integer refId)
 	{
 		if (refId == null)
@@ -3055,7 +3057,9 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 		
 		StringBuilder query = new StringBuilder("SELECT count(l1_1.id) FROM");
 		query.append(" CatsReferral as p1_1 left join p1_1.linkedReferrals as l1_1");
-		query.append(" WHERE p1_1.id = :catsReferralID and (l1_1.referral.isRIE = 0 OR l1_1.referral.isRIE is null) and l1_1.referralRelationType.id = :transferOfCare");
+
+		/* TODO MSSQL case - query.append(" WHERE p1_1.id = :catsReferralID and (l1_1.referral.isRIE = 0 OR l1_1.referral.isRIE is null) and l1_1.referralRelationType.id = :transferOfCare"); */
+		query.append(" WHERE p1_1.id = :catsReferralID and (l1_1.referral.isRIE = FALSE OR l1_1.referral.isRIE is null) and l1_1.referralRelationType.id = :transferOfCare");
 		
 		long count = getDomainFactory().countWithHQL(query.toString(), new String[]{"catsReferralID", "transferOfCare"}, new Object[] {refId, ReferralRelationType.TRANSFER_OF_CARE.getID()});
 		
@@ -3069,7 +3073,9 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 		
 		StringBuilder query = new StringBuilder("SELECT p1_1 FROM");
 		query.append(" CatsReferral as p1_1 left join p1_1.linkedReferrals as l1_1");
-		query.append(" WHERE l1_1.referral.id = :childCatsReferralID and (l1_1.referral.isRIE = 0 OR l1_1.referral.isRIE is null)");
+
+		/* TODO MSSQL case - query.append(" WHERE l1_1.referral.id = :childCatsReferralID and (l1_1.referral.isRIE = 0 OR l1_1.referral.isRIE is null)"); */
+		query.append(" WHERE l1_1.referral.id = :childCatsReferralID and (l1_1.referral.isRIE = FALSE OR l1_1.referral.isRIE is null)");
 		
 		DomainObject domReferral = getDomainFactory().findFirst(query.toString(), new String[]{"childCatsReferralID"}, new Object[] {refId});
 		
@@ -3079,7 +3085,6 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 		return CatsReferralForLinkRefVoAssembler.create((CatsReferral) domReferral);
 	}
 
-	//WDEV-23452
 	public Boolean hasStatusToRevert(CatsReferralRefVo ref)
 	{
 		if (ref == null)
@@ -3094,17 +3099,4 @@ public class ReferralStatusListImpl extends BaseReferralStatusListImpl implement
 		return count > 1;
 	}
 
-
-	//WDEV-23092
-	//wdev-19673
-	/*public ReferralListKPIColorConfVo getReferralListKPIColorConfVo()
-	{
-		DomainFactory factory = getDomainFactory();
-		List list = factory.find("select r1_1 from ReferralListKPIColorConf as r1_1 where (r1_1.isRIE = 0 or r1_1.isRIE is null )");
-		if (list != null && list.size() > 0)
-		{
-			return ReferralListKPIColorConfVoAssembler.createReferralListKPIColorConfVoCollectionFromReferralListKPIColorConf(list).get(0);
-		}
-		return null;
-	}*/
 }

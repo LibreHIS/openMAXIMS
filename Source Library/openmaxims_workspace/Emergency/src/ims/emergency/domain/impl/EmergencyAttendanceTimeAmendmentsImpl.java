@@ -247,12 +247,14 @@ public class EmergencyAttendanceTimeAmendmentsImpl extends BaseEmergencyAttendan
 
 	public void saveTrackingAndRIECurrentStatus(TrackingRefVo tracking, TrackingAttendanceStatusForEventHistoryVo status, FormName formName, PatientRefVo patient, CareContextRefVo careContext, String rieComment) throws StaleObjectException
 	{
-		if(tracking == null || tracking.getID_Tracking() == null)
+		if (tracking == null || tracking.getID_Tracking() == null)
 			return;
 		
 		DomainFactory factory = getDomainFactory();
-		
-		String query = "select attendanceStatus from TrackingAttendanceStatus as attendanceStatus left join attendanceStatus.attendance as contextID where contextID.id = :ContextID and attendanceStatus.id <> :CurrentStatus and (attendanceStatus.isRIE is null or attendanceStatus.isRIE = 0) order by attendanceStatus.systemInformation.creationDateTime desc";
+
+		/* TODO MSSQL case - String query = "select attendanceStatus from TrackingAttendanceStatus as attendanceStatus left join attendanceStatus.attendance as contextID where contextID.id = :ContextID and attendanceStatus.id <> :CurrentStatus and (attendanceStatus.isRIE is null or attendanceStatus.isRIE = 0) order by attendanceStatus.systemInformation.creationDateTime desc"; */
+		String query = "select attendanceStatus from TrackingAttendanceStatus as attendanceStatus left join attendanceStatus.attendance as contextID where contextID.id = :ContextID and attendanceStatus.id <> :CurrentStatus and (attendanceStatus.isRIE is null or attendanceStatus.isRIE = FALSE) order by attendanceStatus.systemInformation.creationDateTime desc";
+
 		TrackingAttendanceStatus prevStatus = (TrackingAttendanceStatus) factory.findFirst(query, new String[] {"ContextID", "CurrentStatus"}, new Object[] {careContext.getID_CareContext(), status.getID_TrackingAttendanceStatus()});
 		
 		if(prevStatus != null)

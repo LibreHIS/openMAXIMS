@@ -43,8 +43,9 @@ public class HomeLeaveDetailsDialogImpl extends BaseHomeLeaveDetailsDialogImpl
 			return null;
 		
 		DomainFactory factory = getDomainFactory();
-		
-		String hql = "select hl from InpatientEpisode as inp left join inp.homeLeaves as hl where (hl.isRIE is null or hl.isRIE = 0) and hl.dateReturnedFromHomeLeave is null and inp.id = :INPAT_ID"; 
+
+		/* TODO MSSQL case - String hql = "select hl from InpatientEpisode as inp left join inp.homeLeaves as hl where (hl.isRIE is null or hl.isRIE = 0) and hl.dateReturnedFromHomeLeave is null and inp.id = :INPAT_ID"; */
+		String hql = "select hl from InpatientEpisode as inp left join inp.homeLeaves as hl where (hl.isRIE is null or hl.isRIE = FALSE) and hl.dateReturnedFromHomeLeave is null and inp.id = :INPAT_ID";
 		
 		HomeLeave doHL = (HomeLeave) factory.findFirst(hql, "INPAT_ID" , inpatRef.getID_InpatientEpisode());
 		

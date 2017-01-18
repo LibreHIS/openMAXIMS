@@ -334,29 +334,29 @@ public class PatientSearchImpl extends DTODomainImplementation implements ims.co
 				idVal += "%";
 			}
 			else
-				hql.append(" and" + (!isCaseSensitivePatIdSearch ? " UPPER(ids.value)" : " ids.value") + " = :idValue"); //WDEV-18790 
+				hql.append(" and" + (!isCaseSensitivePatIdSearch ? " UPPER(ids.value)" : " ids.value") + " = :idValue");
 
 			if(bReturnMergedPatients == true)
 				hql.append(andStr + " and (p.isActive = :isActive or p.associatedPatient is not null)");
 			else
 				hql.append(andStr + " and p.isActive = :isActive and p.associatedPatient is null");
 			
-			//WDEV-17167 //WDEV-21171
 			if (Boolean.TRUE.equals(filter.getExcludeQuickRegistrationPatients()))
 			{
-				hql.append(ConfigFlag.GEN.PATIENT_SEARCH_RETRIEVE_QUICKREGISTRATION_PATIENTS.getValue() ? "" : (andStr + " and ((p.isQuickRegistrationPatient is null) OR (p.isQuickRegistrationPatient = 0)) "));
+				/* TODO MSSQL case - hql.append(ConfigFlag.GEN.PATIENT_SEARCH_RETRIEVE_QUICKREGISTRATION_PATIENTS.getValue() ? "" : (andStr + " and ((p.isQuickRegistrationPatient is null) OR (p.isQuickRegistrationPatient = 0)) ")); */
+				hql.append(ConfigFlag.GEN.PATIENT_SEARCH_RETRIEVE_QUICKREGISTRATION_PATIENTS.getValue() ? "" : (andStr + " and ((p.isQuickRegistrationPatient is null) OR (p.isQuickRegistrationPatient = FALSE)) "));
 			}
 			
 			patients = factory.find(hql.toString(), new String[]{"idValue", "idType", "isActive"}, new Object[]{idVal, getDomLookup(filter.getPersId().getType()),Boolean.TRUE});
 		}
 		else
 		{
-			//WDEV-13293 allow all search field values to be used in conjunction with NHSNumber
+			// Allow all search field values to be used in conjunction with NHSNumber
 			if ((filter.getPersId() != null && filter.getPersId().getValue() != null && filter.getPersId().getType().equals(PatIdType.NHSN)) || filter.getNHSNumber() != null)
 			{
 				filterString = new StringBuffer(" from Patient p ");
 				
-				if(ConfigFlag.DOM.USE_ALIAS_SURNAME_FUNCTIONALITY.getValue())//WDEV-15180
+				if(ConfigFlag.DOM.USE_ALIAS_SURNAME_FUNCTIONALITY.getValue())
 				{
 					filterString.append(" left join p.otherNames as oths ");
 				}
@@ -527,13 +527,14 @@ public class PatientSearchImpl extends DTODomainImplementation implements ims.co
 			markerNames.add("isActive");
 			markerValues.add(Boolean.TRUE);
 			
-			if (Boolean.TRUE.equals(filter.getExcludeQuickRegistrationPatients())) //WDEV-21171
+			if (Boolean.TRUE.equals(filter.getExcludeQuickRegistrationPatients()))
 			{
 				if (andStr.length() == 0)
 				{	
 					andStr = " and ";
 				}
-				filterString.append(ConfigFlag.GEN.PATIENT_SEARCH_RETRIEVE_QUICKREGISTRATION_PATIENTS.getValue() ? "" : (andStr + " ((p.isQuickRegistrationPatient is null) OR (p.isQuickRegistrationPatient = 0)) "));
+				/* TODO MSSQL case - filterString.append(ConfigFlag.GEN.PATIENT_SEARCH_RETRIEVE_QUICKREGISTRATION_PATIENTS.getValue() ? "" : (andStr + " ((p.isQuickRegistrationPatient is null) OR (p.isQuickRegistrationPatient = 0)) ")); */
+				filterString.append(ConfigFlag.GEN.PATIENT_SEARCH_RETRIEVE_QUICKREGISTRATION_PATIENTS.getValue() ? "" : (andStr + " ((p.isQuickRegistrationPatient is null) OR (p.isQuickRegistrationPatient = FALSE)) "));
 			}
 			
 			if ((filter.getPersId() != null && filter.getPersId().getValue() != null && filter.getPersId().getType().equals(PatIdType.NHSN)) || filter.getNHSNumber() != null)
@@ -546,14 +547,13 @@ public class PatientSearchImpl extends DTODomainImplementation implements ims.co
 		
 		if (patients != null)
 		{
-			//TODO dlaffan - when NTPF.Demographics is merged to Core.Demographics we 
-			//can call the getPatient and add the result to the collection and return it 
-			//here instead of this duplicated code
+			// TODO dlaffan - when NTPF.Demographics is merged to Core.Demographics we
+			// can call the getPatient and add the result to the collection and return it here instead of this duplicated code
 			
-			//if only one returned check it is not a merged patient
-			if(patients.size() == 1)
+			// If only one returned check it is not a merged patient
+			if (patients.size() == 1)
 			{
-				//recurse to get master patient if this patient was merged
+				// Recurse to get master patient if this patient was merged
 				Patient domPatient = (Patient) patients.get(0);
 				boolean isMergedPatient = false;
 				while(domPatient.getAssociatedPatient() != null)

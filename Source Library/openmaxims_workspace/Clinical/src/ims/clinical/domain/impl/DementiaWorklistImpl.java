@@ -307,7 +307,10 @@ public class DementiaWorklistImpl extends BaseDementiaWorklistImpl
 		if ( !searchCriteria.getExcludeRemoved())
 		{
 			hqlConditions.append(andStr);
-			hqlConditions.append(" (dementia.isExcludedFromWorklist = 0 or dementia.isExcludedFromWorklist is null)) ");
+
+			/* TODO  */
+			hqlConditions.append(" (dementia.isExcludedFromWorklist = FALSE or dementia.isExcludedFromWorklist is null)) ");
+
 			andStr = " and ";
 		}
 			
@@ -589,7 +592,10 @@ public class DementiaWorklistImpl extends BaseDementiaWorklistImpl
 			&& !searchCriteria.getDeliriumConfirmed())
 		{
 			hqlConditions.append(andStr);
-			hqlConditions.append(" (dem.isExcludedFromWorklist = 0 or dem.isExcludedFromWorklist is null)) ");
+
+			/* TODO MSSQL case - hqlConditions.append(" (dem.isExcludedFromWorklist = 0 or dem.isExcludedFromWorklist is null)) "); */
+			hqlConditions.append(" (dem.isExcludedFromWorklist = FALSE or dem.isExcludedFromWorklist is null)) ");
+
 			andStr = " and ";
 		}
 

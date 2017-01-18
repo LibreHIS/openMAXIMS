@@ -88,8 +88,10 @@ public class UploadDocumentDialogImpl extends BaseUploadDocumentDialogImpl
 	{
 		if(appFormId == null)
 			return null;
-		
-		String query = "select dcf from DocumentCategoryToFormCfg as dcf left join dcf.appForm as af where af.id = :AppFormId and (dcf.isRIE is null  or dcf.isRIE = 0) ";
+
+		/* TODO MSSQL case - String query = "select dcf from DocumentCategoryToFormCfg as dcf left join dcf.appForm as af where af.id = :AppFormId and (dcf.isRIE is null  or dcf.isRIE = 0) "; */
+		String query = "select dcf from DocumentCategoryToFormCfg as dcf left join dcf.appForm as af where af.id = :AppFormId and (dcf.isRIE is null  or dcf.isRIE = FALSE) ";
+
 		List<?> list = getDomainFactory().find(query, new String[] {"AppFormId"}, new Object[] {appFormId});
 		
 		if(list != null && list.size() > 0)

@@ -351,32 +351,6 @@ public class Logic extends BaseLogic
 			return mappingToRemove;
 
 		return ptRTTMapping;
-		
-		//////////////////////
-		
-//		PathwayTargetRTTEventVoCollection ptRTTMappings = form.getGlobalContext().Pathways.getSelectedPathwayTargetsRTTEvents();
-//
-//		if (ptRTTMappings != null)
-//		{
-//			for (int i = 0; i < ptRTTMappings.size(); i++)
-//			{
-//				PathwayTargetRTTEventVo ptRttMapping = ptRTTMappings.get(i);
-//				if (ptRttMapping.getRTTEvent().equals(row.getValue()))
-//				{
-//					if(!row.getColSelect() && ptRttMapping.getID_PathwayTargetRTTEventIsNotNull())
-//						ptRttMapping.setStatus(PreActiveActiveInactiveStatus.INACTIVE);
-//					else if(row.getColSelect())
-//						return ptRttMapping;
-//					
-//					return null;
-//				}	
-//			}
-//		}
-//
-//		PathwayTargetRTTEventVo ptRTTEvent = new PathwayTargetRTTEventVo();
-//		ptRTTEvent.setRTTEvent(row.getValue());
-//
-//		return ptRTTEvent;
 	}
 
 	private PathwayTargetExternalEventMappingVo createOrGetMapping(grdEventsRow row)

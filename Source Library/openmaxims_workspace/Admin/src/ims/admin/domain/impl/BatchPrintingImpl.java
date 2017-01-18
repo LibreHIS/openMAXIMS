@@ -104,7 +104,7 @@ public class BatchPrintingImpl extends DomainImpl implements ims.admin.domain.Ba
 		ArrayList<Object> values = new ArrayList<Object>();
 
 		/* TODO MSSQL case - String hql = "select ls from LocSite as ls left join ls.codeMappings as t left join t.taxonomyName as tn where tn =:taxonomyType and ls.isActive = 1 and ls.type !=:SurgeryType and ls.isRIE is null and ls.isVirtual = 0"; */
-		String hql = "select ls from LocSite as ls left join ls.codeMappings as t left join t.taxonomyName as tn where tn =:taxonomyType and ls.isActive = true and ls.type !=:SurgeryType and ls.isRIE is null and ls.isVirtual = false";
+		String hql = "select ls from LocSite as ls left join ls.codeMappings as t left join t.taxonomyName as tn where tn =:taxonomyType and ls.isActive = TRUE and ls.type !=:SurgeryType and ls.isRIE is null and ls.isVirtual = FALSE";
 		markers.add("SurgeryType");
 		values.add(getDomLookup(LocationType.SURGERY));
 		markers.add("taxonomyType");

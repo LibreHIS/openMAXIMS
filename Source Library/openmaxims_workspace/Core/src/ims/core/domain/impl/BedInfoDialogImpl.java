@@ -1625,15 +1625,17 @@ public class BedInfoDialogImpl extends DTODomainImplementation implements BedInf
 		return PatientCaseNoteRequestLiteVoAssembler.createPatientCaseNoteRequestLiteVoCollectionFromPatientCaseNoteRequest(list);
 	}
 
-	//WDEV-18754 //WDEV-22685 //WDEV-22794 no longer update WardAttender
+	// No longer update WardAttender
 	private void markAssociatedAppoinmentAsDischarged(DomainFactory factory, Integer pasEventID, DateTime dischargeDateTime) throws StaleObjectException
 	{
 
 		String hql = "from Booking_Appointment ba " + 
 				"where ba.pASEvent.id = :eventId " +
 				"and ba.currentStatusRecord.status = :statID " +
- 				"and (ba.isWardAttendance is null OR ba.isWardAttendance = 0) " + 
-				"and (ba.isRIE is null OR ba.isRIE = 0)";
+				/* TODO MSSQL case - "and (ba.isWardAttendance is null OR ba.isWardAttendance = 0) " + */
+ 				"and (ba.isWardAttendance is null OR ba.isWardAttendance = FALSE) " +
+				/* TODO MSSQL case - "and (ba.isRIE is null OR ba.isRIE = 0)"; */
+				"and (ba.isRIE is null OR ba.isRIE = FALSE)";
 
 		ArrayList<String> labels = new ArrayList<String>();
 		labels.add("eventId");
@@ -2669,12 +2671,13 @@ public class BedInfoDialogImpl extends DTODomainImplementation implements BedInf
 	{
 		if (careContext == null)
 			return null;
-		
-		String hqlQuery = "SELECT patTranReq FROM PatientTransportRequirements AS patTranReq WHERE patTranReq.careContext.id = :Context_ID AND (patTranReq.isRIE is null OR patTranReq.isRIE = 0)";
+
+		/* TODO MSSQL case - String hqlQuery = "SELECT patTranReq FROM PatientTransportRequirements AS patTranReq WHERE patTranReq.careContext.id = :Context_ID AND (patTranReq.isRIE is null OR patTranReq.isRIE = 0)"; */
+		String hqlQuery = "SELECT patTranReq FROM PatientTransportRequirements AS patTranReq WHERE patTranReq.careContext.id = :Context_ID AND (patTranReq.isRIE is null OR patTranReq.isRIE = FALSE)";
 		
 		return PatientTransportRequirementsVoAssembler.create((PatientTransportRequirements) getDomainFactory().findFirst(hqlQuery, "Context_ID", careContext.getID_CareContext()));
 	}
-	//WDEV-20367
+
 	private AdmissionDetail updateExtendedDetails(AdmissionDetailVo admissionDetailsVo, DomainFactory factory, InpatientEpisodeLiteVo inpatEpisode,CareContextRefVo voCareContext)
 	{
 		AdmissionDetail admissionDO = AdmissionDetailVoAssembler.extractAdmissionDetail(factory, admissionDetailsVo);
@@ -3308,7 +3311,9 @@ public class BedInfoDialogImpl extends DTODomainImplementation implements BedInf
 			return Boolean.FALSE;
 		
 		StringBuilder query = new StringBuilder("SELECT COUNT(pel.id) FROM PatientElectiveList AS pel LEFT JOIN pel.electiveList AS el LEFT JOIN el.service AS service LEFT JOIN pel.patient AS patient LEFT JOIN pel.tCIDetails AS tci");
-		query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = 0");
+
+		/* TODO MSSQL case - query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = 0"); */
+		query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = FALSE");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();							ArrayList<Object> paramValues = new ArrayList<Object>();
 		paramNames.add("PEL_ID");														paramValues.add(electiveList.getID_PatientElectiveList());
@@ -3370,7 +3375,9 @@ public class BedInfoDialogImpl extends DTODomainImplementation implements BedInf
 			return null;
 		
 		StringBuilder query = new StringBuilder("SELECT pel FROM PatientElectiveList AS pel LEFT JOIN pel.electiveList AS el LEFT JOIN el.service AS service LEFT JOIN pel.patient AS pat LEFT JOIN pel.tCIDetails AS tci");
-		query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = 0");
+
+		/* TODO MSSQL case - query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = 0"); */
+		query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = FALSE");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();							ArrayList<Object> paramValues = new ArrayList<Object>();
 		paramNames.add("PEL_ID");														paramValues.add(electiveList.getID_PatientElectiveList());
@@ -3380,7 +3387,6 @@ public class BedInfoDialogImpl extends DTODomainImplementation implements BedInf
 		return PatientElectiveListBedAdmissionVoAssembler.createPatientElectiveListBedAdmissionVoCollectionFromPatientElectiveList(getDomainFactory().find(query.toString(), paramNames, paramValues));
 	}
 
-	//WDEV-18454
 	public Boolean hasElectiveListsToRemove(PatientRefVo patientRef, PatientElectiveListRefVo electiveListRef, Specialty specialty)
 	{
 		if (patientRef == null || patientRef.getID_Patient() == null)
@@ -3713,8 +3719,9 @@ public class BedInfoDialogImpl extends DTODomainImplementation implements BedInf
 	{
 		if (voInpat == null || Boolean.TRUE.equals(voInpat.getIsOnHomeLeave()))
 			return false;
-		
-		String hql = " select count(hl.id) from InpatientEpisode inp left join inp.homeLeaves as hl WHERE hl.dateReturnedFromHomeLeave is not null AND (hl.isRIE is null OR hl.isRIE = 0) and inp.id = :INPAT_ID";
+
+		/* TODO MSSQL case - String hql = " select count(hl.id) from InpatientEpisode inp left join inp.homeLeaves as hl WHERE hl.dateReturnedFromHomeLeave is not null AND (hl.isRIE is null OR hl.isRIE = 0) and inp.id = :INPAT_ID"; */
+		String hql = " select count(hl.id) from InpatientEpisode inp left join inp.homeLeaves as hl WHERE hl.dateReturnedFromHomeLeave is not null AND (hl.isRIE is null OR hl.isRIE = FALSE) and inp.id = :INPAT_ID";
 		
 		DomainFactory fact = getDomainFactory();
 		
@@ -4001,8 +4008,9 @@ public class BedInfoDialogImpl extends DTODomainImplementation implements BedInf
 	{
 		if (inpatientEpisode == null || inpatientEpisode.getID_InpatientEpisode() == null)
 			return null;
-		
-		String query = "SELECT wardStay FROM InpatientEpisode AS inpatEp LEFT JOIN inpatEp.wardStays AS wardStay WHERE inpatEp.id = :INPATIENT_EPISODE AND (wardStay.isRIE is null OR wardStay.isRIE = 0) ORDER BY wardStay.transferDateTime DESC";
+
+		/* TODO MSSQL case - String query = "SELECT wardStay FROM InpatientEpisode AS inpatEp LEFT JOIN inpatEp.wardStays AS wardStay WHERE inpatEp.id = :INPATIENT_EPISODE AND (wardStay.isRIE is null OR wardStay.isRIE = 0) ORDER BY wardStay.transferDateTime DESC"; */
+		String query = "SELECT wardStay FROM InpatientEpisode AS inpatEp LEFT JOIN inpatEp.wardStays AS wardStay WHERE inpatEp.id = :INPATIENT_EPISODE AND (wardStay.isRIE is null OR wardStay.isRIE = FALSE) ORDER BY wardStay.transferDateTime DESC";
 		
 		return WardStayLiteVoAssembler.create((WardStay) getDomainFactory().findFirst(query, "INPATIENT_EPISODE", inpatientEpisode.getID_InpatientEpisode()));
 	}
@@ -4012,8 +4020,9 @@ public class BedInfoDialogImpl extends DTODomainImplementation implements BedInf
 	{
 		if (inpatientEpisode == null || inpatientEpisode.getID_InpatientEpisode() == null)
 			return null;
-		
-		String query = "SELECT consStay FROM InpatientEpisode AS inpatEp LEFT JOIN inpatEp.consultantStays AS consStay WHERE inpatEp.id = :INPATIENT_EPISODE AND (consStay.isRIE is null OR consStay.isRIE = 0) ORDER BY consStay.transferDateTime DESC";
+
+		/* TODO MSSQL case - String query = "SELECT consStay FROM InpatientEpisode AS inpatEp LEFT JOIN inpatEp.consultantStays AS consStay WHERE inpatEp.id = :INPATIENT_EPISODE AND (consStay.isRIE is null OR consStay.isRIE = 0) ORDER BY consStay.transferDateTime DESC"; */
+		String query = "SELECT consStay FROM InpatientEpisode AS inpatEp LEFT JOIN inpatEp.consultantStays AS consStay WHERE inpatEp.id = :INPATIENT_EPISODE AND (consStay.isRIE is null OR consStay.isRIE = FALSE) ORDER BY consStay.transferDateTime DESC";
 		
 		return ConsultantStayMinVoAssembler.create((ConsultantStay) getDomainFactory().findFirst(query, "INPATIENT_EPISODE", inpatientEpisode.getID_InpatientEpisode()));
 	}

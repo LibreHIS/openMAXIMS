@@ -247,13 +247,14 @@ public class EDDecisionToAdmitDialogImpl extends BaseEDDecisionToAdmitDialogImpl
 		return impl.listActiveWardsForHospitalByName(hospitalRef, value);
 	}
 	
-	//WDEV-20388
 	public TrackingforDecisionToAdmitDialogVo getTrackingByPendingEmergencyAdmission(PendingEmergencyAdmissionRefVo pendingEmergencyAdmissionRef)
 	{
 		if (pendingEmergencyAdmissionRef == null || pendingEmergencyAdmissionRef.getID_PendingEmergencyAdmission() == null)
 			throw new CodingRuntimeException("pendingemergencyadmissionRef is null or id not provided ");
 		
-		String hql = "select t1_1 from Tracking as t1_1 left join t1_1.associatedPendingEmergencyAdmission as p1_1 where p1_1.id = " + pendingEmergencyAdmissionRef.getID_PendingEmergencyAdmission() + " and (t1_1.isRIE is null  or t1_1.isRIE = 0) order by t1_1.systemInformation.creationDateTime desc ";
+		/* TODO MSSQL case - String hql = "select t1_1 from Tracking as t1_1 left join t1_1.associatedPendingEmergencyAdmission as p1_1 where p1_1.id = " + pendingEmergencyAdmissionRef.getID_PendingEmergencyAdmission() + " and (t1_1.isRIE is null  or t1_1.isRIE = 0) order by t1_1.systemInformation.creationDateTime desc "; */
+		String hql = "select t1_1 from Tracking as t1_1 left join t1_1.associatedPendingEmergencyAdmission as p1_1 where p1_1.id = " + pendingEmergencyAdmissionRef.getID_PendingEmergencyAdmission() + " and (t1_1.isRIE is null  or t1_1.isRIE = FALSE) order by t1_1.systemInformation.creationDateTime desc ";
+
 		List lstTracking = getDomainFactory().find(hql);
 		
 		if( lstTracking == null || lstTracking.size() == 0)
@@ -263,7 +264,6 @@ public class EDDecisionToAdmitDialogImpl extends BaseEDDecisionToAdmitDialogImpl
 		
 	}
 
-	//WDEV-20722, WDEV-21201
 	@Override
 	public ServiceLiteVoCollection listActiveClinicalServices(String value) 
 	{

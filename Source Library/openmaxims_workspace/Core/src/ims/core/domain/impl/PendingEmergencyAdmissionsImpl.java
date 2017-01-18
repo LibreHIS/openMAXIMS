@@ -411,13 +411,14 @@ public class PendingEmergencyAdmissionsImpl extends BasePendingEmergencyAdmissio
 		factory.save(doPendingEmergency);
 	}
 
-	//WDEV-20388
 	public TrackingForClinicianWorklistAndTriageVo getTrackingByPendingEmergencyAdmission(PendingEmergencyAdmissionRefVo pendingEmergencyAdmissionRef)
 	{
 		if (pendingEmergencyAdmissionRef == null || pendingEmergencyAdmissionRef.getID_PendingEmergencyAdmission() == null)
 			throw new CodingRuntimeException("pendingemergencyadmissionRef is null or id not provided ");
-		
-		String hql = "select t1_1 from Tracking as t1_1 left join t1_1.associatedPendingEmergencyAdmission as p1_1 where p1_1.id = " + pendingEmergencyAdmissionRef.getID_PendingEmergencyAdmission() + " and (t1_1.isRIE is null  or t1_1.isRIE = 0) order by t1_1.systemInformation.creationDateTime desc ";
+
+		/* TODO MSSQL case - String hql = "select t1_1 from Tracking as t1_1 left join t1_1.associatedPendingEmergencyAdmission as p1_1 where p1_1.id = " + pendingEmergencyAdmissionRef.getID_PendingEmergencyAdmission() + " and (t1_1.isRIE is null  or t1_1.isRIE = 0) order by t1_1.systemInformation.creationDateTime desc "; */
+		String hql = "select t1_1 from Tracking as t1_1 left join t1_1.associatedPendingEmergencyAdmission as p1_1 where p1_1.id = " + pendingEmergencyAdmissionRef.getID_PendingEmergencyAdmission() + " and (t1_1.isRIE is null  or t1_1.isRIE = FALSE) order by t1_1.systemInformation.creationDateTime desc ";
+
 		List lstTracking = getDomainFactory().find(hql);
 		
 		if( lstTracking == null || lstTracking.size() == 0)
@@ -426,8 +427,7 @@ public class PendingEmergencyAdmissionsImpl extends BasePendingEmergencyAdmissio
 		return TrackingForClinicianWorklistAndTriageVoAssembler.create((Tracking)lstTracking.get(0));
 	}
 	
-	//WDEV-20707
-	public LocationLiteVo getCurrentHospital(ILocation location) 
+	public LocationLiteVo getCurrentHospital(ILocation location)
 	{
 		WardView impl = (WardView)getDomainImpl(WardViewImpl.class);
 		return impl.getCurrentHospital(location);
@@ -445,8 +445,10 @@ public class PendingEmergencyAdmissionsImpl extends BasePendingEmergencyAdmissio
 			cc =  impl.getCareContextForPasEvent(adm.getPasEvent());
 		}
 		if (cc == null)
-		{	
-			String hql = "select cc from Tracking as track left join track.attendance as att left join att.careContext as cc left join track.associatedPendingEmergencyAdmission as pea WHERE (att.isRIE is null OR att.isRIE = 0) AND pea.id = :PENDING_ADM_ID";
+		{
+			/* TODO MSSQL case - String hql = "select cc from Tracking as track left join track.attendance as att left join att.careContext as cc left join track.associatedPendingEmergencyAdmission as pea WHERE (att.isRIE is null OR att.isRIE = 0) AND pea.id = :PENDING_ADM_ID"; */
+			String hql = "select cc from Tracking as track left join track.attendance as att left join att.careContext as cc left join track.associatedPendingEmergencyAdmission as pea WHERE (att.isRIE is null OR att.isRIE = FALSE) AND pea.id = :PENDING_ADM_ID";
+
 			DomainFactory fact = getDomainFactory();
 
 			CareContext careContextDO = (CareContext) fact.findFirst(hql, "PENDING_ADM_ID", adm.getID_PendingEmergencyAdmission());

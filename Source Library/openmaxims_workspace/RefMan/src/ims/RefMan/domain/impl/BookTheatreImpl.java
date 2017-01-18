@@ -923,7 +923,9 @@ public class BookTheatreImpl extends BaseBookTheatreImpl
 			return null;
 		
 		DomainFactory factory = getDomainFactory();
-		List lastTheatreErod = factory.find("select theaErod from CatsReferral as cats left join cats.electiveEROD as theaErod where cats.id = :CatsReferralId and (theaErod.isRIE is null or theaErod.isRIE = 0) and theaErod.sequence = (select max(theaErodSec.sequence) from CatsReferral as catsSec left join catsSec.electiveEROD as theaErodSec where catsSec.id = :CatsReferralId and (theaErodSec.isRIE is null or theaErodSec.isRIE = 0))", new String[] {"CatsReferralId"}, new Object[] {catsReferral.getID_CatsReferral()});
+
+		/* TODO MSSQL case - List lastTheatreErod = factory.find("select theaErod from CatsReferral as cats left join cats.electiveEROD as theaErod where cats.id = :CatsReferralId and (theaErod.isRIE is null or theaErod.isRIE = 0) and theaErod.sequence = (select max(theaErodSec.sequence) from CatsReferral as catsSec left join catsSec.electiveEROD as theaErodSec where catsSec.id = :CatsReferralId and (theaErodSec.isRIE is null or theaErodSec.isRIE = 0))", new String[] {"CatsReferralId"}, new Object[] {catsReferral.getID_CatsReferral()}); */
+		List lastTheatreErod = factory.find("select theaErod from CatsReferral as cats left join cats.electiveEROD as theaErod where cats.id = :CatsReferralId and (theaErod.isRIE is null or theaErod.isRIE = FALSE) and theaErod.sequence = (select max(theaErodSec.sequence) from CatsReferral as catsSec left join catsSec.electiveEROD as theaErodSec where catsSec.id = :CatsReferralId and (theaErodSec.isRIE is null or theaErodSec.isRIE = FALSE))", new String[] {"CatsReferralId"}, new Object[] {catsReferral.getID_CatsReferral()});
 			
 		if(lastTheatreErod != null && lastTheatreErod.size() > 0 && lastTheatreErod.get(0) instanceof ReferralEROD)
 		{

@@ -699,10 +699,10 @@ public abstract class VoMapper  implements IMessageHandler
 		}
 		else
 		{
-			//Go through the current alerts and remove any duplicates
-			if (alertsFromMsg != null/*&&alertsFromMsg.size()!=0*/ )//http://jira/browse/WDEV-17156
+			// Go through the current alerts and remove any duplicates
+			if (alertsFromMsg != null)
 			{
-				if(patVo!=null &&patVo.getPatientAlertsIsNotNull()) //WDEV-14427 
+				if(patVo!=null &&patVo.getPatientAlertsIsNotNull())
 				{
 					for (PatientAlertLiteVo existingAlert : patVo.getPatientAlerts())
 					{
@@ -719,7 +719,7 @@ public abstract class VoMapper  implements IMessageHandler
 				}
 				
 				
-				//Go through all the alerts in the message removing any that already in the patient record
+				// Go through all the alerts in the message removing any that already in the patient record
 				Iterator<PatientAlertLiteVo> msgAlertIterator = alertsFromMsg.iterator();
 				while(msgAlertIterator.hasNext())
 				{
@@ -1438,73 +1438,38 @@ public abstract class VoMapper  implements IMessageHandler
 			nk1.getRelationship().getIdentifier().setValue(svc.getRemoteLookup(nok.getRelationship().getID(), providerSystem.getCodeSystem().getText()));
 		}
 
-		//NK1-4 Address (XAD)
+		// NK1-4 Address (XAD)
 		if((isConfidential == null) || (!isConfidential))
 		{
 			renderAddressVoToXAD(nok.getAddress(), nk1.getAddress(0), providerSystem);
 		}
 
-		//NK1-5 Phone number (XTN)
-		//NK1-6 Business phone number (XTN)
+		// NK1-5 Phone number (XTN)
+		// NK1-6 Business phone number (XTN)
 		if(nok.getCommChannelsIsNotNull())
 		{
-			
-			//http://jira/browse/WDEV-22006
-//			CommChannelVoCollection comChannelVoCollection = nok.getCommChannels();
-//			
-//			int phNum = 0;
-//			int workPhNum = 0;
-//			
-//			for (int i = 0; i < comChannelVoCollection.size(); i++)
-//			{
-//				CommChannelVo commChannel = comChannelVoCollection.get(i);
-//				
-//				if((ChannelType.WORK_PHONE).equals(commChannel.getChannelType()))
-//				{channeltopid
-			
-//					nk1.getBusinessPhoneNumber(workPhNum).getTelecommunicationUseCode().setValue("WPN");
-//					nk1.getBusinessPhoneNumber(workPhNum).getAnyText().setValue(commChannel.getCommValue());
-//					workPhNum ++;
-//				}
-//				if((ChannelType.HOME_PHONE).equals(commChannel.getChannelType()))
-//				{
-//					if(phNum > 0)
-//					{
-//						nk1.getPhoneNumber(phNum).getTelecommunicationUseCode().setValue("ORN");
-//					}
-//					else
-//					{
-//						nk1.getPhoneNumber(phNum).getTelecommunicationUseCode().setValue("PRN");
-//					}
-//					nk1.getPhoneNumber(phNum).getAnyText().setValue(commChannel.getCommValue());
-//					phNum ++;	
-//				}
-//			}
-			renderCommChannelVoCollToNK1(nok.getCommChannels(), nk1, providerSystem); //WDEV-22006
-
+			renderCommChannelVoCollToNK1(nok.getCommChannels(), nk1, providerSystem);
 		}
 
-		//NK1-7 Contact role (CE)
+		// NK1-7 Contact role (CE)
 		if(nok.getRoleIsNotNull())
 		{
 			nk1.getContactRole().getIdentifier().setValue(svc.getRemoteLookup(nok.getRole().getID(), providerSystem.getCodeSystem().getText()));
 		}
 
-		//http://jira/browse/WDEV-22006
-		//NK1-8 Start date (DT)
+		// NK1-8 Start date (DT)
 		if (nok.getBeffdateIsNotNull())
 		{
 			nk1.getStartDate().setValue(nok.getBeffdate().toString(DateFormat.ISO));
-		} //WDEV-22006
+		}
 		
-		//http://jira/browse/WDEV-22006
-		//NK1-9 End date (DT)
+		// NK1-9 End date (DT)
 		if (nok.getBetdateIsNotNull())
 		{
 			nk1.getEndDate().setValue(nok.getBetdate().toString(DateFormat.ISO));
-		} //WDEV-22006
+		}
 		
-		//NK1-16 Date/time of birth (TS)
+		// NK1-16 Date/time of birth (TS)
 		if (nok.getDobIsNotNull())
 		{
 			nk1.getDateTimeOfBirth().getTimeOfAnEvent().setValue(nok.getDob().toString(DateFormat.ISO));
@@ -2529,96 +2494,16 @@ public abstract class VoMapper  implements IMessageHandler
 				pid.getPatientDeathDateAndTime().getTimeOfAnEvent().setValue(patVo.getDod().toString(DateFormat.ISO));
 			}
 			pid.getPatientDeathIndicator().setValue("Y");  // Patient Death Indicator
-		} //WDEV-20664
+		}
 
-		// http://jira/browse/WDEV-20335
 		if((patVo.getIsConfidential() == null) || (patVo.getIsConfidentialIsNotNull() && !patVo.getIsConfidential()))
 		{
 			renderAddressVoToXAD(patVo.getAddress(), pid.getPatientAddress(0),providerSystem);
 		}
 
-		// http://jira/browse/WDEV-22237 Replace following code by a call to a single method
-//		int phoneNumberCount = 0;
-//		CommChannelVo commVo = patVo.getCommunicationChannel(ChannelType.EMAIL);
-//		if (commVo != null)
-//		{
-//			pid.getPhoneNumberHome(phoneNumberCount).getTelecommunicationUseCode().setValue("NET");
-//			pid.getPhoneNumberHome(phoneNumberCount).getTelecommunicationEquipmentType().setValue("internet");
-//			pid.getPhoneNumberHome(phoneNumberCount).getEmailAddress().setValue(commVo.getCommValue());
-//			phoneNumberCount++;
-//		}
-//
-//		commVo = patVo.getCommunicationChannel(ChannelType.MOBILE);
-//		if (commVo != null)
-//		{
-//			pid.getPhoneNumberHome(phoneNumberCount).getAnyText().setValue(commVo.getCommValue());
-//			pid.getPhoneNumberHome(phoneNumberCount).getTelecommunicationEquipmentType().setValue("CP");
-//			phoneNumberCount++;
-//		}
-//		commVo = patVo.getCommunicationChannel(ChannelType.HOME_PHONE);
-//		if (commVo != null)
-//		{
-//			pid.getPhoneNumberHome(phoneNumberCount).getAnyText().setValue(commVo.getCommValue());
-//			pid.getPhoneNumberHome(phoneNumberCount).getTelecommunicationEquipmentType().setValue(Phone);  // wdev-11609
-//			phoneNumberCount++;
-//		}
-//
-//		if (patVo.getAddressIsNotNull() && patVo.getAddress().getFaxIsNotNull())
-//		{
-//			pid.getPhoneNumberHome(phoneNumberCount).getAnyText().setValue(patVo.getAddress().getFax());
-//			pid.getPhoneNumberHome(phoneNumberCount).getTelecommunicationEquipmentType().setValue("FX");
-//			phoneNumberCount++;
-//		}
-//		else
-//		{
-//			// wdev-5442
-//			// Check for Fax as a comms channel type and output if set
-//			commVo = patVo.getCommunicationChannel(ChannelType.FAX);
-//			if (commVo != null)
-//			{
-//				pid.getPhoneNumberHome(phoneNumberCount).getAnyText().setValue(commVo.getCommValue());
-//				pid.getPhoneNumberHome(phoneNumberCount).getTelecommunicationEquipmentType().setValue("FX");
-//				phoneNumberCount++;
-//			}
-//		}
-//
-//		// TODO - Not sure whether we can differentiate between home and work email etc..??
-//		
-//		//http://jira/browse/WDEV-18953 //WDEV-18951
-//		phoneNumberCount = 0;
-//		CommChannelVoCollection commChannels = patVo.getCommChannels();
-//		if (commChannels!=null)
-//		{
-//			for (CommChannelVo commChannelVo : commChannels)
-//			{
-//				if(commChannelVo.getChannelType()!=null
-//					&&ChannelType.WORK_PHONE.equals(commChannelVo.getChannelType()))
-//					{
-//					String value = commChannelVo.getCommValue();
-//					if (value!=null &&!isEmail(value))
-//					{
-//						pid.getPhoneNumberBusiness(phoneNumberCount).getAnyText().setValue(value);
-//						phoneNumberCount++;
-//					}
-//				}
-//			}
-//		}
-//
-//		
-//		
-//		commVo = patVo.getCommunicationChannel(ChannelType.WORK_PHONE);
-//		if (commVo != null)
-//		{
-//			String value = commVo.getCommValue();
-//			if (value!=null &&!isEmail(value))
-//			{
-//				pid.getPhoneNumberBusiness(phoneNumberCount).getAnyText().setValue(value);
-//				phoneNumberCount++;
-//			}
-//		}
+		// TODO - Not sure whether we can differentiate between home and work email etc..??
 
 		renderCommChannelVoCollToPID(patVo.getCommChannels(), pid, providerSystem);
-		// WDEV-22237
 		
 		if (patVo.getReligionIsNotNull())
 			pid.getReligion().getIdentifier().setValue(svc.getRemoteLookup(patVo.getReligion().getID(), providerSystem.getCodeSystem().getText()));

@@ -133,60 +133,17 @@ public class CaseNotesWorklistImpl extends BaseCaseNotesWorklistImpl
 		
 		paramNames.add("OUTPATIENT_PROFILE");
 		paramValues.add(SchProfileType.OUTPATIENT.getID());
-		paramNames.add("isActive");//wdev-20063
-		paramValues.add(Boolean.TRUE);//wdev-20063
+		paramNames.add("isActive");
+		paramValues.add(Boolean.TRUE);
 		
-		//WDEV-21735 
 		if (name != null)
 		{
 			paramNames.add("NAME");
-			paramValues.add(getNameStr(name, true)); //WDEV-22880
+			paramValues.add(getNameStr(name, true));
 		}
 		
 		return ProfileLiteVoAssembler.createProfileLiteVoCollectionFromSch_Profile(getDomainFactory().find(query.toString(), paramNames, paramValues));
 	}
-	
-//	private String getLocationsIdsForHospital(LocationRefVo hospital)
-//	{
-//		DomainFactory factory = getDomainFactory();
-//		Location doLocation = (Location) factory.getDomainObject(Location.class, hospital.getID_Location());
-//
-//		ArrayList<Location> locations = new ArrayList<Location>();
-//		buildLocationsList(doLocation, locations);
-//		
-//		String ids = "";
-//		
-//		for (int i = 0; i < locations.size(); i++)
-//		{
-//
-//			if (locations.get(i) == null || locations.get(i).getId() == null)
-//				continue;
-//
-//			if (ids == "")
-//				ids += locations.get(i).getId().toString();
-//			else
-//				ids += ", " + locations.get(i).getId().toString();
-//
-//		}	
-//		
-//		return ids;
-//	}
-
-//	private void buildLocationsList(Location location, ArrayList<Location> listItems)
-//	{
-//		if (Boolean.TRUE.equals(location.isIsActive()) && Boolean.FALSE.equals(location.isIsVirtual()))
-//		{
-//			listItems.add(location);
-//		}
-//		
-//		Iterator<?> it = location.getLocations().iterator();
-//		
-//		while (it.hasNext())
-//		{
-//			Location doLocation = (Location) it.next();
-//			buildLocationsList(doLocation, listItems);
-//		}
-//	}
 
 	public LocationLiteVoCollection listCaseNoteLocation(LocationRefVo hospital, String name)
 	{

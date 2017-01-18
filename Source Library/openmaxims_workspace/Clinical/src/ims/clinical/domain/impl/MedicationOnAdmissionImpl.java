@@ -169,7 +169,10 @@ public class MedicationOnAdmissionImpl extends DomainImpl implements ims.clinica
 		
 		// Get last care context (of type INPATIET)
 		StringBuilder ccQuery = new StringBuilder();
-		ccQuery.append("select cc from PatientMedication as pmed join pmed.careContext as cc where pmed.patient.id = :PAT_ID and cc.context.id = :CC_TYPE and (pmed.isRIE is null or pmed.isRIE = 0) and (pmed.isDiscontinued is null or pmed.isDiscontinued = 0)");
+
+		/* TODO MSSQL case - ccQuery.append("select cc from PatientMedication as pmed join pmed.careContext as cc where pmed.patient.id = :PAT_ID and cc.context.id = :CC_TYPE and (pmed.isRIE is null or pmed.isRIE = 0) and (pmed.isDiscontinued is null or pmed.isDiscontinued = 0)"); */
+		ccQuery.append("select cc from PatientMedication as pmed join pmed.careContext as cc where pmed.patient.id = :PAT_ID and cc.context.id = :CC_TYPE and (pmed.isRIE is null or pmed.isRIE = FALSE) and (pmed.isDiscontinued is null or pmed.isDiscontinued = FALSE)");
+
 		ArrayList<String> paramCCNames = new ArrayList<String>();
 		ArrayList<Object> paramCCValues = new ArrayList<Object>();
 		

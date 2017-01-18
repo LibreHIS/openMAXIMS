@@ -348,23 +348,6 @@ public class A28NasMapper extends NasMapper
 			}
 		}
 		
-		
-		//now surgery
-		/* but nothing useful done with it so leave for moment to save a few calls
-		if (pd1.getPatientPrimaryFacility() != null)
-		{
-			tmpVal = pd1.getPatientPrimaryFacility(0).getOrganizationNameTypeCode().getValue();
-			if (tmpVal == null || tmpVal.equals(""))
-				throw new HL7Exception("PD1.03 - Doctor's surgery is a required field");
-			
-			intTmpVal = this.getOrganisationByOrgCode(tmpVal);
-			if (intTmpVal <= 0)
-				throw new HL7Exception("PD1.03 - Doctor's surgery cannot be mapped");
-			else
-				nm.addPair("PRCD",Integer.toString(intTmpVal));
-		}*/
-		
-		
 		nm.addPair("LPDSTAT", "1");
 		if (updNm != null)
 		{

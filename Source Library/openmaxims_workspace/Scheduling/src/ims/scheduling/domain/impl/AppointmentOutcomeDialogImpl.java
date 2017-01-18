@@ -310,7 +310,9 @@ public class AppointmentOutcomeDialogImpl extends BaseAppointmentOutcomeDialogIm
 			{
 				StringBuilder query = new StringBuilder("SELECT c1_1 FROM ");
 				query.append(" CatsReferral as c1_1 left join c1_1.appointments as b1_1");
-				query.append(" WHERE( (c1_1.isRIE = 0 OR c1_1.isRIE is null) and b1_1.id = :bookingApptID ) ");
+
+				/* TODO MSSQL case - query.append(" WHERE( (c1_1.isRIE = 0 OR c1_1.isRIE is null) and b1_1.id = :bookingApptID ) "); */
+				query.append(" WHERE( (c1_1.isRIE = FALSE OR c1_1.isRIE is null) and b1_1.id = :bookingApptID ) ");
 				
 				ArrayList<String> paramNames = new ArrayList<String>();
 				ArrayList<Object> paramValues = new ArrayList<Object>();
@@ -1689,15 +1691,16 @@ public class AppointmentOutcomeDialogImpl extends BaseAppointmentOutcomeDialogIm
 		
 		return tempColl;
 	}
-	//wdev-19933
+
 	private PatientEventForTransferOfCareVoCollection getPatientEventEvents(PatientPathwayJourneyForTransferOfCareVo patj)
 	{
 		if( patj == null )
 			return null;
 		
 		DomainFactory factory = getDomainFactory();
-		
-		String hql = "select p1_1 	from PatientEvent as p1_1 left join p1_1.journey as p2_1 where (p2_1.id ="+patj.getID_PatientPathwayJourney() +" and ( p1_1.isRIE = 0 or p1_1.isRIE is null ) )"; 
+
+		/* TODO MSSQL case - String hql = "select p1_1 	from PatientEvent as p1_1 left join p1_1.journey as p2_1 where (p2_1.id ="+patj.getID_PatientPathwayJourney() +" and ( p1_1.isRIE = 0 or p1_1.isRIE is null ) )"; */
+		String hql = "select p1_1 	from PatientEvent as p1_1 left join p1_1.journey as p2_1 where (p2_1.id ="+patj.getID_PatientPathwayJourney() +" and ( p1_1.isRIE = FALSE or p1_1.isRIE is null ) )";
 	
 		List events = factory.find(hql);
 		if(events != null && events.size() > 0)
@@ -1705,9 +1708,7 @@ public class AppointmentOutcomeDialogImpl extends BaseAppointmentOutcomeDialogIm
 		
 		return null;
 	}
-	
-	
-	//wdev-19933
+
 	private PathwayRTTStatusVo getParentCurentRTTSTatus(PathwayRTTStatusVo record)
 	{
 		if( record == null)
@@ -3327,8 +3328,12 @@ public class AppointmentOutcomeDialogImpl extends BaseAppointmentOutcomeDialogIm
 		query.append(" WHERE ");
 		
 		query.append(" appointment.id = :APPOINTMENT AND relationType.id = :REQUEST_FOR_SERVICE ");
-		query.append(" AND (linkedCatsReferral.isRIE is null OR linkedCatsReferral.isRIE = 0) ");
-		query.append(" AND (referral.isRIE is null OR referral.isRIE = 0) ");
+
+		/* TODO MSSQL case - query.append(" AND (linkedCatsReferral.isRIE is null OR linkedCatsReferral.isRIE = 0) "); */
+		query.append(" AND (linkedCatsReferral.isRIE is null OR linkedCatsReferral.isRIE = FALSE) ");
+
+		/* TODO MSSQL case - query.append(" AND (referral.isRIE is null OR referral.isRIE = 0) "); */
+		query.append(" AND (referral.isRIE is null OR referral.isRIE = FALSE) ");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
@@ -3374,8 +3379,12 @@ public class AppointmentOutcomeDialogImpl extends BaseAppointmentOutcomeDialogIm
 		query.append(" WHERE ");
 		
 		query.append(" appointment.id = :APPOINTMENT AND relationType.id = :REQUEST_FOR_SERVICE ");
-		query.append(" AND (linkedCatsReferral.isRIE is null OR linkedCatsReferral.isRIE = 0) ");
-		query.append(" AND (referral.isRIE is null OR referral.isRIE = 0) ");
+
+		/* TODO MSSQL case - query.append(" AND (linkedCatsReferral.isRIE is null OR linkedCatsReferral.isRIE = 0) "); */
+		query.append(" AND (linkedCatsReferral.isRIE is null OR linkedCatsReferral.isRIE = FALSE) ");
+
+		/* MSSQL case - query.append(" AND (referral.isRIE is null OR referral.isRIE = 0) "); */
+		query.append(" AND (referral.isRIE is null OR referral.isRIE = FALSE) ");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
@@ -3414,7 +3423,9 @@ public class AppointmentOutcomeDialogImpl extends BaseAppointmentOutcomeDialogIm
 		query.append(" WHERE ");
 		
 		query.append(" appointment.id = :APPOINTMENT AND outcomeAction.id = :OUTCOME_ACTION ");
-		query.append(" AND (electiveList.isRIE is null OR electiveList.isRIE = 0)");
+
+		/* TODO MSSQL case - query.append(" AND (electiveList.isRIE is null OR electiveList.isRIE = 0)"); */
+		query.append(" AND (electiveList.isRIE is null OR electiveList.isRIE = FALSE)");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
@@ -3565,8 +3576,6 @@ public class AppointmentOutcomeDialogImpl extends BaseAppointmentOutcomeDialogIm
 		return CatsReferralParentVoAssembler.create((CatsReferral) getDomainFactory().findFirst(query.toString(), paramNames, paramValues));
 	}
 
-	
-	//wdev-19933
 	public CatsReferralForRequestServiceVo getChildReferralForTransferOfCareVo(CatsReferralRefVo catsReferralRef)
 	{
 		if( catsReferralRef == null)
@@ -3574,7 +3583,9 @@ public class AppointmentOutcomeDialogImpl extends BaseAppointmentOutcomeDialogIm
 		
 		StringBuilder query = new StringBuilder("SELECT c1_1 FROM ");
 		query.append(" CatsReferral as p1_1 left join p1_1.linkedReferrals as l1_1 left join l1_1.referral as c1_1  left join l1_1.referralRelationType as l2_1 ");
-		query.append(" WHERE( (c1_1.isRIE = 0 OR c1_1.isRIE is null) and l2_1.id = :ActionType and p1_1.id = :parentCatsReferralID) ");
+
+		/* TODO MSSQL case - query.append(" WHERE( (c1_1.isRIE = 0 OR c1_1.isRIE is null) and l2_1.id = :ActionType and p1_1.id = :parentCatsReferralID) "); */
+		query.append(" WHERE( (c1_1.isRIE = FALSE OR c1_1.isRIE is null) and l2_1.id = :ActionType and p1_1.id = :parentCatsReferralID) ");
 				
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
@@ -3595,8 +3606,7 @@ public class AppointmentOutcomeDialogImpl extends BaseAppointmentOutcomeDialogIm
 	}
 
 
-	//wdev-19933, wdev-19930
-	//This method is it used by ReferralDetails form
+	// This method is it used by ReferralDetails form
 	public void saveChildCatsReferralForTransferOfCare(CatsReferralForRequestServiceVo chillCatsReferralForTransferOfCare, CatsReferralRefVo parentRef, BookingAppointmentOutcomeVo appointment) throws DomainInterfaceException, StaleObjectException
 	{
 		DomainFactory factory = getDomainFactory();

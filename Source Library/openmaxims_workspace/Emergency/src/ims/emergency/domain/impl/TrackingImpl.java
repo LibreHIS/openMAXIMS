@@ -2383,8 +2383,9 @@ public class TrackingImpl extends BaseTrackingImpl
 	{
 		if(attendance == null || attendance.getID_CareContext() == null)
 			return false;
-		
-		String query = "select count(seenBy.id) from SeenByHCP as seenBy left join seenBy.attendance as careContext where careContext.id = :CareContextId and (seenBy.isRIE is null or seenBy.isRIE = 0)";
+
+		/* TODO MSSQL case - String query = "select count(seenBy.id) from SeenByHCP as seenBy left join seenBy.attendance as careContext where careContext.id = :CareContextId and (seenBy.isRIE is null or seenBy.isRIE = 0)"; */
+		String query = "select count(seenBy.id) from SeenByHCP as seenBy left join seenBy.attendance as careContext where careContext.id = :CareContextId and (seenBy.isRIE is null or seenBy.isRIE = FALSE)";
 		
 		Object[] count = getDomainFactory().find(query, new String[] {"CareContextId"}, new Object[] {attendance.getID_CareContext()}).toArray();
 		
@@ -2394,7 +2395,6 @@ public class TrackingImpl extends BaseTrackingImpl
 		return false;	
 	}
 	
-	//WDEV-19006 
 	public TrackingWithPartialAdmissionVo cancelCurrentPartialAdmission(TrackingWithPartialAdmissionVo trWithPartialAdmission, EDPartialAdmissionVo partialAdmission) throws StaleObjectException, UniqueKeyViolationException
 	{
 		if(trWithPartialAdmission == null || partialAdmission== null)
@@ -2441,13 +2441,13 @@ public class TrackingImpl extends BaseTrackingImpl
 		return impl.getHospitalLiteForLocation(getCurrentLocation());
 	}
 
-	//WDEV-22171
 	public Boolean wasPainScaleRecordedForCurrentCareContext(CareContextRefVo careContext)
 	{
 		if(careContext == null)
     		return false;
-    	
-    	String query = "select p from VitalSigns as vs left join vs.careContext as cc left join vs.pain as p where (vs.isRIE = 0 or vs.isRIE is null ) and vs.pain is not null  and  (p.isRIE = 0 or p.isRIE is null ) and cc.id =:careContextID ";
+
+		/* TODO MSSQL case - String query = "select p from VitalSigns as vs left join vs.careContext as cc left join vs.pain as p where (vs.isRIE = 0 or vs.isRIE is null ) and vs.pain is not null  and  (p.isRIE = 0 or p.isRIE is null ) and cc.id =:careContextID "; */
+    	String query = "select p from VitalSigns as vs left join vs.careContext as cc left join vs.pain as p where (vs.isRIE = FALSE or vs.isRIE is null ) and vs.pain is not null  and  (p.isRIE = FALSE or p.isRIE is null ) and cc.id =:careContextID ";
     	
     	List<?> list=getDomainFactory().find(query, new String[] {"careContextID"}, new Object[] {careContext.getID_CareContext()});
     	
@@ -2463,7 +2463,6 @@ public class TrackingImpl extends BaseTrackingImpl
 		return impl.wasTriageAlreadyCreated(tracking);
 	}
 
-	//WDEV-23527
 	public PatIdType getPrimaryIDFromProviderSystem(Category category)
 	{
 		if(category == null )

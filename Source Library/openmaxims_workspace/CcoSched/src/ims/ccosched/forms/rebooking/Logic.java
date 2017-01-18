@@ -272,17 +272,18 @@ public class Logic extends BaseLogic
 
 		if(furtherAppointment() == false)
 		{
-			//Requirement - default the Sequence to Monday, Tuesday, if more than one record in the grid
+			// Requirement - default the Sequence to Monday, Tuesday, if more than one record in the grid
 			form.Sequence().setValue(form.MainGrid().getRows().size() > 1);
 			defaultSequence(form.Sequence().getValue());
-			//simulate CurrentSelection = 0;
+
+			// Simulate CurrentSelection = 0;
 			int rowCount = form.MainGrid().getRows().size();
 			if(rowCount > 0)
 			{
 				form.MainGrid().setValue(form.MainGrid().getRows().get(0).getValue());
 				try
 				{
-					//Force a selChange in the grid
+					// Force a selChange in the grid
 					OnMainGrid();
 				} catch (PresentationLogicException e)
 				{
@@ -293,7 +294,7 @@ public class Logic extends BaseLogic
 		
 		if(furtherAppointment())
 		{	
-			//Set the data in the context
+			// Set the data in the context
 			aData.add(new Object[]{null, minDate, "", "", "", "", "", "", ""});
 			form.getGlobalContext().CcoSched.Rebooking.setData(aData);
 			populateActionDetails();
@@ -1089,21 +1090,11 @@ public class Logic extends BaseLogic
 					Time t1 = (Time)newTimes.get(i);
 					if (!((t.isGreaterThan(t1) && TimeSpan.getTimeSpan(t, t1).getMinutes() >= form.getGlobalContext().CcoSched.Booking.getIntervalRequired().intValue()*60) || (t.isLessThan(t1) && TimeSpan.getTimeSpan(t1, t).getMinutes() >= form.getGlobalContext().CcoSched.Booking.getIntervalRequired().intValue()*60)))
 					{
-						//row.setSelect(false);
 						ShowMessage("The interval required must be " + form.getGlobalContext().CcoSched.Booking.getIntervalRequired().toString() + " hour(s).");
 						return;
 					}
 				}
-//				for (int i = 0; i < form.ChangeTime().getRows().size(); ++i)
-//				{
-//					Time t1 = (form.ChangeTime().getRows().get(i).getNewTime() == null ? form.ChangeTime().getRows().get(i).getOldTime() : form.ChangeTime().getRows().get(i).getNewTime());
-//					if (!((t.isGreaterThan(t1) && TimeSpan.getTimeSpan(t, t1).getMinutes() >= form.getGlobalContext().CcoSched.Booking.getIntervalRequired().intValue()*60) || (t.isLessThan(t1) && TimeSpan.getTimeSpan(t1, t).getMinutes() >= form.getGlobalContext().CcoSched.Booking.getIntervalRequired().intValue()*60)))
-//					{
-//						//row.setSelect(false);
-//						ShowMessage("The interval required must be " + form.getGlobalContext().CcoSched.Booking.getIntervalRequired().toString() + " hour(s).");
-//						return;
-//					}
-//				}
+//
 	
 				for(int i=0; i<alreadyBooked.size(); i++)
 				{
@@ -1117,37 +1108,27 @@ public class Logic extends BaseLogic
 					}
 					if (!((t.isGreaterThan(t1) && TimeSpan.getTimeSpan(t, t1).getMinutes() >= form.getGlobalContext().CcoSched.Booking.getIntervalRequired().intValue()*60) || (t.isLessThan(t1) && TimeSpan.getTimeSpan(t1, t).getMinutes() >= form.getGlobalContext().CcoSched.Booking.getIntervalRequired().intValue()*60)))
 					{
-						//row.setSelect(false);
 						ShowMessage("The interval required must be " + form.getGlobalContext().CcoSched.Booking.getIntervalRequired().toString() + " hour(s).");
 						return;
 					}
 				}
 	
-				Object dt = form.getLocalContext().getCheckedTime();//UIEngine.Context.Get("10020:Checked time");
+				Object dt = form.getLocalContext().getCheckedTime();
 				if (!form.Calendar().getSelectedDates().contains(selectedDate))
 				{
 					form.Calendar().getSelectedDates().add(selectedDate);
 					boolean m_Fire = false;
-					//form.Calendar().check(selectedDate);
-					//OnDateChecked(selectedDate, true, m_Fire, m_ManualEvents);
+
 					m_Fire = true;
 				}
-				//row.setSelect(true);
-//				if (dt != null)
-//					for (int i = 0; i < form.SlotsGrid().getRows().size(); ++i)
-//						if (i != Integer.valueOf(row.getValue()).intValue() && form.SlotsGrid().getRows().get(i).getSelect() == true)
-//							form.SlotsGrid().getRows().get(i).setSelect(false);
-				//form.getLocalContext().setCheckedTime(row.getSlots());
+
 				form.getLocalContext().setCheckedTime(ar.get(0).toString());
 	
 				//TODO - Added data[1] - Please check
 				data[1] = selectedDate;
-				//------------------------------------
-				//data[2] = row.getSlots();
 				data[2] = ar.get(0).toString();
 				data[3] = form.getGlobalContext().CcoSched.Booking.getSessionId();
 				data[4] = form.getGlobalContext().CcoSched.Booking.getSessionDetailsId();
-				//mainGridRow.setNewAppointment(((Date)data[1]).toString(DateFormat.STANDARD) + " - " + row.getSlots());
 				if(furtherAppointment() == false)
 					mainGridRow.setNewAppointment(((Date)data[1]).toString(DateFormat.STANDARD) + " - " + ar.get(0).toString());
 	
@@ -3122,25 +3103,11 @@ public class Logic extends BaseLogic
 			for (int j = 0; j < excludedPeriods.size(); j++) 
 				tmpArr.add(excludedPeriods.get(j));
 			excludedPeriods.clear();
-//			for (int j = 0; j < tmpArr.size(); j++)
-//			{
-//				Time[] excludedPeriod  = (Time[]) tmpArr.get(j);
-//				if (CompareTimes(s, excludedPeriod[1]) > 0 || CompareTimes(e, excludedPeriod[0]) < 0)
-//					excludedPeriods.add(excludedPeriod);
-//				else if (CompareTimes(s, excludedPeriod[0]) >= 0 && CompareTimes(s, excludedPeriod[1]) <= 0 && CompareTimes(e, excludedPeriod[1]) > 0)
-//					excludedPeriods.add(new Time[]{excludedPeriod[1], e});
-//				else if (CompareTimes(s, excludedPeriod[0]) < 0 && CompareTimes(e, excludedPeriod[0]) >= 0 && CompareTimes(e, excludedPeriod[1]) <= 0)
-//					excludedPeriods.add(new Time[]{s, excludedPeriod[0]});
-//				else if (CompareTimes(s, excludedPeriod[0]) > 0 && CompareTimes(s, excludedPeriod[1]) < 0 && CompareTimes(e, excludedPeriod[0]) > 0 && CompareTimes(e, excludedPeriod[1]) < 0) 
-//				{
-//					excludedPeriods.add(new Time[]{excludedPeriod[0], s});
-//					excludedPeriods.add(new Time[]{e, excludedPeriod[1]});
-//				}
-//			}
+
 			for(int j=0; j<tmpArr.size(); j++)
 			{
 				Time[] excludedPeriod = (Time[])tmpArr.get(j);
-				// exclusion times typically start on the hour 
+				// Exclusion times typically start on the hour
 				if (CompareTimes(s, excludedPeriod[1]) >= 0 || CompareTimes(e, excludedPeriod[0]) <= 0)
 					excludedPeriods.add(excludedPeriod);
 				else if (CompareTimes(s,excludedPeriod[0]) >= 0 && CompareTimes(s, excludedPeriod[1]) <= 0 && CompareTimes(e, excludedPeriod[1]) > 0)
@@ -3155,18 +3122,16 @@ public class Logic extends BaseLogic
 			}
 			
 		}
-//		#endregion
-//
-//		#region 4. find HCP period
+
+		// #region 4. find HCP period
 		Time startTimeListOwner = null;
 		Time endTimeListOwner = null;
 		if (form.ListOwner().getValue() != null)
 		{
 			for (int i = 0; i < sessionAppointment.LoseqnoCollection.count(); i++) 
-			//foreach ( dto.Sd_sess_apptsDTO.LoseqnoClient listOwner in sessionAppointment.LoseqnoCollection)
 			{
 				Sd_sess_appts.Sd_sess_apptsLoseqnoRecord listOwner = sessionAppointment.LoseqnoCollection.get(i);
-				if (listOwner.Mos_id.equals(form.ListOwner().getValue().Staff_no)) // WDEV-14442
+				if (listOwner.Mos_id.equals(form.ListOwner().getValue().Staff_no))
 				{
 					try{startTimeListOwner = new Time(listOwner.Stm1, TimeFormat.FLAT6);}catch(RuntimeException e){e.printStackTrace();}
 					if (startTimeListOwner == null)
@@ -4708,33 +4673,9 @@ public class Logic extends BaseLogic
 	}
     private void loadModality()
     {
-//        Lkup lookup = (Lkup)domain.getDTOInstance(Lkup.class);
-//        lookup.Filter.clear();
-//        lookup.Filter.Lkup_typ = "3422"; 
-//        Result result = lookup.list();
-//        if (result != null)
-//        {
-//            ShowMessage(result.getMessage());
-//            return;
-//        }
-//        for (int i = 0; i < lookup.DataCollection.count(); ++i)
-//            if (lookup.DataCollection.get(i).Lkup_stat.equals("Y"))
-//                form.Modality().newRow(lookup.DataCollection.get(i).Lkup_id, lookup.DataCollection.get(i).Lkup_nm);
     }
     private void loadEnergyUnit()
     {
-//        Lkup lookup = (Lkup)domain.getDTOInstance(Lkup.class);
-//        lookup.Filter.clear();
-//        lookup.Filter.Lkup_typ = "3424"; 
-//        Result result = lookup.list();
-//        if (result != null)
-//        {
-//            ShowMessage(result.getMessage());
-//            return;
-//        }
-//        for (int i = 0; i < lookup.DataCollection.count(); ++i)
-//            if (lookup.DataCollection.get(i).Lkup_stat.equals("Y"))
-//                form.EnergyUnit().newRow(lookup.DataCollection.get(i).Lkup_id, lookup.DataCollection.get(i).Lkup_nm);
     }
     
 	public void setAnaesthetic(Lkup value)
@@ -4764,7 +4705,6 @@ public class Logic extends BaseLogic
 	
 	public void setTreatmentPlanActions(Go_ptplact value)
 	{
-		//form.getGlobalContext().CcoSched.ActionUpdate.setTreatmentPlanActions(value);		
 	}
 	
 	public void setTreatmentPlanDetails(Go_ptreatplRecord value)

@@ -500,7 +500,8 @@ public class MoveSessionDialogImpl extends BaseMoveSessionDialogImpl
 		if (session == null || session.getID_Sch_Session() == null)
 			throw new CodingRuntimeException("session is null or id not provided in method countNonCancelledAppointmentsForSession");
 
-		List lstCount = getDomainFactory().find("select count(appt.id) from Booking_Appointment appt where ( appt.isCABBooking is null or appt.isCABBooking = 0 ) and appt.session.id = " + session.getID_Sch_Session() + " and appt.apptStatus.id = " + Integer.valueOf(Status_Reason.BOOKED.getID()));
+		/* TODO MSSQL case - List lstCount = getDomainFactory().find("select count(appt.id) from Booking_Appointment appt where ( appt.isCABBooking is null or appt.isCABBooking = 0 ) and appt.session.id = " + session.getID_Sch_Session() + " and appt.apptStatus.id = " + Integer.valueOf(Status_Reason.BOOKED.getID())); */
+		List lstCount = getDomainFactory().find("select count(appt.id) from Booking_Appointment appt where ( appt.isCABBooking is null or appt.isCABBooking = FALSE ) and appt.session.id = " + session.getID_Sch_Session() + " and appt.apptStatus.id = " + Integer.valueOf(Status_Reason.BOOKED.getID()));
 
 		int count = 0;
 		if (lstCount != null)

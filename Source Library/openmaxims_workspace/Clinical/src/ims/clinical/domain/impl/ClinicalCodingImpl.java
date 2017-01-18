@@ -773,11 +773,12 @@ public class ClinicalCodingImpl extends BaseClinicalCodingImpl
 				if( Boolean.TRUE.equals(isMedication))
 				{
 				    /* TODO MSSQL case - hql.append(" and proc.medicalWL = 1"); */
-					hql.append(" and proc.medicalWL = true");
+					hql.append(" and proc.medicalWL = TRUE");
 				}
 				else
 				{
-					hql.append(" and (proc.medicalWL = 0 or proc.medicalWL is null)");
+					/* TODO MSSQL case - hql.append(" and (proc.medicalWL = 0 or proc.medicalWL is null)"); */
+					hql.append(" and (proc.medicalWL = FALSE or proc.medicalWL is null)");
 				}
 			}
 			if( isEndoscopy != null)
@@ -790,12 +791,11 @@ public class ClinicalCodingImpl extends BaseClinicalCodingImpl
 				}
 				else
 				{
-					hql.append(" and (proc.isEndoscopy = 0 or proc.isEndoscopy is null)");
+					/* TODO MSSQL case - hql.append(" and (proc.isEndoscopy = 0 or proc.isEndoscopy is null)"); */
+					hql.append(" and (proc.isEndoscopy = FALSE or proc.isEndoscopy is null)");
 				}
 			}
-			
-			//----------
-			
+
 			return ProcedureVoAssembler.createProcedureVoCollectionFromProcedure(Keywords.searchByKeywords(factory, name, hql.toString(), names, values));	
 
 		}
@@ -830,7 +830,8 @@ public class ClinicalCodingImpl extends BaseClinicalCodingImpl
     			}
     			else
     			{
-    				hql.append(" and (proc.medicalWL = 0 or proc.medicalWL is null)");
+					/* TODO MSSQL case - hql.append(" and (proc.medicalWL = 0 or proc.medicalWL is null)"); */
+    				hql.append(" and (proc.medicalWL = FALSE or proc.medicalWL is null)");
     			}
     		}
     		if( isEndoscopy != null)
@@ -842,7 +843,8 @@ public class ClinicalCodingImpl extends BaseClinicalCodingImpl
     			}
     			else
     			{
-    				hql.append(" and (proc.isEndoscopy = 0 or proc.isEndoscopy is null)");
+					/* TODO MSSQL case - hql.append(" and (proc.isEndoscopy = 0 or proc.isEndoscopy is null)"); */
+    				hql.append(" and (proc.isEndoscopy = FALSE or proc.isEndoscopy is null)");
     			}
     		}
     		if( specialty !=null)
@@ -851,11 +853,7 @@ public class ClinicalCodingImpl extends BaseClinicalCodingImpl
     			names.add("spec");
     			values.add(getDomLookup(specialty));			
     		}
-    		
-    		//----------
-    		
-    		//return ProcedureVoAssembler.createProcedureVoCollectionFromProcedure(Keywords.searchByKeywords(factory, name, hql.toString(), names, values));	
-    		
+
     		List hits = Keywords.searchByKeywords(factory, name, hql.toString(), names, values);		
     		
     		List ret = new ArrayList();		

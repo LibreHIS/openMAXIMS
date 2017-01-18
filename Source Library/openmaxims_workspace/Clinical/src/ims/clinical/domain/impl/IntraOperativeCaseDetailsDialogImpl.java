@@ -1172,19 +1172,21 @@ public class IntraOperativeCaseDetailsDialogImpl extends BaseIntraOperativeCaseD
 		return false;
 	}
 
-	//WDEV-21840
 	public Boolean isPlannedOrPerformedProcedureAddedAlready(Booking_AppointmentRefVo appt, ProcedureRefVo procedureRef)
 	{
 		if (appt == null || procedureRef==null)
 			throw new CodingRuntimeException("appt or procedure is null in method isPlannedOrPerformedProcedureAddedAlready");
 
 		DomainFactory factory = getDomainFactory();
-		Long plannedProcCount = factory.countWithHQL("select count(iopp.id) from IntraOpPlannedProcedure as iopp left join iopp.plannedProcedure as pp left join pp.procedure as proc where iopp.theatreAppointment.id = :idAppt and proc.id = :procID  and (iopp.isRIE = 0 or iopp.isRIE is null) ", new String[] { "idAppt" , "procID"}, new Object[] { appt.getID_Booking_Appointment(), procedureRef.getID_Procedure() });
+
+		/* TODO MSSQL case - Long plannedProcCount = factory.countWithHQL("select count(iopp.id) from IntraOpPlannedProcedure as iopp left join iopp.plannedProcedure as pp left join pp.procedure as proc where iopp.theatreAppointment.id = :idAppt and proc.id = :procID  and (iopp.isRIE = 0 or iopp.isRIE is null) ", new String[] { "idAppt" , "procID"}, new Object[] { appt.getID_Booking_Appointment(), procedureRef.getID_Procedure() }); */
+		Long plannedProcCount = factory.countWithHQL("select count(iopp.id) from IntraOpPlannedProcedure as iopp left join iopp.plannedProcedure as pp left join pp.procedure as proc where iopp.theatreAppointment.id = :idAppt and proc.id = :procID  and (iopp.isRIE = FALSE or iopp.isRIE is null) ", new String[] { "idAppt" , "procID"}, new Object[] { appt.getID_Booking_Appointment(), procedureRef.getID_Procedure() });
 		
 		if (plannedProcCount!=null && plannedProcCount>0)
 			return true;
-		
-		Long performedProcCount = factory.countWithHQL("select count(ppi.id) from PerformedProceduresIntraO as ppi left join ppi.performedProcedure as pp left join pp.procedure as proc where ppi.theatreAppointment.id = :idAppt and proc.id = :procID and (ppi.isRIE = 0 or ppi.isRIE is null) ", new String[] { "idAppt" , "procID"}, new Object[] { appt.getID_Booking_Appointment(), procedureRef.getID_Procedure() });
+
+		/* TODO MSSQL case - Long performedProcCount = factory.countWithHQL("select count(ppi.id) from PerformedProceduresIntraO as ppi left join ppi.performedProcedure as pp left join pp.procedure as proc where ppi.theatreAppointment.id = :idAppt and proc.id = :procID and (ppi.isRIE = 0 or ppi.isRIE is null) ", new String[] { "idAppt" , "procID"}, new Object[] { appt.getID_Booking_Appointment(), procedureRef.getID_Procedure() }); */
+		Long performedProcCount = factory.countWithHQL("select count(ppi.id) from PerformedProceduresIntraO as ppi left join ppi.performedProcedure as pp left join pp.procedure as proc where ppi.theatreAppointment.id = :idAppt and proc.id = :procID and (ppi.isRIE = FALSE or ppi.isRIE is null) ", new String[] { "idAppt" , "procID"}, new Object[] { appt.getID_Booking_Appointment(), procedureRef.getID_Procedure() });
 		
 		if (performedProcCount!=null && performedProcCount>0)
 			return true;
@@ -1192,7 +1194,6 @@ public class IntraOperativeCaseDetailsDialogImpl extends BaseIntraOperativeCaseD
 		return false;
 	}
 
-	//WDEV-21840
 	public Boolean isAnyProcedurePerormed(Booking_AppointmentRefVo appt)
 	{
 		if (appt == null )
@@ -1267,8 +1268,9 @@ public class IntraOperativeCaseDetailsDialogImpl extends BaseIntraOperativeCaseD
 			throw new CodingRuntimeException("appt or procedure is null in method isPlannedOrPerformedProcedureAddedAlready");
 
 		DomainFactory factory = getDomainFactory();
-		
-		Long performedProcCount = factory.countWithHQL("select count(ppi.id) from PerformedProceduresIntraO as ppi left join ppi.performedProcedure as pp left join pp.procedure as proc where ppi.theatreAppointment.id = :idAppt and proc.id = :procID and (ppi.isRIE = 0 or ppi.isRIE is null) ", new String[] { "idAppt" , "procID"}, new Object[] { appt.getID_Booking_Appointment(), procedureRef.getID_Procedure() });
+
+		/* TODO MSSQL case - Long performedProcCount = factory.countWithHQL("select count(ppi.id) from PerformedProceduresIntraO as ppi left join ppi.performedProcedure as pp left join pp.procedure as proc where ppi.theatreAppointment.id = :idAppt and proc.id = :procID and (ppi.isRIE = 0 or ppi.isRIE is null) ", new String[] { "idAppt" , "procID"}, new Object[] { appt.getID_Booking_Appointment(), procedureRef.getID_Procedure() }); */
+		Long performedProcCount = factory.countWithHQL("select count(ppi.id) from PerformedProceduresIntraO as ppi left join ppi.performedProcedure as pp left join pp.procedure as proc where ppi.theatreAppointment.id = :idAppt and proc.id = :procID and (ppi.isRIE = FALSE or ppi.isRIE is null) ", new String[] { "idAppt" , "procID"}, new Object[] { appt.getID_Booking_Appointment(), procedureRef.getID_Procedure() });
 		
 		if (performedProcCount!=null && performedProcCount>0)
 			return true;
@@ -1276,7 +1278,6 @@ public class IntraOperativeCaseDetailsDialogImpl extends BaseIntraOperativeCaseD
 		return false;
 	}
 
-	//WDEV-22721
 	public void removeSkinPrep(SkinPrepIntraOpRefVo skinPrepRefVo)
 	{
 		String methodName = "removeSkinPrep";

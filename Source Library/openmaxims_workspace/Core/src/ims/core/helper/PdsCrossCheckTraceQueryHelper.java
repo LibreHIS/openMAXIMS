@@ -354,20 +354,4 @@ public class PdsCrossCheckTraceQueryHelper extends PdsQuery
 		
 		return pat;
 	}
-
-	/*
-	private String loadFileFromClasspath(String filename) throws IOException
-	{
-		InputStream in = this.getClass().getResourceAsStream(filename);
-		
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	    byte[] buffer = new byte[1024*2];
-	    int length = 0;
-	    while ((length = in.read(buffer)) != -1) 
-	    {
-	        baos.write(buffer, 0, length);
-	    }
-	    return new String(baos.toByteArray());		
-	}
-	*/
 }

@@ -73,16 +73,6 @@ public class Logic extends BaseLogic
 	{
 		form.grdLocations().getRows().clear();
 		
-		/*ILocation[] locations = engine.getLocationProvider().listLocations();
-		if(locations != null)
-		{
-			for(int x = 0; x < locations.length; x++)
-			{
-				if(shouldAddLocation(locations[x]))
-					addLocation(locations[x]);
-			}
-		}*/
-		
 		setNoteMessage();
 	}
 	private int getMaximumSelectionAllowed()
@@ -108,26 +98,7 @@ public class Logic extends BaseLogic
 		else
 			form.lblNote().setValue("Note: Up to " + maximum + " locations can be selected.");		
 	}
-	/*private boolean shouldAddLocation(ILocation location)
-	{
-		ILocation[] locations = form.getGlobalContext().Admin.getManagedLocations();
-		if(locations == null)
-			return true;
-		
-		for(int x = 0; x < locations.length; x++)
-		{
-			if(locations[x] != null && locations[x].getID() == location.getID())
-				return false;
-		}	
-		
-		return true;
-	}
-	private void addLocation(ILocation location) 
-	{
-		GenForm.grdLocationsRow row = form.grdLocations().getRows().newRow();
-		row.setcolLocation(location.getName());
-		row.setValue(location);
-	}*/
+
 	private ILocation[] getLocations() 
 	{
 		int count = 0;

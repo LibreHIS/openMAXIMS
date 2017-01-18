@@ -138,38 +138,26 @@ public class Logic extends BaseLogic
 		
 		OrderInvestigationBookingVoCollection voColl = new OrderInvestigationBookingVoCollection();
 		
-		//add the radiology results from the grid
+		// Add the radiology results from the grid
 		for (int i = 0 ; i < form.grdInvestigations().getRows().size() ; i++)
 		{
 			if (form.grdInvestigations().getRows().get(i).getColInclude())
 				voColl.add(form.grdInvestigations().getRows().get(i).getValue());
 		}
-		
-		//WDEV-18619 add the pathology results
-		/*OrderInvestigationBookingVoCollection pathInvs = form.getLocalContext().getPathologyInvestigations();
-		
-		for (int j = 0 ; pathInvs != null && j <  pathInvs.size() ; j++)
-		{
-				if ( ! voColl.contains(pathInvs.get(j)))
-					voColl.add(pathInvs.get(j));
-		}*/
-		
-		//wdev-18892
-		//add the pathology results from the grid
+
+		// Add the pathology results from the grid
 		for (int i = 0 ; i < form.grdPathologyRelevantResults().getRows().size() ; i++)
 		{
 			if( form.grdPathologyRelevantResults().getRows().get(i).getColumnInclude())
 				voColl.add(form.grdPathologyRelevantResults().getRows().get(i).getValue());
 		}
 		
-		//add the clinical results from the grid
+		// Add the clinical results from the grid
 		for (int i = 0 ; i < form.grdClinicalRelevantResults().getRows().size() ; i++)
 		{
 			if( form.grdClinicalRelevantResults().getRows().get(i).getColumnInclude())
 				voColl.add(form.grdClinicalRelevantResults().getRows().get(i).getValue());
 		}
-		
-		//---------
 		
 		voClinInfo.setResults(voColl);
 		

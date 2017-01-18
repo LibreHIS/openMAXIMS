@@ -123,7 +123,9 @@ public class EDAssessmentComponentImpl extends BaseEDAssessmentComponentImpl
 		DomainFactory factory = getDomainFactory();
 		
 		StringBuilder hqlJoins = new StringBuilder("select tr , (select count (alert.id) from PatientAlert as alert where ( alert.isRIE = false or alert.isRIE is null ) and alert.isCurrentlyActiveAlert = true and alert.patient.id = p.id), (select count (allergy.id) from PatientAllergy as allergy where ( allergy.isRIE = false or allergy.isRIE is null ) and allergy.isCurrentlyActiveAllergy = true and allergy.patient.id = p.id) from Tracking as tr left join tr.patient as p left join tr.attendance as att ");
-		StringBuilder hqlConditions = new StringBuilder(" where ((tr.isDischarged is null or tr.isDischarged = 0) and att.outcome is null) ");
+
+		/* TODO MSSQL case - StringBuilder hqlConditions = new StringBuilder(" where ((tr.isDischarged is null or tr.isDischarged = 0) and att.outcome is null) "); */
+		StringBuilder hqlConditions = new StringBuilder(" where ((tr.isDischarged is null or tr.isDischarged = FALSE) and att.outcome is null) ");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
@@ -645,17 +647,16 @@ public class EDAssessmentComponentImpl extends BaseEDAssessmentComponentImpl
     		//return true;
     		return (AttendanceRequiringContracting)list.get(0);
     	}
-    	//return false;
     	return null;
     }
 
-    //WDEV-18994
 	public Boolean wasPainScaleRecordedForCurrentCareContext(CareContextRefVo careContext)
 	{
 		if(careContext == null)
     		throw new CodingRuntimeException("CareContext cannot be null.");
-    	
-    	String query = "select p from VitalSigns as vs left join vs.careContext as cc left join vs.pain as p where (vs.isRIE = 0 or vs.isRIE is null ) and vs.pain is not null  and  (p.isRIE = 0 or p.isRIE is null ) and cc.id =:careContextID ";
+
+		/* TODO MSSQL case - String query = "select p from VitalSigns as vs left join vs.careContext as cc left join vs.pain as p where (vs.isRIE = 0 or vs.isRIE is null ) and vs.pain is not null  and  (p.isRIE = 0 or p.isRIE is null ) and cc.id =:careContextID "; */
+    	String query = "select p from VitalSigns as vs left join vs.careContext as cc left join vs.pain as p where (vs.isRIE = FALSE or vs.isRIE is null ) and vs.pain is not null  and  (p.isRIE = FALSE or p.isRIE is null ) and cc.id =:careContextID ";
     	
     	List<?> list=getDomainFactory().find(query, new String[] {"careContextID"}, new Object[] {careContext.getID_CareContext()});
     	
@@ -665,7 +666,6 @@ public class EDAssessmentComponentImpl extends BaseEDAssessmentComponentImpl
 		return false;
 	}
 
-	//WDEV-18988
 	public TriageTabConfigVo getTabsConfigForRole(Integer roleId)
 	{
 		if (roleId == null)

@@ -73,7 +73,10 @@ public class EDWhiteBoardNewDialogImpl extends BaseEDWhiteBoardNewDialogImpl
 			throw new CodingRuntimeException("Cannot list Tracking Area for a null EDLocation Id.");
 		
 		DomainFactory factory = getDomainFactory();
-		String query = "select ta   from TrackingConfiguration as trc left join trc.areas as ta where ta.eDLocation.id = :EDLocationId and ta.status.id = :ActiveStatus and ta.isRegistrationArea = 0 order by index(ta)";//order by upper(ta.areaDisplayName)";
+
+		/* TODO MSSQL case - String query = "select ta   from TrackingConfiguration as trc left join trc.areas as ta where ta.eDLocation.id = :EDLocationId and ta.status.id = :ActiveStatus and ta.isRegistrationArea = 0 order by index(ta)"; */
+		String query = "select ta   from TrackingConfiguration as trc left join trc.areas as ta where ta.eDLocation.id = :EDLocationId and ta.status.id = :ActiveStatus and ta.isRegistrationArea = FALSE order by index(ta)";
+
 		List<?> list = factory.find(query, new String[] {"EDLocationId", "ActiveStatus"}, new Object[] {edLoc.getID(), PreActiveActiveInactiveStatus.ACTIVE.getID()});
 		
 		if( list != null && list.size() > 0)

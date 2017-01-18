@@ -66,34 +66,6 @@ public class BayLayoutConfigImpl extends BaseBayLayoutConfigImpl
 		return FloorBedSpaceLayoutLiteVoAssembler.createFloorBedSpaceLayoutLiteVoCollectionFromFloorBedSpaceLayout(factory.find(hql, markers, values));		
 	}
 
-//	public void saveBayLayout(BayLayoutConfigListVoCollection coll)
-//			throws StaleObjectException 
-//	{		
-//		if(coll == null || coll.size() == 0)
-//			return;
-//		
-//		DomainFactory factory = getDomainFactory();
-//		
-//		for (int i = 0; i < coll.size(); i++) 
-//		{
-//			BayLayoutConfigListVo vo = coll.get(i);
-//			BayConfigVo bay = vo.getBayConfigVo();
-//			LocationLiteVo ward = vo.getLocationLiteVo();
-//			
-//			FloorBedSpaceLayoutVo floorBedSpaceLayout = getFloorBedSpaceLayout(((BayConfigVo) bay).getFloorBedSpaceLayout());
-//			BedSpaceVoCollection bedSpaceColl = floorBedSpaceLayout.getBedSpaces();
-//			for (int j = 0; j < bedSpaceColl.size(); j++) 
-//			{
-//				BedSpaceStateLiteVo bedSpaceState = getBedSpaceState(bedSpaceColl.get(j));
-//				bedSpaceState.setWard((LocationLiteVo) ward);
-//				BedSpaceState dom = BedSpaceStateLiteVoAssembler.extractBedSpaceState(factory, bedSpaceState);
-//				factory.save(dom);
-//			}			
-//			
-//			factory.save(BayConfigVoAssembler.extractBayConfig(factory, (BayConfigVo) bay));
-//		}		
-//	}
-
 	public LocationLiteVoCollection listActiveHospitalsLite()
 	{
 		BedInfoDialog impl = (BedInfoDialog) getDomainImpl(BedInfoDialogImpl.class);

@@ -675,13 +675,10 @@ public class Logic extends BaseLogic
 		else
 		{
 			form.setMode(FormMode.EDIT);
-			//clearDetails();
-			//onGrdAssessmentSelectionChanged();
 			setScreenMode(NEW);
 			form.dteScreening().setValue(new Date());
 			form.setcustomControlAuthEnabled(true);
 			form.customControlAuth().initializeComponent();
-			//form.grdAssessment().setValue(null);
 			form.getLocalContext().setbNewHeaderRecord(Boolean.FALSE);
 			GenForm.grdMRSAAssChildRow cRow = form.grdMRSAAssChild().getRows().newRow();
 			cRow.setValue(new MRSASitesResultsVo());
@@ -693,7 +690,6 @@ public class Logic extends BaseLogic
 		form.getContextMenus().getGenericGridAddItem().setVisible(form.getMode().equals(FormMode.VIEW) && form.recbrAssessment().getValue() != null && form.recbrAssessment().getValue().equals(form.getGlobalContext().Core.getCurrentCareContext()));
 		form.getContextMenus().getGenericGridUpdateItem().setVisible(form.getMode().equals(FormMode.VIEW) && form.grdAssessment().getSelectedRowIndex()>=0 && form.recbrAssessment().getValue() != null && form.recbrAssessment().getValue().equals(form.getGlobalContext().Core.getCurrentCareContext()));
 		form.btnUpdate().setVisible(form.getMode().equals(FormMode.VIEW) && form.grdAssessment().getSelectedRowIndex()>=0 && (form.recbrAssessment().getValue() != null) && (form.recbrAssessment().getValue().equals(form.getGlobalContext().Core.getCurrentCareContext())));
-		//form.getContextMenus().getGenericGridRemoveItem().setVisible(form.grdAssessment().getSelectedRowIndex()>=0 && form.grdAssessment().isEnabled());
 		form.getContextMenus().getGenericGridRemoveItem().setVisible(false);
 		form.getContextMenus().getGenericGridMoveDownItem().setVisible(false);
 		form.getContextMenus().getGenericGridMoveUpItem().setVisible(false);

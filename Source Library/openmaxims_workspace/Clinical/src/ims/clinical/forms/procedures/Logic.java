@@ -1209,7 +1209,6 @@ public class Logic extends BaseLogic
 			
 			// TODO - Uncomment flag here
 			form.getContextMenus().getProcedureADDItem().setVisible(viewMode && !(ConfigFlag.UI.PLANNED_PROCEDURES_TO_BE_CREATED_VIA_SFS.getValue() && Boolean.TRUE.equals(form.getLocalContext().getPlannedProceduresWithoutIntraOperativeExists())));
-			// form.getContextMenus().getProcedureUPDATEItem().setVisible(viewMode && form.grdProcedure().getSelectedRowIndex() >= 0);
 			form.getContextMenus().getProcedureUPDATEItem().setVisible(viewMode && form.dyngrdProcedure().getSelectedRow() != null);
 			form.getContextMenus().getProcedureVIEWASSOCIATIONSItem().setVisible(viewMode && hasAssociations());
 		}
@@ -1224,8 +1223,7 @@ public class Logic extends BaseLogic
 			else
 			{
 				boolean viewMode = form.getMode().equals(FormMode.VIEW);
-				//form.getContextMenus().getProcedurePERFORMEDItem().setVisible(viewMode);// true);
-				form.getContextMenus().getProcedureCANCELItem().setVisible(viewMode);// true);
+				form.getContextMenus().getProcedureCANCELItem().setVisible(viewMode); // true);
 				form.getContextMenus().getProcedureVIEWASSOCIATIONSItem().setVisible(viewMode && hasAssociations());
 			}
 		}

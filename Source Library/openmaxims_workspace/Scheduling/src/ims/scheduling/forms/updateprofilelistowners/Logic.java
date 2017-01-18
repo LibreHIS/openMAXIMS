@@ -367,20 +367,6 @@ public class Logic extends BaseLogic
 		form.btnSave().setEnabled(Boolean.TRUE.equals(form.getLocalContext().getContextualMenuActionWasLaunched()));
 	}
 	
-	/*private boolean isListOwnerLinkedToSlot(Profile_ListOwnerVo listOwner, Profile_SlotGenericVoCollection collSlots)
-	{
-		if (listOwner==null || collSlots==null || collSlots.size()==0)
-			return false;
-		
-		for (int i=0;i<collSlots.size();i++)
-		{
-			if (listOwner.getHCPIsNotNull() && collSlots.get(i).getSlotRespIsNotNull() && listOwner.getHCP().equals(collSlots.get(i).getSlotResp().getHCP()))
-				return true;
-		}
-		
-		return false;
-	}*/
-	
 	private void addListOwner()
 	{
 		grdListOwnersRow row = form.grdListOwners().getRows().newRow(true);

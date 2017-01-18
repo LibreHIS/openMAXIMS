@@ -182,8 +182,7 @@ public class AllocateCubicleImpl extends BaseAllocateCubicleImpl
 		
 	}
 
-	//wdev-17430
-	public Boolean isAllocateCubicleForCurrentTrackingArea(TrackingAreaRefVo trackingAreaRef, CareContextRefVo careContext) 
+	public Boolean isAllocateCubicleForCurrentTrackingArea(TrackingAreaRefVo trackingAreaRef, CareContextRefVo careContext)
 	{
 		if( trackingAreaRef == null )
 			throw new CodingRuntimeException("Tracking Area not provided");
@@ -192,8 +191,9 @@ public class AllocateCubicleImpl extends BaseAllocateCubicleImpl
 			throw new CodingRuntimeException("Current Care Context not provided");
 		
 		DomainFactory factory = getDomainFactory();
-		 
-		String hsql = "select c1_1	from CubicleAllocation as c1_1 left join c1_1.trackingArea as t1_1 left join c1_1.attendance as cc where (t1_1.id = :id and cc.id = :CareContextId and (c1_1.isRIE is null or c1_1.isRIE = 0))";
+
+		/* TODO MSSQL case - String hsql = "select c1_1	from CubicleAllocation as c1_1 left join c1_1.trackingArea as t1_1 left join c1_1.attendance as cc where (t1_1.id = :id and cc.id = :CareContextId and (c1_1.isRIE is null or c1_1.isRIE = 0))"; */
+		String hsql = "select c1_1	from CubicleAllocation as c1_1 left join c1_1.trackingArea as t1_1 left join c1_1.attendance as cc where (t1_1.id = :id and cc.id = :CareContextId and (c1_1.isRIE is null or c1_1.isRIE = FALSE))";
 		 
 		List cubicle = factory.find(hsql, new String[] {"id", "CareContextId"}, new Object[] {trackingAreaRef.getID_TrackingArea(), careContext.getID_CareContext()});
 		if(cubicle != null && cubicle.size() > 0)
@@ -204,8 +204,7 @@ public class AllocateCubicleImpl extends BaseAllocateCubicleImpl
 		return Boolean.FALSE;
 	}
 
-	//wdev-17430
-	public TrackingLiteVo getTrackingLiteVo(TrackingRefVo trackingRef) 
+	public TrackingLiteVo getTrackingLiteVo(TrackingRefVo trackingRef)
 	{
 		if(	trackingRef == null)
 			throw new CodingRuntimeException("Tracking not provided");

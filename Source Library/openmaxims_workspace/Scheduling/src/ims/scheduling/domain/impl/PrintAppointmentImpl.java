@@ -202,15 +202,16 @@ public class PrintAppointmentImpl extends BasePrintAppointmentImpl
 			else
 				hql+=("," + idsArrayList.get(i));
 		}
-		hql += " )";		
-		hql +=" and (ba.isRIE is null OR ba.isRIE = 0 )";
+		hql += " )";
+
+		/* TODO MSSQL case - hql +=" and (ba.isRIE is null OR ba.isRIE = 0 )"; */
+		hql +=" and (ba.isRIE is null OR ba.isRIE = FALSE )";
 		
 		return factory.find(hql);
 		
 	}
 
 
-	//WDEV-19381
 	public ReportTemplateVo getReportTemplateVo(TemplateBoRefVo reportTemplateRef)
 	{
 		if (reportTemplateRef==null)

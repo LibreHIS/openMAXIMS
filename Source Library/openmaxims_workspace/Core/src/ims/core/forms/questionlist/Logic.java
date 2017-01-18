@@ -182,7 +182,7 @@ public class Logic extends BaseLogic
 		grdSelectedQuestionsRow row;
 		for (int i = 0; voColl != null && i < voColl.size(); i++) 
 		{
-			if(isQuestionAdded(voColl.get(i)) == false)
+			if (isQuestionAdded(voColl.get(i)) == false)
 			{
 				row = form.lyrTrees().tabPageSelect().grdSelectedQuestions().getRows().newRow();
 				row.setReadOnly(false);
@@ -190,11 +190,6 @@ public class Logic extends BaseLogic
 				setRowData(row, voColl.get(i));
 			}
 		}
-		
-		//Code to deal with the Selected Questions displayed hierarchical
-		/*ArrayList dataColl = getSelectedQuestions();
-		for (int i = 0; i < dataColl.size(); i++) 
-			addSelectedItem((SelectData)dataColl.get(i));*/
 		
 		form.getLocalContext().setMoveRecords(new Boolean(false));
 	}
@@ -211,7 +206,7 @@ public class Logic extends BaseLogic
 		QuestionInformationShortVoCollection voColl = new QuestionInformationShortVoCollection();
 		grdListedQuestionsRow rowParent, rowChild;
 		Object value;
-		//Get the parents first (as it's a requirement to be displayed first)
+		// Get the parents first (as it's a requirement to be displayed first)
 		for(int i=0; i<form.lyrTrees().tabPageSelect().grdListedQuestions().getRows().size(); i++)
 		{
 			for(int j=0; j<form.lyrTrees().tabPageSelect().grdListedQuestions().getRows().get(i).getRows().size(); j++)

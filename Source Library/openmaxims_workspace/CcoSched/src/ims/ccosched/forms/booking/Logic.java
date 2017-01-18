@@ -196,38 +196,6 @@ public class Logic extends BaseLogic
 			form.Calendar().setEnabled(true);
 		
 		SetTreatmentPlanActivity();
-
-		//start WDEV-14216
-/*	
-		int activities = 0;
-
-		if (form.Activity().getNodes() != null)
-		{
-			activities = form.Activity().getNodes().size();
-		}
-
-		if (form.getGlobalContext().getPatTreatmentPlanAction() != null)
-		{
-			if (form.getGlobalContext().getPatTreatmentPlanAction().getActivityIsNotNull() 
-				&& form.getGlobalContext().getPatTreatmentPlanAction().getActiveIsNotNull() 
-				&& form.getGlobalContext().getPatTreatmentPlanAction().getActive().equals(true))
-			{
-				for (int i = 0; i < activities; i++)
-				{
-					if (form.Activity().getNodes().get(i).getText().equals(form.getGlobalContext().getPatTreatmentPlanAction().getActivity().getName()))
-					{
-						form.Activity().setValue(form.Activity().getNodes().get(i).getValue());
-						if (form.Activity().getSelectedNode().getNodes().size() > 0)
-						{
-							form.Activity().getSelectedNode().setExpanded(true);
-						}
-						break;
-					}
-				}
-			}
-		}
-		*/
-		//end
 	}
 
 	private void setPIDTooltip(PatientShort patientShort, PatTreatmentPlanLiteVo treatmentPlan, PatTreatPlanActionVoCollection collection)
@@ -235,11 +203,6 @@ public class Logic extends BaseLogic
 		engine.clearAlertsByType(PatientAlertCCO.class);
 		PatTreatPlanActionVo actionRecord = (collection!= null && collection.size() > 0?collection.get(0):null);
 		engine.addAlert(new PatientAlertCCO(new ims.ccosched.Helper.PIDTooltip().getTooltip2(patientShort, treatmentPlan, actionRecord)));
-		
-//		engine.clearAlertsByType(PatientAlertCCO.class);
-//		Go_ptplactRecord go_ptplactRecord = actions!= null && actions.DataCollection.count() > 0?actions.DataCollection.get(0):null;
-//		engine.addAlert(new PatientAlertCCO(new ims.ccosched.Helper.PIDTooltip().getTooltip(patientShort, treatmentPlan, go_ptplactRecord)));
-		
 	}
 
 	private void SetTreatmentPlanActivity()
@@ -249,10 +212,8 @@ public class Logic extends BaseLogic
 		PatTreatPlanActionVoCollection actionDetails = form.getGlobalContext().getPatTreatmentPlanIsNotNull()?form.getGlobalContext().getPatTreatmentPlan().getActions():null;
 		if (form.getGlobalContext().CcoSched.TreatmentPlan.getIgnoreActionID2() != null || actionDetails == null)
 		{
-			//boolean oldVal = form.TreatmentPlanActivities().getValue(); 
 			form.TreatmentPlanActivities().setValue(false);
-			//if(oldVal == true)
-				onTreatmentPlanActivitiesValueChanged();
+			onTreatmentPlanActivitiesValueChanged();
 			form.TreatmentPlanActivities().setEnabled(false);
 			form.getGlobalContext().CcoSched.TreatmentPlan.setIgnoreActionID1(Boolean.TRUE);
 		}
@@ -1053,27 +1014,9 @@ public class Logic extends BaseLogic
 	
 	private void SetDefaultAppointmentTime(ArrayList list)
 	{
-		/*
-		Form.DefaultAppointmentTime.Value = "";
-		for (int i = 0; i < list.Count; i++)
-		{
-			if (Form.DefaultAppointmentTime.Value.Length > 0)
-				Form.DefaultAppointmentTime.Value += " ";
-			Form.DefaultAppointmentTime.Value += (string)list[i];
-		}
-		*/
-		
-		/*form.DefaultAppointmentTime().setValue("");
-		for (int i = 0; i < list.size(); i++)
-		{
-			//ICCO934 3) the control returns null now, not empty strings 
-			if (form.DefaultAppointmentTime().getValue() != null && form.DefaultAppointmentTime().getValue().length() > 0)
-				form.DefaultAppointmentTime().setValue(form.DefaultAppointmentTime().getValue() != null?form.DefaultAppointmentTime().getValue():"" + " ");
-			form.DefaultAppointmentTime().setValue(form.DefaultAppointmentTime().getValue() != null?form.DefaultAppointmentTime().getValue():"" + (String)list.get(i));
-		}*/
 	}
 	
-	//old method OnActivitySelected
+	// Old method OnActivitySelected
 	protected void onActivityTreeViewSelectionChanged(ims.framework.controls.TreeNode selectedNode)
 	{
 		bChangeResouces = false;
@@ -1090,7 +1033,6 @@ public class Logic extends BaseLogic
 			form.Calendar().setSelectedDay(null);
 			
 			Date dt = new Date(form.Calendar().getCurrentMonth().getYear(), form.Calendar().getCurrentMonth().getMonth(), 1);
-			//for (int i = 1; i <= DateTime.DaysInMonth(form.Calendar().CurrentMonth.Year, form.Calendar().CurrentMonth.Month); ++i)
 			for (int i = 1; i <= dt.getNumberOfDaysInTheMonth(); ++i)
 				form.Calendar().addNoSessionDates(new Date(form.Calendar().getCurrentMonth().getYear(), form.Calendar().getCurrentMonth().getMonth(), i));
 		}
@@ -1144,7 +1086,6 @@ public class Logic extends BaseLogic
 			String actionID = new String();
 			Hashtable values = form.getLocalContext().getActivityTree();
 
-			//Context.ContextBooking.IntervalRequired = 0;
 			form.getGlobalContext().CcoSched.Booking.setIntervalRequired(new Integer(0));
 			if(tp && values != null && selectedNode != null)
 			{
@@ -1154,13 +1095,8 @@ public class Logic extends BaseLogic
 				groupID = tpActionSelected.getActivityGroupIsNotNull()?tpActionSelected.getActivityGroup().getID_ActivityGroup().toString():"";
 				activityID = tpActionSelected.getActivityIsNotNull()?tpActionSelected.getActivity().getActivityIdIsNotNull()?tpActionSelected.getActivity().getActivityId().toString():"":"";
 				actionID = tpActionSelected.getActionIsNotNull()?tpActionSelected.getAction().getActionIsNotNull()?tpActionSelected.getAction().getAction().getID_ActionIsNotNull()?tpActionSelected.getAction().getAction().getID_Action().toString():"":"":"";
-				//#region Fix 25 June 2003
+
 				form.getGlobalContext().CcoSched.TreatmentPlan.setActionID(tpActionSelected.getActionIsNotNull()?tpActionSelected.getAction().getActionIsNotNull()?tpActionSelected.getAction().getAction().getID_Action().toString():"":"");
-				//#endregion
-				// Category
-				//form.PatientCategory().setValue(tpActionSelected.Txcattypetxt);
-				// Transport
-				//form.Transport().setValue(tpActionSelected.Transreq_txt);
 
 				// Interval Required
 				ActivityActionVoCollection activityActions = form.getGlobalContext().CcoSched.ActivityView.getActivityActions();
@@ -1293,43 +1229,7 @@ public class Logic extends BaseLogic
 					//Fire manually the event
 					onEnergyValueChanged();
 					if (sd == null)
-						ShowMessage("Energy is empty");	
-					
-//replaced code					
-//					// Modality
-//					Go_ptplact.Go_ptplactRecord tpActionSelected = (Go_ptplact.Go_ptplactRecord)values.get(selectedNode.getValue());
-//					form.Modality().newRow(tpActionSelected.Modality_id, tpActionSelected.Modality_idtxt);
-//					form.Modality().setValue(tpActionSelected.Modality_id);
-//					//Context.ContextBooking.ModalityId = tpActionSelected.attModality_id; // ???????????????????
-//					form.getLocalContext().setModalityId(tpActionSelected.Modality_id);
-//					// Unit
-//					form.EnergyUnit().newRow(tpActionSelected.Modalty_unit_id, tpActionSelected.Modality_unit_idtxt);
-//					form.EnergyUnit().setValue(tpActionSelected.Modalty_unit_id);
-//					// Dose
-//					Integer si = GetInteger(tpActionSelected.Tl_dose);
-//					form.Dose().setValue(si ==null ? new Integer(0) : si);
-//					if (si == null)
-//						ShowMessage("Dose is empty");
-//		
-//					// Fractions
-//					si = GetInteger(tpActionSelected.Tl_fractions);
-//					form.Fractions().setValue(si ==null ? new Integer(0) : si);
-//					if (si == null)
-//						ShowMessage("Fractions is empty");	
-//					// Duration
-//					si = GetInteger(tpActionSelected.Tl_dur);
-//					form.Duration().setValue(si ==null ? new Integer(0) : si);
-//					if (si == null)
-//						ShowMessage("Duration is empty");					
-//					// Energy
-//					Float sd = GetFloat(tpActionSelected.Modality_enrgy);
-//					bChangeResouces = true;
-//					form.Energy().setValue( sd == null? new Float(0) : sd); // fire ChangeResources
-//					//Fire manually the event
-//					onEnergyValueChanged();
-//					if (sd == null)
-//						ShowMessage("Energy is empty");	
-				}
+						ShowMessage("Energy is empty");
 				else
 				{
 				
@@ -1904,13 +1804,11 @@ public class Logic extends BaseLogic
 		form.NumberOfFirstAppointments().setValue("");
 		form.bActions().setEnabled(false);
 
-		//Context.ContextBooking.ClearDateSessionSlotsList();
 		form.getGlobalContext().CcoSched.Booking.setDateSessionSlotsList(null);
-		//Context.ContextBooking.ClearSelectedSessions();
 		form.getGlobalContext().CcoSched.Booking.setSelectedSessions(null);
-		//Context.ContextBooking.SessionIndex = 0;
 		form.getGlobalContext().CcoSched.Booking.setSessionIndex(new Integer(0));
-		//05/01/2005 - Clear the Selected Session Dates
+
+		// Clear the Selected Session Dates
 		form.getGlobalContext().CcoSched.Booking.setCalendarSelectedDates(null);
 	}
 	

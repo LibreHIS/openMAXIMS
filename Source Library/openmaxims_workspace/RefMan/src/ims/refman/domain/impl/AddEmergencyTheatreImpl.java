@@ -101,8 +101,10 @@ public class AddEmergencyTheatreImpl extends BaseAddEmergencyTheatreImpl
 
 		DomainFactory factory = getDomainFactory();
 
+		/* TODO MSSQL case - StringBuffer hql = new StringBuffer("select proc from ProcedureHotlist as procHotList left join procHotList.hotlistItem as procHotListItem left join procHotListItem.procedure as proc left join proc.keywords as kw " +
+						   "where (proc.outpatientOnlyProcedure = 0 or proc.outpatientOnlyProcedure is null ) and (proc.medicalWL = 0 or proc.medicalWL is null )");  */
 		StringBuffer hql = new StringBuffer("select proc from ProcedureHotlist as procHotList left join procHotList.hotlistItem as procHotListItem left join procHotListItem.procedure as proc left join proc.keywords as kw " +
-						   "where (proc.outpatientOnlyProcedure = 0 or proc.outpatientOnlyProcedure is null ) and (proc.medicalWL = 0 or proc.medicalWL is null )"); 
+						   "where (proc.outpatientOnlyProcedure = FALSE or proc.outpatientOnlyProcedure is null ) and (proc.medicalWL = FALSE or proc.medicalWL is null )");
 		
 		ArrayList names = new ArrayList();
 		ArrayList values = new ArrayList();
@@ -124,7 +126,9 @@ public class AddEmergencyTheatreImpl extends BaseAddEmergencyTheatreImpl
 	private ProcedureLiteVoCollection listProcedures(String name) throws DomainInterfaceException
 	{
 		DomainFactory factory = getDomainFactory();
-		StringBuffer hql = new StringBuffer(" from Procedure proc join proc.keywords as kw where (proc.outpatientOnlyProcedure = 0 or proc.outpatientOnlyProcedure is null ) and (proc.medicalWL = 0 or proc.medicalWL is null ) ");
+
+		/* TODO MSSQL case - StringBuffer hql = new StringBuffer(" from Procedure proc join proc.keywords as kw where (proc.outpatientOnlyProcedure = 0 or proc.outpatientOnlyProcedure is null ) and (proc.medicalWL = 0 or proc.medicalWL is null ) "); */
+		StringBuffer hql = new StringBuffer(" from Procedure proc join proc.keywords as kw where (proc.outpatientOnlyProcedure = FALSE or proc.outpatientOnlyProcedure is null ) and (proc.medicalWL = FALSE or proc.medicalWL is null ) ");
 		
 		ArrayList names = new ArrayList();
 		ArrayList values = new ArrayList();

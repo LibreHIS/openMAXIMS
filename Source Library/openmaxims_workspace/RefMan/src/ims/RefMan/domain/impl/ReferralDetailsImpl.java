@@ -2111,7 +2111,6 @@ public class ReferralDetailsImpl extends BaseReferralDetailsImpl implements IRec
 	
 
 	
-	//wdev-19933, wdev-19930
 	public CatsReferralForRequestServiceVo getChildCatsReferralForTransferOfCare(CatsReferralRefVo catsRef)
 	{
 		if( catsRef == null)
@@ -2119,7 +2118,9 @@ public class ReferralDetailsImpl extends BaseReferralDetailsImpl implements IRec
 		
 		StringBuilder query = new StringBuilder("SELECT c1_1 FROM ");
 		query.append(" CatsReferral as p1_1 left join p1_1.linkedReferrals as l1_1 left join l1_1.referral as c1_1  left join l1_1.referralRelationType as l2_1 ");
-		query.append(" WHERE( (c1_1.isRIE = 0 OR c1_1.isRIE is null) and l2_1.id = :ActionType and p1_1.id = :parentCatsReferralID) ");
+
+		/* TODO MSSQL case - query.append(" WHERE( (c1_1.isRIE = 0 OR c1_1.isRIE is null) and l2_1.id = :ActionType and p1_1.id = :parentCatsReferralID) "); */
+		query.append(" WHERE( (c1_1.isRIE = FALSE OR c1_1.isRIE is null) and l2_1.id = :ActionType and p1_1.id = :parentCatsReferralID) ");
 				
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();

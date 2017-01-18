@@ -1056,34 +1056,7 @@ public class StructuredAssessmentsHelper
 			voDPPQuestionGroupColl.add(voDppGroup);
 		}
 	}
-	
-	/*private boolean removeAssessmentQuestion(UserAssessmentVo userAssessment, AssessmentQuestionVo voAssQuestion)
-	{
-		for (int i = 0; voDPPQuestionGroupColl != null && i < voDPPQuestionGroupColl.size(); i++)
-		{
-			DPPQuestionGroupVo voDppGroup = voDPPQuestionGroupColl.get(i);
-			boolean sameAssessment = voDppGroup.getUserAssessmentIsNotNull() && voDppGroup.getUserAssessment().equals(userAssessment);
-			if (sameAssessment)
-			{
-				AssessmentQuestionVoCollection assQuestionColl = voDppGroup.getAssessmentQuestions();
-				if(assQuestionColl != null)
-				{
-					int index = assQuestionColl.indexOf(voAssQuestion);
-					if(index >= 0)
-					{
-						assQuestionColl.remove(voAssQuestion);
-						voDppGroup.setAssessmentQuestions(assQuestionColl);
-						voDPPQuestionGroupColl.set(i, voDppGroup);
-						
-						return true;
-					}
-				}
-			}
-		}
-		
-		return false;
-	}
-*/
+
 	public AssessmentQuestionVo updateAssessmentQuestionVoFromRowData(DynamicGridRow row)
 	{
 		if (row == null)

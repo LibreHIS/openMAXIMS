@@ -56,7 +56,6 @@ public class ReferralOverviewAndKpisImpl extends BaseReferralOverviewAndKpisImpl
 		return CatsReferralForOverviewVoAssembler.create(doCatsReferral);
 	}
 
-	//wdev-20721
 	public CatsReferralForLinkRefVo getParentCatsReferralByChild(CatsReferralRefVo catsRef)
 	{
 		if( catsRef == null)
@@ -64,14 +63,15 @@ public class ReferralOverviewAndKpisImpl extends BaseReferralOverviewAndKpisImpl
 		
 		StringBuilder query = new StringBuilder("SELECT p1_1 FROM ");
 		query.append(" CatsReferral as p1_1 left join p1_1.linkedReferrals as l1_1 left join l1_1.referral as c1_1  left join l1_1.referralRelationType as l2_1 ");
-		query.append(" WHERE( (c1_1.isRIE = 0 OR c1_1.isRIE is null) and l1_1.referral.id = :childCatsReferralID) ");
+
+		/* TODO MSSQL case - query.append(" WHERE( (c1_1.isRIE = 0 OR c1_1.isRIE is null) and l1_1.referral.id = :childCatsReferralID) "); */
+		query.append(" WHERE( (c1_1.isRIE = FALSE OR c1_1.isRIE is null) and l1_1.referral.id = :childCatsReferralID) ");
 				
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
 		
 		paramNames.add("childCatsReferralID");		paramValues.add(catsRef.getID_CatsReferral());
-		//paramNames.add("ActionType");				paramValues.add(actionType.getID());
-		
+
 		CatsReferral catsReferral = (CatsReferral) getDomainFactory().findFirst(query.toString(), paramNames, paramValues);
 		return CatsReferralForLinkRefVoAssembler.create(catsReferral);
 	}

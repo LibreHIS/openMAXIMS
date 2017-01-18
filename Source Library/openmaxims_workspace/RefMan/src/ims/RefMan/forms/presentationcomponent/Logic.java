@@ -1001,22 +1001,6 @@ public class Logic extends BaseLogic
 		return medications;
 	}
 
-	/*
-	private CoMorbiditiesCollection addCoMorbities(CoMorbidities[] values)
-	{
-		CoMorbiditiesCollection coMorbities = new CoMorbiditiesCollection();
-		if (values != null)
-		{
-			for (int i = 0; i < values.length; i++)
-			{
-				coMorbities.add(values[i]);
-			}
-		}
-
-		return coMorbities;
-	}
-	*/
-
 	protected void onIssuesComboBoxTextBoxSubmitted(int column, grdIssuesRow row, String text) throws PresentationLogicException
 	{
 		row.getPresentingIssue().clear();

@@ -149,8 +149,9 @@ public class ElectiveListManagementImpl extends BaseElectiveListManagementImpl
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
 		
-		
-		conditionQueryPart.append(" (patientElectiveList.requiresVetting is null OR patientElectiveList.requiresVetting = 0) ");
+		/* TODO MSSQL case - conditionQueryPart.append(" (patientElectiveList.requiresVetting is null OR patientElectiveList.requiresVetting = 0) "); */
+		conditionQueryPart.append(" (patientElectiveList.requiresVetting is null OR patientElectiveList.requiresVetting = FALSE) ");
+
 		String conditionString = " AND ";
 		
 		

@@ -199,7 +199,6 @@ public class Logic extends BaseLogic
 	
 	private void loadReasonCombo()
 	{
-		//WDEV-14167
 		form.cmbReason().clear();
 		loadComboReason(form.cmbActionStatus().getID());
 		
@@ -243,7 +242,6 @@ public class Logic extends BaseLogic
 //		}
 	}
 
-	//WDEV-14167
 	private void loadComboReason(int idFromCombo) 
 	{
 		ActionStatusReasonCollection lkpActionStatus = LookupHelper.getActionStatusReason(domain.getLookupService());
@@ -373,32 +371,6 @@ public class Logic extends BaseLogic
 					}
 					
 			}
-//			for (int i = 0; i < actions.DataCollection.count(); ++i)
-//			{
-//				if (actions.DataCollection.get(i).Activ_id.equals(id) && actions.DataCollection.get(i).Grp_id.equals(groupId))
-//				{
-//					// Update mode
-//					if (ScreenInUpdateMode())
-//					{
-//						PatTreatPlanActionVo actionsDto = GetActionsDto();
-//
-//						if (actions.DataCollection.get(i).Action_act_ind.equals("Y"))
-//						{
-//							form.cmbAction().newRow(actions.DataCollection.get(i).Action_id, actions.DataCollection.get(i).Action_nm);
-//						}
-//						else
-//						{
-//							if (actionsDto != null && actionsDto.Action_id.equals(actions.DataCollection.get(i).Action_id))
-//								form.cmbAction().newRow(actions.DataCollection.get(i).Action_id, actions.DataCollection.get(i).Action_nm);
-//						}
-//					}
-//					else
-//					{
-//						if (actions.DataCollection.get(i).Action_act_ind.equals("Y"))
-//							form.cmbAction().newRow(actions.DataCollection.get(i).Action_id, actions.DataCollection.get(i).Action_nm);
-//					}
-//				}
-//			}
 		}
 
 		if (form.cmbActivity().getValue() != null)
@@ -415,14 +387,12 @@ public class Logic extends BaseLogic
 		{
 			form.cmbActivity().clear();
 			form.cmbAction().clear();
-			displayActivityControls(0);//WDEV-14318
+			displayActivityControls(0);
 			return;
 		}
 
 		ActivityGroupVo id = form.cmbGroup().getValue();
-		SchedActivityVoCollection activities = form.getLocalContext().getActivities();// UIEngine.Context.Get("10003:Activities")
-																		// as
-																		// dto.Sd_activityDTO;
+		SchedActivityVoCollection activities = form.getLocalContext().getActivities();
 
 		if (activities == null)
 		{
@@ -992,32 +962,19 @@ public class Logic extends BaseLogic
 //			SelChangeActionStatus();
 //		}
 
-		//wdev-13667
+
 		HcpLiteVoCollection hcpVoColl = domain.listConsultants();
 		
 		if(hcpVoColl != null)
 		{
-			//hcpVoColl.sort(new ConsultatntNameComparator(SortOrder.ASCENDING)); //wdev-13961  //WDEV-14301
 			for (int i = 0; i < hcpVoColl.size(); ++i)
 			{
 				HcpLiteVo consultant = hcpVoColl.get(i);
 				if((consultant.getIsActiveIsNotNull() && consultant.getIsActive()) || 
-					//(treatmentPlanDto != null && treatmentPlanDto.Chcp.equals(consultant.getID_Hcp())))
 					(form.getGlobalContext().getPatTreatmentPlanIsNotNull() && form.getGlobalContext().getPatTreatmentPlan().equals(consultant)))
 				form.cmbHcp().newRow(consultant,(consultant.getName().getSurnameIsNotNull() ? consultant.getName().getSurname() : "")  + ", " +(consultant.getName().getForenameIsNotNull()?consultant.getName().getForename():"") );//WDEV-14526
 			}
 		}
-		
-		// Hcp
-//		Clinical_team hcps = form.getLocalContext().getHCPs();;
-//		if (hcps != null)
-//		{
-//			for (int i = 0; i < hcps.DataCollection.count(); ++i)
-//			{
-//				if (hcps.DataCollection.get(i).Stat.equals("Y") || (actionDto != null && actionDto.Act_consult.equals(hcps.DataCollection.get(i).Hcp_id)))
-//					form.cmbHcp().newRow(hcps.DataCollection.get(i), hcps.DataCollection.get(i).Hcp_txt);
-//			}
-//		}
 	}
 
 	private void fillTrSiteGridCombos()
@@ -1037,7 +994,6 @@ public class Logic extends BaseLogic
 			if (patName != null)
 				form.PatientName().setValue(patName.getForename()+ " " + patName.getSurname());
 			
-			//Date dt = DateHelper.GetDOBDateFromString(patientDto.Dob);
 			if (patVo.getDob() != null)
 				form.PatientDOB().setValue(patVo.getDob().toString());
 			
@@ -1047,7 +1003,7 @@ public class Logic extends BaseLogic
 			{
 				if ((patAddr.getAddressBuildingName() !=  null && !patAddr.getAddressBuildingName().equals("")))
 				{
-					//address with building name
+					// Address with building name
 					if(ConfigFlag.DOM.HEARTS_REPLICATE_PATIENTS.getValue())
 					{
 						if(patAddr.getAddressBuildingName()!=null)
@@ -1659,7 +1615,6 @@ public class Logic extends BaseLogic
 //		}
 	}
 
-	// #region 01.03.2003
 	protected void OnAddDose() throws ims.framework.exceptions.PresentationLogicException
 	{
 		form.gDose().getRows().newRow(true);
@@ -1736,52 +1691,11 @@ public class Logic extends BaseLogic
 				actionVo.getDose().add(PopulateDoseCollectionRecord(new PatTreatPlanActionDoseVo(), DoseValue, FractionValue, DurationValue, Booked));
 			}
 
-			// Check Duplicates
-		/*} WDEV-15157 
-		else
-		{
-			// Update - take care of the inactive records
-			//actionVo.setDose(null);
-			for (int i = 0; i < form.gDose().getRows().size(); i++)
-			{
-				PatTreatPlanActionDoseVo doseRecord = form.gDose().getRows().get(i).getValue();
-				String Booked = doseRecord != null ? doseRecord.getEdisbooked() : "N";
-				Integer DoseValue = form.gDose().getRows().get(i).getDose();
-				Integer FractionValue = form.gDose().getRows().get(i).getFractions();
-				Integer DurationValue = form.gDose().getRows().get(i).getDays();
-				if (form.gDose().getRows().get(i).getValue() != null)
-				{
-					//update
-					//int recIndex = GetSeqNoRecord(actionVo.Dose_seqCollection, form.gDose().getRows().get(i).getValue());
-					//if (recIndex >= 0)
-					Integer index = 0;
-					for (Iterator<?> iter = actionVo.getDose().iterator(); iter.hasNext();) 
-					{						
-						PatTreatPlanActionDoseVo element = (PatTreatPlanActionDoseVo) iter.next();
-						if (element.equals(form.gDose().getRows().get(i).getValue()))
-						{
-							//update it
-							actionVo.getDose().set(index, PopulateDoseCollectionRecord(form.gDose().getRows().get(i).getValue(), DoseValue, FractionValue, DurationValue, Booked));
-						}
-						index++;
-					}
-					
-				}
-				else
-				{	
-					//just add to collection
-					if (actionVo.getDose() == null)
-						actionVo.setDose(new PatTreatPlanActionDoseVoCollection());
-
-					actionVo.getDose().add(PopulateDoseCollectionRecord(new PatTreatPlanActionDoseVo(), DoseValue, FractionValue, DurationValue, Booked));
-				}
-			}
-		}*/
 	}
 
 	private PatTreatPlanActionDoseVo PopulateDoseCollectionRecord(PatTreatPlanActionDoseVo doseVo, Integer doseValue, Integer fractionValue, Integer durationValue, String Booked)
 	{
-		// save here the ED_ISBOOKED
+		// Save here the ED_ISBOOKED
 		doseVo.setEdisbooked(Booked);
 		doseVo.setEbdose(doseValue);
 		doseVo.setEbfractions(fractionValue);
@@ -2004,7 +1918,7 @@ public class Logic extends BaseLogic
 		engine.showMessage(message);
 	}
 
-	// checks the Pat_req flag
+	// Checks the Pat_req flag
 	private boolean isPatientRequired()
 	{
 //TODO

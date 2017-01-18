@@ -472,12 +472,15 @@ public class CDSGenerateImpl extends BaseCDSGenerateImpl implements StatefulJob
 		deleteOutpatientSql = " delete from core_cdsdiagdetail where core_cdsoutpatient_icddiaggro in (select id from core_cdsoutpatient where core_cdsoutpatient.apptdate between ? and ?)";
 		deleteFromTable(deleteOutpatientSql, fromDate, toDate);
 		
-		deleteOutpatientSql = "delete from core_cdsoutpatient where core_cdsoutpatient.apptdate between ? and ?";//WDEV-13368
-		deleteFromTable(deleteOutpatientSql, fromDate, toDate);//	WDEV-13368
+		deleteOutpatientSql = "delete from core_cdsoutpatient where core_cdsoutpatient.apptdate between ? and ?";
+		deleteFromTable(deleteOutpatientSql, fromDate, toDate);
 
 		// List all appointments who's appointment dates are within the given date range
 		StringBuffer hql = new StringBuffer();
-		hql.append(" from CatsReferral ref  join ref.appointments as appt join ref.careContext as cc where ((appt.isRIE is null or appt.isRIE = 0) and (appt.session.sessionProfileType.id = :OUTPATIENT_SESSION) ");
+
+		/* TODO MSSQL case - hql.append(" from CatsReferral ref  join ref.appointments as appt join ref.careContext as cc where ((appt.isRIE is null or appt.isRIE = 0) and (appt.session.sessionProfileType.id = :OUTPATIENT_SESSION) "); */
+		hql.append(" from CatsReferral ref  join ref.appointments as appt join ref.careContext as cc where ((appt.isRIE is null or appt.isRIE = FALSE) and (appt.session.sessionProfileType.id = :OUTPATIENT_SESSION) ");
+
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
 		
@@ -488,11 +491,11 @@ public class CDSGenerateImpl extends BaseCDSGenerateImpl implements StatefulJob
 		
 		if (fromDate != null && toDate != null)
 		{
-			hql.append(" and appt.appointmentDate >= :fromDate and appt.appointmentDate < :toDate"); //WDEV-19260 
+			hql.append(" and appt.appointmentDate >= :fromDate and appt.appointmentDate < :toDate");
 			markers.add("fromDate");
 			markers.add("toDate");
 			values.add(fromDate.getDate());
-			values.add(toDate.addDay(1).getDate());//WDEV-19260 
+			values.add(toDate.addDay(1).getDate());
 		}
 		else if (fromDate != null && toDate == null)
 		{
@@ -1483,7 +1486,10 @@ public class CDSGenerateImpl extends BaseCDSGenerateImpl implements StatefulJob
 
 
 		StringBuffer hql = new StringBuffer();
-		hql.append(" select pel from PatientElectiveList pel where pel.electiveAdmissionType.id in (:BookedType, :ElecType) and (pel.isRIE is null or pel.isRIE = 0) ");
+
+		/* TODO MSSQL case - hql.append(" select pel from PatientElectiveList pel where pel.electiveAdmissionType.id in (:BookedType, :ElecType) and (pel.isRIE is null or pel.isRIE = 0) "); */
+		hql.append(" select pel from PatientElectiveList pel where pel.electiveAdmissionType.id in (:BookedType, :ElecType) and (pel.isRIE is null or pel.isRIE = FALSE) ");
+
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
 		
@@ -2506,13 +2512,15 @@ public class CDSGenerateImpl extends BaseCDSGenerateImpl implements StatefulJob
 			defaultSiteCode="NA";
 		defaultSiteCode = formatStr(defaultSiteCode, 5); // Max Length allowed
 		
-		// wdev-9922 
 		// List from ReferralCoding level as won't be progressing without this anyway
 		// and it cuts down on any unrequired items.
 		
-		// List all appointments who's appointment dates are within the given date range -- WDEV-19175  check active Referral Coding records
+		// List all appointments who's appointment dates are within the given date range -- check active Referral Coding records
 		StringBuffer hql = new StringBuffer();
-		hql.append(" select ref from ReferralCoding ref join ref.pasEvent pe where pe.eventType.id = :Inpatient and (pe.isRIE is null or pe.isRIE = 0) and (ref.isRIE is null or ref.isRIE = 0) and (ref.active = true or ref.active is null) ");
+
+		/* TODO MSSQL case - hql.append(" select ref from ReferralCoding ref join ref.pasEvent pe where pe.eventType.id = :Inpatient and (pe.isRIE is null or pe.isRIE = 0) and (ref.isRIE is null or ref.isRIE = 0) and (ref.active = 1 or ref.active is null) "); */
+		hql.append(" select ref from ReferralCoding ref join ref.pasEvent pe where pe.eventType.id = :Inpatient and (pe.isRIE is null or pe.isRIE = FALSE) and (ref.isRIE is null or ref.isRIE = FALSE) and (ref.active = TRUE or ref.active is null) ");
+
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
 		
@@ -2521,17 +2529,17 @@ public class CDSGenerateImpl extends BaseCDSGenerateImpl implements StatefulJob
 		
 		if (fromDate != null && toDate != null)
 		{
-			hql.append(" and pe.eventDateTime >= :fromDate and pe.eventDateTime < :toDate"); //WDEV-19260
+			hql.append(" and pe.eventDateTime >= :fromDate and pe.eventDateTime < :toDate");
 			markers.add("fromDate");
 			markers.add("toDate");
-			values.add(new DateTime(fromDate).getJavaDate()); //WDEV-19260
-			values.add(new DateTime(toDate.addDay(1)).getJavaDate()); //WDEV-19260
+			values.add(new DateTime(fromDate).getJavaDate());
+			values.add(new DateTime(toDate.addDay(1)).getJavaDate());
 		}
 		else if (fromDate != null && toDate == null)
 		{
 			hql.append(" and pe.eventDateTime >= :fromDate");
 			markers.add("fromDate");
-			values.add(new DateTime(fromDate).getJavaDate()); //WDEV-19260
+			values.add(new DateTime(fromDate).getJavaDate());
 		}
 		else if (fromDate == null && toDate != null)
 		{
@@ -3254,8 +3262,10 @@ public class CDSGenerateImpl extends BaseCDSGenerateImpl implements StatefulJob
 	private IntraOperativeCareRecord getIntraFromProcedure(DomainFactory factory, PatientProcedure patientProcedure, Date admitDate, Date dischargeDate)
 	{
 		StringBuffer hql = new StringBuffer(); 
-		
-		hql.append(" from IntraOperativeCareRecord rec where (rec.actualProcedure.procedure = :patientProc  or rec.plannedProcedure.procedure = :patientProc ) and (rec.isRIE is null or rec.isRIE = 0)");
+
+		/* TODO MSSQL case - hql.append(" from IntraOperativeCareRecord rec where (rec.actualProcedure.procedure = :patientProc  or rec.plannedProcedure.procedure = :patientProc ) and (rec.isRIE is null or rec.isRIE = 0)"); */
+		hql.append(" from IntraOperativeCareRecord rec where (rec.actualProcedure.procedure = :patientProc  or rec.plannedProcedure.procedure = :patientProc ) and (rec.isRIE is null or rec.isRIE = FALSE)");
+
 		hql.append(" and rec.careContext = :careContext");
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
@@ -3283,7 +3293,9 @@ public class CDSGenerateImpl extends BaseCDSGenerateImpl implements StatefulJob
 	@SuppressWarnings("rawtypes")
 	private DischargedEpisode getDischargeEpisode(DomainFactory factory, PASEvent domEvent) 
 	{
-		String hql = " from DischargedEpisode discharge where discharge.pasEvent.id = :domEvent and (discharge.isRIE is null or discharge.isRIE = 0) "; 
+		/* TODO MSSQL case - String hql = " from DischargedEpisode discharge where discharge.pasEvent.id = :domEvent and (discharge.isRIE is null or discharge.isRIE = 0) "; */
+		String hql = " from DischargedEpisode discharge where discharge.pasEvent.id = :domEvent and (discharge.isRIE is null or discharge.isRIE = FALSE) ";
+
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
 		markers.add("domEvent");
@@ -3298,14 +3310,15 @@ public class CDSGenerateImpl extends BaseCDSGenerateImpl implements StatefulJob
 	@SuppressWarnings({"rawtypes"})
 	private SuitableForSurgeryAssessment getSurgeryAssessment(DomainFactory factory, PatientProcedure firstProc, Date admissionDateTime) 
 	{
-		// WDEV-13306, exclude the check for configured procedure not null
-		String hql = " select surgery from SuitableForSurgeryAssessment surgery where surgery.careContext = :careContext and surgery.procedure = :firstProc and (surgery.isRIE is null or surgery.isRIE = 0)" +
-		   " and surgery.authoringInformation.authoringDateTime < :admissionDT";  // wdev-10682 
+		// Exclude the check for configured procedure not null
+		/* TODO MSSQL case - String hql = " select surgery from SuitableForSurgeryAssessment surgery where surgery.careContext = :careContext and surgery.procedure = :firstProc and (surgery.isRIE is null or surgery.isRIE = 0)" + */
+		String hql = " select surgery from SuitableForSurgeryAssessment surgery where surgery.careContext = :careContext and surgery.procedure = :firstProc and (surgery.isRIE is null or surgery.isRIE = FALSE)" +
+		   " and surgery.authoringInformation.authoringDateTime < :admissionDT";
+
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
 		markers.add("firstProc");
 
-		// WDEV-13200
 		// If the firstProc has a planned procedure, match against it, otherwise
 		// just match against the firstProc itself.  This is because the suitable for surgery
 		// record always has the initial planned procedure.  If this changes, the patient procedure
@@ -3316,7 +3329,7 @@ public class CDSGenerateImpl extends BaseCDSGenerateImpl implements StatefulJob
 			values.add(firstProc);
 		markers.add("careContext");
 		values.add(firstProc.getCareContext());
-		markers.add("admissionDT");   // wdev-10682
+		markers.add("admissionDT");
 		values.add(admissionDateTime);
 		
 		List lst = factory.find(hql, markers, values);
@@ -3328,7 +3341,9 @@ public class CDSGenerateImpl extends BaseCDSGenerateImpl implements StatefulJob
 	@SuppressWarnings({"rawtypes"})
 	private DischargeSummaryPacuAndWard getDischargeSummaryRecord(DomainFactory factory, DischargedEpisode domDisEpis) 
 	{
-		String hql = " select discharge from DischargeSummaryPacuAndWard discharge where discharge.dischargeEpisode.id = :dischargeEpisode and discharge.dischargeDateTime is not null and (discharge.isRIE is null or discharge.isRIE = 0) "; 
+		/* TODO MSSQL case - String hql = " select discharge from DischargeSummaryPacuAndWard discharge where discharge.dischargeEpisode.id = :dischargeEpisode and discharge.dischargeDateTime is not null and (discharge.isRIE is null or discharge.isRIE = 0) "; */
+		String hql = " select discharge from DischargeSummaryPacuAndWard discharge where discharge.dischargeEpisode.id = :dischargeEpisode and discharge.dischargeDateTime is not null and (discharge.isRIE is null or discharge.isRIE = FALSE) ";
+
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
 		markers.add("dischargeEpisode");

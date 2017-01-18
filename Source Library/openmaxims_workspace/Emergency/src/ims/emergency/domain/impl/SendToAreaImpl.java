@@ -202,7 +202,9 @@ public class SendToAreaImpl extends BaseSendToAreaDialogImpl
 				
 		StringBuffer hql = new StringBuffer();
 		hql.append("select twc from TrackingWorkflowConfig as twc ");
-		hql.append("where twc.id = :twcID and (twc.isRIE is null  or twc.isRIE = 0) ");
+
+		/* TODO MSSQL case - hql.append("where twc.id = :twcID and (twc.isRIE is null  or twc.isRIE = 0) "); */
+		hql.append("where twc.id = :twcID and (twc.isRIE is null  or twc.isRIE = FALSE) ");
 		
 		DomainFactory factory = getDomainFactory();
 		List<?> list = factory.find(hql.toString(), new String[] {"twcID"}, new Object[] {trackingStatusRef.getID_TrackingWorkflowConfig()});

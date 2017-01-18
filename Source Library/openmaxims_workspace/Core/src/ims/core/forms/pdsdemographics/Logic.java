@@ -2980,130 +2980,10 @@ public class Logic extends BaseLogic
 		return true;
 	}
 
-	/*
-	private boolean hasAddressChanged(PersonAddress previousAddress) //WDEV-19137 Now includes check for County && Address Line 5 
-	{
-		
-		PersonAddress newAddress = form.lyrDetails().tabPatientDetails().ccAddress().getValue();
-		
-		if (previousAddress == null || isEmptyAddress(previousAddress))
-			return false;
-		else if(newAddress == null)
-			return true;
-		
-		if (previousAddress.getLine1() == null && newAddress.getLine1() == null)
-							;
-		else if ((previousAddress.getLine1() != null && newAddress.getLine1() == null)	|| (previousAddress.getLine1() == null && newAddress.getLine1() != null))
-						return true;
-		else if (!previousAddress.getLine1().equals(newAddress.getLine1()))
-						return true;
-		
-		if (previousAddress.getLine2() == null && newAddress.getLine2() == null)
-							;
-		else if ((previousAddress.getLine2() != null && newAddress.getLine2() == null) || (previousAddress.getLine2() == null && newAddress.getLine2() != null))
-						return true;
-		else if (!previousAddress.getLine2().equals(newAddress.getLine2()))
-						return true;
-		
-		if(previousAddress.getLine3() == null && newAddress.getLine3() == null)
-							;
-		else if ((previousAddress.getLine3() != null && newAddress.getLine3() == null) || (previousAddress.getLine3() == null && newAddress.getLine3() != null))
-						return true;
-		else if (!previousAddress.getLine3().equals(newAddress.getLine3()))
-						return true;
-		
-		if(previousAddress.getLine4() == null && newAddress.getLine4() == null)
-							;
-		else if ((previousAddress.getLine4() != null && newAddress.getLine4() == null) || (previousAddress.getLine4() == null && newAddress.getLine4()!= null))
-						return true;
-		else if (!previousAddress.getLine4().equals(newAddress.getLine4()))
-						return true;
-		////WDEV-19137 ----------------------------------------------
-		if(previousAddress.getLine5() == null && (newAddress.getLine5() == null || newAddress.getLine5().equals("")))		//wdev-19228
-							;
-		else if ((previousAddress.getLine5() != null && newAddress.getLine5() == null) || (previousAddress.getLine5() == null && newAddress.getLine5() != null))
-						return true;
-		else if (!previousAddress.getLine5().equals(newAddress.getLine5()))
-						return true;
-		
-		if(previousAddress.getCounty() == null && newAddress.getCounty() == null)
-							;
-		else if ((previousAddress.getCounty() != null && newAddress.getCounty() == null) || (previousAddress.getCounty() == null && newAddress.getCounty() != null))
-						return true;
-		else if (!previousAddress.getCounty().equals(newAddress.getCounty()))
-						return true;
-		////WDEV-19137 ----------------------------------------------
-		
-		//WDEV-19597 -- Area Of Residence added
-		if(previousAddress.getAreaOfResidence() == null && newAddress.getAreaOfResidence() == null)
-							;
-		else if ((previousAddress.getAreaOfResidence() != null && newAddress.getAreaOfResidence() == null) || (previousAddress.getAreaOfResidence() == null && newAddress.getAreaOfResidence() != null))
-						return true;
-		else if (!previousAddress.getAreaOfResidence().equals(newAddress.getAreaOfResidence()))
-						return true;
-		
-		if (previousAddress.getPostCode() == null && newAddress.getPostCode() == null)
-							;
-		else if((previousAddress.getPostCode()!= null && newAddress.getPostCode() == null) || (previousAddress.getPostCode() == null && newAddress.getPostCode() != null))
-						return true;
-		else if (!previousAddress.getPostCode().replaceAll("[^a-zA-Z0-9]", "").equals(newAddress.getPostCode().replaceAll("[^a-zA-Z0-9]", "")))
-						return true;
-		//---------------------------	
-		return false;
-	}
-	*/
-
-	/**
-	 * WDEV-13432
-	 * Function used to test an address if it is empty.
-	 * A null address is also considered empty
-	 * @param decouplePatientRecord 
-	 * @param markSimilarOnesAsDuplicated 
-	 */
-	/*
-	private boolean isEmptyAddress(PersonAddress previousAddress)
-	{
-		// Test address for null value
-		if (previousAddress == null)
-			return true;
-		
-		// Test relevant fields if are not empty
-		
-		if (previousAddress.getLine1IsNotNull() && previousAddress.getLine1().length() != 0)
-			return false;
-		
-		if (previousAddress.getLine2IsNotNull() && previousAddress.getLine2().length() != 0)
-			return false;
-		
-		if (previousAddress.getLine3IsNotNull() && previousAddress.getLine3().length() != 0)
-			return false;
-		
-		if (previousAddress.getLine4IsNotNull() && previousAddress.getLine4().length() != 0)
-			return false;
-		
-		if (previousAddress.getLine5IsNotNull() && previousAddress.getLine5().length() != 0)
-			return false;
-		
-		if (previousAddress.getPostCodeIsNotNull() && previousAddress.getPostCode().length() != 0)
-			return false;
-		
-		if (previousAddress.getPhoneIsNotNull() && previousAddress.getPhone().length() != 0)
-			return false;
-		
-		if (previousAddress.getCountyIsNotNull())
-			return false;
-		
-		if (previousAddress.getAreaOfResidenceIsNotNull()) //WDEV-19597
-			return false;
-		
-		return true;
-	}
-	*/
-
 	private boolean save(Patient patient, boolean newPatient, PersonAddress previousAddress, PersonAddress historicAddress,boolean bPCTcheck, Boolean decouplePatientRecord, Boolean markSimilarOnesAsDuplicated)
 	{		
 		boolean bSave = newPatient;
-		boolean pdsMode = isPds(); //WDEV-23506
+		boolean pdsMode = isPds();
 		
 		if (patient.getSourceOfInformation() == null)
 		{
@@ -3131,26 +3011,6 @@ public class Logic extends BaseLogic
 
 			if ((savedPatient.getAddressesIsNotNull() && !patient.getAddressesIsNotNull()) || (!savedPatient.getAddressesIsNotNull() && patient.getAddressesIsNotNull()) || (savedPatient.getAddressesIsNotNull() && patient.getAddressesIsNotNull() && !savedPatient.getAddresses().toDisplayString().equals(patient.getAddresses().toDisplayString())))
 				bSave = true;
-
-			// WDEV-5928 - BW Modified
-			//boolean dataModified = checkForEditedData(form.getLocalContext().getsavedPatient(), patient);
-			//WDEV-21785 - this only applies in non PDS mode
-			/*
-			boolean dataModified = dataChangedForVerifiedNHSNumber(form.getLocalContext().getsavedPatient(), patient);
-
-			if (patient.getSourceOfInformationIsNotNull() && patient.getSourceOfInformation().equals(RegistrationSourceOfInfo.PDS) && form.getLocalContext().getsavedPatientIsNotNull() && dataModified)
-			{
-				patient.setSourceOfInformation(RegistrationSourceOfInfo.MAXIMS);
-				for (int i = 0; patient.getIdentifiersIsNotNull() && i < patient.getIdentifiers().size(); i++)
-				{
-					if (patient.getIdentifiers().get(i).getTypeIsNotNull() && patient.getIdentifiers().get(i).getType().equals(PatIdType.NHSN))
-					{
-						patient.getIdentifiers().get(i).setVerified(false);
-					}
-				}
-				bSave = true;
-			}
-			*/
 			
 			boolean dataModified = checkForEditedData(form.getLocalContext().getsavedPatient(), patient);
 			
@@ -3158,7 +3018,7 @@ public class Logic extends BaseLogic
 				bSave = true;
 		}
 		
-		//WDEV-21785 - this only applies in non PDS mode		
+		// This only applies in non PDS mode
 		if(!pdsMode)
 		{
 			boolean dataModified = dataChangedForVerifiedNHSNumber(form.getLocalContext().getsavedPatient(), patient);

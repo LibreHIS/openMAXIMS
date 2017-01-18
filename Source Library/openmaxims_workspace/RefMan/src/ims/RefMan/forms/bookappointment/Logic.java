@@ -2044,32 +2044,9 @@ public class Logic extends BaseLogic
 		return false;
 	}
 
-	/*
-	private boolean checkIfThereIsFirstApptPerClock(SessionSlotListVo checkedSessionSlot)
-	{
-		if (checkedSessionSlot == null || checkedSessionSlot.getID_Session_Slot() == null)
-			return false;
-
-		// check locally
-		boolean areFirstAppointmentsLocally = false;
-
-		for (int i = 0; i < form.grdAppt().getRows().size(); i++)
-		{
-			grdApptRow row = form.grdAppt().getRows().get(i);
-			if (row.getValue() != null && row.getValue().getActivity() != null && Boolean.TRUE.equals(row.getValue().getActivity().getFirstAppointment()) && form.getLocalContext().getCurrentClock() != null && form.getLocalContext().getCurrentClock().equals(row.getValue().getPathwayClock()))
-			{
-				areFirstAppointmentsLocally = true;
-			}
-		}
-
-		// check from DB
-		return domain.checkIfThereIsFirstApptPerClock(form.getGlobalContext().RefMan.getCatsReferral(), areFirstAppointmentsLocally, checkedSessionSlot);
-	}
-	*/
-
 	private void clearAllOtherSelections(DynamicGridRow row)
 	{
-		// clear the only other appt entry as only allow rebook one appt
+		// Clear the only other appt entry as only allow rebook one appt
 		for (int i = 0; i < form.dyngrdSessionSlots().getRows().size(); i++)
 		{
 			DynamicGridRow sRow = form.dyngrdSessionSlots().getRows().get(i);
@@ -2086,7 +2063,6 @@ public class Logic extends BaseLogic
 		}
 	}
 
-	// WDEV-18557
 	private ConsMediaAndCategory retrieveConsMediaAndCategoryData(Session_SlotRefVo sessionSlot)
 	{
 
@@ -2275,24 +2251,13 @@ public class Logic extends BaseLogic
 		{
 			for (int i = 0; i < voCollBookAppointments.size(); i++)
 			{
-				// WDEV-10291
 				if (voCollBookAppointments.get(i).getActivity() == null)
 					voCollBookAppointments.get(i).setActivity(form.cmbActivity().getValue());
 			}
 		}
 
-		// Refresh appointments from grid values //WDEV-18557
+		// Refresh appointments from grid values
 		updateAppointmentswithAdditionalDetails(form.grdAppt().getValues());
-
-		/*
-		 * for (int i = 0; i < form.grdAppt().getRows().size(); i++) {
-		 * Booking_AppointmentVo appt =
-		 * form.grdAppt().getRows().get(i).getValue();
-		 * appt.setConsMediaType(form
-		 * .grdAppt().getRows().get(i).getcolConsMedia());
-		 * appt.setCategory(form.
-		 * grdAppt().getRows().get(i).getcolPatCategory()); }
-		 */
 
 		form.getLocalContext().setSelectedAppointments(voCollBookAppointments);
 		form.grdAppt().getRows().clear();
@@ -2304,49 +2269,13 @@ public class Logic extends BaseLogic
 			aRow = form.grdAppt().getRows().newRow();
 			voBookAppt = voCollBookAppointments.get(i);
 
-			// WDEV-12645
 			aRow.setcolApptDate(voBookAppt.getAppointmentDateIsNotNull() ? voBookAppt.getAppointmentDate().toString() : null);
 			aRow.setTooltipForcolApptDate(voBookAppt.getAppointmentDateIsNotNull() ? voBookAppt.getAppointmentDate().toString() : null);
 			aRow.setcolApptTime(voBookAppt.getApptStartTimeIsNotNull() ? voBookAppt.getApptStartTime().toString() : null);
 			aRow.setTooltipForcolApptTime(voBookAppt.getApptStartTimeIsNotNull() ? voBookAppt.getApptStartTime().toString() : null);
-			// WDEV-18411 //WDEV-18557
 			aRow.setcolConsMedia(voBookAppt.getConsMediaType());
 			aRow.setcolPatCategory(voBookAppt.getPatientCategory());
 			aRow.setcolDoNotMove(Boolean.TRUE.equals(voBookAppt.getDoNotMove()));
-
-			/*
-			 * removed as part of WDEV-18411
-			 * aRow.setcolErod(form.getLocalContext()
-			 * .getReferralERODForRebooking() != null &&
-			 * form.getLocalContext().getReferralERODForRebooking()
-			 * .getERODDate1() != null);// voBookAppt.getEarliestOfferedDate()
-			 * // != null); aRow.setcolErodReadOnly(!(voBookAppt.getActivity()
-			 * != null && Boolean.TRUE.equals(voBookAppt.getActivity()
-			 * .getFirstAppointment()) &&
-			 * form.getLocalContext().getReferralERODForRebooking() == null &&
-			 * (form .getLocalContext().getIsCAB() == null || Boolean.FALSE
-			 * .equals(form.getLocalContext().getIsCAB()))));
-			 * aRow.setcolErodDate(form.getLocalContext()
-			 * .getReferralERODForRebooking() != null ? form
-			 * .getLocalContext().getReferralERODForRebooking() .getERODDate1()
-			 * : null); aRow.setTooltipForcolErodDate((form.getLocalContext()
-			 * .getReferralERODForRebooking() != null && form
-			 * .getLocalContext().getReferralERODForRebooking() .getERODDate1()
-			 * != null) ? form.getLocalContext()
-			 * .getReferralERODForRebooking().getERODDate1().toString() : null);
-			 * aRow.setcolErodDateReadOnly((aRow.getcolErod() && form
-			 * .getLocalContext().getReferralERODForRebooking() != null) ||
-			 * !aRow.getcolErod());
-			 * aRow.setcolErodDate2ReadOnly(!aRow.getcolErod());
-			 * aRow.setcolErodDate2(form.getLocalContext()
-			 * .getReferralERODForRebooking() != null ? form
-			 * .getLocalContext().getReferralERODForRebooking() .getERODDate2()
-			 * : null); aRow.setTooltipForcolErodDate2((form.getLocalContext()
-			 * .getReferralERODForRebooking() != null && form
-			 * .getLocalContext().getReferralERODForRebooking() .getERODDate2()
-			 * != null) ? form.getLocalContext()
-			 * .getReferralERODForRebooking().getERODDate2().toString() : null);
-			 */
 
 			aRow.setcolActivity(voBookAppt.getActivityIsNotNull() ? voBookAppt.getActivity().getName() : null);
 			aRow.setTooltipForcolActivity(voBookAppt.getActivityIsNotNull() ? voBookAppt.getActivity().getName() : null);
@@ -2367,12 +2296,12 @@ public class Logic extends BaseLogic
 	protected void onBookingCalendarApptsDateSelected(ims.framework.utils.Date date) throws ims.framework.exceptions.PresentationLogicException
 	{
 		bookingCalendarDateSelected(date);
-		updateControlState();//WDEV-23885
+		updateControlState();
 	}
 
 	private void bookingCalendarDateSelected(ims.framework.utils.Date date)
 	{
-		// go through sessions getting ones for the selected date
+		// Go through sessions getting ones for the selected date
 		SessionShortVoCollection voCollSessionShort = form.getLocalContext().getSessions();
 		if (voCollSessionShort == null)
 			return;
@@ -4027,7 +3956,6 @@ public class Logic extends BaseLogic
 			}
 		}
 
-		// WDEV-18557
 		for (int i = 0; i < form.grdAppt().getRows().size(); i++)
 		{
 			grdApptRow aRow = form.grdAppt().getRows().get(i);
@@ -4037,14 +3965,6 @@ public class Logic extends BaseLogic
 				storeConsMediaAndCategorySelection(aRow.getValue(), new ConsMediaAndCategory(aRow.getcolConsMedia(), aRow.getcolPatCategory()));
 			}
 		}
-		/*
-		 * WDEV-5941 removed as part of WDEV-18411 for (int i = 0; i <
-		 * form.grdAppt().getRows().size(); i++) { grdApptRow aRow =
-		 * form.grdAppt().getRows().get(i); if (aRow.getcolErod())
-		 * storeErodSelection(aRow.getValue().getSessionSlot(), new
-		 * Erod(aRow.getcolErodDate(), aRow.getcolErodDate2(),
-		 * aRow.getcolErod())); }
-		 */
 
 		Booking_AppointmentVoCollection voCollBookAppointments = form.getLocalContext().getSelectedAppointments();
 		if (voCollBookAppointments == null)
@@ -4054,14 +3974,14 @@ public class Logic extends BaseLogic
 		{
 			boolean bInListAlready = false;
 
-			// /////////////////////////////////////////
-			// rebook///////////////////////////////////
+
+			// Rebook
 			if (form.getLocalContext().getIsRebookApptSelectedIsNotNull())
 			{
 
 				clearSlotSelection(row);
 
-				// rebook appt already selected
+				// Rebook appt already selected
 				if (!form.getLocalContext().getIsRebookApptSelected().booleanValue())
 				{
 					form.getLocalContext().setIsRebookApptSelected(true);
@@ -4279,18 +4199,6 @@ public class Logic extends BaseLogic
 
 		loadAppointmentsGrid(voCollBookAppointments);
 
-		/*
-		 * WDEV-5941 - repopulate ErodSelected data //removed as part of
-		 * WDEV-18411 for (int i = 0; i < form.grdAppt().getRows().size(); i++)
-		 * { grdApptRow aRow = form.grdAppt().getRows().get(i); Erod erodData =
-		 * retrieveErodData(aRow.getValue().getSessionSlot()); if (erodData !=
-		 * null) { aRow.setcolErod(erodData.isSelected());
-		 * aRow.setcolErodDate(erodData.getErodDate());
-		 * aRow.setcolErodDate2(erodData.getErodDate2());
-		 * aRow.setcolErodDateReadOnly(!erodData.isSelected());
-		 * aRow.setcolErodDate2ReadOnly(!erodData.isSelected()); } }
-		 */
-		// WDEV-18557
 		if (isChecked)
 		{
 			for (int i = 0; i < form.grdAppt().getRows().size(); i++)

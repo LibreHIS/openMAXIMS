@@ -459,24 +459,16 @@ public class Logic extends BaseLogic
 								// FindingStageQuestions
 								// need to review for the third type of
 								// assessment
-								// if(voGraphicAssessmentFinding.getAssociatedQuestionsIsNotNull())
 								if (voGraphicAssessmentFinding.getFindingStageIsNotNull() && voGraphicAssessmentFinding.getFindingStage().size() > 0 && voGraphicAssessmentFinding.getFindingStage().get(0).getAssociatedQuestionsIsNotNull())
 								{
-									// voPatientGraphicAssessmentFinding.setFindingQuestion(new
-									// PatientGraphicAssessmentFindingQuestionAnswerVoCollection());
+
 									voPatientGraphicAssessmentFinding.setStage(new PatientGraphicalAssessmentStageVoCollection());
-									// for(int l = 0; l <
-									// voGraphicAssessmentFinding.getAssociatedQuestions().size();
-									// l++)
+
 									for (int l = 0; l < voGraphicAssessmentFinding.getFindingStage().get(0).getAssociatedQuestions().size(); l++)
 									{
-										// GraphicAssessmentFindingQuestionVo
-										// graphicAssessmentFindingQuestionVo =
-										// voGraphicAssessmentFinding.getAssociatedQuestions().get(l);
 										GraphicAssessmentFindingQuestionVo graphicAssessmentFindingQuestionVo = voGraphicAssessmentFinding.getFindingStage().get(0).getAssociatedQuestions().get(l);
 										PreActiveActiveInactiveStatus findingQuestionStatus = graphicAssessmentFindingQuestionVo.getActiveStatus();
-										// WDEV-1211 - Check finding Question to
-										// be active
+										// Check finding Question to nbe active
 										if (findingQuestionStatus != null && findingQuestionStatus.equals(PreActiveActiveInactiveStatus.ACTIVE))
 										{
 											PatientGraphicAssessmentFindingQuestionAnswerVo vpPGAFindingQA = new PatientGraphicAssessmentFindingQuestionAnswerVo();
@@ -1487,55 +1479,17 @@ public class Logic extends BaseLogic
 											if (ao.getScoreIsNotNull())
 												answearScore += ao.getScore();
 										}
-										pad.setCalculatedScore(answearScore);//WDEV-11934
+										pad.setCalculatedScore(answearScore);
 										groupScore+=answearScore;
 									}
 									
 								}
-								
-								//WDEV-11675-End
-								/* WDEV-11675
-								 * if (assessmentQuestion != null && assessmentQuestion.getAssessmentQuestionIsNotNull() && answerDetail.getAnswerDetailsIsNotNull())
-								 
-								{
-									AssessmentQuestionVo question = assessmentQuestion.getAssessmentQuestion();
-									if (question.getScoringAnswerTypeIsNotNull())
-									{
-										for (int z = 0; z < answerDetail.getAnswerDetails().size(); z++)
-										{
-											AnswerDetailsVo answerDetails = answerDetail.getAnswerDetails().get(z);
-											if (answerDetails != null && answerDetails.getAnswerTypeIsNotNull())
-											{
-												if (answerDetails.getAnswerType().equals(question.getScoringAnswerType()))
-												{
-													if (answerDetails.getPicklist() != null && answerDetails.getAnswerType().getOptionsIsNotNull())
-													{
-														for (int o = 0; o < answerDetails.getAnswerType().getOptions().size(); o++)
-														{
-															if (answerDetails.getPicklist().equals(answerDetails.getAnswerType().getOptions().get(o)))
-															{
-																if (answerDetails.getAnswerType().getOptions().get(o).getScoreIsNotNull())
-																{
-																	groupScore += answerDetails.getAnswerType().getOptions().get(o).getScore().intValue();
-																	answerDetails.setCalculatedScore((float) answerDetails.getAnswerType().getOptions().get(o).getScore().intValue());//WDEV-11675
-																	break;
-																}
-															}
-														}
-													}
-												}
-											}
-											
-										}
-									}
-								}*/
+
 							}
 						}
 					}
 
-					// WDEV-3619
 					group.setCurrentScore(new Float(groupScore));
-					// WDEV-3619
 
 					groups.set(x, group);
 				}

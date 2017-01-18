@@ -139,26 +139,13 @@ public class Logic extends BaseLogic
 		{
 			uiErrors.add("Planned/Performed Procedures are  mandatory.");
 		}
-		//-----------wdev-15739, wdev-15831
-		/*if( form.grdPlannedPerformedProcedure().getRows().size() > 0)
-		{
-			for( int i = 0; i < form.grdPlannedPerformedProcedure().getRows().size();i++ )
-			{
-				PatientProcedureForSurgicalAuditPreOpChecksVo tempVo = form.grdPlannedPerformedProcedure().getRows().get(i).getValue();
-				if(isPerformedOrCancelled(tempVo) == false)
-				{
-					uiErrors.add("All Procedures should have Performed or Cancelled status.");
-					break;
-				}
-			}
-		}*/
-		//--------------------
+
 		if( form.grdSurgicalPack().getRows().size() == 0)
 		{
 			uiErrors.add("Surgical packs are mandatory.");
 		}
 		
-		//AnaesthetistsStartDate 
+		// AnaesthetistsStartDate
 		if( form.dtimAnaesthetistaStartDate().getValue() == null)
 		{
 			uiErrors.add("Anaesthetists Start Date is mandatory.");
@@ -169,7 +156,7 @@ public class Logic extends BaseLogic
 			uiErrors.add("Anaesthetists Start Date cannot be set in the future!");
 		}
 		
-		//SurgeryStartTime
+		// SurgeryStartTime
 		if( form.dtimSurgeryStartTime().getValue() == null)
 		{
 			uiErrors.add("Surgery Start Time is mandatory.");

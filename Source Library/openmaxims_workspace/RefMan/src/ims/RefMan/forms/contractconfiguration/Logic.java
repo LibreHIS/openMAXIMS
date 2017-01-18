@@ -339,29 +339,9 @@ public class Logic extends BaseLogic
 					}
 				}
 			}
-			//wdev-18409 //WDEV-20054 check no longer required
-			/*for(int i= 0; i < record.getServiceLocations().size();i++)
-			{
-				ContractServiceLocationsConfigVo tempVo = record.getServiceLocations().get(i);
-				if( tempVo != null && tempVo.getServiceIsNotNull() && record.getCCGsForContractIsNotNull() && record.getCCGsForContract().size() > 0 )
-				{
-					for(int x = 0; x < record.getCCGsForContract().size();x++)
-					{
-						CCGToContractConfigVo checkccGVo = record.getCCGsForContract().get(x);
-						if( checkccGVo != null && Boolean.TRUE.equals(checkccGVo.getIsActive()) )
-						{
-							if( Boolean.TRUE.equals(domain.countContractsWithTheSameServiceForTheSaneCCGCode(record, tempVo.getService(), checkccGVo.getCCGCode())))  //check if exist other contracts linked to the same service that has the same ccg code
-							{
-								engine.showMessage("CCG Code: " + checkccGVo.getCCGCode() + " is used by other contract linked to "+ tempVo.getService().getServiceName()+ " service");
-								return false;
-							}
-						}
-					}
-				}
-			}*/ //WDEV-20054 ends here
-			//-----------
+
 		}
-		//-----------
+
 		
 		String[] errors = record.validate(validateUIRules());
 		if (errors != null && errors.length>0)
@@ -385,7 +365,7 @@ public class Logic extends BaseLogic
 			return false;
 		}
 		
-		form.getLocalContext().setRemovedCCG(null);			//wdev-18409
+		form.getLocalContext().setRemovedCCG(null);
 		
 		return true;
 	}

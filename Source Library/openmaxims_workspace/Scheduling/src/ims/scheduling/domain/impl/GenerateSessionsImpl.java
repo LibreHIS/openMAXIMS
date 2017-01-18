@@ -1436,15 +1436,18 @@ public class GenerateSessionsImpl extends DomainImpl implements ims.scheduling.d
 		if (domRipple != null)
 		{
 			// List the sessions and update
-			String hql = " from Sch_Session sess where sess.sessionDate >= :effectiveFrom and sess.sch_Profile = :profile and (sess.isModified = 0 or sess.isModified is null) and (sess.isAdHocSession = 0 or sess.isAdHocSession is null)";
-			List lst = factory.find(hql, new String[]{"effectiveFrom", "profile"}, new Object[]{domRipple.getEffectiveFromDate(), domRipple.getProfile()}, 50000);  //  Need to ensure it's not just the first 200 records updated
+			/* TODO MSSQL case - String hql = " from Sch_Session sess where sess.sessionDate >= :effectiveFrom and sess.sch_Profile = :profile and (sess.isModified = 0 or sess.isModified is null) and (sess.isAdHocSession = 0 or sess.isAdHocSession is null)"; */
+			String hql = " from Sch_Session sess where sess.sessionDate >= :effectiveFrom and sess.sch_Profile = :profile and (sess.isModified = FALSE or sess.isModified is null) and (sess.isAdHocSession = FALSE or sess.isAdHocSession is null)";
+
+			List lst = factory.find(hql, new String[]{"effectiveFrom", "profile"}, new Object[]{domRipple.getEffectiveFromDate(), domRipple.getProfile()}, 50000);  // Need to ensure it's not just the first 200 records updated
 			if (lst != null && lst.size() > 0)
 			{
 		
 				for (int i=0; i<lst.size(); i++)
 				{
 					Sch_Session domSession = (Sch_Session) lst.get(i);
-					List<Session_Slot> slotList = new ArrayList<Session_Slot>(); //WDEV-23800 do not re-initialise the list MAXIMS_10.5.3.17
+					List<Session_Slot> slotList = new ArrayList<Session_Slot>(); // Do not re-initialise the list
+
 					// 	Check the ripple type and perform the session update accordingly
 					if (domRipple.getStartTime() != null || domRipple.getEndTime() != null)
 					{

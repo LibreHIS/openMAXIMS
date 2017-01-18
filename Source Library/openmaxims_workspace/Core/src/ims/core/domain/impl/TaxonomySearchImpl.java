@@ -374,20 +374,12 @@ public class TaxonomySearchImpl extends DTODomainImplementation implements ims.c
 		TaxonomyMapCollection snomedCodeColl = new TaxonomyMapCollection();
 		HashMap concepts = new HashMap();
 
-		//WDEV-7119
 		StringBuffer sql = new StringBuffer();
 		sql.append(" select c.fullyspeci term, c.conceptid conceptid")
 			.append(" from core_snomed_concept c, core_snomed_cwrdidx w " ) 
 			.append(" where w.conceptid = c.conceptid ")
 			.append(" and c.conceptsta = 0 ")
 			.append(" and w.keyword like ");
-
-//		StringBuffer sql = new StringBuffer();
-//		sql.append(" select c.fullyspecifiedname term, c.conceptid conceptid")
-//			.append(" from snomed_concept c, snomed_concept_wordindex w " ) 
-//			.append(" where w.conceptid = c.conceptid ")
-//			.append(" and c.conceptstatus = 0 ")
-//			.append(" and w.keyword like ");
 		
 		StringTokenizer st = new StringTokenizer(filter.getDescription().trim().toUpperCase(), " ,.;:");
 		if (st.countTokens() == 0) throw new DomainInterfaceException("At least one key value must be supplied.");	

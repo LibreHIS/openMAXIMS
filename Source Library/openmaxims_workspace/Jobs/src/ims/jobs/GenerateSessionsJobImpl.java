@@ -146,18 +146,6 @@ public final class GenerateSessionsJobImpl extends ims.scheduler.SchedulerJob
 		return new SchedulerJobExecutionSummary(SchedulerJobExecutionStatus.SUCCEEDED, summaryMessage.toString());
 	}
 
-	/*private int getProfileIndex(ProfileShortVo profileToGenVo, ProfileSessionsGeneratedCountVoCollection coll)
-	{
-		if (coll == null || coll.size() == 0 || profileToGenVo == null)
-			return -1;
-		for (int i=0; i<coll.size(); i++)
-		{
-			if (coll.get(i) != null && coll.get(i).getProfileIsNotNull() && coll.get(i).getProfile().getID_Sch_Profile().equals(profileToGenVo.getID_Sch_Profile()))
-				return i;
-		}
-		return -1;
-	}*/
-
 	private ProfileSessionsGeneratedCountVo countSessionsForProfile(ProfileShortVo voProf, int generatedSessionNo)
 	{
 		ProfileSessionsGeneratedCountVo voProfileCount = new ProfileSessionsGeneratedCountVo();

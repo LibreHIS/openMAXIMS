@@ -193,7 +193,10 @@ public class OutpatientClinicListImpl extends BaseOutpatientClinicListImpl
 		querySelectPart.append("recordingUserTitle.text, ");
 		querySelectPart.append("bookingLetterRecordingUser.name.surname, bookingLetterRecordingUser.name.forename, ");
 		querySelectPart.append("bookingLetter.recordingDateTime, ");
-		querySelectPart.append(" (SELECT COUNT(linkedAppt.id) FROM Booking_Appointment AS appt1 LEFT JOIN appt1.linkedAppointments AS linkedAppt WHERE appt1.id = appts.id AND (linkedAppt.isRIE is null OR linkedAppt.isRIE = 0)), ");
+
+		/* TODO MSSQL case - querySelectPart.append(" (SELECT COUNT(linkedAppt.id) FROM Booking_Appointment AS appt1 LEFT JOIN appt1.linkedAppointments AS linkedAppt WHERE appt1.id = appts.id AND (linkedAppt.isRIE is null OR linkedAppt.isRIE = 0)), "); */
+		querySelectPart.append(" (SELECT COUNT(linkedAppt.id) FROM Booking_Appointment AS appt1 LEFT JOIN appt1.linkedAppointments AS linkedAppt WHERE appt1.id = appts.id AND (linkedAppt.isRIE is null OR linkedAppt.isRIE = FALSE)), ");
+
 		querySelectPart.append("appts.comments, ");
 		querySelectPart.append(" (SELECT sch.bookingComments FROM Sch_Booking AS sch LEFT JOIN sch.appointments AS appo WHERE appo.id = appts.id), ");
 		querySelectPart.append("referral.id, referral.version, ");

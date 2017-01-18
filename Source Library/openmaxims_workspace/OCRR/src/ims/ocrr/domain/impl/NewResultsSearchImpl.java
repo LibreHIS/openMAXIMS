@@ -96,47 +96,12 @@ public class NewResultsSearchImpl extends BaseNewResultsSearchImpl
 
 		
 		long startTime = System.currentTimeMillis();
-		
-//		List<?> searchResults = getDomainFactory().find(query.toString());
-//
-//		if (searchResults == null || searchResults.size() == 0)
-//			return null;
-//		
+
 		NewResultsSearchListVoCollection results = NewResultsSearchListVoAssembler.createNewResultsSearchListVoCollectionFromOrderInvestigation(getDomainFactory().find(query.toString()));
-		
-//		NewResultsSearchListVoCollection results = new NewResultsSearchListVoCollection();
-//
-//		for (int i = 0; i < searchResults.size(); i++)
-//		{
-//			Object[] result = (Object[]) searchResults.get(i);
-//			
-//			if (result[0] instanceof OrderInvestigation)
-//			{
-//				NewResultsSearchListVo newResult = NewResultsSearchListVoAssembler.create((OrderInvestigation) result[0]);
-//
-//				if (result[1] instanceof Long && (Long)result[1] > 0)
-//					newResult.setAbnormalResults(Boolean.TRUE);
-//				else
-//					newResult.setAbnormalResults(Boolean.FALSE);
-//				
-//				results.add(newResult);
-//			}
-//		}
-		
-		
+
 		long endTime = System.currentTimeMillis();
 
 		System.out.println("Time elapsed to retrive record data (ms): " + (endTime - startTime));
-
-//		List<?> resultsCustomConstructor = getDomainFactory().find(query.toString());
-//
-//		NewResultSearchListVoCollection resultsCollection = new NewResultSearchListVoCollection();
-//
-//		for (int i = 0; i < results.size(); i++)
-//		{
-//			if (resultsCustomConstructor.get(i) instanceof NewResultSearchListVo)
-//				resultsCollection.add((NewResultSearchListVo) resultsCustomConstructor.get(i));
-//		}
 
 		return results;
 	}
@@ -153,12 +118,6 @@ public class NewResultsSearchImpl extends BaseNewResultsSearchImpl
 	{
 		if (criteria == null || criteria.getFromDate() == null)
 			throw new CodingRuntimeException("Invalid parameter - Start Date");
-
-//		boolean reverseChronological = Boolean.TRUE.equals(criteria.getNewestFirst());
-//		
-//
-//		List<Integer> investigationsID = new ArrayList<Integer>(); 
-		
 
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();

@@ -387,8 +387,10 @@ public class InterventionsDiagnosisInvestigationsCcImpl extends BaseIntervention
 			return null;
 		
 		DomainFactory factory = getDomainFactory();
-		
-		String queryNoKnownInvestigationSaved = "SELECT attendDiagInvTreatStatus  from AttendDiagInvTreatStatus as attendDiagInvTreatStatus left join attendDiagInvTreatStatus.attendance as at where (at.id = :AttendenceId and (attendDiagInvTreatStatus.isRIE is null OR attendDiagInvTreatStatus.isRIE = 0) ) ";
+
+		/* TODO MSSQL case - String queryNoKnownInvestigationSaved = "SELECT attendDiagInvTreatStatus  from AttendDiagInvTreatStatus as attendDiagInvTreatStatus left join attendDiagInvTreatStatus.attendance as at where (at.id = :AttendenceId and (attendDiagInvTreatStatus.isRIE is null OR attendDiagInvTreatStatus.isRIE = 0) ) "; */
+		String queryNoKnownInvestigationSaved = "SELECT attendDiagInvTreatStatus  from AttendDiagInvTreatStatus as attendDiagInvTreatStatus left join attendDiagInvTreatStatus.attendance as at where (at.id = :AttendenceId and (attendDiagInvTreatStatus.isRIE is null OR attendDiagInvTreatStatus.isRIE = FALSE) ) ";
+
 		AttendDiagInvTreatStatus doAttendDiagInvTreatStatus = (AttendDiagInvTreatStatus) factory.findFirst(queryNoKnownInvestigationSaved, new String[] {"AttendenceId"}, new Object[] {careContextRef.getID_CareContext()});
 		
 		return AttendDiagInvTreatStatusVoAssembler.create(doAttendDiagInvTreatStatus);
@@ -508,7 +510,8 @@ public class InterventionsDiagnosisInvestigationsCcImpl extends BaseIntervention
 			hqlConditions.append(" ) ");
 		}
 
-		hqlConditions.append(andStr + " (attClinicalNotes.isRIE is null OR attClinicalNotes.isRIE = 0) ");
+		/* TODO MSSQL case - hqlConditions.append(andStr + " (attClinicalNotes.isRIE is null OR attClinicalNotes.isRIE = 0) "); */
+		hqlConditions.append(andStr + " (attClinicalNotes.isRIE is null OR attClinicalNotes.isRIE = FALSE) ");
 		
 		hql=hql + hqlConditions.toString();
 		
@@ -522,14 +525,12 @@ public class InterventionsDiagnosisInvestigationsCcImpl extends BaseIntervention
 		return false;
 	}
 
-	//WDEV-19239
 	public CodedDiagnosesForAttendanceVoCollection listCodedDiagnosesForAttendance(CareContextRefVo attendance, Boolean isMain)
 	{
 		CodedDiagnosisForAttendanceDialog impl=(CodedDiagnosisForAttendanceDialog)getDomainImpl(CodedDiagnosisForAttendanceDialogImpl.class);
 		return impl.listCodedDiagnosis(attendance, isMain);
 	}
 
-	//WDEV-19239
 	public CodedDiagnosesForAttendanceVoCollection saveCodedDiagnosis(CodedDiagnosesForAttendanceVoCollection codedDiagList) throws StaleObjectException
 	{
 		if(codedDiagList == null)

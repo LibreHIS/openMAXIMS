@@ -927,7 +927,7 @@ public class Logic extends BaseLogic
 		
 		return message.toString();
 	}
-	//wdev-11819
+
 	private String getGpListMessageLoc(LocSiteVo locVo, ForeignKeyViolationException excp)
 	{
 		StringBuffer message = new StringBuffer();
@@ -936,11 +936,7 @@ public class Logic extends BaseLogic
 		{
 			message.append("Cannot delete '" + locVo.getName() + "' as it is currently associated with");
 			message.append(" " +gps.length + " Patients");
-			/*for (int i = 0; i < gps.length; i++)
-			{
-				message.append(System.getProperty("line.separator"));
-				message.append(gps[i]);
-			}*/
+
 		}
 		else
 		{
@@ -949,7 +945,6 @@ public class Logic extends BaseLogic
 		
 		return message.toString();
 	}
-	//-----------
 	
 	private boolean removeSurgery()
 	{

@@ -444,7 +444,8 @@ public class AdmitToWardImpl extends BaseAdmitToWardImpl
 		if (patient == null || patient.getID_Patient() == null)
 			return false;
 		
-		String hql = "SELECT COUNT(alert.id) FROM PatientAlert AS alert LEFT JOIN alert.patient AS pat LEFT JOIN alert.alertType AS aType LEFT JOIN aType.parent AS aCategory WHERE (alert.isRIE is null OR alert.isRIE = 0) AND aCategory.id = :SELF_ADMIT_ALERT AND alert.isCurrentlyActiveAlert = :ACTIVE_ALERT AND pat.id = :PATIENT";
+		/* TODO MSSQL case - String hql = "SELECT COUNT(alert.id) FROM PatientAlert AS alert LEFT JOIN alert.patient AS pat LEFT JOIN alert.alertType AS aType LEFT JOIN aType.parent AS aCategory WHERE (alert.isRIE is null OR alert.isRIE = 0) AND aCategory.id = :SELF_ADMIT_ALERT AND alert.isCurrentlyActiveAlert = :ACTIVE_ALERT AND pat.id = :PATIENT"; */
+		String hql = "SELECT COUNT(alert.id) FROM PatientAlert AS alert LEFT JOIN alert.patient AS pat LEFT JOIN alert.alertType AS aType LEFT JOIN aType.parent AS aCategory WHERE (alert.isRIE is null OR alert.isRIE = FALSE) AND aCategory.id = :SELF_ADMIT_ALERT AND alert.isCurrentlyActiveAlert = :ACTIVE_ALERT AND pat.id = :PATIENT";
 		
 		long count = getDomainFactory().countWithHQL(hql, new String[]{"SELF_ADMIT_ALERT","ACTIVE_ALERT", "PATIENT" }, new Object[]{AlertType.SELF_ADMIT_PATIENT.getID(), Boolean.TRUE, patient.getID_Patient()});
 		

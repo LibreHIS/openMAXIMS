@@ -64,15 +64,6 @@ public class Logic extends BaseLogic
 	
 		if (coll == null || coll.size() == 0)
 			return null;
-		//WDEV-18594 - now it is possible to have a RTT status child of itself
-		/*for (int i=0; i<coll.size(); i++)
-		{
-			if (coll.get(i) != null && (coll.get(i).getID_RTTStatusPoint().equals(((RTTStatusPointVo) args[0]).getID_RTTStatusPoint())))
-			{
-				coll.remove(i);
-				break;
-			}		
-		}*/
 		return coll;
 	}
 

@@ -133,7 +133,7 @@ public class TriageHistoryImpl extends BaseTriageHistoryImpl
 	private TriageProtocolAssessmentShortVo getPreviousProtocolAssessment(CareContextRefVo careContext, DateTime assessmentDateTime, TriageProtocolAssessmentRefVo currentTriageProtocol)
 	{
 		/* TODO MSSQL case - String query = "SELECT tp FROM TriageProtocolAssessment AS tp LEFT JOIN tp.attendance AS attend WHERE (tp.isRIE is null OR tp.isRIE = 0) AND tp.isMain = 1 AND tp.id <> :PROTOCOL_ID AND attend.id = :CONTEXT_ID AND tp.assessmentDateTime <= :PROT_DATETIME ORDER BY tp.assessmentDateTime DESC"; */
-		String query = "SELECT tp FROM TriageProtocolAssessment AS tp LEFT JOIN tp.attendance AS attend WHERE (tp.isRIE is null OR tp.isRIE = false) AND tp.isMain = true AND tp.id <> :PROTOCOL_ID AND attend.id = :CONTEXT_ID AND tp.assessmentDateTime <= :PROT_DATETIME ORDER BY tp.assessmentDateTime DESC";
+		String query = "SELECT tp FROM TriageProtocolAssessment AS tp LEFT JOIN tp.attendance AS attend WHERE (tp.isRIE is null OR tp.isRIE = FALSE) AND tp.isMain = TRUE AND tp.id <> :PROTOCOL_ID AND attend.id = :CONTEXT_ID AND tp.assessmentDateTime <= :PROT_DATETIME ORDER BY tp.assessmentDateTime DESC";
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
@@ -181,7 +181,8 @@ public class TriageHistoryImpl extends BaseTriageHistoryImpl
 
 	private TriageForRIETriageAssessmentVo getTriage(CareContextRefVo careContext)
 	{
-		String query = "SELECT trg FROM Triage AS trg LEFT JOIN trg.attendance AS attd WHERE attd.id = :CONTEXT_ID and (trg.isRIE is null OR trg.isRIE = 0)";
+		/* TODO MSSQL case - String query = "SELECT trg FROM Triage AS trg LEFT JOIN trg.attendance AS attd WHERE attd.id = :CONTEXT_ID and (trg.isRIE is null OR trg.isRIE = 0)"; */
+		String query = "SELECT trg FROM Triage AS trg LEFT JOIN trg.attendance AS attd WHERE attd.id = :CONTEXT_ID and (trg.isRIE is null OR trg.isRIE = FALSE)";
 		
 		return TriageForRIETriageAssessmentVoAssembler.create((Triage) getDomainFactory().findFirst(query, "CONTEXT_ID", careContext.getID_CareContext()));
 	}

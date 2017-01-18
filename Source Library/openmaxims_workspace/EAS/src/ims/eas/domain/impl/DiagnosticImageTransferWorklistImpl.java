@@ -141,17 +141,13 @@ public class DiagnosticImageTransferWorklistImpl extends BaseDiagnosticImageTran
 		
 		if (removed == false)
 		{
-			query.append(" AND (eas.removedStat = 0 OR eas.removedStat is null)");
-			query.append(" AND (imgTransfers.removedStat = 0 OR imgTransfers.removedStat is null)");
+			/* TODO MSSQL case - query.append(" AND (eas.removedStat = 0 OR eas.removedStat is null)"); */
+			query.append(" AND (eas.removedStat = FALSE OR eas.removedStat is null)");
+
+			/* TODO MSSQL case - query.append(" AND (imgTransfers.removedStat = 0 OR imgTransfers.removedStat is null)"); */
+			query.append(" AND (imgTransfers.removedStat = FALSE OR imgTransfers.removedStat is null)");
 		}
-		/* WDEV-17621
-		else
-		{
-			query.append(" AND eas.removedStat = 1");
-			query.append(" AND imgTransfers.removedStat = 1");
-		}*/ 
-		
-		
+
 		return DiagnosticImageTransferVoAssembler.createDiagnosticImageTransferVoCollectionFromElectronicActionSheet(getDomainFactory().find(query.toString(), paramNames, paramValues));
 	}
 

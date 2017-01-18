@@ -424,33 +424,20 @@ public class Logic extends BaseLogic
 					
 			}
 		}
-/*		HcpLiteVoCollection hcpVoColl = domain.listConsultants();
-		
-		if(hcpVoColl != null)
-		{
-			//hcpVoColl.sort(new ConsultatntNameComparator(SortOrder.ASCENDING)); //wdev-13961  //WDEV-14301
-			for (int i = 0; i < hcpVoColl.size(); ++i)
-			{
-				HcpLiteVo consultant = hcpVoColl.get(i);
-				if((consultant.getIsActiveIsNotNull() && consultant.getIsActive()) 
-					|| (form.getGlobalContext().getPatTreatmentPlanIsNotNull() && form.getGlobalContext().getPatTreatmentPlan().equals(consultant)))
-				form.cmbConsultant().newRow(consultant, consultant.getIMosName());
-			}
-		}
-*/
-		//SeenAt
+
+		// SeenAt
 		this.form.cmbSeenAt().clear();
 		ims.ccosched.vo.lookups.SeenAtCollection seenatlookupCollection = domain.loadSeenAtLookup();
 		for(int x = 0; x < seenatlookupCollection.size(); x++)
 		{
-			//WDEV-17011
+
 			if (seenatlookupCollection.get(x).isActive())
 			{
 				this.form.cmbSeenAt().newRow(seenatlookupCollection.get(x), seenatlookupCollection.get(x).getText(), seenatlookupCollection.get(x).getImage(), seenatlookupCollection.get(x).getTextColor());
 			}
 		}
 		
-		//Patient Status
+		// Patient Status
 		this.form.cmbPatientStatus().clear();
 		ims.ccosched.vo.lookups.StatusCollection patStatlookupCollection = domain.loadPatientStatusLookup();
 		for(int x = 0; x < patStatlookupCollection.size(); x++)
@@ -458,7 +445,7 @@ public class Logic extends BaseLogic
 			this.form.cmbPatientStatus().newRow(patStatlookupCollection.get(x), patStatlookupCollection.get(x).getText(), patStatlookupCollection.get(x).getImage(), patStatlookupCollection.get(x).getTextColor());
 		}
 
-		//Treatment Intent
+		// Treatment Intent
 		this.form.cmbTreatmentIntent().clear();
 		ims.ccosched.vo.lookups.TreatmentIntentCollection treatIntentlookupCollection = domain.loadTreatmentIntent();
 		for(int x = 0; x < treatIntentlookupCollection.size(); x++)
@@ -474,30 +461,16 @@ public class Logic extends BaseLogic
 		{
 			this.form.cmbWrtSurgery().newRow(surgeryReqlookupCollection.get(x), surgeryReqlookupCollection.get(x).getText(), surgeryReqlookupCollection.get(x).getImage(), surgeryReqlookupCollection.get(x).getTextColor());
 		}
-		
-		// WDEV-13261
-		// load organisations for SeenAt combo
-		//start http://jira/browse/WDEV-13934
-//		OrganisationLiteVoCollection orgLiteVoColl = domain.listSeenAtLocations();
-//		if(orgLiteVoColl != null)
-//		{
-//			for (int i = 0; i < orgLiteVoColl.size(); ++i)
-//			{
-//				OrganisationLiteVo org = orgLiteVoColl.get(i);
-//				if((org.getIsActiveIsNotNull() && org.getIsActive())) 
-//					form.cmbSeenAt().newRow(org, org.getName());
-//			}
-//		}
-		//end http://jira/browse/WDEV-13934		
+
 	}
 	
-	/** WDEV-13261
+	/**
 	 *  Load the local Episode of CareList into the combo
 	 *  If the global context is set, default to that value 
 	 */
 	private void LoadEpisodeOfCareCombo()
 	{
-		// WDEV-13261
+
 		PatientShort patVo = form.getGlobalContext().Core.getPatientShort();
 
 		EpisodeofCareShortVoCollection episColl = domain.listEpisodesForPatient(patVo);
@@ -982,56 +955,15 @@ public class Logic extends BaseLogic
 		if ( form.getLocalContext().getPatTreatmentPlanVoIsNotNull()
 			&& form.getLocalContext().getPatTreatmentPlanVo().getID_PatTreatmentPlanIsNotNull()
 			&& form.getLocalContext().getPatTreatmentPlanVo().getActionsIsNotNull()
-			&& ! node.isChecked()) //unchecked
+			&& ! node.isChecked()) // unchecked
 		{
 			for (int i = 0 ; i < form.getLocalContext().getPatTreatmentPlanVo().getActions().size() ; i++)
 			{
-				//TODO http://jira/browse/WDEV-13830
-				/*
-				  if (form.getLocalContext().getPatTreatmentPlanVo().getActions().get(i).getGroupSiteTechIsNotNull())
-				 
-				{
-					for (int x = 0 ; x < form.getLocalContext().getPatTreatmentPlanVo().getActions().get(i).getGroupSiteTech().size() ; x++)
-					{
-						
-						//TODO
-						
-						
-						
-						
-				//		if (node.getValue() instanceof GroupVo)
-				//		{
-				//			if (form.getLocalContext().getPatTreatmentPlanVo().getActions().get(i).getGroupSiteTech().get(x).getTreatmentGroupIsNotNull()
-				//				&& form.getLocalContext().getPatTreatmentPlanVo().getActions().get(i).getGroupSiteTech().get(x).getTreatmentGroup().compareTo((GroupVo)node.getValue()) == 0)
-				//			{
-								engine.showMessage(" Cannot remove Treatment Site as an associated Action Details record exists for this Treatment Site.");
-				//				break;
-				//			}
-				//		}
-
-								
-								//TODO
-				
-				//		if (node.getValue() instanceof GroupSiteVo)
-				//		{
-				//			if (form.getLocalContext().getPatTreatmentPlanVo().getActions().get(i).getGroupSiteTech().get(x).getTreatmentSiteIsNotNull()
-				//				&& form.getLocalContext().getPatTreatmentPlanVo().getActions().get(i).getGroupSiteTech().get(x).getTreatmentSite().compareTo((GroupSiteVo)node.getValue()) == 0)
-				//			{
-								engine.showMessage(" Cannot remove Treatment Site as an associated Action Details record exists for this Treatment Site.");
-								node.setChecked(true);
-				//				break;
-				//			}
-				//		}
-					}
-				}
-					
-				*/
-				
 				
 			}
 		}
 	}
-	//wdev-13961
+
 	public class ConsultatntNameComparator implements Comparator
 	{
 		private int direction = 1;

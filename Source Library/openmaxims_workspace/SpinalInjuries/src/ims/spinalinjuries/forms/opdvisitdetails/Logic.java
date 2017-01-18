@@ -267,18 +267,9 @@ public class Logic extends BaseLogic
 
 		for(int i=0;i<collHcps.size();i++)
 		{
-			//WDEV-193 Don't include the Responsible Medical Officer in the list of 'other' HCP's  
+			// Don't include the Responsible Medical Officer in the list of 'other' HCP's
 			if (form.qmbRecordingHCP().getValue() != null)
-			//{
-			//	if (collHcps.get(i).getID_Hcp().equals(form.qmbRecordingHCP().getValue().getID_Hcp()))
-			//		continue;
-			//}
 				row.getcolHcps().newRow(collHcps.get(i), collHcps.get(i).toString());
-			
-			//for(int i=0;i<collHcps.size();i++)
-			//	row.getColHcp().newRow(collHcps.get(i),collHcps.get(i).toString());					
-
-			
 		}
 	}
 	protected void onGrdOtherHcpSelectionChanged() throws PresentationLogicException

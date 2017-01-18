@@ -117,12 +117,12 @@ public class ProfilesSlotGenericImpl extends DomainImpl implements ims.schedulin
 		if( Boolean.TRUE.equals(isFlexible))
 		{
 			/* TODO MSSQL case - hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.activity as a1_1 where (s1_1.isActive = 1 and a1_1.isActive = 1 and s1_1.service.id = :serviceId and s1_1.isFlexible = 1 )"; */
-			hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.activity as a1_1 where (s1_1.isActive = true and a1_1.isActive = true and s1_1.service.id = :serviceId and s1_1.isFlexible = true )";
+			hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.activity as a1_1 where (s1_1.isActive = TRUE and a1_1.isActive = TRUE and s1_1.service.id = :serviceId and s1_1.isFlexible = true )";
 		}
 		else
 		{
 			/* TODO MSSQL case - hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.activity as a1_1 where (s1_1.isActive = 1 and a1_1.isActive = 1 and s1_1.service.id = :serviceId and (s1_1.isFlexible = 0 or s1_1.isFlexible is null))"; */
-			hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.activity as a1_1 where (s1_1.isActive = true and a1_1.isActive = true and s1_1.service.id = :serviceId and (s1_1.isFlexible = false or s1_1.isFlexible is null))";
+			hql = "select s1_1.activity from ServiceActivity as s1_1 left join s1_1.activity as a1_1 where (s1_1.isActive = TRUE and a1_1.isActive = TRUE and s1_1.service.id = :serviceId and (s1_1.isFlexible = false or s1_1.isFlexible is null))";
 		}
 		
 		List lst = factory.find(hql, new String[]{"serviceId"}, new Object[]{new Integer(serviceRef.getID_Service())});
@@ -139,8 +139,7 @@ public class ProfilesSlotGenericImpl extends DomainImpl implements ims.schedulin
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
 		StringBuffer condStr = new StringBuffer();
-		//String hql = " from DirectoryofService dos "; 
-		
+
 		String hql = " select dos from DirectoryofService as dos left join dos.functions as s1_1 left join s1_1.function as l1_1 ";
 		
 		String andStr = " ";

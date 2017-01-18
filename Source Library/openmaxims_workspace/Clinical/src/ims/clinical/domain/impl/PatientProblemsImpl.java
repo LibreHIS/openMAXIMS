@@ -178,7 +178,8 @@ public class PatientProblemsImpl extends BasePatientProblemsImpl
 		
 		if (isResolved.equals(Boolean.TRUE))
 		{
-			hql.append ("and (problem.isResolved is null or problem.isResolved = 0)");
+			/* TODO MSSQL case - hql.append ("and (problem.isResolved is null or problem.isResolved = 0)"); */
+			hql.append ("and (problem.isResolved is null or problem.isResolved = FALSE)");
 		}
 		
 		List list = factory.find(hql.toString());

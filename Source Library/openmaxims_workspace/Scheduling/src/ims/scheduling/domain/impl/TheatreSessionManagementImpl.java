@@ -715,7 +715,9 @@ public class TheatreSessionManagementImpl extends BaseTheatreSessionManagementIm
 			domainMOS = MemberOfStaffShortVoAssembler.extractMemberOfStaff(factory,((MemberOfStaffShortVo) getMosUser()));
 		}
 
-		String patientElectiveListQuery = "select electiveList from PatientElectiveList as electiveList left join electiveList.referral as cats left join electiveList.electiveListStatus as currentStatus left join currentStatus.electiveListStatus as elStatus left join electiveList.tCIDetails as tci left join tci.appointment as appt where cats.id = :CatsId and appt.id = :appointmentID and elStatus.id <> :RemovedId and (electiveList.isRIE is null or electiveList.isRIE = 0)";
+		/* TODO MSSQL case - String patientElectiveListQuery = "select electiveList from PatientElectiveList as electiveList left join electiveList.referral as cats left join electiveList.electiveListStatus as currentStatus left join currentStatus.electiveListStatus as elStatus left join electiveList.tCIDetails as tci left join tci.appointment as appt where cats.id = :CatsId and appt.id = :appointmentID and elStatus.id <> :RemovedId and (electiveList.isRIE is null or electiveList.isRIE = 0)"; */
+		String patientElectiveListQuery = "select electiveList from PatientElectiveList as electiveList left join electiveList.referral as cats left join electiveList.electiveListStatus as currentStatus left join currentStatus.electiveListStatus as elStatus left join electiveList.tCIDetails as tci left join tci.appointment as appt where cats.id = :CatsId and appt.id = :appointmentID and elStatus.id <> :RemovedId and (electiveList.isRIE is null or electiveList.isRIE = FALSE)";
+
 		PatientElectiveList patientElectiveListDO  = (PatientElectiveList) factory.findFirst(patientElectiveListQuery, new String[] {"CatsId", "appointmentID", "RemovedId"}, new Object[] {catsReferral.getID_CatsReferral(), apptRef.getID_Booking_Appointment(), WaitingListStatus.REMOVED.getID()});
 		
 		if (patientElectiveListDO == null)

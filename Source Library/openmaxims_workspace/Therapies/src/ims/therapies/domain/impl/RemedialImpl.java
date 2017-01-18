@@ -126,7 +126,6 @@ public class RemedialImpl extends BaseRemedialImpl
 			//return null;	
 	}
 
-	//WDEV-15078
 	public Boolean existRemedialForClinicalContact(ClinicalContactRefVo clinicalContactRef)
 	{
 		if (clinicalContactRef == null || clinicalContactRef.getID_ClinicalContact() == null)
@@ -136,7 +135,9 @@ public class RemedialImpl extends BaseRemedialImpl
 
 		StringBuffer hql = new StringBuffer();
 		hql.append("select count(remedial.id) from Remedial as remedial ");
-		hql.append("where (remedial.clinicalContact.id = :clinicalId and (remedial.isRIE is null or remedial.isRIE = 0)) ");
+
+		/* TODO MSSQL case - hql.append("where (remedial.clinicalContact.id = :clinicalId and (remedial.isRIE is null or remedial.isRIE = 0)) "); */
+		hql.append("where (remedial.clinicalContact.id = :clinicalId and (remedial.isRIE is null or remedial.isRIE = FALSE)) ");
 		
 		DomainFactory factory = getDomainFactory();
 		Object[] count = factory.find(hql.toString(), new String[] {"clinicalId"}, new Object[] {clinicalContactRef.getID_ClinicalContact()}).toArray();

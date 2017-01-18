@@ -496,7 +496,10 @@ public class TaxonomySearchCmpImpl extends DTODomainImplementation implements im
 		sql.append(" select c.fullyspeci term, c.conceptid conceptid")
 			.append(" from core_snomed_concept c, core_snomed_cwrdidx w " ) 
 			.append(" where w.conceptid = c.conceptid ")
-			.append(" and c.conceptsta = 0 ")
+
+			/* TODO MSSQL case - .append(" and c.conceptsta = 0 ") */
+			.append(" and c.conceptsta = FALSE ")
+
 			.append(" and w.keyword like ");
 		
 		StringTokenizer st = new StringTokenizer(filter.getDescription().trim().toUpperCase(), " ,.;:");

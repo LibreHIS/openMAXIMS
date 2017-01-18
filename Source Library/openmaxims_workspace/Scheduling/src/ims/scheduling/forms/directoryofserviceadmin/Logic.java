@@ -424,14 +424,6 @@ public class Logic extends BaseLogic
 			form.cmbServiceFilter().newRow(voCollServices.get(i), voCollServices.get(i).getServiceName());
 			form.cmbService().newRow(voCollServices.get(i), voCollServices.get(i).getServiceName());
 		}
-		/*WDEV-11662
-		OrganisationLiteVoCollection listOrganisations = domain.listOrganisations();
-		
-		form.cmbOrganisation().clear();
-		for (int i = 0; listOrganisations != null && i < listOrganisations.size(); i++)
-		{
-			form.cmbOrganisation().newRow(listOrganisations.get(i), listOrganisations.get(i).getName());
-		}*/
 		
 		ContractConfigShortVoCollection contracts = domain.listActiveContracts();
 		form.cmbContract().clear();
@@ -439,8 +431,6 @@ public class Logic extends BaseLogic
 		{
 			form.cmbContract().newRow(contracts.get(i), contracts.get(i).getContractName());
 		}
-		//WDEV-11662 End
-
 	}
 
 	protected void onQmbLocationFilterTextSubmited(String value) throws PresentationLogicException

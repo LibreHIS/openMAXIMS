@@ -125,12 +125,12 @@ public class Logic extends BaseLogic
 
 	private void selectOrderEntryTemplate(Object[] args) throws PresentationLogicException
 	{
-		if(args == null)
+		if (args == null)
 			return;
 		
-		if(args.length == 1)
+		if (args.length == 1)
 		{
-			if(args[0] instanceof OrderEntryTemplateBaseVo)
+			if (args[0] instanceof OrderEntryTemplateBaseVo)
 			{
 				OrderEntryTemplateBaseVo voOrdTemplate = (OrderEntryTemplateBaseVo) args[0];
 				form.treDetails().setValue(voOrdTemplate);
@@ -138,80 +138,13 @@ public class Logic extends BaseLogic
 			}
 		}
 	}
-	
-	/*
-	//WDEV-10858 Code here will do security level checks and modify the components in Global Context if needed
-	private MyOrderComponentVoCollection enforceSecurity(MyOrderComponentVoCollection components) throws PresentationLogicException
-	{
-		MyOrderComponentVoCollection removableComponenets = new MyOrderComponentVoCollection();
-		for (int x = 0; x < components.size(); x++)
-		{
-			MyOrderComponentVo component = components.get(x);
-
-			if (component != null)
-			{
-				if(form.getGlobalContext().OCRR.getRoleDisciplineSecurityLevelsIsNotNull())
-				{
-					SecurityLevelAndServiceCheckVo voSecLevelAndService = domain.getSecurityLevelAndServiceForInvestigation(component.getID());
-					if(voSecLevelAndService != null && voSecLevelAndService.getSecurityLevelIsNotNull() && voSecLevelAndService.getServiceIsNotNull())
-					{
-						if(!form.getGlobalContext().OCRR.getRoleDisciplineSecurityLevels().doesInvPassSecurityCheck(voSecLevelAndService.getService(),voSecLevelAndService.getSecurityLevel()))
-						{
-							removableComponenets.add(component);
-							continue;
-						}
-					}
-				}
-
-				MyOrderChildComponentVoCollection childComponents = component.getComponents();
-				MyOrderChildComponentVoCollection accessibleChildComponents = new MyOrderChildComponentVoCollection();
-				if (childComponents != null)
-				{
-					for (int y = 0; y < childComponents.size(); y++)
-					{
-						MyOrderChildComponentVo childComponent = childComponents.get(y);
-
-						//child investigations of profiles or order sets - security levels
-						if(form.getGlobalContext().OCRR.getRoleDisciplineSecurityLevelsIsNotNull())
-						{
-							SecurityLevelAndServiceCheckVo voSecLevelAndService = domain.getSecurityLevelAndServiceForInvestigation(childComponent.getID());
-							if(voSecLevelAndService != null && voSecLevelAndService.getSecurityLevelIsNotNull() && voSecLevelAndService.getServiceIsNotNull())
-							{
-								if(form.getGlobalContext().OCRR.getRoleDisciplineSecurityLevels().doesInvPassSecurityCheck(voSecLevelAndService.getService(),voSecLevelAndService.getSecurityLevel()))
-								{
-									//add to collection to replace existing childComponents
-									accessibleChildComponents.add(childComponent);
-								}
-							}
-							else //if there is no security level for the investigation
-								accessibleChildComponents.add(childComponent);
-						}
-					}
-					component.setComponents(accessibleChildComponents);
-				}
-			}
-		}
-		
-		//remove profiles here also WDEV-10848
-		if(removableComponenets.size() > 0)
-		{
-			for(MyOrderComponentVo compToRemove : removableComponenets)
-			{
-				components.remove(compToRemove);
-			}
-		}
-
-		form.getGlobalContext().OCRR.setMyOrderComponents(components);	
-		return components;
-	}
-	*/
 
 	private void repopulateFromMyOrder() throws PresentationLogicException
 	{
 		SelectedComponentFromSelectOrderVoCollection voCollSelectedComponents = new SelectedComponentFromSelectOrderVoCollection();
 
 		MyOrderComponentVoCollection voCollMyOrderComponents = form.getGlobalContext().OCRR.getMyOrderComponents();
-		if(voCollMyOrderComponents != null)
+		if (voCollMyOrderComponents != null)
 		{
 			for (int i = 0; i < voCollMyOrderComponents.size(); i++)
 			{

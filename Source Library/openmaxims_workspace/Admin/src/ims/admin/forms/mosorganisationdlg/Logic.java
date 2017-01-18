@@ -728,22 +728,6 @@ public class Logic extends BaseLogic
 
 				fillAccreditationForLocationSite(row);
 			}
-/*			else if (row.getValue() instanceof LocMostVo)
-			{
-				DynamicGridCell cell2 = row.getCells().newCell(getColByIdentifier(COL_ACCREDITATION), DynamicCellType.EMPTY);
-				if (cell2 != null)
-				{
-					cell2.setReadOnly(true);
-					AccreditationLocationStatusCollection coll = LookupHelper.getAccreditationLocationStatus(domain.getLookupService());
-					for(int k = 0 ; k < coll.size() ; k++) 
-						cell2.getItems().newItem(coll.get(k));
-					
-					cell2.setReadOnly(false);
-					cell2.setTooltip("Please select an Accreditation");
-					cell2.setWidth(-1);
-				}
-			}
-*/
 		}
 	}
 

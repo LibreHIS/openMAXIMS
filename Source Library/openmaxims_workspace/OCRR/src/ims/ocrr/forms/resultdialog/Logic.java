@@ -636,7 +636,6 @@ public class Logic extends BaseLogic
 			else
 				form.lnkViewPatientDetails().setVisible(false);
 			form.getLocalContext().setPickValue(ResultDisplayHelper.PICK_VIEWED);
-			//form.htmDocument().setHTML("<embed src='"+ getFileServerURL() + invest.getResultDetails().getDocumentResultDetails().getServerDocument().getFileName() + "#navpanes=0' width='835' height='411'></embed>");//WDEV-16232
 			form.htmDocument().setHTML("<IFRAME id=\"PostFrame\" name=\"PostFrame\" width=\"100%\" height=\"100%\" frameborder=0 src='" + getFileServerURL() + invest.getResultDetails().getDocumentResultDetails().getServerDocument().getFileName() +  "'></IFRAME>");//WDEV-16651
 		}		
 		
@@ -811,7 +810,7 @@ public class Logic extends BaseLogic
 			form.htmDocument().setVisible(true);
 			showResultStatusOptions(true);
 			form.dyngrdResults().setVisible(false);
-			//WDEV-10904
+
 			String htmlString = "<IFRAME id=\"PostFrame\" name=\"PostFrame\" width=\"100%\" height=\"100%\" frameborder=0 src='" + getFileServerURL() + voOrderInvestigation.getResultDetails().getDocumentResultDetails().getServerDocument().getFileName() + "'></IFRAME>";//WDEV-16232
 			form.getLocalContext().sethtmlString(htmlString);
 			form.htmDocument().setHTML(htmlString);
@@ -1076,10 +1075,10 @@ public class Logic extends BaseLogic
 		form.txtLabRadNo().setValue(invest.getFillerOrdNum());
 		if (invest.getResultDetails() != null && invest.getResultDetails().getClinicalResultDetails() != null && invest.getResultDetails().getClinicalResultDetails().getExamDateTime() != null)//WDEV-16232		
 		{
-			if (invest.getResultDetails().getClinicalResultDetails().getExamTimeSupplied().booleanValue())//WDEV-16232
-				form.txtTypeOrExamDt().setValue(invest.getResultDetails().getClinicalResultDetails().getExamDateTime().toString());//WDEV-16232
+			if (invest.getResultDetails().getClinicalResultDetails().getExamTimeSupplied().booleanValue())
+				form.txtTypeOrExamDt().setValue(invest.getResultDetails().getClinicalResultDetails().getExamDateTime().toString());
 			else
-				form.txtTypeOrExamDt().setValue(invest.getResultDetails().getClinicalResultDetails().getExamDateTime().getDate().toString());//WDEV-16232
+				form.txtTypeOrExamDt().setValue(invest.getResultDetails().getClinicalResultDetails().getExamDateTime().getDate().toString());
 		}
 		// JP 09/11/2006 WDEV-2102
 		if (invest.getRepDateTime() != null)
@@ -1797,78 +1796,6 @@ public class Logic extends BaseLogic
 		}
 		
 		engine.openUrl(resultUrl);
-		
-		/*
-		ReportVoCollection coll = domain.listAssignedReports(new Integer(engine.getFormName().getID()));
-
-		ReportVo rep = null;
-		if(coll != null && coll.size() > 0)
-		{
-			for (int i = 0; i < coll.size(); i++)
-			{
-				if(coll.get(i).getSeeds() == null || coll.get(i).getSeeds().size() == 0)
-				{
-					if(rep != null)
-					{
-						engine.showMessage("More than one report assigned to this form.");
-						return;
-					}
-					
-					rep = coll.get(i);
-				}
-				else
-					rep = coll.get(i);
-			}
-			
-			if(rep == null)
-				engine.showMessage("I could not find a suitable report for this form.\n\rPlease go to Admin->Reports and assign a report to this form.");
-			
-			if(rep != null &&
-					rep.getTemplatesIsNotNull() &&
-						rep.getTemplates().size() > 0)
-			{
-				ReportTemplateVo template = rep.getTemplates().get(0);
-				
-				String[] obj = null;
-				try
-				{
-					obj = domain.getReportAndTemplate(rep.getID_ReportBo(), template.getID_TemplateBo());				
-				}
-				catch (DomainInterfaceException e)
-				{
-					engine.showMessage("Error retrieving report template !\r\n" + e.getMessage());
-					return;
-				}
-				
-				if(obj == null || obj.length == 0)
-				{
-					engine.showMessage("I could not get the report and template !");
-					return;
-				}
-
-				QueryBuilderClient client = new QueryBuilderClient(urlQueryServer, engine.getSessionId());
-				
-				client.addSeed(new SeedValue("OrderInvestigation_id",  form.getLocalContext().getOrderInv().getBoId(), Integer.class));
-				
-				String resultUrl = "";
-				try
-				{
-					resultUrl = client.buildReportAsUrl(obj[0], obj[1], urlReportServer, "PDF", "", 1);
-				} 
-				catch (QueryBuilderClientException e1)
-				{
-					engine.showMessage("Error creating report: " + e1.getMessage());
-					return;
-				}
-				
-				engine.openUrl(resultUrl);
-			}
-		}
-		else
-		{
-			engine.showMessage("No report was assigned to this form.\n\rPlease go to Admin->Reports and assign a report to this form.");
-		}
-		*/
 	}
 	@Override
 	protected void onBtnPrintResultClick() throws PresentationLogicException
@@ -1876,7 +1803,7 @@ public class Logic extends BaseLogic
 		String urlQueryServer = ConfigFlag.GEN.QUERY_SERVER_URL.getValue();
 		String urlReportServer = ConfigFlag.GEN.REPORT_SERVER_URL.getValue();
 
-		//we need a better way to do this
+		// FIXME We need a better way to do this
 		Object[] obj = domain.getSystemReportAndTemplate(new Integer(75));
 		
 		if(obj == null || obj.length < 2)
@@ -1885,7 +1812,7 @@ public class Logic extends BaseLogic
 			return;
 		}
 		
-		if(obj[0] == null || obj[1] == null)
+		if (obj[0] == null || obj[1] == null)
 		{
 			engine.showMessage("The report has not been deployed !");
 			return;

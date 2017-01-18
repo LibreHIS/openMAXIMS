@@ -448,32 +448,6 @@ public class Logic extends BaseLogic
 		form.lyrMain().tabSearch().qmbInvestigationType().newRow(investigation, investigation.getName());
 	}
 
-	// private void populateOrderingLocations(String value)
-	// {
-	// form.qmbOrderingLocation().clear();
-	// LocationLiteVoCollection locations = domain.listLocations("%" + value +
-	// "%");
-	// if(locations != null)
-	// {
-	// for(int x = 0; x < locations.size(); x++)
-	// {
-	// addLocation(locations.get(x));
-	// }
-	//				
-	// if(locations.size() == 1)
-	// form.qmbOrderingLocation().setValue(locations.get(0));
-	// else if(locations.size() > 1)
-	// form.qmbOrderingLocation().showOpened();
-	// }
-	// }
-	//	
-	// private void addLocation(LocationLiteVo location)
-	// {
-	// if(location == null || location.getName() == null)
-	// return;
-	// form.qmbOrderingLocation().newRow(location, location.getName());
-	// }
-
 	private void populateClinicians(String value)
 	{
 		form.lyrMain().tabSearch().qmbClinician().clear();

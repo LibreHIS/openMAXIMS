@@ -490,7 +490,9 @@ public class DayCaseAdmissionDialogImpl extends BaseDayCaseAdmissionDialogImpl
 			return Boolean.FALSE;
 		
 		StringBuilder query = new StringBuilder("SELECT COUNT(pel.id) FROM PatientElectiveList AS pel LEFT JOIN pel.electiveList AS el LEFT JOIN el.service AS serv LEFT JOIN pel.patient AS patient LEFT JOIN pel.tCIDetails AS tci");
-		query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = 0");
+
+		/* TODO MSSQL case - query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = 0"); */
+		query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = FALSE");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();							ArrayList<Object> paramValues = new ArrayList<Object>();
 		paramNames.add("PEL_ID");														paramValues.add(patientElectiveList.getID_PatientElectiveList());
@@ -514,7 +516,9 @@ public class DayCaseAdmissionDialogImpl extends BaseDayCaseAdmissionDialogImpl
 			return null;
 		
 		StringBuilder query = new StringBuilder("SELECT pel FROM PatientElectiveList AS pel LEFT JOIN pel.electiveList AS el LEFT JOIN el.service AS service LEFT JOIN pel.patient AS patient LEFT JOIN pel.tCIDetails AS tci");
-		query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = 0");
+
+		/* TODO MSSQL case - query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = 0"); */
+		query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = FALSE");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();							ArrayList<Object> paramValues = new ArrayList<Object>();
 		paramNames.add("PEL_ID");														paramValues.add(electiveList.getID_PatientElectiveList());

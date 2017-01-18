@@ -62,8 +62,9 @@ public class TransportBookingImpl extends BaseTransportBookingImpl
 	{
 		if (careContext == null)
 			return null;
-		
-		String hqlQuery = "SELECT patTranReq FROM PatientTransportRequirements AS patTranReq WHERE patTranReq.careContext.id = :Context_ID AND (patTranReq.isRIE is null OR patTranReq.isRIE = 0)";
+
+		/* TODO MSSQL case - String hqlQuery = "SELECT patTranReq FROM PatientTransportRequirements AS patTranReq WHERE patTranReq.careContext.id = :Context_ID AND (patTranReq.isRIE is null OR patTranReq.isRIE = 0)"; */
+		String hqlQuery = "SELECT patTranReq FROM PatientTransportRequirements AS patTranReq WHERE patTranReq.careContext.id = :Context_ID AND (patTranReq.isRIE is null OR patTranReq.isRIE = FALSE)";
 		
 		return PatientTransportRequirementsVoAssembler.create((PatientTransportRequirements) getDomainFactory().findFirst(hqlQuery, "Context_ID", careContext.getID_CareContext()));
 	}

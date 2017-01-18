@@ -207,8 +207,7 @@ public class Logic extends BaseLogicDTO
 		Integer nActivityId = null;
 		try
 		{
-			//nActivityId = Integer.valueOf(element.getActivity().getID_SchedActivity());
-			nActivityId = Integer.valueOf(element.getActivity().getActivityId());//WDEV-15341
+			nActivityId = Integer.valueOf(element.getActivity().getActivityId());
 		}
 		catch (NumberFormatException e)
 		{
@@ -219,19 +218,19 @@ public class Logic extends BaseLogicDTO
 		{
 			if (nActivityId.intValue() == -202 || nActivityId.intValue() == -207)
 			{
-				tooltip += "  Modality: " + (element.getModalityIsNotNull()?element.getModality().getText():"") + newline + 
-				"  Energy Value: " + (element.getModalEnergyIsNotNull()?element.getModalEnergy():"") + newline + "  Units: " + 
-				(element.getUnitIsNotNull()?element.getUnit().getText():"") + newline + 
-				"  Dose: " + (element.getTl_doseIsNotNull()?element.getTl_dose().toString():"") + 
-				" in " + (element.getTl_fractionsIsNotNull()?element.getTl_fractions().toString():"") + 
-				" Fractions over " + (element.getTl_durationIsNotNull()?element.getTl_duration().toString():"") + 
-				" days" + newline + GetActionTreatmentSite(element);
+				tooltip += "  Modality: " + (element.getModalityIsNotNull()?element.getModality().getText():"") + newline +
+						"  Energy Value: " + (element.getModalEnergyIsNotNull()?element.getModalEnergy():"") + newline + "  Units: " +
+						(element.getUnitIsNotNull()?element.getUnit().getText():"") + newline +
+						"  Dose: " + (element.getTl_doseIsNotNull()?element.getTl_dose().toString():"") +
+						" in " + (element.getTl_fractionsIsNotNull()?element.getTl_fractions().toString():"") +
+						" Fractions over " + (element.getTl_durationIsNotNull()?element.getTl_duration().toString():"") +
+						" days" + newline + GetActionTreatmentSite(element);
 
-			}// Chemotherapy
+			} // Chemotherapy
 			else if (nActivityId.intValue() == -201)
 			{
 				tooltip += " Start Date: " + (element.getChemPlanStartDateIsNotNull()?element.getChemPlanStartDate().toString():"") + " Planned Regime: " + (element.getPlannedRegimeIsNotNull()?element.getPlannedRegime().getText():"") + newline;
-			}// Brachytherapy
+			} // Brachytherapy
 			else if (nActivityId.intValue() == -204 || nActivityId.intValue() == -200)
 			{
 				if (nActivityId.intValue() == -204)
@@ -247,134 +246,17 @@ public class Logic extends BaseLogicDTO
 	row.setActivity(activity.toString());
 	row.setTooltip(tooltip);
 	row.setValue(element.getID_PatAction().toString());
-		
-//		if(element == null || row == null)
-//			return;
-//		
-//		StringBuilder activity = new StringBuilder();
-//		activity.append(element.Activity_idtxt == null || element.Activity_idtxt.length() > 0?element.Activity_idtxt:"(No Activity)");
-//		activity.append(", ");
-//		activity.append(element.Action_idtxt);
-//		// 10/01/2003 - AU - Kevin's improvements
-//		String tooltip = "<center><b>" + activity + "</b></center>" + "Consultant: " + element.Act_consultxt + newline + "Priority: " + element.Txtact_priorty + newline + "Attending As: " + element.Attend_astxt + newline;
-//
-//		if (element.Attnd_as.length() > 0)
-//		{
-//			// Inpatient case
-//			Integer nAttndAs = null;
-//			try
-//			{
-//				nAttndAs = Integer.valueOf(element.Attnd_as);
-//			}
-//			catch (NumberFormatException e)
-//			{
-//				e.printStackTrace();
-//			}
-//
-//			if (nAttndAs != null)
-//			{
-//				if (nAttndAs.intValue() < 0)
-//				{
-//					tooltip += " Booked Date: " + GetDate(element.Act_bk_date) + newline;
-//					tooltip += " Ward: " + element.Opa_rsnodesc + newline;
-//				}// Outpatient case
-//				else
-//				{
-//					tooltip += " Appointment Date: " + GetDate(element.Appt_date) + newline;
-//				}
-//			}
-//		}
-//		tooltip += "Transport Required: " + element.Txttrans_req + newline + "Treatment Category: " + element.Txcattypetxt + newline;
-//		tooltip += "Estimated Start Date: " + GetDate(element.Eststartdt) + newline;
-//		tooltip += "Estimated End Date: " + GetDate(element.Estenddate) + newline;
-//
-//		if (element.Activity_id.length() > 0)
-//		{
-//			// External Beam or Orthvoltage
-//			Integer nActivityId = null;
-//			try
-//			{
-//				nActivityId = Integer.valueOf(element.Activity_id);
-//			}
-//			catch (NumberFormatException e)
-//			{
-//				e.printStackTrace();
-//			}
-//
-//			if (nActivityId != null)
-//			{
-//				if (nActivityId.intValue() == -202 || nActivityId.intValue() == -207)
-//				{
-//					tooltip += "  Modality: " + element.Modality_idtxt + newline + "  Energy Value: " + element.Modality_enrgy + newline + "  Units: " + element.Modality_unit_idtxt + newline + "  Dose: " + element.Tl_dose + " in " + element.Tl_fractions + " Fractions over " + element.Tl_dur + " days" + newline + GetActionTreatmentSite(element.Pt_act_id);
-//
-//				}// Chemotherapy
-//				else if (nActivityId.intValue() == -201)
-//				{
-//					tooltip += " Start Date: " + GetDate(element.Ch_pl_st_dt) + " Planned Regime: " + element.Txtch_pl_reg + newline;
-//				}// Brachytherapy
-//				else if (nActivityId.intValue() == -204 || nActivityId.intValue() == -200)
-//				{
-//					if (nActivityId.intValue() == -204)
-//					{
-//						tooltip += " Date: " + GetDate(element.Imag_dt) + newline;
-//						tooltip += " Modality: " + element.Modality_idtxt + newline;
-//						tooltip += " Anaesthetic Needed: " + GetAnaestheticText(element.Anaesthetic);
-//					}
-//				}
-//			}
-//		}
-//
-//		row.setActivity(activity.toString());
-//		row.setTooltip(tooltip);
-//		row.setValue(element.Pt_act_id);
 
-		/*Go_ptplactRecord activityRecord = getActivity(actions, go_ptplactRecord.Treatmentaction);
-		if (activityRecord != null)
-		{
-			TreatmentPlanRow activityRow = row.getRows().newRow();
-			addTreatmentPlanRow(actions, activityRecord, activityRow);
-			if (row.getRows().size() > 0)
-				row.setExpanded(true);
-		}*/
 	}
-
-//	Go_ptplactRecord getActivity(Go_ptplact go_ptplact, String treatmentActionId)
-//    {
-//    	if(go_ptplact != null && treatmentActionId != null && treatmentActionId.length() > 0)
-//    	{
-//    		for (int i = 0; i < go_ptplact.DataCollection.count(); i++)
-//			{
-//    			if(go_ptplact.DataCollection.get(i).Pt_act_id.equals(treatmentActionId))
-//    				return go_ptplact.DataCollection.get(i);
-//			}
-//    	}
-//    	return null;
-//    }
-//		
-//	private boolean isChildOfPretreatment(Go_ptplact actionsDto, String treatmentActionId)
-//	{
-//		if (actionsDto == null || treatmentActionId == null || treatmentActionId.length() == 0)
-//			return false;
-//
-//		for (int i = 0; i < actionsDto.DataCollection.count(); i++)
-//		{
-//			if(treatmentActionId.equals(actionsDto.DataCollection.get(i).Treatmentaction))
-//				return true;
-//		}
-//
-//		return false;
-//	}
 
 	private void populateHeaderTP(PatTreatmentPlanLiteVo vo)
 	{
 		
-		//String headerActivity = GetDate(vo.DataCollection.get(0).Tp_des_treat) + ", " + vo.DataCollection.get(0).Chcptxt;
 		String headerActivity = vo.getDecisionToTreat() + ", " + vo.getConsultant().getName();
 	
-		//String tmpStr = GetDate(vo.DataCollection.get(0).Dt_seen);
 		String tmpStr = vo.getDateSeen().toString();
 
-		//treatment sites
+		// Treatment sites
 		String treatmentSiteStr = new String("");
 		if (vo.getTreatmentSitesIsNotNull())
 		{

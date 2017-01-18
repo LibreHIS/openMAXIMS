@@ -95,7 +95,6 @@ public class Logic extends BaseLogic
 			}
 		}
 		
-		//WDEV-19794
 		form.getGlobalContext().OCRR.setDisplayExaminDateTime(false);
 	}
 	private boolean attachDocumentToInvestigation() {

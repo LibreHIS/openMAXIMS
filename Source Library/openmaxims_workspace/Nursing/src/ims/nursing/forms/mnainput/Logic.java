@@ -387,18 +387,14 @@ public class Logic extends BaseLogic
 
 		record.setAssessmentDetails(new MiniNutritionalAssessmentDetailsCollection());
 
-		// screening
+		// Screening
 		for (int k = 0; k < form.grdScreening().getRows().size(); k++)
 		{
 			for (int i = 0; i < form.grdScreening().getRows().get(k).getRows().size(); i++)
 			{
-				// GenForm.grdScreeningRow row =
-				// form.grdScreening().getRows().get(k).getRows().get(i);
 				GenForm.grdScreeningRow child = form.grdScreening().getRows().get(k).getRows().get(i);
 
-				// for (int j = 0; j < row.getRows().size(); j++)
 				{
-					// GenForm.grdScreeningRow child = row.getRows().get(j);
 
 					MiniNutritionalAssessmentDetails detail = new ims.nursing.vo.MiniNutritionalAssessmentDetails();
 					detail.setAssessment(new Integer(child.getValue()));
@@ -414,13 +410,9 @@ public class Logic extends BaseLogic
 		{
 			for (int i = 0; i < form.grdAssessment().getRows().get(k).getRows().size(); i++)
 			{
-				// GenForm.grdAssessmentRow row =
-				// form.grdAssessment().getRows().get(k).getRows().get(i);
 				GenForm.grdAssessmentRow child = form.grdAssessment().getRows().get(k).getRows().get(i);
 
-				// for (int j = 0; j < row.getRows().size(); j++)
 				{
-					// GenForm.grdAssessmentRow child = row.getRows().get(j);
 
 					MiniNutritionalAssessmentDetails detail = new ims.nursing.vo.MiniNutritionalAssessmentDetails();
 					detail.setAssessment(new Integer(child.getValue()));
@@ -652,12 +644,7 @@ public class Logic extends BaseLogic
 		for (int k = 0; k < form.grdAssessment().getRows().size(); k++)
 		{
 			GenForm.grdAssessmentRow row = form.grdAssessment().getRows().get(k);
-			// for (int i = 0; i <
-			// form.grdScreening().getRows().get(k).getRows().size(); i++)
 			{
-				// GenForm.grdScreeningRow row =
-				// form.grdScreening().getRows().get(k).getRows().get(i);
-
 				if (row.getValue().equalsIgnoreCase("N"))
 				{
 					int nFound = 0;
@@ -686,11 +673,7 @@ public class Logic extends BaseLogic
 		for (int k = 0; k < form.grdScreening().getRows().size(); k++)
 		{
 			GenForm.grdScreeningRow row = form.grdScreening().getRows().get(k);
-			// for (int i = 0; i <
-			// form.grdScreening().getRows().get(k).getRows().size(); i++)
 			{
-				// GenForm.grdScreeningRow row =
-				// form.grdScreening().getRows().get(k).getRows().get(i);
 
 				if (row.getValue().equalsIgnoreCase("N"))
 				{

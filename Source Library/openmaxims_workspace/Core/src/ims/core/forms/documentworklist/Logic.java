@@ -1523,27 +1523,6 @@ public class Logic extends BaseLogic
 		}
 	}
 
-	/* WDEV-11810
-	private String getHospNo(PatientShort patient)
-	{
-		if (patient == null)
-			return null;
-
-		if (!patient.getIdentifiersIsNotNull())
-			return null;
-
-		for (int i = 0; i < patient.getIdentifiers().size(); i++)
-		{
-			PatientId ident = patient.getIdentifiers().get(i);
-			if (ident == null)
-				continue;
-			if (PatIdType.NHSN.equals(ident.getType()))
-				return ident.getIdValue();
-		}
-
-		return null;
-	}*/
-
 	public void newInstance() throws PresentationLogicException
 	{
 		if (!form.getGlobalContext().Core.getPatientShortIsNotNull())
@@ -1556,31 +1535,31 @@ public class Logic extends BaseLogic
 	{
 		boolean isViewMode = form.getMode().equals(FormMode.VIEW);
 		
-		form.lblIDType().setVisible(ConfigFlag.UI.DOCUMENT_WORKLIST_DISPLAY_PATIENT_ID_SEARCH_FIELD.getValue()); //WDEV-12643, WDEV-13794
-		form.lblIDValue().setVisible(ConfigFlag.UI.DOCUMENT_WORKLIST_DISPLAY_PATIENT_ID_SEARCH_FIELD.getValue());	//WDEV-12643, WDEV-13794
+		form.lblIDType().setVisible(ConfigFlag.UI.DOCUMENT_WORKLIST_DISPLAY_PATIENT_ID_SEARCH_FIELD.getValue());
+		form.lblIDValue().setVisible(ConfigFlag.UI.DOCUMENT_WORKLIST_DISPLAY_PATIENT_ID_SEARCH_FIELD.getValue());
 		
 		if (isViewMode)
 		{
 			form.qmbClinic().setEnabled(form.cmbLocation().getValue() != null);
-			form.chkPatOnly().setVisible(ConfigFlag.UI.DOCUMENT_WORKLIST_DISPLAY_VIEW_DOCUMENTS_FOR_PATIENT_CHECKBOX.getValue());	//WDEV-12643, 	WDEV-13794
-			form.chkPatOnly().setEnabled(form.getGlobalContext().Core.getPatientShortIsNotNull());//WDEV-11810
-			form.cmbIdType().setVisible(ConfigFlag.UI.DOCUMENT_WORKLIST_DISPLAY_PATIENT_ID_SEARCH_FIELD.getValue());	//WDEV-12643, WDEV-13794
-			form.txtPatId().setVisible(ConfigFlag.UI.DOCUMENT_WORKLIST_DISPLAY_PATIENT_ID_SEARCH_FIELD.getValue());	//WDEV-12643, WDEV-13794
-			form.cmbIdType().setEnabled(!form.chkPatOnly().getValue());//WDEV-11810
-			form.txtPatId().setEnabled(!form.chkPatOnly().getValue());//WDEV-11810
+			form.chkPatOnly().setVisible(ConfigFlag.UI.DOCUMENT_WORKLIST_DISPLAY_VIEW_DOCUMENTS_FOR_PATIENT_CHECKBOX.getValue());
+			form.chkPatOnly().setEnabled(form.getGlobalContext().Core.getPatientShortIsNotNull());
+			form.cmbIdType().setVisible(ConfigFlag.UI.DOCUMENT_WORKLIST_DISPLAY_PATIENT_ID_SEARCH_FIELD.getValue());
+			form.txtPatId().setVisible(ConfigFlag.UI.DOCUMENT_WORKLIST_DISPLAY_PATIENT_ID_SEARCH_FIELD.getValue());
+			form.cmbIdType().setEnabled(!form.chkPatOnly().getValue());
+			form.txtPatId().setEnabled(!form.chkPatOnly().getValue());
 			
-			form.chkClear().setVisible(ConfigFlag.UI.DOCUMENT_WORKLIST_DISPLAY_KEEP_SELECTED_PATIENT_CHECKBOX.getValue());	//WDEV-12643
+			form.chkClear().setVisible(ConfigFlag.UI.DOCUMENT_WORKLIST_DISPLAY_KEEP_SELECTED_PATIENT_CHECKBOX.getValue());
 			
-			form.btnBatchC().setVisible(ConfigFlag.UI.DOCUMENT_WORKLIST_DISPLAY_BATCH_BUTTON.getValue());	//	WDEV-12643, WDEV-13794
+			form.btnBatchC().setVisible(ConfigFlag.UI.DOCUMENT_WORKLIST_DISPLAY_BATCH_BUTTON.getValue());
 		}
 		
-		form.getContextMenus().Core.getDocumentWorklistMenuSELECT_ALLItem().setVisible(isViewMode);//WDEV-14174
-		form.getContextMenus().Core.getDocumentWorklistMenuDESELECT_ALLItem().setVisible(isViewMode);//WDEV-14174
+		form.getContextMenus().Core.getDocumentWorklistMenuSELECT_ALLItem().setVisible(isViewMode);
+		form.getContextMenus().Core.getDocumentWorklistMenuDESELECT_ALLItem().setVisible(isViewMode);
 		
-		form.getContextMenus().Core.getDocumentWorklistMenuNEW_DOCUMENTItem().setVisible(isViewMode);	//WDEV-12643, WDEV-13794
+		form.getContextMenus().Core.getDocumentWorklistMenuNEW_DOCUMENTItem().setVisible(isViewMode);
 		form.getContextMenus().Core.getDocumentWorklistMenuDELETEItem().setVisible(isViewMode);
 		form.getContextMenus().Core.getDocumentWorklistMenuEDITItem().setVisible(isViewMode);
-		form.getContextMenus().Core.getDocumentWorklistMenuSELECT_PATIENTItem().setVisible(isViewMode);		//WDEV-12643, WDEV-13794
+		form.getContextMenus().Core.getDocumentWorklistMenuSELECT_PATIENTItem().setVisible(isViewMode);
 
 		form.getContextMenus().Core.getDocumentWorklistMenuVIEWItem().setVisible(isViewMode);
 		form.getContextMenus().Core.getDocumentWorklistMenuPRINTItem().setVisible(isViewMode);

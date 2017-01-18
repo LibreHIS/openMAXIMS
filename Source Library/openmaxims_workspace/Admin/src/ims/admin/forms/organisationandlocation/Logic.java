@@ -910,7 +910,7 @@ public class Logic extends BaseLogic
 		if (form.getGlobalContext().getPrintersSelected() == null || 
 				(form.getGlobalContext().getPrintersSelectedIsNotNull() && form.getGlobalContext().getPrintersSelected().size() == 0))
 		{
-			value.setPrinters(null);	//WDEV-11885
+			value.setPrinters(null);
 			value.setDefaultPrinter(null);
 			value.setDesignatedPrinterForNewResults(null);
 			value.setDesignatedPrinterForOCSOrder(null);
@@ -918,14 +918,7 @@ public class Logic extends BaseLogic
 			return;
 		}
 		
-		/*WDEV-11885
-		for (int i = 0; i < form.getGlobalContext().getPrintersSelected().size(); i++)
-		{
-			printers.add(form.getGlobalContext().getPrintersSelected().get(i));
-		}
-		*/
-		
-		value.setPrinters(form.getGlobalContext().getPrintersSelected());	//WDEV-11885
+		value.setPrinters(form.getGlobalContext().getPrintersSelected());
 				
 		value.setDefaultPrinter(form.getGlobalContext().getDefaultPrinterIsNotNull() ? domain.getPrinter(form.getGlobalContext().getDefaultPrinter()) : null);									
 		value.setDesignatedPrinterForNewResults(form.getGlobalContext().getDesignatedPrinterForNewResultsIsNotNull() ? domain.getPrinter(form.getGlobalContext().getDesignatedPrinterForNewResults()) : null);									
@@ -998,7 +991,7 @@ public class Logic extends BaseLogic
 		if (form.getGlobalContext().getPrintersSelected() == null || 
 				(form.getGlobalContext().getPrintersSelectedIsNotNull() && form.getGlobalContext().getPrintersSelected().size() == 0))
 		{
-			value.setPrinters(null); //WDEV-11885
+			value.setPrinters(null);
 			value.setDefaultPrinter(null);
 			value.setDesignatedPrinterForNewResults(null);
 			value.setDesignatedPrinterForOCSOrder(null);
@@ -1006,14 +999,7 @@ public class Logic extends BaseLogic
 			return;
 		}
 		
-		/*WDEV-11885
-		for (int i = 0; i < form.getGlobalContext().getPrintersSelected().size(); i++)
-		{
-			printers.add(form.getGlobalContext().getPrintersSelected().get(i));
-		}
-		*/
-		
-		value.setPrinters(form.getGlobalContext().getPrintersSelected());	//WDEV-11885
+		value.setPrinters(form.getGlobalContext().getPrintersSelected());
 				
 		value.setDefaultPrinter(form.getGlobalContext().getDefaultPrinterIsNotNull() ? domain.getPrinter(form.getGlobalContext().getDefaultPrinter()) : null);									
 		value.setDesignatedPrinterForNewResults(form.getGlobalContext().getDesignatedPrinterForNewResultsIsNotNull() ? domain.getPrinter(form.getGlobalContext().getDesignatedPrinterForNewResults()) : null);									

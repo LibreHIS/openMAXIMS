@@ -149,9 +149,7 @@ public class Logic extends BaseLogic
 		
 		if (form.cmbCancellationReason().getValue() != null)
 			form.chkCancelledForNonMedicalReason().setValue(Boolean.TRUE.equals(form.cmbCancellationReason().getValue().getIsNonMedicalReason()));
-		//  WDEV-19446 --- ends here
-		
-		//WDEV-22889 
+
 		form.setMode((args != null && args.length > 0 &&  args[0] instanceof FormMode) ? (FormMode)args[0] : FormMode.EDIT);
 		form.getLocalContext().setbCanEdit((args != null && args.length > 1 &&  args[1] instanceof Boolean) ? !(Boolean) args[1] : true);
 	}
@@ -163,57 +161,6 @@ public class Logic extends BaseLogic
 		form.cmbCancellationType().newRow(Status_Reason.PATIENTCANCELLED, Status_Reason.PATIENTCANCELLED.getText());
 		form.cmbCancellationType().newRow(Status_Reason.HOSPITALCANCELLED, Status_Reason.HOSPITALCANCELLED.getText());
 	}
-
-	//WDEV-19446
-	/*
-	private void populateCancelationType(Date tciDate, DateTime cancellationDate)
-	{
-		form.cmbCancellationType().clear();
-		AdmissionOfferOutcomeCollection cancellationTypes = getCancellationTypes(tciDate, cancellationDate);
-		for (int i = 0; cancellationTypes != null && i < cancellationTypes.size(); i++)
-		{			
-			form.cmbCancellationType().newRow(cancellationTypes.get(i), cancellationTypes.get(i).toString());
-		}
-		if (cancellationTypes.size() == 1)
-			form.cmbCancellationType().setValue(cancellationTypes.get(0));
-	}*/
-	
-	//WDEV-19446
-	/*
-	private AdmissionOfferOutcomeCollection getCancellationTypes(Date tciDate, DateTime cancellationDate)
-	{
-		AdmissionOfferOutcomeCollection cancellationTypes = ims.RefMan.vo.lookups.LookupHelper.getAdmissionOfferOutcome(domain.getLookupService());
-		
-		cancellationTypes.remove(AdmissionOfferOutcome.NOT_APPLICABLE_OR_REMOVED_ETC_9);
-		cancellationTypes.remove(AdmissionOfferOutcome.PATIENT_ADMITTED);
-		cancellationTypes.remove(AdmissionOfferOutcome.PATIENT_ADMITTED_COMMENCED_8);
-		cancellationTypes.remove(AdmissionOfferOutcome.PATIENT_ADMITTED_COMPLETED_1);
-		cancellationTypes.remove(AdmissionOfferOutcome.PATIENT_ADMITTED_TREATMENT_DEFERRED_5);
-		cancellationTypes.remove(AdmissionOfferOutcome.PATIENT_FAILED_TO_ARRIVE_4);
-		
-		for (int i = 0; cancellationTypes != null && i < cancellationTypes.size(); i++)
-		{
-			if (cancellationDate != null)
-			{	
-				if (cancellationDate.getDate().isGreaterThan(tciDate))
-				{		
-					cancellationTypes.remove(AdmissionOfferOutcome.ADMISSION_CANCELLED_BY_HOSPITAL_BEFORE_6);
-					cancellationTypes.remove(AdmissionOfferOutcome.ADMISSION_CANCELLED_BY_HOSPITAL_ON_DAY_7);	
-				}	
-				else if (cancellationDate.getDate().isLessThan(tciDate))
-				{
-					cancellationTypes.remove(AdmissionOfferOutcome.ADMISSION_CANCELLED_BY_HOSPITAL_ON_DAY_7);				
-				}
-				else
-				{
-					cancellationTypes.remove(AdmissionOfferOutcome.ADMISSION_CANCELLED_BY_HOSPITAL_BEFORE_6);
-
-				}
-			}
-		}		
-		return cancellationTypes;
-	}*/
-	//WDEV-19446 ----------------end
 	
 	@Override
 	protected void onBtnCancelClick() throws ims.framework.exceptions.PresentationLogicException

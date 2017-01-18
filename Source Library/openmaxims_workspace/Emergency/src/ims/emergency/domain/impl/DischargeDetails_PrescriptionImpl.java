@@ -59,8 +59,9 @@ public class DischargeDetails_PrescriptionImpl extends BaseDischargeDetails_Pres
 			throw new CodingRuntimeException(" The care context reference must be provided");
 	
 		StringBuilder mainHql = new StringBuilder();
-			
-		mainHql.append("select presc from EDPrescription as presc LEFT JOIN presc.attendance as cc WHERE cc.id = :CONTEXTID AND presc.isRIE is null OR presc.isRIE = 0 ORDER BY presc.authoringInformation.authoringDateTime DESC");
+
+		/* TODO MSSQL case - mainHql.append("select presc from EDPrescription as presc LEFT JOIN presc.attendance as cc WHERE cc.id = :CONTEXTID AND presc.isRIE is null OR presc.isRIE = 0 ORDER BY presc.authoringInformation.authoringDateTime DESC"); */
+		mainHql.append("select presc from EDPrescription as presc LEFT JOIN presc.attendance as cc WHERE cc.id = :CONTEXTID AND presc.isRIE is null OR presc.isRIE = FALSE ORDER BY presc.authoringInformation.authoringDateTime DESC");
 		
 		DomainFactory domainFactory = getDomainFactory();
 		

@@ -143,18 +143,17 @@ public class DischargePlanning_AdviceMobilityEquipmentImpl extends BaseDischarge
 			InterventionsTreatmentsForAttendence doInterventionsTreatmentsForAttendence = InterventionsTreatmentForAdviceLeafletVoAssembler.extractInterventionsTreatmentsForAttendence(factory, intervention);
 			factory.save(doInterventionsTreatmentsForAttendence);
 		}
-		
-		//-----------
-		
+
 		// Return saved object
 		return DischargeServicesAndAdviceForDischargePlanningVoAssembler.create(domainRecord);
 	}
-	//WDEV-19917
 	private Tracking getTrackingForAttendance(EmergencyAttendanceForDischargeLetterVo emergencyAttendance)
 	{
 		if (emergencyAttendance == null || emergencyAttendance.getID_EmergencyAttendance() == null || emergencyAttendance.getAttendanceSupplementaryComment() == null)
 			return null;
-		String hql = "select tr from Tracking as tr left join tr.attendance as att where att.id = :ATT_ID and (att.isRIE is null OR att.isRIE = 0) ";
+
+		/* TODO MSSQL case - String hql = "select tr from Tracking as tr left join tr.attendance as att where att.id = :ATT_ID and (att.isRIE is null OR att.isRIE = 0) "; */
+		String hql = "select tr from Tracking as tr left join tr.attendance as att where att.id = :ATT_ID and (att.isRIE is null OR att.isRIE = FALSE) ";
 		
 		Tracking doTracking = (Tracking) getDomainFactory().findFirst(hql, new String[]{"ATT_ID"},new Object[]{emergencyAttendance.getID_EmergencyAttendance()});
 		

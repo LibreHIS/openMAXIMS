@@ -61,10 +61,6 @@ public final class FullSDSJobImpl extends ims.scheduler.SchedulerJob
 	private int	TotalPracticesNo = 0;
 	private int	SuccessfulPracticesNo = 0;
 	
-	//private static int FAILED_MAX_NUMBER = 100000;
-	//private int FailedNo = 0;
-	//private int FailedNoInactiveGP = 0;
-	
 	private int FailedNoProcessingGPs = 0;
 	private int FailedNoProcessingPractices = 0;
 	private int FailedNoSavingGPs = 0;
@@ -72,10 +68,6 @@ public final class FullSDSJobImpl extends ims.scheduler.SchedulerJob
 	
 	HashSet<Gp> gps = null;
 	HashSet<Organisation> practices = null;
-	
-	//WDEV-23281
-	//HashSet<Gp> updatedGps = null;
-	//HashSet<Organisation> updatedPractices = null;
 	
 	@Override
 	public SchedulerJobExecutionSummary doExecute() throws JobExecutionException
@@ -525,15 +517,11 @@ public final class FullSDSJobImpl extends ims.scheduler.SchedulerJob
 	
 	private void listGpsAndPractices()
 	{
-		String gpQuery = "select gp from Gp as gp left join gp.status as status where (gp.isRIE is null or gp.isRIE = 0) and  status.id <> " + GPStatus.INACTIVE.getID();
+		/* TODO MSSQL case - String gpQuery = "select gp from Gp as gp left join gp.status as status where (gp.isRIE is null or gp.isRIE = 0) and  status.id <> " + GPStatus.INACTIVE.getID(); */
+		String gpQuery = "select gp from Gp as gp left join gp.status as status where (gp.isRIE is null or gp.isRIE = FALSE) and  status.id <> " + GPStatus.INACTIVE.getID();
 		List<?> gpsList = getDomainFactory().find(gpQuery);
 		
 		assembleGps(gpsList);
-		
-		//String practiceQuery = "select org from Organisation as org left join org.type as orgType where (org.isRIE is null or org.isRIE = 0) and orgType.id = :OrganisationType";
-		//List<?> practicesList = getDomainFactory().find(practiceQuery, new String[]{"OrganisationType"}, new Object[] {OrganisationType.GPP.getID()});
-		
-		//assemblePractices(practicesList);
 	}
 
 	private void assembleGps(List<?> list)

@@ -400,26 +400,23 @@ public class Logic extends BaseLogic
 				PathwayHistoryVoCollection voHistory = journeys.get(x).getPathwayHistory();
 				
 				for (int i = voHistory.size()-1 ; i >= 0 ; i--)
-				//for (int i = 0; i < voHistory.size() ; i++)
 				{
 					PatwayHistoryDummyVo voPathwayDummy = new PatwayHistoryDummyVo();
 					voPathwayDummy.setPatientJourneyID(voDummy.getPatientJourneyID());
 					voPathwayDummy.setPathwayHistoryID(voHistory.get(i).getPathway().getID_Pathway());
 					voPathwayDummy.setIterator(i);
 					
-					//WDEV-14576
 					StringBuffer text = new StringBuffer("    ");
 					text.append(voHistory.get(i).getPathway().toString());		
-					text.append(voHistory.get(i).getSystemInformation().getCreationUser()!= null ? " - " + voHistory.get(i).getSystemInformation().getCreationUser(): ""); //WDEV-20078
-					text.append(voHistory.get(i).getSystemInformation().getCreationUser()!= null? ", " + voHistory.get(i).getSystemInformation().getCreationDateTime(): ""); //WDEV-20078			
+					text.append(voHistory.get(i).getSystemInformation().getCreationUser()!= null ? " - " + voHistory.get(i).getSystemInformation().getCreationUser(): "");
+					text.append(voHistory.get(i).getSystemInformation().getCreationUser()!= null? ", " + voHistory.get(i).getSystemInformation().getCreationDateTime(): "");
 					form.cmbPatientJourney().newRow(voPathwayDummy,text.toString(),Color.Red);
 					listOfPreviousPathways.add(text.toString());
 				}		
 			}
 			
-			form.cmbPatientJourney().setTooltip(null);//WDEV-20423
+			form.cmbPatientJourney().setTooltip(null);
 						
-			//WDEV-17914
 			if (listOfPreviousPathways.size() > 0)
 			{
 				String result = "";

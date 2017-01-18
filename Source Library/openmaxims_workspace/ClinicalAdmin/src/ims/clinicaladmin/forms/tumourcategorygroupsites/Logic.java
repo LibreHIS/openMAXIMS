@@ -262,19 +262,14 @@ public class Logic extends BaseLogic
 						row.setValue(voSerumMarkers);
 
 						form.getLocalContext().setSelectedSerumRecord(voSerumMarkers);
-						/*
-						 * form.lyrConfig().tabSerumMarker().lyrSereumMarkers().tabSerumMarkers().grdSerumMarkers().setValue(voSerumMarkers); onGrdSerumMarkersSelectionChanged(); voCollTaxonomy.add(voTaxonomyMap); if (form.lyrConfig().tabSerumMarker().lyrSereumMarkers().tabMappings().customSerumMarkerMappings().getValue() != null) { for (int i = 0; i <form.lyrConfig().tabSerumMarker().lyrSereumMarkers().tabMappings().customSerumMarkerMappings().getValue().size(); i++) { voCollTaxonomy.add(form.lyrConfig().tabSerumMarker().lyrSereumMarkers().tabMappings().customSerumMarkerMappings().getValue().get(i)); } }
-						 */
+
 						onGrdSerumMarkersSelectionChanged();
 					}
-					/*
-					 * else if (form.getLocalContext().getCurrentSelectedTab().equals(TumourCategoryGroupSiteSelectedTab.GROUP)) { voCollTaxonomy.add(voTaxonomyMap); if (form.lyrConfig().tabTGroup().lyrGroupDetails().tabTaxonomy().customGrupMappings().getValue() != null) { for (int i = 0; i <form.lyrConfig().tabTGroup().lyrGroupDetails().tabTaxonomy().customGrupMappings().getValue().size(); i++) { voCollTaxonomy.add(form.lyrConfig().tabTGroup().lyrGroupDetails().tabTaxonomy().customGrupMappings().getValue().get(i)); } } form.lyrConfig().tabTGroup().lyrGroupDetails().tabTaxonomy().customGrupMappings().setValue(voCollTaxonomy); } else if (form.getLocalContext().getCurrentSelectedTab().equals(TumourCategoryGroupSiteSelectedTab.CATEGORY)) { voCollTaxonomy.add(voTaxonomyMap); if (form.lyrConfig().tabTCategory().customMappings().getValue() != null) { for (int i = 0; i <form.lyrConfig().tabTCategory().customMappings().getValue().size(); i++) {
-					 * voCollTaxonomy.add(form.lyrConfig().tabTCategory().customMappings().getValue().get(i)); } } form.lyrConfig().tabTCategory().customMappings().setValue(voCollTaxonomy); } else if (form.getLocalContext().getCurrentSelectedTab().equals(TumourCategoryGroupSiteSelectedTab.SITE)) { voCollTaxonomy.add(voTaxonomyMap); if (form.lyrConfig().tabTSite().customSiteMappings().getValue() != null) { for (int i = 0; i <form.lyrConfig().tabTSite().customSiteMappings().getValue().size(); i++) { voCollTaxonomy.add(form.lyrConfig().tabTSite().customSiteMappings().getValue().get(i)); } } form.lyrConfig().tabTSite().customSiteMappings().setValue(voCollTaxonomy); }
-					 */
+
 				}
 			}
 		}
-		//  WDEV-11684
+
 		else if (formName.equals(form.getForms().ClinicalAdmin.SelectTumourHistology) && result.equals(DialogResult.OK))
 		{
 			addHistology(form.getGlobalContext().ClinicalAdmin.getTumourHistology());
@@ -4005,13 +4000,6 @@ public class Logic extends BaseLogic
 
 			voCollHistology = populateDataFromScreenForTabHistology(voCollHistology);
 
-			// for (int i = 0; i < form.lyrConfig().tabHistology().lyrHistology().tabHisto().grdHistology().getRows().size(); i++)
-			// {
-			// TumourHistologyVo voHistology = form.lyrConfig().tabHistology().lyrHistology().tabHisto().grdHistology().getRows().get(i).getValue();
-			// voHistology.setHistologyDescription(form.lyrConfig().tabHistology().lyrHistology().tabHisto().grdHistology().getRows().get(i).getColHistology());
-			// voCollHistology.add(voHistology);
-			// }
-
 			if (form.getLocalContext().getSelectedRecord() instanceof TumourGroupVo)
 			{
 				TumourGroupVo voGroup = (TumourGroupVo) form.getLocalContext().getSelectedRecord();
@@ -4045,15 +4033,7 @@ public class Logic extends BaseLogic
 				voCollSerumMarkers = new TumourSerumMarkersLiteVoCollection();
 
 			voCollSerumMarkers = populateDataFromScreenForTabSerum(voCollSerumMarkers);
-			/*
-			 * for (int i = 0; i < form.lyrC onfig().tabSerumMarker().lyrSereumMarkers().tabSerumMarkers().grdSerumMarkers().getRows().size(); i++) { TumourSerumMarkersVo voSerumMarkers = form.lyrConfig().tabSerumMarker().lyrSereumMarkers().tabSerumMarkers().grdSerumMarkers().getRows().get(i).getValue();
-			 * 
-			 * if (voSerumMarkers == null) voSerumMarkers = new TumourSerumMarkersVo();
-			 * 
-			 * voSerumMarkers.setSerumMarkerValue(form.lyrConfig().tabSerumMarker().lyrSereumMarkers().tabSerumMarkers().grdSerumMarkers().getRows().get(i).getColValue()); voSerumMarkers.setSerumMarkerDescription(form.lyrConfig().tabSerumMarker().lyrSereumMarkers().tabSerumMarkers().grdSerumMarkers().getRows().get(i).getColDescription()); voSerumMarkers.setIsActive(true);
-			 * 
-			 * voCollSerumMarkers.add(voSerumMarkers); }
-			 */
+
 			if (form.getLocalContext().getSelectedRecord() instanceof TumourGroupVo)
 			{
 				TumourGroupVo voGroup = (TumourGroupVo) form.getLocalContext().getSelectedRecord();
@@ -4062,9 +4042,7 @@ public class Logic extends BaseLogic
 			}
 			else if (form.getLocalContext().getSelectedRecord() instanceof TumourSiteVo)
 			{
-				// TumourSiteVo voSite = (TumourSiteVo) form.getLocalContext().getSelectedRecord();
-				// voSite.setSerumMarkers(voCollSerumMarkers);
-				// form.getLocalContext().setSelectedRecord(voSite);
+
 			}
 
 			form.getLocalContext().setbSerumMarkerLoaded(false);

@@ -225,7 +225,8 @@ public class PDSPatientSearchImpl extends BasePDSPatientSearchImpl
 			
 			if (Boolean.TRUE.equals(filter.getExcludeQuickRegistrationPatients()))
 			{
-				hql.append(ConfigFlag.GEN.PATIENT_SEARCH_RETRIEVE_QUICKREGISTRATION_PATIENTS.getValue() ? "" : (condition + " AND ((p.isQuickRegistrationPatient IS NULL) OR (p.isQuickRegistrationPatient = 0)) ")); //WDEV-21171
+				/* TODO MSSQL case - hql.append(ConfigFlag.GEN.PATIENT_SEARCH_RETRIEVE_QUICKREGISTRATION_PATIENTS.getValue() ? "" : (condition + " AND ((p.isQuickRegistrationPatient IS NULL) OR (p.isQuickRegistrationPatient = 0)) ")); */
+				hql.append(ConfigFlag.GEN.PATIENT_SEARCH_RETRIEVE_QUICKREGISTRATION_PATIENTS.getValue() ? "" : (condition + " AND ((p.isQuickRegistrationPatient IS NULL) OR (p.isQuickRegistrationPatient = FALSE)) "));
 			}
 			
 			if (!bShowInactivePatients)
@@ -425,7 +426,8 @@ public class PDSPatientSearchImpl extends BasePDSPatientSearchImpl
 				{	
 					condition = " AND ";
 				}
-				filterString.append(ConfigFlag.GEN.PATIENT_SEARCH_RETRIEVE_QUICKREGISTRATION_PATIENTS.getValue() ? "" : (condition + " ((p.isQuickRegistrationPatient is null) OR (p.isQuickRegistrationPatient = 0)) ")); //WDEV-21171
+				/* TODO MSSQL case - filterString.append(ConfigFlag.GEN.PATIENT_SEARCH_RETRIEVE_QUICKREGISTRATION_PATIENTS.getValue() ? "" : (condition + " ((p.isQuickRegistrationPatient is null) OR (p.isQuickRegistrationPatient = 0)) ")); */
+				filterString.append(ConfigFlag.GEN.PATIENT_SEARCH_RETRIEVE_QUICKREGISTRATION_PATIENTS.getValue() ? "" : (condition + " ((p.isQuickRegistrationPatient is null) OR (p.isQuickRegistrationPatient = FALSE)) "));
 			}
 			
 

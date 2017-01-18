@@ -252,8 +252,11 @@ public final class PatientClinicalNotesforEvolveIngestionJobImpl extends ims.sch
 		cal.add(Calendar.HOUR, hoursToSearch.intValue());
 		Date searchStartDate = cal.getTime();
 
-		String query = "select pat from ClinicalNotes as cl join cl.careContext as cc join cc.episodeOfCare as ep join ep.careSpell as cs join cs.patient as pat " +
+		/* TODO MSSQL case - String query = "select pat from ClinicalNotes as cl join cl.careContext as cc join cc.episodeOfCare as ep join ep.careSpell as cs join cs.patient as pat " +
 				"where (cl.isRIE is null  or cl.isRIE = 0) and  ( (cl.systemInformation.creationDateTime >= :SEARCHSTARTDATE) " +
+				"or (cl.systemInformation.lastUpdateDateTime >= :SEARCHSTARTDATE) )";  */
+		String query = "select pat from ClinicalNotes as cl join cl.careContext as cc join cc.episodeOfCare as ep join ep.careSpell as cs join cs.patient as pat " +
+				"where (cl.isRIE is null  or cl.isRIE = FALSE) and  ( (cl.systemInformation.creationDateTime >= :SEARCHSTARTDATE) " +
 				"or (cl.systemInformation.lastUpdateDateTime >= :SEARCHSTARTDATE) )"; 
 
 		List<?> results = factory.find(query, new String[] {"SEARCHSTARTDATE"}, new Object[] {searchStartDate});

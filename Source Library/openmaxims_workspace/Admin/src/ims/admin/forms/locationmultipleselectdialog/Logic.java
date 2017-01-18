@@ -347,70 +347,7 @@ public class Logic extends BaseLogic
 			return false;
 		
 	}
-	//WDEV-20054 - no longer lists locations
-	/*private void addLocationBegin(LocationConfigVo loc , ConfigLocationLiteVoCollection tempVoColl,String name)
-	{
-		 
-		if(loc.getLocations() == null || loc.getLocations().size() == 0)
-			return;
-		for(int j = 0; j < loc.getLocations().size(); j++)
-		{
-			LocationConfigVo temVo = loc.getLocations().get(j);
-			if(temVo != null && temVo.getNameIsNotNull() && temVo.getName().toUpperCase().startsWith(name))
-			{
-				if(Boolean.TRUE.equals(loc.getLocations().get(j).getIsActive()) && Boolean.FALSE.equals(loc.getLocations().get(j).getIsVirtual())) //WDEV-19532
-					tempVoColl.add(loc.getLocations().get(j));
-			}
-			
-			addLocationBegin(temVo,tempVoColl,name);
-		}
-	}
-	private void addLocationEnd(LocationConfigVo loc , ConfigLocationLiteVoCollection tempVoColl,String name)
-	{
-		 
-		if(loc.getLocations() == null || loc.getLocations().size() == 0)
-			return;
-		for(int j = 0; j < loc.getLocations().size(); j++)
-		{
-			LocationConfigVo temVo = loc.getLocations().get(j);
-			if(temVo != null && temVo.getNameIsNotNull() && temVo.getName().toUpperCase().endsWith(name))
-			{
-				if(Boolean.TRUE.equals(loc.getLocations().get(j).getIsActive()) && Boolean.FALSE.equals(loc.getLocations().get(j).getIsVirtual())) //WDEV-19532
-					tempVoColl.add(loc.getLocations().get(j));
-			}
-			
-			addLocationEnd(temVo,tempVoColl,name);
-		}
-	}
-	private void addLocationContain(LocationConfigVo loc , ConfigLocationLiteVoCollection tempVoColl,String name)
-	{
-		 
-		if(loc.getLocations() == null || loc.getLocations().size() == 0)
-			return;
-		for(int j = 0; j < loc.getLocations().size(); j++)
-		{
-			LocationConfigVo temVo = loc.getLocations().get(j);
-			if(temVo != null && temVo.getNameIsNotNull() && temVo.getName().toUpperCase().contains(name))
-			{
-				if(Boolean.TRUE.equals(loc.getLocations().get(j).getIsActive()) && Boolean.FALSE.equals(loc.getLocations().get(j).getIsVirtual())) //WDEV-19532
-					tempVoColl.add(loc.getLocations().get(j));
-			}
-			
-			addLocationContain(temVo,tempVoColl,name);
-		}
-	}
-	
-	private void addLocation(LocationConfigVo loc,ConfigLocationLiteVoCollection tempVoColl)
-	{
-		if(loc.getLocations() == null || loc.getLocations().size() == 0)
-			return;
-		for(int j = 0; j < loc.getLocations().size(); j++)
-		{
-			if(loc.getLocations().get(j) != null &&  Boolean.TRUE.equals(loc.getLocations().get(j).getIsActive()) && Boolean.FALSE.equals(loc.getLocations().get(j).getIsVirtual())) //WDEV-19532
-				tempVoColl.add(loc.getLocations().get(j));
-			addLocation(loc.getLocations().get(j),tempVoColl);
-		}
-	}*/
+
 	private boolean checkCharacter(String name)
 	{
 		boolean flag = true;

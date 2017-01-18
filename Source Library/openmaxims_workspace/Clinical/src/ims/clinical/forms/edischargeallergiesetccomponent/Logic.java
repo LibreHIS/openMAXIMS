@@ -564,8 +564,6 @@ public class Logic extends BaseLogic
 			form.ctnAllergy().cmbAllergyType().setEnabled(true);
 			form.ctnAllergy().cmbAllergyReaction().setEnabled(true);
 		}
-		
-	//	form.ctnAllergy().setCollapsed(!(form.grdAllergies().getSelectedRowIndex() >= 0));
 	}
 
 

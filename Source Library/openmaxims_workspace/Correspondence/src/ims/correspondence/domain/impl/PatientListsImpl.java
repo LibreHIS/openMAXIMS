@@ -350,7 +350,8 @@ public class PatientListsImpl extends DTODomainImplementation implements Patient
 		{
 			if (lkpDocumentStatus.equals(DocumentStatus.LETTERREQUIRED))
 			{
-				String strStatusCond = "(($DOCUMENTSTATUS$ = 0 AND $DOCUMENTSTATUS$ != " + getDomLookup(DocumentStatus.NOLETTERREQUIRED).getId() + ") OR $DOCUMENTSTATUS$ = " + getDomLookup(DocumentStatus.LETTERREQUIRED).getId() + ")";
+				/* TODO MSSQL case - String strStatusCond = "(($DOCUMENTSTATUS$ = 0 AND $DOCUMENTSTATUS$ != " + getDomLookup(DocumentStatus.NOLETTERREQUIRED).getId() + ") OR $DOCUMENTSTATUS$ = " + getDomLookup(DocumentStatus.LETTERREQUIRED).getId() + ")"; */
+				String strStatusCond = "(($DOCUMENTSTATUS$ = FALSE AND $DOCUMENTSTATUS$ != " + getDomLookup(DocumentStatus.NOLETTERREQUIRED).getId() + ") OR $DOCUMENTSTATUS$ = " + getDomLookup(DocumentStatus.LETTERREQUIRED).getId() + ")";
 				strGroupCond = strGroupCond + strAnd + strStatusCond;
 			}				
 			else

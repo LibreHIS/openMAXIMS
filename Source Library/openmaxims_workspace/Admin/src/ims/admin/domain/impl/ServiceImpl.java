@@ -226,7 +226,7 @@ public class ServiceImpl extends BaseServiceImpl
 			{
     			// Get Service Internal Referral Configuration active record and inactivate it
 				/* TODO MSSQL case - String query = "SELECT intRef FROM ServiceConfigIntReferral AS intRef LEFT JOIN intRef.service AS srv WHERE srv.id = :SRV_ID AND intRef.active = 1 and (intRef.isRIE = 0 OR intRef.isRIE is null)"; */
-    			String query = "SELECT intRef FROM ServiceConfigIntReferral AS intRef LEFT JOIN intRef.service AS srv WHERE srv.id = :SRV_ID AND intRef.active = true and (intRef.isRIE = false OR intRef.isRIE is null)";
+    			String query = "SELECT intRef FROM ServiceConfigIntReferral AS intRef LEFT JOIN intRef.service AS srv WHERE srv.id = :SRV_ID AND intRef.active = TRUE and (intRef.isRIE = FALSE OR intRef.isRIE is null)";
 
     			ServiceConfigIntReferral serviceConfig = (ServiceConfigIntReferral) getDomainFactory().findFirst(query, "SRV_ID", voService.getID_Service());
     			

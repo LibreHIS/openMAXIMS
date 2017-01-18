@@ -86,7 +86,9 @@ public class InternalReferralsBookedListComponentImpl extends BaseInternalReferr
 		String andStr = " and ";
 		
 		StringBuffer hql = new StringBuffer(" select referrals from ClinicalReferrals as referrals left join referrals.referralType as refType ");
-		StringBuffer hqlConditions = new StringBuffer(" (referrals.isRIE is null or referrals.isRIE = 0) and ( refType.id =:IPSeenAsOutpatient or refType.id =:OPSeenAsOutpatient ) ");
+
+		/* TODO MSSQL case - StringBuffer hqlConditions = new StringBuffer(" (referrals.isRIE is null or referrals.isRIE = 0) and ( refType.id =:IPSeenAsOutpatient or refType.id =:OPSeenAsOutpatient ) "); */
+		StringBuffer hqlConditions = new StringBuffer(" (referrals.isRIE is null or referrals.isRIE = FALSE) and ( refType.id =:IPSeenAsOutpatient or refType.id =:OPSeenAsOutpatient ) ");
 		
 		markers.add("IPSeenAsOutpatient");
 		values.add(ClinicalReferralType.IP_TO_BE_SEEN_AS_OUTPATIENT.getID());

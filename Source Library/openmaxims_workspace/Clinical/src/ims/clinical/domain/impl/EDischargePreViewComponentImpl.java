@@ -380,7 +380,9 @@ public class EDischargePreViewComponentImpl extends BaseEDischargePreViewCompone
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
 
-		hqlConditions.append(" (d1_1.isRIE is null OR d1_1.isRIE = 0) and a1_1.pasEvent.id = :pe"); //WDEV-17656
+		/* TODO MSSQL case - hqlConditions.append(" (d1_1.isRIE is null OR d1_1.isRIE = 0) and a1_1.pasEvent.id = :pe"); */
+		hqlConditions.append(" (d1_1.isRIE is null OR d1_1.isRIE = FALSE) and a1_1.pasEvent.id = :pe");
+
 		markers.add("pe");
 		values.add(voPasEventRef.getID_PASEvent());
 		
@@ -396,7 +398,6 @@ public class EDischargePreViewComponentImpl extends BaseEDischargePreViewCompone
 		return DementiaEDischargeCheckVoAssembler.createDementiaEDischargeCheckVoCollectionFromDementia(list).get(0);
 	}
 
-	//WDEV-16745
 	public InpatientEpisodeForVTERiskAsessmentVo getVteStatus(Integer pasId)
 	{
 		if (pasId == null)

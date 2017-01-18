@@ -101,105 +101,6 @@ public class Logic extends BaseLogic
 			form.getLocalContext().setPatient(patient);
 			form.getLocalContext().setPatientDetailsTabAction(PatientDetailsTab.GPBUTTON);
 			form.fireCustomControlValueChanged();
-			
-			//WDEV-21624
-			//WDEV-22699
-			/*if(patient.getGpIsNotNull())
-			{
-				//SDS lookup
-				GpShortVo gp = patient.getGp();
-				String sdsId = "";
-				String sdsOrgId = "";
-				String gpCode = "";
-				
-				if(gp.getCodeMappingsIsNotNull())
-				{
-					for(int i = 0; i < gp.getCodeMappings().size(); i++)
-					{
-						TaxonomyMap mapping = gp.getCodeMappings().get(i);
-						
-						if(TaxonomyType.SDSID.equals(mapping.getTaxonomyName()))
-						{
-							sdsId = mapping.getTaxonomyCode();
-							//break;
-						}
-						
-						if(TaxonomyType.NAT_GP_CODE.equals(mapping.getTaxonomyName()))
-						{
-							gpCode = mapping.getTaxonomyCode();
-							//break;
-						}
-
-					}
-				}
-				
-				if(patient.getPracticeIsNotNull() && patient.getPractice().getCodeMappingsIsNotNull())
-				{
-					for(int i = 0; i < patient.getPractice().getCodeMappings().size(); i++)
-					{
-						TaxonomyMap mapping = patient.getPractice().getCodeMappings().get(i);
-						
-						if(TaxonomyType.ICAB.equals(mapping.getTaxonomyName()))
-						{
-							sdsOrgId = mapping.getTaxonomyCode();
-							break;
-						}
-					}
-				}
-				
-				if((sdsId != null && sdsId.length() > 0) || (gpCode != null && gpCode.length() > 0) )
-				{
-					SdsRequestHelper sdsHelper = new SdsRequestHelper();
-					SdsRequest sdsRequest = new SdsRequest();
-					PdsRetrievalQueryHelper pds = new PdsRetrievalQueryHelper(domain);
-					PDSConfigurationVo conf = pds.getPdsConfiguration();
-					
-					if(conf == null)
-					{
-						engine.showMessage("SDSHost and SDSPort must be configured on Patient Search Configuration screen in order to perform a GP/Practice SDS lookup.");
-						return;
-					}
-
-					if(conf.getSDSHost() == null || conf.getSDSHost().length() == 0)
-					{
-						engine.showMessage("SDSHost must be configured on Patient Search Configuration screen in order to perform a GP/Practice SDS lookup.");
-						return;
-					}
-
-					if(conf.getSDSPort() == null || conf.getSDSPort().length() == 0)
-					{
-						engine.showMessage("SDSPort must be configured on Patient Search Configuration screen in order to perform a GP/Practice SDS lookup.");
-						return;
-					}
-					
-					sdsRequest.setReferrerSdsId(sdsId);
-					sdsRequest.setReferrerSdsOrgId(sdsOrgId);
-					//WDEV-22699
-					//sdsRequest.setReferrerGpCodeId(gpCode);
-					
-					try
-					{
-						sdsHelper.processSdsRequest(sdsRequest, conf.getSDSHost(), conf.getSDSPort(), true, gpCode); //WDEV-22855
-					}
-					catch (Exception e)
-					{
-			            String err = "Error processing SDS request for GP '" + gp.getName().toString()  + "': " + e.toString();
-
-			            domain.createSystemLogEntry(SystemLogType.APPLICATION, SystemLogLevel.ERROR, err);
-					}					
-				}
-				else
-				{
-					String err = "GP '" + gp.getName().toString()  + "' doesn't have a taxonomy mapping of type SDSID and therefore it is not possible to do a SDS lookup.";
-					domain.createSystemLogEntry(SystemLogType.APPLICATION, SystemLogLevel.WARNING, err);
-					
-					if(patient.getPracticeIsNotNull() && sdsOrgId.length() == 0)
-					{
-						err = "Practice '" + patient.getPractice().getName()  + "' doesn't have a taxonomy mapping of type ICAB and therefore it is not possible to do a SDS lookup.";
-						domain.createSystemLogEntry(SystemLogType.APPLICATION, SystemLogLevel.WARNING, err);
-					}
-				}
-			}*/
 		}
 		else if (formName.equals(form.getForms().Admin.GPPracticeSelect) && result.equals(DialogResult.OK))
 		{
@@ -217,7 +118,7 @@ public class Logic extends BaseLogic
 				
 				if(!isPds())
 				{
-					//remove GP if it doesn't belog to selected practice
+					// Remove GP if it doesn't belog to selected practice
 					GpShortVo gp = form.getGlobalContext().Core.getGPDetails();
 					
 					if(form.txtGPName().getValue() != null && form.txtGPName().getValue().length() > 0 && gp != null)
@@ -238,7 +139,7 @@ public class Logic extends BaseLogic
 							
 							if(!practiceFound)
 							{
-								//clear the GP as it belongs to other practice
+								// Clear the GP as it belongs to other practice
 								form.getGlobalContext().Core.setGPDetails(null);
 								
 								if(form.getLocalContext().getPatientIsNotNull())
@@ -250,83 +151,18 @@ public class Logic extends BaseLogic
 								form.txtGPName().setTooltip(null);
 								form.imbGPSearch().setTooltip(null);	
 								
-								form.ccEffectiveDates().clear(); //WDEV-22036
+								form.ccEffectiveDates().clear();
 							}
 						}
 					}
 				}
 				
-				/*String sdsOrgId = "";
-				if(practice.getCodeMappingsIsNotNull())
-				{
-					for(int i = 0; i < patient.getPractice().getCodeMappings().size(); i++)
-					{
-						TaxonomyMap mapping = patient.getPractice().getCodeMappings().get(i);
-						
-						if(TaxonomyType.ICAB.equals(mapping.getTaxonomyName()))
-						{
-							sdsOrgId = mapping.getTaxonomyCode();
-							break;
-						}
-					}
-				}
-				
-				//SDS lookup
-				if(sdsOrgId != null && sdsOrgId.length() > 0)
-				{
-					SdsRequestHelper sdsHelper = new SdsRequestHelper();
-					SdsRequest sdsRequest = new SdsRequest();
-					PdsRetrievalQueryHelper pds = new PdsRetrievalQueryHelper(domain);
-					PDSConfigurationVo conf = pds.getPdsConfiguration();
-					
-					if(conf == null)
-					{
-						engine.showMessage("SDSHost and SDSPort must be configured on Patient Search Configuration screen in order to perform a GP/Practice SDS lookup.");
-						return;
-					}
-
-					if(conf.getSDSHost() == null || conf.getSDSHost().length() == 0)
-					{
-						engine.showMessage("SDSHost must be configured on Patient Search Configuration screen in order to perform a GP/Practice SDS lookup.");
-						return;
-					}
-
-					if(conf.getSDSPort() == null || conf.getSDSPort().length() == 0)
-					{
-						engine.showMessage("SDSPort must be configured on Patient Search Configuration screen in order to perform a GP/Practice SDS lookup.");
-						return;
-					}
-					
-					sdsRequest.setReferrerSdsOrgId(sdsOrgId);
-					
-					try
-					{
-						sdsHelper.processSdsRequest(sdsRequest, conf.getSDSHost(), conf.getSDSPort(), false, null); //WDEV-22855
-					}
-					catch (Exception e)
-					{
-			            String err = "Error processing SDS request for Practice '" + practice.getName()  + "': " + e.toString();
-
-			            domain.createSystemLogEntry(SystemLogType.APPLICATION, SystemLogLevel.ERROR, err);
-					}					
-				}
-				else
-				{
-					String err = "Practice '" + practice.getName()  + "' doesn't have a taxonomy mapping of type ICAB and therefore it is not possible to do a SDS lookup.";
-					
-					domain.createSystemLogEntry(SystemLogType.APPLICATION, SystemLogLevel.WARNING, err);
-				}
-				*/
-				
 			}
 			
 			refreshGpDetails(form.getGlobalContext().Core.getGPDetails(), form.getGlobalContext().Core.getGPPracticeWithComm(), form.getGlobalContext().Core.getGPSurgery(), true/*!ConfigFlag.DOM.GP_USE_SURGERIES.getValue()*/);
-			
-			//WDEV-22720
+
 			form.getLocalContext().setPatient(patient);
 			form.fireCustomControlValueChanged();
-			//WDEV-22720
-			
 		}
 	}
 	

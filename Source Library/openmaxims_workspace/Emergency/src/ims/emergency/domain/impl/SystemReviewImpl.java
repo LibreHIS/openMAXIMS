@@ -78,12 +78,12 @@ public class SystemReviewImpl extends BaseSystemReviewImpl
 		return SystemReviewVoAssembler.create(doSystemsReview);
 	}
 
-    //WDEV-17118
 	public SystemReviewVoCollection getAllActiveSystemNotes(CareContextRefVo attendance)
 	{
 		DomainFactory factory = getDomainFactory();
-		
-		String hsql = "select sys from SystemsReview as sys left join sys.attendance as att where (att.id = :idcareContext) and (sys.isRIE is null or sys.isRIE = 0) and (sys.isCorrected is null or sys.isCorrected = 0)";
+
+		/* TODO MSSQL case - String hsql = "select sys from SystemsReview as sys left join sys.attendance as att where (att.id = :idcareContext) and (sys.isRIE is null or sys.isRIE = 0) and (sys.isCorrected is null or sys.isCorrected = 0)"; */
+		String hsql = "select sys from SystemsReview as sys left join sys.attendance as att where (att.id = :idcareContext) and (sys.isRIE is null or sys.isRIE = FALSE) and (sys.isCorrected is null or sys.isCorrected = FALSE)";
 	
 		List systemrev = factory.find(hsql, new String[] {"idcareContext"}, new Object[] {attendance.getID_CareContext()});
 		

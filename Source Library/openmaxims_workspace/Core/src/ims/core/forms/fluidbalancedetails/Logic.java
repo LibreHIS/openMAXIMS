@@ -433,9 +433,6 @@ public class Logic extends BaseLogic
 			}
 		}
 
-		/*
-		 * //Now Check to see if a Signatory shift needs to be removed for (int j = 0 ; j < voDFB.getShiftDetails().getSignatoryShifts().size() ; j++) { boolean bRemoveSignatoryShift = true; if (voDFB.getFluidBalanceInstancesIsNotNull()) { for (int k = 0 ; k < voDFB.getFluidBalanceInstances().size() ; k++) { if (voDFB.getFluidBalanceInstances().get(k).getSignatoryShiftIsNotNull() && voDFB.getFluidBalanceInstances().get(k).getSignatoryShift().getID_SignatoryShiftDetailsIsNotNull() && voDFB.getShiftDetails().getSignatoryShifts().get(j).getID_SignatoryShiftDetailsIsNotNull() && voDFB.getFluidBalanceInstances().get(k).getSignatoryShift().getID_SignatoryShiftDetails().equals(voDFB.getShiftDetails().getSignatoryShifts().get(j).getID_SignatoryShiftDetails()) ) bRemoveSignatoryShift = false; } } if (bRemoveSignatoryShift) { voDFB.getShiftDetails().getSignatoryShifts().remove(j); break; } }
-		 */
 		form.getLocalContext().setCurrentDailyFluidBalanceVo(voDFB);
 		form.getLocalContext().setCurrentFluidBalanceInstanceVo(voFluid);
 	}

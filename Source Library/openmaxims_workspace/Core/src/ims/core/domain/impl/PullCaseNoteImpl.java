@@ -159,7 +159,9 @@ public class PullCaseNoteImpl extends BasePullCaseNoteImpl
 			return null;
 		
 		StringBuilder query = new StringBuilder("SELECT patient FROM Patient AS patient LEFT JOIN patient.identifiers AS ident LEFT JOIN ident.type AS identType");
-		query.append(" WHERE ident.value = :ID_VALUE AND identType.id = :ID_TYPE AND (patient.isRIE is null OR patient.isRIE = 0) ");
+
+		/* TODO MSSQL case - query.append(" WHERE ident.value = :ID_VALUE AND identType.id = :ID_TYPE AND (patient.isRIE is null OR patient.isRIE = 0) "); */
+		query.append(" WHERE ident.value = :ID_VALUE AND identType.id = :ID_TYPE AND (patient.isRIE is null OR patient.isRIE = FALSE) ");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();

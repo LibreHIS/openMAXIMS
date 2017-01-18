@@ -88,9 +88,12 @@ public class ClinicianAssessmentWorklistImpl extends BaseClinicianAssessmentWork
 	public TrackingListForClinicianWorklistVoCollection listPatientsWaiting(ims.framework.interfaces.ILocation edLocation, ims.emergency.vo.lookups.TrackingStatus trackingStatus, HcpRefVo allocatedHcp)
 	{
 		DomainFactory factory = getDomainFactory();
-		
-		StringBuilder hqlJoins = new StringBuilder("select tr , (select count (alert.id) from PatientAlert as alert where ( alert.isRIE = false or alert.isRIE is null ) and alert.isCurrentlyActiveAlert = true and alert.patient.id = p.id), (select count (allergy.id) from PatientAllergy as allergy where ( allergy.isRIE = false or allergy.isRIE is null ) and allergy.isCurrentlyActiveAllergy = true and allergy.patient.id = p.id) from Tracking as tr left join tr.patient as p left join tr.attendance as att ");
-		StringBuilder hqlConditions = new StringBuilder(" where ((tr.isDischarged is null or tr.isDischarged = 0) and att.outcome is null) ");
+
+		/* TODO MSSQL case - StringBuilder hqlJoins = new StringBuilder("select tr , (select count (alert.id) from PatientAlert as alert where ( alert.isRIE = 0 or alert.isRIE is null ) and alert.isCurrentlyActiveAlert = 1 and alert.patient.id = p.id), (select count (allergy.id) from PatientAllergy as allergy where ( allergy.isRIE = 0 or allergy.isRIE is null ) and allergy.isCurrentlyActiveAllergy = 1 and allergy.patient.id = p.id) from Tracking as tr left join tr.patient as p left join tr.attendance as att "); */
+		StringBuilder hqlJoins = new StringBuilder("select tr , (select count (alert.id) from PatientAlert as alert where ( alert.isRIE = FALSE or alert.isRIE is null ) and alert.isCurrentlyActiveAlert = TRUE and alert.patient.id = p.id), (select count (allergy.id) from PatientAllergy as allergy where ( allergy.isRIE = FALSE or allergy.isRIE is null ) and allergy.isCurrentlyActiveAllergy = TRUE and allergy.patient.id = p.id) from Tracking as tr left join tr.patient as p left join tr.attendance as att ");
+
+		/* TODO MSSQL case - StringBuilder hqlConditions = new StringBuilder(" where ((tr.isDischarged is null or tr.isDischarged = 0) and att.outcome is null) "); */
+		StringBuilder hqlConditions = new StringBuilder(" where ((tr.isDischarged is null or tr.isDischarged = FALSE) and att.outcome is null) ");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();

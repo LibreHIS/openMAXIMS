@@ -376,43 +376,7 @@ public class Logic extends BaseLogic
 		{
 			MuscleRefVoCollection coll = form.getLocalContext().getLinkCollection();
 			boolean flag = false;
-			
-			/*for (int i = 0; i < coll.size(); i++)
-			{
-				flag = false;
-				for( int j = 0 ; j < form.lyrTabs().tabMuscleSelection().grdSearchMuscles().getRows().size() ; j++)
-				{
-					boolean equals = form.lyrTabs().tabMuscleSelection().grdSearchMuscles().getRows().get(j).getValue().getID_Muscle().equals(coll.get(i).getID_Muscle());
-					boolean select = form.lyrTabs().tabMuscleSelection().grdSearchMuscles().getRows().get(j).getColSelect();
-					
-					if (select && equals)
-					{
-						flag = true;
-						break;
-					}
-				}
-				if(flag)
-					break;
-			}
-						
-			if (flag == false)
-			{
-				for (int i = 0; i < coll.size(); i++)
-				{
-					for( int j = 0 ; j < form.lyrTabs().tabMuscleSelection().grdSearchMuscles().getRows().size() ; j++)
-					{
-						if (form.lyrTabs().tabMuscleSelection().grdSearchMuscles().getRows().get(j).getColSelect())
-						{
-							GenForm.lyrTabsLayer.tabMuscleSelectionContainer.grdSelectedListRow row = form.lyrTabs().tabMuscleSelection().grdSelectedList().getRows().newRow();
-							row.setValue(form.lyrTabs().tabMuscleSelection().grdSearchMuscles().getRows().get(j).getValue());
-							row.setMuscName(form.lyrTabs().tabMuscleSelection().grdSearchMuscles().getRows().get(j).getValue().getName());
-						
-							addToColl(coll, i);
-						}
-					}
-				}
-			}*/
-			//-------------------------------------------------------------------------------------------------
+
 			int dim = coll.size();
 			
 			
@@ -437,7 +401,6 @@ public class Logic extends BaseLogic
 						addToColl(coll, j);
 					}
 				}
-				//-----------------------------------------------------------------------------------------
 		}
 		else
 		{

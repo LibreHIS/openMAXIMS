@@ -97,8 +97,9 @@ public class NotificationsImpl extends BaseNotificationsImpl
 			throw new CodingRuntimeException("Unable to get the logged user.");
 		
 		DomainFactory factory = getDomainFactory();
-		
-		String hql = "from Notifications n where n.user.id = :userIden and n.seen = 0 order by n.priority asc, n.dateTime desc";
+
+		/* TODO MSSQL case - String hql = "from Notifications n where n.user.id = :userIden and n.seen = 0 order by n.priority asc, n.dateTime desc"; */
+		String hql = "from Notifications n where n.user.id = :userIden and n.seen = FALSE order by n.priority asc, n.dateTime desc";
 		
 		return NotificationVoAssembler.createNotificationVoCollectionFromNotifications(factory.find(hql, new String[] {"userIden"}, new Object[] { this.getLoggedInUser().getUserId() }));
 	}

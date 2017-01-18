@@ -508,32 +508,22 @@ public class Logic extends BaseLogic
 			{
 				form.getContextMenus().getOCRRMyOrderHcpAlertAddItem().setVisible(true);
 				form.getContextMenus().getOCRRMyOrderHcpAlertRemoveItem().setVisible(true);
-				//if (form.grdDetails().getSelectedRowIndex()>=0)
-				//	form.btnUpdate().setVisible(true);
-				//else
-				//	form.btnUpdate().setVisible(false);
 			}
 			else
 			{
 				form.getContextMenus().getOCRRMyOrderHcpAlertAddItem().setVisible(true);
 				form.getContextMenus().getOCRRMyOrderHcpAlertRemoveItem().setVisible(false);
-				//form.btnUpdate().setVisible(false);
 			}
 			if (form.ctnDetails().grdOthers().getSelectedRowIndex()>=0)
 			{
 				form.getContextMenus().getGenericGridAddItem().setVisible(true);
 				form.getContextMenus().getGenericGridRemoveItem().setVisible(true);
-				//if (form.grdDetails().getSelectedRowIndex()>=0)
-				//	form.btnUpdate().setVisible(true);
-				//else
-				//	form.btnUpdate().setVisible(false);
 			}
 			else
 			{
 				
 				form.getContextMenus().getGenericGridAddItem().setVisible(true);
 				form.getContextMenus().getGenericGridRemoveItem().setVisible(false);
-				//form.btnUpdate().setVisible(false);
 			}
 			
 			form.getContextMenus().Oncology.hideAllMDTDetailsMenuItems();

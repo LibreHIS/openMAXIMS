@@ -706,15 +706,15 @@ public class DynamicAssessmentsImpl extends BaseDynamicAssessmentsImpl
 		}
 		else if(contextType instanceof PatientRefVo)
 		{
-			//WDEV-11721
 			query += " and a.patient.id = :pat";
 			markers.add("pat");
 			values.add(((PatientRefVo)contextType).getID_Patient());
 		}
 		else
 			throw new CodingRuntimeException("Invalid context type");
-		
-		query += " and a.isRIE is null or a.isRIE = 0 order by a.authoringInformation.authoringDateTime desc"; //WDEV-19078
+
+		/* TODO MSSQL case - query += " and a.isRIE is null or a.isRIE = 0 order by a.authoringInformation.authoringDateTime desc"; */
+		query += " and a.isRIE is null or a.isRIE = FALSE order by a.authoringInformation.authoringDateTime desc";
 		
 		DomainObject previousAssessment = factory.findFirst(query, markers, values);
 		
@@ -727,7 +727,7 @@ public class DynamicAssessmentsImpl extends BaseDynamicAssessmentsImpl
 	public EpisodeofCareShortVo getEpisodeOfCare(EpisodeOfCareRefVo episodeOfCareRef) 
 	{
 		if(episodeOfCareRef == null || !episodeOfCareRef.getID_EpisodeOfCareIsNotNull())
-			return null;		//WDEV-11721
+			return null;
 		
 		return EpisodeofCareShortVoAssembler.create((EpisodeOfCare) getDomainFactory().getDomainObject(EpisodeOfCare.class, episodeOfCareRef.getID_EpisodeOfCare()));
 	}

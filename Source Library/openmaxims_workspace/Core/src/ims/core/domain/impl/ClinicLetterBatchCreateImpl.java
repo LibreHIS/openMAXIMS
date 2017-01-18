@@ -152,7 +152,7 @@ public class ClinicLetterBatchCreateImpl extends BaseClinicLetterBatchCreateImpl
 		String mainHql = "select t from DocumentCategoryConfig as d left join d.template as t left join t.report as r";
 
 		/* TODO MSSQL case - String whereHql = " where t.id not in (select t11.id from TemplateBo as t11 left join t11.report as r11 left join r11.seeds as r21  where (r21.canBeNull = 0" + subHql + ")) and r.reportXml is not null  and t.templateXml is not null and r.isActive = 1 and t.isActive = 1"; */
-		String whereHql = " where t.id not in (select t11.id from TemplateBo as t11 left join t11.report as r11 left join r11.seeds as r21  where (r21.canBeNull = 0" + subHql + ")) and r.reportXml is not null  and t.templateXml is not null and r.isActive = true and t.isActive = true";
+		String whereHql = " where t.id not in (select t11.id from TemplateBo as t11 left join t11.report as r11 left join r11.seeds as r21  where (r21.canBeNull = FALSE" + subHql + ")) and r.reportXml is not null  and t.templateXml is not null and r.isActive = TRUE and t.isActive = TRUE";
 		
 		if(templateName != null && templateName.length() > 0)
 		{

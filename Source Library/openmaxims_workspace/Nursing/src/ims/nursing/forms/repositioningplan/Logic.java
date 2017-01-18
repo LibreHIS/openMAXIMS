@@ -268,35 +268,6 @@ public class Logic extends BaseLogic
 		return true;
 	}
 	
-	/*private String[] addScreenErrorsToVOErrors(ArrayList screenErrors, String[] arrErrors)
-	{
-		String[] arrAllErrors = null;
-		
-		if(arrErrors != null)
-		{
-			arrAllErrors = new String[screenErrors.size() + arrErrors.length];
-			for(int i=0;i<screenErrors.size();i++)
-				arrAllErrors[i] = (String)screenErrors.get(i);
-			
-			int i=0;	
-			for(int p=screenErrors.size();p<arrAllErrors.length;p++)
-			{
-				arrAllErrors[p] = arrErrors[i];
-				i++;
-			}
-		}	
-		else
-		{
-			arrAllErrors = new String[screenErrors.size()];		
-			
-			for(int i=0;i<screenErrors.size();i++)
-				arrAllErrors[i] = (String)screenErrors.get(i);	
-		}	
-		
-		return arrAllErrors;
-	}
-	*/
-	
 	private RepositioningPlanVo populateInstanceData() 
 	{
 		RepositioningPlanVo voRepositioningPlan = form.getLocalContext().getRepositioningPlan();

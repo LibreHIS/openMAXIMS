@@ -942,24 +942,6 @@ public class BedAdmissionComponentImpl extends DTODomainImplementation implement
 		return clockImpact;
 	}
 
-	/*private void cancelCaseNoteRequests(Integer tciId) throws StaleObjectException
-	{
-		PatientCaseNoteRequestLiteVoCollection requestsForCancellation = getLinkedCaseNoteOpenRequests(tciId);
-
-		if (requestsForCancellation == null || requestsForCancellation.size() == 0)
-			return;
-
-		Object mos = getMosUser();
-
-		PatientCaseNotes impl = (PatientCaseNotes) getDomainImpl(PatientCaseNotesImpl.class);
-
-		for (int i = 0; i < requestsForCancellation.size(); i++)
-		{
-			impl.cancelRequest(requestsForCancellation.get(i), (MemberOfStaffRefVo) mos, null);
-		}
-
-	}*/
-
 	private PatientCaseNoteRequestLiteVoCollection getLinkedCaseNoteOpenRequests(Integer tciId)
 	{
 		if(tciId == null)
@@ -971,7 +953,6 @@ public class BedAdmissionComponentImpl extends DTODomainImplementation implement
 		return PatientCaseNoteRequestLiteVoAssembler.createPatientCaseNoteRequestLiteVoCollectionFromPatientCaseNoteRequest(list);
 	}
 
-	// WDEV-18742
 	private void saveDementiaRecord(AdmissionDetailVo admissionDetailVo, HashMap domMap, DomainFactory factory) throws StaleObjectException
 	{
 		ADT impl = (ADT) getDomainImpl(ADTImpl.class);
@@ -2955,20 +2936,21 @@ public class BedAdmissionComponentImpl extends DTODomainImplementation implement
 
 		return pat;
 	}
-	//WDEV-20349 
+
 	private Boolean hasActiveSelfAdmitAlert(PatientRefVo patientRefVo)
 	{
 		if (patientRefVo == null || patientRefVo.getID_Patient() == null)
 			return false;
 
-		String hql = "select count(alert.id) from PatientAlert as alert left join alert.patient as pat left join alert.alertType as aType left join aType.parent as aCategory WHERE (alert.isRIE is null OR alert.isRIE = 0) and aCategory.id = :SELF_ADMIT_ALERT and alert.isCurrentlyActiveAlert = :ACTIVE_ALERT and pat.id = :PATIENT";
+		/* TODO MSSQL case - String hql = "select count(alert.id) from PatientAlert as alert left join alert.patient as pat left join alert.alertType as aType left join aType.parent as aCategory WHERE (alert.isRIE is null OR alert.isRIE = 0) and aCategory.id = :SELF_ADMIT_ALERT and alert.isCurrentlyActiveAlert = :ACTIVE_ALERT and pat.id = :PATIENT"; */
+		String hql = "select count(alert.id) from PatientAlert as alert left join alert.patient as pat left join alert.alertType as aType left join aType.parent as aCategory WHERE (alert.isRIE is null OR alert.isRIE = FALSE) and aCategory.id = :SELF_ADMIT_ALERT and alert.isCurrentlyActiveAlert = :ACTIVE_ALERT and pat.id = :PATIENT";
 
 		long count = getDomainFactory().countWithHQL(hql, new String[]{"SELF_ADMIT_ALERT","ACTIVE_ALERT", "PATIENT" }, new Object[]{AlertType.SELF_ADMIT_PATIENT.getID(), Boolean.TRUE, patientRefVo.getID_Patient()});
 
 		return count > 0;
 	}
 
-	//get all open active episodes and then get the primary diagnosis associated with each
+	// Get all open active episodes and then get the primary diagnosis associated with each
 	public EpisodeOfCareWithPrimaryDiagnosisVoCollection listOpenEpisodesForPatient(PatientRefVo patient)
 	{
 		if (patient == null || patient.getID_Patient() == null)
@@ -3197,7 +3179,9 @@ public class BedAdmissionComponentImpl extends DTODomainImplementation implement
 			return Boolean.FALSE;
 
 		StringBuilder query = new StringBuilder("SELECT COUNT(pel.id) FROM PatientElectiveList AS pel LEFT JOIN pel.electiveList AS el LEFT JOIN el.service AS service LEFT JOIN pel.patient AS patient LEFT JOIN pel.tCIDetails AS tci");
-		query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = 0");
+
+		/* TODO MSSQL case - query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = 0"); */
+		query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = FALSE");
 
 		ArrayList<String> paramNames = new ArrayList<String>();							ArrayList<Object> paramValues = new ArrayList<Object>();
 		paramNames.add("PEL_ID");														paramValues.add(electiveElist.getID_PatientElectiveList());
@@ -3221,7 +3205,9 @@ public class BedAdmissionComponentImpl extends DTODomainImplementation implement
 			return null;
 
 		StringBuilder query = new StringBuilder("SELECT pel FROM PatientElectiveList AS pel LEFT JOIN pel.electiveList AS el LEFT JOIN el.service AS service LEFT JOIN pel.patient AS patient LEFT JOIN pel.tCIDetails AS tci");
-		query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = 0");
+
+		/* TODO MSSQL case - query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = 0"); */
+		query.append(" WHERE pel.id <> :PEL_ID AND patient.id = :PAT_ID AND service.id = :SERVICE_ID AND tci.isActive = FALSE");
 
 		ArrayList<String> paramNames = new ArrayList<String>();							ArrayList<Object> paramValues = new ArrayList<Object>();
 		paramNames.add("PEL_ID");														paramValues.add(electiveElist.getID_PatientElectiveList());

@@ -682,8 +682,9 @@ public class VTERiskAssessmentWorklistImpl extends BaseVTERiskAssessmentWorklist
 	{
 		StringBuilder hqlJoins =  new StringBuilder("select pea, pat, summaryRec from PendingElectiveAdmission as pea left join pea.electiveAdmissionStatus as admissionStatus left join pea.pasEvent as pasEv left join pasEv.patient as pat ");
 					  hqlJoins.append(", PatientSummaryRecord as summaryRec right join summaryRec.patient as summaryRecPat left join summaryRec.preOpVTEAssessment as preOpVteAssessment left join summaryRec.inpatientVTEAssessment as inpVTEAssessment");
-		
-		StringBuilder hqlConditions = new StringBuilder(" where pea.tCIDate = :tciDate and admissionStatus.id = :admissionStatusID and pat.id = summaryRecPat.id and (preOpVteAssessment.isRIE is null or preOpVteAssessment.isRIE = 0) and (inpVTEAssessment.isRIE is null or inpVTEAssessment.isRIE = 0)");
+
+		/* TODO MSSQL case - StringBuilder hqlConditions = new StringBuilder(" where pea.tCIDate = :tciDate and admissionStatus.id = :admissionStatusID and pat.id = summaryRecPat.id and (preOpVteAssessment.isRIE is null or preOpVteAssessment.isRIE = 0) and (inpVTEAssessment.isRIE is null or inpVTEAssessment.isRIE = 0)"); */
+		StringBuilder hqlConditions = new StringBuilder(" where pea.tCIDate = :tciDate and admissionStatus.id = :admissionStatusID and pat.id = summaryRecPat.id and (preOpVteAssessment.isRIE is null or preOpVteAssessment.isRIE = FALSE) and (inpVTEAssessment.isRIE is null or inpVTEAssessment.isRIE = FALSE)");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();

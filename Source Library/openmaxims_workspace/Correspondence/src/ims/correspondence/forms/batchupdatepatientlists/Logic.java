@@ -95,25 +95,7 @@ public class Logic extends BaseLogic
 						voPasEvent = voDischargedEpisode.getPasEvent();
 					else if(voOutpatientAttendance != null && voOutpatientAttendance.getPasEventIsNotNull())
 						voPasEvent = voOutpatientAttendance.getPasEvent();
-					
-					/*if(form.grdPatientList().getValue()==null && form.getLocalContext().getUserAccessVoIsNotNull()){
-						boolean bIsUserAccessConsultant = false;
-						UserAccessVo voUserAccess = form.getLocalContext().getUserAccessVo();
-						ConsultantAccessVoCollection  collConsultantAccessVo = voUserAccess.getConsultantAccess();
-						MedicLiteVo med = null;
-						
-						if (collConsultantAccessVo != null)
-						{
-							for (int j = 0; j < collConsultantAccessVo.size(); j++)
-							{
-								med = collConsultantAccessVo.get(j).getConsultant();
-								if(med.getID_Hcp().equals(voInpatient.getPasEvent().getConsultant().getID_Hcp()))
-									bIsUserAccessConsultant=true;
-							}
-						}
-						if(!bIsUserAccessConsultant)
-							continue;
-					}*/
+
 					if (voPasEvent.getPatientIsNotNull())
 					{
 						row = form.grdPatientList().getRows().newRow();

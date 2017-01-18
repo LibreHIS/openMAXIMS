@@ -67,7 +67,8 @@ public class NotificationsProvider extends DomainImpl implements INotificationsP
 	{
 		DomainFactory factory = getDomainFactory();
 
-		String hql = "select count(n.id) from Notifications n where n.seen = 0 and n.user.id = :userIden";
+		/* TODO MSSQL case - String hql = "select count(n.id) from Notifications n where n.seen = 0 and n.user.id = :userIden"; */
+		String hql = "select count(n.id) from Notifications n where n.seen = FALSE and n.user.id = :userIden";
 		
 		Object[] count = factory.find(hql, new String[] {"userIden"}, new Object[] {userId}).toArray();
 		

@@ -123,19 +123,16 @@ public class Logic extends BaseLogic
 			populateScreenFromData(ddVo);
 		}
 		else 
-		{	//WDEV-16548 patient DOD may have been updated through HL7 message, set this value in the date field 
+		{	// Patient DOD may have been updated through HL7 message, set this value in the date field
 			form.dteDOD().setValue(form.getGlobalContext().Core.getPatientShort().getDod());
-			form.timTOD().setValue(form.getGlobalContext().Core.getPatientShort().getTimeOfDeath()); //WDEV-19682
+			form.timTOD().setValue(form.getGlobalContext().Core.getPatientShort().getTimeOfDeath());
 			
-			// WDEV-21930 - If PDS, default Informal
+			// If PDS, default Informal
 			if (isPds())
 			{
 				form.cmbDeathNotificationStatus().setValue(PDSDeathNotificationStatus.INFORMAL);
 			}
-		}	
-	 	
-	 	//for (int i = 0; i < form.grdCauseofDeath().getRows().size(); i++)
-	 		//form.grdCauseofDeath().getRows().get(i).setTooltip(form.grdCauseofDeath().getRows().get(i).getColCause().getText());
+		}
 	}
 
 	protected void onBtnCancelClick() throws ims.framework.exceptions.PresentationLogicException
@@ -146,7 +143,6 @@ public class Logic extends BaseLogic
 	
 	protected void onBtnSaveClick() throws ims.framework.exceptions.PresentationLogicException
 	{
-		//WDEV-14715
 		String[] uiErrors = getUIErrors();
 		if (uiErrors != null)
 		{

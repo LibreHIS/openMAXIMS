@@ -1618,10 +1618,10 @@ public class PDSDemographicsImpl extends DTODomainImplementation implements ims.
 		return rttSTatusDO;
 	}
 
-	private  List<?> getCatsReferralsforPatient(Patient patient) //now get all referrals not EOC  -WDEV-20060
+	private  List<?> getCatsReferralsforPatient(Patient patient) // Now get all referrals not EOC
 	{
-		//WDEV-18497 removed from query "and cclock.stopDate is null"
-		String hql = "select ref from CatsReferral as ref left join ref.currentStatus as cstatus left join ref.patient as pat where (ref.isRIE is null or ref.isRIE = 0) AND pat.id = :patientID AND cstatus.referralStatus.id <> :EOC";
+		/* TODO MSSQL case - String hql = "select ref from CatsReferral as ref left join ref.currentStatus as cstatus left join ref.patient as pat where (ref.isRIE is null or ref.isRIE = 0) AND pat.id = :patientID AND cstatus.referralStatus.id <> :EOC"; */
+		String hql = "select ref from CatsReferral as ref left join ref.currentStatus as cstatus left join ref.patient as pat where (ref.isRIE is null or ref.isRIE = FALSE) AND pat.id = :patientID AND cstatus.referralStatus.id <> :EOC";
 
 		DomainFactory factory = getDomainFactory();
 
@@ -1634,7 +1634,7 @@ public class PDSDemographicsImpl extends DTODomainImplementation implements ims.
 		return null;
 	}
 
-	private void instantiatePatientEvent(CatsReferral doCats, PathwayRTTStatus pathRTTStatDO) throws StaleObjectException, DomainInterfaceException //WDEV-18325
+	private void instantiatePatientEvent(CatsReferral doCats, PathwayRTTStatus pathRTTStatDO) throws StaleObjectException, DomainInterfaceException
 	{
 		
 		if (!ConfigFlag.DOM.RTT_STATUS_POINT_FUNCTIONALITY.getValue())
@@ -4044,24 +4044,6 @@ public class PDSDemographicsImpl extends DTODomainImplementation implements ims.
 		
 		return null;
 	}
-	
-	//WDEV-22172
-
-	/*
-	private boolean missingMappingExists(MissingMappingVoCollection missingMappings, Integer nameType)
-	{
-		if(missingMappings == null)
-			return false;
-		
-		for(int i = 0; i < missingMappings.size(); i++)
-		{
-			if(nameType.equals(missingMappings.get(i).getPdsField()))
-				return true;
-		}
-		
-		return false;
-	}
-	*/
 
 	private PatRelative getRelativeByObjectIdentifier(PatRelativeCollection patRelativeCollection, String objectIdentifier)
 	{

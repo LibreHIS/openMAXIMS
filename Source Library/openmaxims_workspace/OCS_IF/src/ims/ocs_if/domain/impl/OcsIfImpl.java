@@ -388,17 +388,31 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 			" and patient.nameuppersurna <> 'DummyICABSurname' " +
 			" and oi.lkp_ordinvcurrordinvstat =? " +
 			" and inv.investigat = invidx.id " +
-			" and ord.wasprocess = 0 " +
-			" and (ord.wasdiscard is null or ord.wasdiscard = 0) " +
+
+			/* TODO MSSQL case - and ord.wasprocess = 0 */
+			" and ord.wasprocess = FALSE " +
+
+			/* TODO MSSQL case - and (ord.wasdiscard is null or ord.wasdiscard = 0) */
+			" and (ord.wasdiscard is null or ord.wasdiscard = FALSE) " +
+
 			" and ord.lkp_authorisat=? " +
 			" and (invidx.lkp_category=? or (invidx.lkp_category=? and inv.lkp_eventtype=?))" +
-			" and (oi.wasprocess = 0 or oi.wasprocess is null) " +
+
+			/* TODO MSSQL case - and (oi.wasprocess = 0 or oi.wasprocess is null) */
+			" and (oi.wasprocess = FALSE or oi.wasprocess is null) " +
+
 			" union " +
 			" select c_ord from ocrr_orderspecimen os, ocrr_ocsorder ord" +
 			" where os.c_ord = ord.id " +
-			" and ord.wasprocess = 0 " +
-			" and (os.wasprocess is null or os.wasprocess = 0)" +
-			" and (ord.wasdiscard is null or ord.wasdiscard = 0) " +
+
+			/* TODO MSSQL case - and ord.wasprocess = 0 */
+			" and ord.wasprocess = FALSE " +
+
+			/* TODO MSSQL case - and (os.wasprocess is null or os.wasprocess = 0) */
+			" and (os.wasprocess is null or os.wasprocess = FALSE)" +
+
+			/* TODO MSSQL case - and (ord.wasdiscard is null or ord.wasdiscard = 0) */
+			" and (ord.wasdiscard is null or ord.wasdiscard = FALSE) " +
 
 			/* TODO MSSQL case - " and (os.colldateti is not null or os.ispatientc=1 or ord.sendnumber=1) " + */
 			" and (os.colldateti is not null or os.ispatientc = TRUE or ord.sendnumber = TRUE) " +
@@ -413,17 +427,30 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 				" and oi.investigat = inv.id " +
 				" and oi.lkp_ordinvcurrordinvstat =? " +
 				" and inv.investigat = invidx.id " +
-				" and ord.wasprocess = 0 " +
-				" and (ord.wasdiscard is null or ord.wasdiscard = 0) " +
+
+				/* TODO MSSSQL case - " and ord.wasprocess = 0 " */
+				" and ord.wasprocess = FALSE " +
+
+				/* TODO MSSQL case - " and (ord.wasdiscard is null or ord.wasdiscard = 0) " */
+				" and (ord.wasdiscard is null or ord.wasdiscard = FALSE) " +
+
 				" and ord.lkp_authorisat=? " +
 				" and (invidx.lkp_category=? or (invidx.lkp_category=? and inv.lkp_eventtype=?))" +
-				" and (oi.wasprocess = 0 or oi.wasprocess is null) " +
+
+				/* TODO MSSQL case - " and (oi.wasprocess = 0 or oi.wasprocess is null) " */
+				" and (oi.wasprocess = FALSE or oi.wasprocess is null) " +
 				" union " +
 				" select c_ord from ocrr_orderspecimen os, ocrr_ocsorder ord" +
 				" where os.c_ord = ord.id " +
-				" and ord.wasprocess = 0 " +
-				" and (os.wasprocess is null or os.wasprocess = 0)" +
-				" and (ord.wasdiscard is null or ord.wasdiscard = 0) " +
+
+				/* TODO MSSQL case - " and ord.wasprocess = 0 " */
+				" and ord.wasprocess = FALSE " +
+
+				/* TODO MSSQL case - " and (os.wasprocess is null or os.wasprocess = 0)" */
+				" and (os.wasprocess is null or os.wasprocess = FALSE)" +
+
+				/* TODO MSSQL case - " and (ord.wasdiscard is null or ord.wasdiscard = 0) " */
+				" and (ord.wasdiscard is null or ord.wasdiscard = FALSE) " +
 
 				/* TODO MSSQL case - " and (os.colldateti is not null or os.ispatientc=1 or ord.sendnumber=1) " + */
 				" and (os.colldateti is not null or os.ispatientc = TRUE or ord.sendnumber = TRUE) " +
@@ -830,21 +857,21 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 			{
 				if (triggers.contains(QueueType.DEMOGRAPHICFEED.getID()))
 				{
-					if(ConfigFlag.GEN.ICAB_ENABLED.getValue()) //WDEV-18949
+					if (ConfigFlag.GEN.ICAB_ENABLED.getValue())
 					{
-						//WDEV-19317 Lower case table and column names
-						//           Done so that SQL will work for case sensitive DBs
+						// Lower case table and column names
+						// Done so that SQL will work for case sensitive DBs
 						query.append("select adto_demographicsmq.id,lkp_queuetype,adto_demographicsmq.sys_creation_datetime as DT "+
 									"from adto_demographicsmq "+
 									"left join core_patient on adto_demographicsmq.patient=core_patient.id "+
 									"where core_patient.nameuppersurna <> 'DummyICABSurname' "+ 
-									"and (wasprocess is null or wasprocess=0) and (wasdiscard is null or wasdiscard=0)");
+									"and (wasprocess is null or wasprocess = FALSE) and (wasdiscard is null or wasdiscard = FALSE)");
 
 					}
 					else
 					{
 						query.append("select id,lkp_queuetype,sys_creation_datetime as DT "+
-									"from adto_demographicsmq where (wasprocess is null or wasprocess=0) and (wasdiscard is null or wasdiscard=0)");
+									"from adto_demographicsmq where (wasprocess is null or wasprocess = FALSE) and (wasdiscard is null or wasdiscard = FALSE)");
 					}
 				}
 				if (triggers.contains(QueueType.ORDERCHANGERESPONSE.getID()))
@@ -853,10 +880,10 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 					{
 						query.append(" union ");
 					}
-					//WDEV-19317 Lower case table and column names
-					//           Done so that SQL will work for case sensitive DBs
+					// Lower case table and column names
+					// Done so that SQL will work for case sensitive DBs
 					query.append("select id,lkp_queuetype,sys_creation_datetime as DT "+
-								"from ocrr_orderchangeres where (wasprocess is null or wasprocess=0) and (wasdiscard is null or wasdiscard=0)");
+								"from ocrr_orderchangeres where (wasprocess is null or wasprocess = FALSE) and (wasdiscard is null or wasdiscard = FALSE)");
 				}
 				if(triggers.contains(QueueType.PATIENTDOCUMENT.getID()))
 				{
@@ -864,10 +891,10 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 					{
 						query.append(" union ");
 					}
-					//WDEV-19317 Lower case table and column names
-					//           Done so that SQL will work for case sensitive DBs
+					// Lower case table and column names
+					// Done so that SQL will work for case sensitive DBs
 					query.append("select id,lkp_queuetype,sys_creation_datetime as DT "+
-								"from adto_patientdocumen where (wasprocess is null or wasprocess=0) and (wasdiscard is null or wasdiscard=0)");
+								"from adto_patientdocumen where (wasprocess is null or wasprocess = FALSE) and (wasdiscard is null or wasdiscard = FALSE)");
 				}	
 				if(triggers.contains(QueueType.EDATTENDANCE.getID()))
 				{
@@ -875,10 +902,10 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 					{
 						query.append(" union ");
 					}
-					//WDEV-19317 Lower case table and column names
-					//           Done so that SQL will work for case sensitive DBs
+					// Lower case table and column names
+					// Done so that SQL will work for case sensitive DBs
 					query.append("select id,lkp_queuetype,sys_creation_datetime as DT "+
-								"from adto_edattendanceme where (wasprocess is null or wasprocess=0) and (wasdiscard is null or wasdiscard=0)");
+								"from adto_edattendanceme where (wasprocess is null or wasprocess = FALSE) and (wasdiscard is null or wasdiscard = FALSE)");
 				}
 				if(triggers.contains(QueueType.INPATIENTADT.getID()))
 				{
@@ -886,10 +913,10 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 					{
 						query.append(" union ");
 					}
-					//WDEV-1317 Lower case table and column names
-					//           Done so that SQL will work for case sensitive DBs
+					// Lower case table and column names
+					// Done so that SQL will work for case sensitive DBs
 					query.append("select id,lkp_queuetype,sys_creation_datetime as DT "+
-								"from adto_inpatientadtme where (wasprocess is null or wasprocess=0) and (wasdiscard is null or wasdiscard=0)");
+								"from adto_inpatientadtme where (wasprocess is null or wasprocess = FALSE) and (wasdiscard is null or wasdiscard = FALSE)");
 				}	
 				if(triggers.contains(QueueType.APPOINTMENT.getID()))
 				{
@@ -899,19 +926,19 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 					}
 					if(ConfigFlag.GEN.ICAB_ENABLED.getValue())
 					{
-						//WDEV-19317 Lower case column and table names, ensure identifiers match definition
-						//           Done so that SQL will work for case sensitive DBs
+						// Lower case column and table names, ensure identifiers match definition
+						// Done so that SQL will work for case sensitive DBs
 						query.append("select adto_appointmentmes.id,lkp_queuetype,adto_appointmentmes.sys_creation_datetime as DT "+
 									"from adto_appointmentmes "+
 									"left join schl_sch_booking  on adto_appointmentmes.appointmen=schl_sch_booking.id "+
 									"left join core_patient on schl_sch_booking.patient=core_patient.id "+
 									"where core_patient.nameuppersurna <> 'DummyICABSurname' "+ 
-									"and (wasprocess is null or wasprocess=0) and (wasdiscard is null or wasdiscard=0)");
+									"and (wasprocess is null or wasprocess = FALSE) and (wasdiscard is null or wasdiscard = FALSE)");
 					}
 					else
 					{
 						query.append("select id,lkp_queuetype,sys_creation_datetime as DT "+
-									"from adto_appointmentmes where (wasprocess is null or wasprocess=0) and (wasdiscard is null or wasdiscard=0)");
+									"from adto_appointmentmes where (wasprocess is null or wasprocess = FALSE) and (wasdiscard is null or wasdiscard = FALSE)");
 
 					}
 					
@@ -926,24 +953,23 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 				}
 				if (ConfigFlag.GEN.ICAB_ENABLED.getValue())
 					{
-//					ExternalSystemEventTypes.NEWORDER.getId() -1518
-					//WDEV-19317 Lower case column and table names
-					//           Done so that SQL will work for case sensitive DBs
+					// Lower case column and table names
+					// Done so that SQL will work for case sensitive DBs
 					query.append("select ext.id,null,ext.sys_creation_datetime as DT from schl_externalsy as ext ");
 					query.append("left join ocrr_orderinvestiga inv on ext.investigat=inv.id ");
 					query.append("left join ocrr_ocsorder orde on inv.orderdetai=orde.id ");
 					query.append("left join core_patient pat on orde.patient=pat.id ");
 					query.append("where   pat.nameuppersurna<> 'DummyICABSurname' and pat.nameuppersurna is not null and "); 
-					query.append("ext.wasprocess is null or ext.wasprocess=0 and ext.lkp_eventtype <>-1518");
+					query.append("ext.wasprocess is null or ext.wasprocess = FALSE and ext.lkp_eventtype <>-1518");
 				}
 				else
 				{
 					query.append("select id,null,sys_creation_datetime as DT "+
-								"from schl_externalsy where (wasprocess is null or wasprocess=0) and lkp_eventtype <>-1518");
+								"from schl_externalsy where (wasprocess is null or wasprocess = FALSE) and lkp_eventtype <>-1518");
 				}
 			}
 			
-			//WDEV-19160 RadioTherapy messages (VARIAN)
+			// RadioTherapy messages (VARIAN)
 			if (triggers.contains(QueueType.RADIOTHERAPYSCHEDULING.getID()))
 			{
 				if (query.length()!=0)
@@ -952,10 +978,10 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 				}
 				query.append("select id,lkp_queuetype,sys_creation_datetime as DT " +
 						"from adto_radiotherapysc " +
-						"where (wasprocess is null or wasprocess=0) and (wasdiscard is null or wasdiscard=0)");
+						"where (wasprocess is null or wasprocess = FALSE) and (wasdiscard is null or wasdiscard = FALSE)");
 			}
 			
-			//WDEV-19481 Inpatient Episode messages
+			// Inpatient Episode messages
 			if (triggers.contains(QueueType.INPATIENTEPISODE.getID()))
 			{
 				if (query.length()!=0)
@@ -964,10 +990,10 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 				}
 				query.append("select id,lkp_queuetype,sys_creation_datetime as DT " +
 						"from adto_inpatientepiso " +
-						"where (wasprocess is null or wasprocess=0) and (wasdiscard is null or wasdiscard=0)");
+						"where (wasprocess is null or wasprocess = FALSE) and (wasdiscard is null or wasdiscard = FALSE)");
 			}
 
-			//WDEV-19576 Ward Master File messages
+			// Ward Master File messages
 			if (triggers.contains(QueueType.WARDMASTERFILE.getID()))
 			{
 				if (query.length()!=0)
@@ -976,10 +1002,10 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 				}
 				query.append("select id,lkp_queuetype,sys_creation_datetime as DT " +
 						"from adto_wardmessageque " +
-						"where (wasprocess is null or wasprocess=0) and (wasdiscard is null or wasdiscard=0)");
+						"where (wasprocess is null or wasprocess = FALSE) and (wasdiscard is null or wasdiscard = FALSE)");
 			}
 
-			//WDEV-19576 GP Practice Master File messages
+			// GP Practice Master File messages
 			if (triggers.contains(QueueType.GPPRACTICEMASTERFILE.getID()))
 			{
 				if (query.length()!=0)
@@ -988,10 +1014,10 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 				}
 				query.append("select id,lkp_queuetype,sys_creation_datetime as DT " +
 						"from adto_gppracticemess " +
-						"where (wasprocess is null or wasprocess=0) and (wasdiscard is null or wasdiscard=0)");
+						"where (wasprocess is null or wasprocess = FALSE) and (wasdiscard is null or wasdiscard = FALSE)");
 			}
 
-			//WDEV-19576 MOS (Consultant) Master File messages
+			// MOS (Consultant) Master File messages
 			if (triggers.contains(QueueType.MOSMASTERFILE.getID()))
 			{
 				if (query.length()!=0)
@@ -1000,10 +1026,10 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 				}
 				query.append("select id,lkp_queuetype,sys_creation_datetime as DT " +
 						"from adto_mosmessagequeu " +
-						"where (wasprocess is null or wasprocess=0) and (wasdiscard is null or wasdiscard=0)");
+						"where (wasprocess is null or wasprocess = FALSE) and (wasdiscard is null or wasdiscard = FALSE)");
 			}
 
-			//WDEV-19576 GP Master File messages
+			// GP Master File messages
 			if (triggers.contains(QueueType.GPMASTERFILE.getID()))
 			{
 				if (query.length()!=0)
@@ -1012,10 +1038,10 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 				}
 				query.append("select id,lkp_queuetype,sys_creation_datetime as DT " +
 						"from adto_gpmessagequeue " +
-						"where (wasprocess is null or wasprocess=0) and (wasdiscard is null or wasdiscard=0)");
+						"where (wasprocess is null or wasprocess = FALSE) and (wasdiscard is null or wasdiscard = FALSE)");
 			}
 
-			//WDEV-19704 Patient Elective List (TCI) messages
+			// Patient Elective List (TCI) messages
 			if (triggers.contains(QueueType.ELECTIVELIST.getID()))
 			{
 				if (query.length()!=0)
@@ -1024,13 +1050,13 @@ public class OcsIfImpl extends BaseOcsIfImpl implements IQueueHandler
 				}
 				query.append("select id,lkp_queuetype,sys_creation_datetime as DT " +
 						"from adto_electivelistme " +
-						"where (wasprocess is null or wasprocess=0) and (wasdiscard is null or wasdiscard=0)");
+						"where (wasprocess is null or wasprocess = FALSE) and (wasdiscard is null or wasdiscard = FALSE)");
 			}
 
 
 
 			
-			//WDEV-13985 change order by
+			// Change order by
 			query.append(" order by DT");	
 
 			Connection conn = factory.getJdbcConnection();

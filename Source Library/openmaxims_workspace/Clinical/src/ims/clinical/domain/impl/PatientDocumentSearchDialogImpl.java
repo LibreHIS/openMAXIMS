@@ -45,13 +45,13 @@ public class PatientDocumentSearchDialogImpl extends BasePatientDocumentSearchDi
 	{
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
-			
-		StringBuilder query = new StringBuilder("select pd from PatientDocument as pd left join pd.currentDocumentStatus as ds left join ds.correspondenceStatus as cs where (pd.isRIE is null or pd.isRIE = 0) and pd.patient.id = :Patient_id  and (ds is null or cs.id <> :Status_id )"); //WDEV-18962
+
+		/* TODO MSSQL case - StringBuilder query = new StringBuilder("select pd from PatientDocument as pd left join pd.currentDocumentStatus as ds left join ds.correspondenceStatus as cs where (pd.isRIE is null or pd.isRIE = 0) and pd.patient.id = :Patient_id  and (ds is null or cs.id <> :Status_id )"); */
+		StringBuilder query = new StringBuilder("select pd from PatientDocument as pd left join pd.currentDocumentStatus as ds left join ds.correspondenceStatus as cs where (pd.isRIE is null or pd.isRIE = FALSE) and pd.patient.id = :Patient_id  and (ds is null or cs.id <> :Status_id )");
 			
 		paramNames.add("Patient_id");
 		paramValues.add(patient.getID_Patient());
 		
-		//WDEV-18962
 		paramNames.add("Status_id");
 		paramValues.add(ims.core.vo.lookups.DocumentStatus.DRAFT.getID());
 		

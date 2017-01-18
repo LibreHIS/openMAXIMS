@@ -55,25 +55,6 @@ public class Logic extends BaseLogic
 				form.cmbEpisode().newRow(vo, detail.toString());
 			}
 		}
-	/*	ClinicalContactShortVo voClinicalContactShort = null;
-		for(int i = 0 ; i < voColl.size() ; i++)
-		{
-			voClinicalContactShort = voColl.get(i);
-			if (form.getGlobalContext().Core.getCurrentClinicalContactIsNotNull())
-			{
-				if(!voClinicalContactShort.equals(form.getGlobalContext().Core.getCurrentClinicalContact()))
-				{
-					StringBuffer detail = new StringBuffer();
-					if (voClinicalContactShort.getStartDateTimeIsNotNull())
-						detail.append(voClinicalContactShort.getStartDateTime().getDate().toString(DateFormat.STANDARD) + " - ");
-										
-					if (voClinicalContactShort.getSeenByIsNotNull())
-						detail.append(voClinicalContactShort.getSeenBy().toString());
-	
-					form.cmbEpisode().newRow(voClinicalContactShort, detail.toString());
-				}
-			}
-		}*/
 	}
 	
 	protected void onBtnOKClick() throws ims.framework.exceptions.PresentationLogicException

@@ -215,30 +215,13 @@ public class Logic extends BaseLogic
 		}
 		return null;
 	}
-	//WDEV-15687
-	/*
-	private void populateProcdureCombo()
-	{
-		ProcedureLiteVoCollection tempColl = null;
-		
-		EpisodeofCareShortVo epShort = form.getGlobalContext().Core.getEpisodeofCareShort();
-		tempColl = domain.getProcedures(epShort.getSpecialty());
-		if( tempColl != null)
-		{
-			for(int i = 0; i < tempColl.size();i++)
-			{
-				form.cmbProcedure().newRow(tempColl.get(i), tempColl.get(i).getProcedureName());
-			}
-		}
-	}
-	*/
+
 	private void clearAll()
 	{
-		form.ccProcedure().clear();//WDEV-15687
-		form.cmbSurgeon().clear();//WDEV-15687
+		form.ccProcedure().clear();
+		form.cmbSurgeon().clear();
 		form.GroupStaus().setValue(null);
 		form.ccConsultantName().clear();
-		//form.ccSurgeon().clear();
 	}
 	
 	protected void onBtnSaveClick() throws ims.framework.exceptions.PresentationLogicException
@@ -258,7 +241,6 @@ public class Logic extends BaseLogic
 			tempVo.setCareContext(form.getGlobalContext().Core.getCurrentCareContext());		
 			tempVo.setInfoSource(SourceofInformation.CLINICALCONTACT);
 			
-			//WDEV-15687
 			IClinicalCodingValue procDetails = form.ccProcedure().getValue();
 			if (procDetails != null)
 			{

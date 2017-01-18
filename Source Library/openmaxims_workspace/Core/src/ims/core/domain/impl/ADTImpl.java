@@ -1266,16 +1266,18 @@ public class ADTImpl extends DomainImpl implements ims.core.domain.ADT, ims.doma
 			}
 		}
 		
-		factory.save(ad);//WDEV-12825
+		factory.save(ad);
 		
-		// WDEV-16240 - check if a Dementia record is to be updated
+		// Check if a Dementia record is to be updated
 		updateDementiaRecordForInpatient(factory, ad);
 	}
 
 
 	private PatientElectiveList getPatientElectiveListForAdmission(DomainFactory factory, AdmissionDetail ad) throws StaleObjectException
 	{
-		String pelQuery = "select pel from PatientElectiveList as pel left join pel.admissions as ad where ad.id = " + ad.getId() + " AND (pel.isRIE is null OR pel.isRIE = 0)";
+		/* TODO MSSQL case - String pelQuery = "select pel from PatientElectiveList as pel left join pel.admissions as ad where ad.id = " + ad.getId() + " AND (pel.isRIE is null OR pel.isRIE = 0)"; */
+		String pelQuery = "select pel from PatientElectiveList as pel left join pel.admissions as ad where ad.id = " + ad.getId() + " AND (pel.isRIE is null OR pel.isRIE = FALSE)";
+
 		List <PatientElectiveList> pelList = factory.find(pelQuery);
 		PatientElectiveList patientElectiveList = null;
 		if (pelList != null && pelList.size() > 0)
@@ -1285,7 +1287,9 @@ public class ADTImpl extends DomainImpl implements ims.core.domain.ADT, ims.doma
 
 		if (patientElectiveList == null)
 		{
-			String pel2Query = "select p1_1 from PatientElectiveList as p1_1 left join p1_1.tCIDetails as t1_1 left join t1_1.admissionDetail as a1_1 where t1_1.admissionDetail.id = " + ad.getId() + " AND (p1_1.isRIE is null OR p1_1.isRIE = 0)";
+			/* TODO MSSQL case - String pel2Query = "select p1_1 from PatientElectiveList as p1_1 left join p1_1.tCIDetails as t1_1 left join t1_1.admissionDetail as a1_1 where t1_1.admissionDetail.id = " + ad.getId() + " AND (p1_1.isRIE is null OR p1_1.isRIE = 0)"; */
+			String pel2Query = "select p1_1 from PatientElectiveList as p1_1 left join p1_1.tCIDetails as t1_1 left join t1_1.admissionDetail as a1_1 where t1_1.admissionDetail.id = " + ad.getId() + " AND (p1_1.isRIE is null OR p1_1.isRIE = FALSE)";
+
 			List <PatientElectiveList> pelList2 = factory.find(pel2Query);
 			if(pelList2 != null && pelList2.size() > 0)
 			{

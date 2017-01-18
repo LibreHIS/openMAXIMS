@@ -186,7 +186,6 @@ public class Logic extends BaseLogic
 		grdDiscriminatorSelectRowCollection rows = form.grdDiscriminatorSelect().getRows();
 		DiscriminatorConfigVo firstPriority = null;
 
-//		for (int i = rows.size() - 1; i >= 0; i--)
 		for (int i = 0 ; i < rows.size() ; i++)
 		{
 			grdDiscriminatorSelectRow discriminator = rows.get(i);

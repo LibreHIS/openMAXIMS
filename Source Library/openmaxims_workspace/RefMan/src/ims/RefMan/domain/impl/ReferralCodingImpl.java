@@ -254,8 +254,9 @@ public class ReferralCodingImpl extends BaseReferralCodingImpl
 			paramNames.add("pasID");
 			paramValues.add(pasEventRefVo.getID_PASEvent());
 		}
-		
-		hql += " and (rc.isRIE is null or rc.isRIE = 0)"; //WDEV-19154
+
+		/* TODO MSSQL case - hql += " and (rc.isRIE is null or rc.isRIE = 0)"; */
+		hql += " and (rc.isRIE is null or rc.isRIE = FALSE)";
 		
 		List list = factory.find(hql, paramNames, paramValues);
 
@@ -364,7 +365,9 @@ public class ReferralCodingImpl extends BaseReferralCodingImpl
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
 
-		String hql = "select rc from ReferralCoding as rc left join rc.appointment as appt where appt.id = :apptID and (rc.isRIE is null or rc.isRIE = 0)";  //WDEV-19154
+		/* TODO MSSQL case - String hql = "select rc from ReferralCoding as rc left join rc.appointment as appt where appt.id = :apptID and (rc.isRIE is null or rc.isRIE = 0)"; */
+		String hql = "select rc from ReferralCoding as rc left join rc.appointment as appt where appt.id = :apptID and (rc.isRIE is null or rc.isRIE = FALSE)";
+
 		paramNames.add("apptID");
 		paramValues.add(appointmentRef.getID_Booking_Appointment());
 
@@ -419,7 +422,9 @@ public class ReferralCodingImpl extends BaseReferralCodingImpl
 
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
-		hql.append(" select distinct orderInvs.id from ReferralCoding as referral left join referral.catsReferral as catsRef left join referral.codingItems as coding left join coding.investigation as orderInvs where catsRef.id = :catsReferralID and orderInvs is not null and (referral.isRIE is null or referral.isRIE = 0) ");
+
+		/* TODO MSSQL case - hql.append(" select distinct orderInvs.id from ReferralCoding as referral left join referral.catsReferral as catsRef left join referral.codingItems as coding left join coding.investigation as orderInvs where catsRef.id = :catsReferralID and orderInvs is not null and (referral.isRIE is null or referral.isRIE = 0) "); */
+		hql.append(" select distinct orderInvs.id from ReferralCoding as referral left join referral.catsReferral as catsRef left join referral.codingItems as coding left join coding.investigation as orderInvs where catsRef.id = :catsReferralID and orderInvs is not null and (referral.isRIE is null or referral.isRIE = FALSE) ");
 
 		markers.add("catsReferralID");
 		values.add(referralRef.getID_CatsReferral());
@@ -434,7 +439,8 @@ public class ReferralCodingImpl extends BaseReferralCodingImpl
 
 		StringBuffer hql = new StringBuffer();
 
-		hql.append(" select count(referral.id) from ReferralCoding as referral left join referral.catsReferral as catsRef left join referral.codingItems as coding left join coding.patientProcedure as patProc where catsRef.id = :catsReferralID and patProc.id = :procedureID and (referral.isRIE is null or referral.isRIE = 0)");
+		/* TODO MSSQL case - hql.append(" select count(referral.id) from ReferralCoding as referral left join referral.catsReferral as catsRef left join referral.codingItems as coding left join coding.patientProcedure as patProc where catsRef.id = :catsReferralID and patProc.id = :procedureID and (referral.isRIE is null or referral.isRIE = 0)"); */
+		hql.append(" select count(referral.id) from ReferralCoding as referral left join referral.catsReferral as catsRef left join referral.codingItems as coding left join coding.patientProcedure as patProc where catsRef.id = :catsReferralID and patProc.id = :procedureID and (referral.isRIE is null or referral.isRIE = FALSE)");
 
 		Object[] count = factory.find(hql.toString(), new String[] { "catsReferralID", "procedureID" }, new Object[] { referralRef.getID_CatsReferral(), procedureRef.getID_PatientProcedure() }).toArray();
 
@@ -473,7 +479,9 @@ public class ReferralCodingImpl extends BaseReferralCodingImpl
 
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
-		hql.append(" select distinct patProc.id from ReferralCoding as referral left join referral.catsReferral as catsRef left join referral.codingItems as coding left join coding.patientProcedure as patProc where catsRef.id = :catsReferralID and patProc is not null and (referral.isRIE is null or referral.isRIE = 0)");
+
+		/* TODO MSSQL case - hql.append(" select distinct patProc.id from ReferralCoding as referral left join referral.catsReferral as catsRef left join referral.codingItems as coding left join coding.patientProcedure as patProc where catsRef.id = :catsReferralID and patProc is not null and (referral.isRIE is null or referral.isRIE = 0)"); */
+		hql.append(" select distinct patProc.id from ReferralCoding as referral left join referral.catsReferral as catsRef left join referral.codingItems as coding left join coding.patientProcedure as patProc where catsRef.id = :catsReferralID and patProc is not null and (referral.isRIE is null or referral.isRIE = FALSE)");
 
 		markers.add("catsReferralID");
 		values.add(catsReferralRef.getID_CatsReferral());
@@ -482,7 +490,6 @@ public class ReferralCodingImpl extends BaseReferralCodingImpl
 
 	}
 
-	//WDEV-19351
 	public Boolean isInpatientNonSuitableForSurgery(CatsReferralRefVo referralRef)
 	{
 		if (referralRef == null || referralRef.getID_CatsReferral() == null)

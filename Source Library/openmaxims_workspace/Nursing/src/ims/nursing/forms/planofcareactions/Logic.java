@@ -262,21 +262,12 @@ public class Logic extends BaseLogic
 				//PlanOfCare
 				newActionVo.setPlanOfCare(rowValue);
 				
-				//add row to collection
+				// Add row to collection
 				coColl.add(newActionVo);
 				
 			}				
 			
-		}	
-/*		String [] error = coColl.validate();
-		
-					
-		
-		if(error != null && error.length != 0)
-		{
-				engine.showErrors(error);
-				return null;
-		}*/
+		}
 		
 		return coColl;
 	}

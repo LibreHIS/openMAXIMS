@@ -859,21 +859,6 @@ public class Logic extends BaseLogic
 		return voFolder;
 	}
 
-	/*private boolean checkParentNodesHasChildren(TreeNode[] parentNodes)
-	{
-		for (int i = 0; i < parentNodes.length; i++)
-		{
-			TreeNode node = parentNodes[i];
-			if(node.getValue() == null && node.getNodes().size() == 0)
-			{
-				engine.showMessage("Please add at least one favourite entry to the '" + node.getText() + "' node");
-				return false;
-			}
-		}
-		
-		return true;
-	}*/
-
 	private TreeNode[] getParentTreeNodes()
 	{
 		int size = form.lyrTabs().tabPageFavourites().treFavourites().getNodes().size();

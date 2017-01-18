@@ -351,45 +351,6 @@ public class Logic extends BaseLogic
 			case GenForm.ContextMenus.CorrespondenceNamespace.CorrespondenceDetails.SetLetterRequired:
 				setLetterRequired();
 		}
-		
-		
-		
-/*		
-		switch(menuItemID)
-		{				
-		case GenForm.ContextMenus.CorrespondenceDetails.ViewDemographics:
-			if (form.grdAttendences().getSelectedRowIndex() >= 0 )
-			{
-				
-				// Set the current patient for the session
-				domain.setCurrentPatientId(form.getGlobalContext().Core.getPatientShort());		
-				
-				engine.setPatientInfo(form.getGlobalContext().Core.getPatientShort().getPatientInfo());
-				
-				form.getGlobalContext().Correspondence.setOpenForm(form.getForms().Core.Demographics);
-				
-				engine.close(DialogResult.OK);
-			
-			}
-			break;
-		case GenForm.ContextMenus.CorrespondenceDetails.Edit:
-			if (form.grdAttendences().getSelectedRowIndex() >= 0 )
-			{
-				form.getGlobalContext().Correspondence.setGenerateFormMode(FormMode.EDIT);
-				
-				domain.setCurrentPatientId(form.getGlobalContext().Core.getPatientShort());		
-				
-				engine.setPatientInfo(form.getGlobalContext().Core.getPatientShort().getPatientInfo());
-				
-				if (form.grdAttendences().getValue() != null)
-					form.getGlobalContext().Correspondence.setPasContact(form.grdAttendences().getValue());
-				
-				form.getGlobalContext().Correspondence.setOpenForm(form.getForms().Correspondence.CorrespondenceDetails);
-				
-				engine.close(DialogResult.OK);
-			}
-		}*/	
-		
 	}
 	
 	private void setContextMenusForNLR() 

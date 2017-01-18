@@ -80,7 +80,9 @@ public class InternalReferralsIncomingListComponentImpl extends BaseInternalRefe
 		String statusesIds = getStatusesIds(criteria);
 		
 		StringBuilder hqlJoins = new StringBuilder("select clinicReferral from ClinicalReferrals as clinicReferral left join clinicReferral.currentReferralStatus as clinicReferralStatus left join clinicReferralStatus.referralStatus as status ");
-		StringBuilder hqlConditions = new StringBuilder(" where status.id not in (" + InternalReferralStatus.ABANDONED.getID() + ") and (clinicReferral.isRIE is null or clinicReferral.isRIE = 0) ");
+
+		/* TODO MSSQL case - StringBuilder hqlConditions = new StringBuilder(" where status.id not in (" + InternalReferralStatus.ABANDONED.getID() + ") and (clinicReferral.isRIE is null or clinicReferral.isRIE = 0) "); */
+		StringBuilder hqlConditions = new StringBuilder(" where status.id not in (" + InternalReferralStatus.ABANDONED.getID() + ") and (clinicReferral.isRIE is null or clinicReferral.isRIE = FALSE) ");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();

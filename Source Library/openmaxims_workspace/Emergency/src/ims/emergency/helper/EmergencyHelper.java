@@ -138,7 +138,9 @@ public class EmergencyHelper extends DomainImpl implements IEmergencyHelper, ims
 		DomainFactory factory = getDomainFactory();
 	
 		StringBuffer hql = new StringBuffer();
-		hql.append("select chartReq from ChartRequested as chartReq left join chartReq.emergencyAttendence as emergeAtt  where 	(emergeAtt.id = :emergAttID and (emergeAtt.isRIE is null or emergeAtt.isRIE = 0) ) "); //WDEV-22956
+
+		/* TODO MSSQL case - hql.append("select chartReq from ChartRequested as chartReq left join chartReq.emergencyAttendence as emergeAtt  where 	(emergeAtt.id = :emergAttID and (emergeAtt.isRIE is null or emergeAtt.isRIE = 0) ) "); */
+		hql.append("select chartReq from ChartRequested as chartReq left join chartReq.emergencyAttendence as emergeAtt  where 	(emergeAtt.id = :emergAttID and (emergeAtt.isRIE is null or emergeAtt.isRIE = FALSE) ) ");
 
 		List<?> list = factory.find(hql.toString(), new String[] { "emergAttID" }, new Object[] { emergencyAttendanceRef.getID_EmergencyAttendance() });
 
@@ -160,7 +162,9 @@ public class EmergencyHelper extends DomainImpl implements IEmergencyHelper, ims
 		DomainFactory factory = getDomainFactory();
 	
 		StringBuffer hql = new StringBuffer();
-		hql.append("select emergeAttBilling from EmergencyAttendanceBilling as emergeAttBilling left join emergeAttBilling.emergencyAttendence as emergeAtt  where 	(emergeAtt.id = :emergAttID and (emergeAtt.isRIE is null or emergeAtt.isRIE = 0)) "); //WDEV-22956
+
+		/* TODO MSSQL case - hql.append("select emergeAttBilling from EmergencyAttendanceBilling as emergeAttBilling left join emergeAttBilling.emergencyAttendence as emergeAtt  where 	(emergeAtt.id = :emergAttID and (emergeAtt.isRIE is null or emergeAtt.isRIE = 0)) "); */
+		hql.append("select emergeAttBilling from EmergencyAttendanceBilling as emergeAttBilling left join emergeAttBilling.emergencyAttendence as emergeAtt  where 	(emergeAtt.id = :emergAttID and (emergeAtt.isRIE is null or emergeAtt.isRIE = FALSE)) ");
 
 		List<?> list = factory.find(hql.toString(), new String[] { "emergAttID" }, new Object[] { emergencyAttendanceRef.getID_EmergencyAttendance() });
 

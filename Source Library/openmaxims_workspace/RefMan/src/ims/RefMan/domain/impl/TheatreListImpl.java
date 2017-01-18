@@ -798,13 +798,14 @@ public class TheatreListImpl extends BaseTheatreListImpl
 		return PatientElectiveListForDNAAppointmentsVoAssembler.create((PatientElectiveList) getDomainFactory().findFirst(query, "APPT_ID", appointment.getID_Booking_Appointment()));
 	}
 
-	//wdev-19303
 	public TCIForPatElectListForWardLiteVo getTCIForPatElectiveList(Booking_AppointmentRefVo bookAppt)
 	{
 		if( bookAppt == null || bookAppt.getID_Booking_Appointment() == null)
 			throw new CodingRuntimeException("Appointment cannot be null");
-		
-		List tci = getDomainFactory().find("select t1_1 from TCIForPatientElectiveList as t1_1 left join t1_1.appointment as b1_1 where	(b1_1.id = :appointmid and (t1_1.isRIE = 0 or t1_1.isRIE = null))", new String[]{"appointmid"}, new Object[]{bookAppt.getID_Booking_Appointment()});
+
+		/* TODO MSSQL case - List tci = getDomainFactory().find("select t1_1 from TCIForPatientElectiveList as t1_1 left join t1_1.appointment as b1_1 where	(b1_1.id = :appointmid and (t1_1.isRIE = 0 or t1_1.isRIE = null))", new String[]{"appointmid"}, new Object[]{bookAppt.getID_Booking_Appointment()}); */
+		List tci = getDomainFactory().find("select t1_1 from TCIForPatientElectiveList as t1_1 left join t1_1.appointment as b1_1 where	(b1_1.id = :appointmid and (t1_1.isRIE = FALSE or t1_1.isRIE = null))", new String[]{"appointmid"}, new Object[]{bookAppt.getID_Booking_Appointment()});
+
 		if( tci != null && tci.size() > 0)
 		{
 			return TCIForPatElectListForWardLiteVoAssembler.createTCIForPatElectListForWardLiteVoCollectionFromTCIForPatientElectiveList(tci).get(0);

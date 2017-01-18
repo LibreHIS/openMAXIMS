@@ -76,97 +76,7 @@ public class PatientPathwaysAwaitingValidationImpl extends BasePatientPathwaysAw
 		
 		Boolean validationDateAdded = false;
 		Boolean rttValidationAdded = false;
-		
-		 
-		
-		//WDEV-21431 (Following code commented out and replaced below)
-//		StringBuffer hql = new StringBuffer(" select pathways from PatientPathwayJourney as pathways left join pathways.currentClock as cc ");
-//		StringBuffer hqlConditions = new StringBuffer(" cc is not null and cc.stopDate is null and (pathways.isRIE is null or pathways.isRIE = 0) ");
-//		
-//		//WDEV-21431
-//		
-//		if (searchCriteria != null && searchCriteria.getStartDateIsNotNull() && Boolean.FALSE.equals(searchCriteria.getRttIncluded()))
-//		{
-//			hqlConditions.append("and pathways.nextValidationDate is not null");
-//			validationDateAdded = true;
-//			
-//			hqlConditions.append(andStr);
-//			
-//			hqlConditions.append(" pathways.nextValidationDate >= :fromDate ");
-//			markers.add("fromDate");
-//			DateTime fromDateTime = new DateTime( searchCriteria.getStartDate(), new Time(0, 0));
-//			values.add(fromDateTime.getJavaDate());
-//			
-//			andStr = " and ";
-//		}
-//		
-//		if (searchCriteria != null && searchCriteria.getEndDateIsNotNull() && Boolean.FALSE.equals(searchCriteria.getRttIncluded()))
-//		{
-//			if (Boolean.FALSE.equals(validationDateAdded))
-//			{
-//				hqlConditions.append("and pathways.nextValidationDate is not null");
-//				validationDateAdded = true;
-//			}
-//			
-//			hqlConditions.append(andStr);
-//			
-//			hqlConditions.append(" pathways.nextValidationDate <= :toDate ");
-//			markers.add("toDate");
-//			DateTime toDateTime = new DateTime( searchCriteria.getEndDate(), new Time(0, 0));
-//			values.add(toDateTime.getJavaDate());
-//			values.add(searchCriteria.getEndDate());
-//			andStr = " and ";
-//		}
-//		
-//		//WDEV-21155
-//		hqlConditions.append("and pathways.validationCompletedDT is null and pathways.validationCompletedBy is null ");
-//		
-//		if (searchCriteria != null &&  Boolean.TRUE.equals(searchCriteria.getRttIncluded()))
-//		{
-//			hqlConditions.append(andStr);
-//			
-//			hql.append(" left join pathways.currentClock as cc left join cc.currentRTTStatus as crtts ");
-//			hqlConditions.append(" (pathways.nextValidationDate >= :notValidatedStartDate and pathways.nextValidationDate <= :notValidatedEndDate)  
-//		or (pathways.nextValidationDate is null and  crtts.statusDateTime is not null and  crtts.statusDateTime >= :startDate and crtts.statusDateTime <= :endDate) ");
-//			
-//			markers.add("notValidatedStartDate");
-//			DateTime notValidatedStartDate = new DateTime();
-//			values.add(notValidatedStartDate.addDays(-(searchCriteria.getNotValidatedNoOfWeeks() * 7)).getJavaDate());
-//			
-//			markers.add("notValidatedEndDate");
-//			values.add(new DateTime().getJavaDate());
-//			
-//			markers.add("startDate");
-//			DateTime startDate = new DateTime();
-//			values.add(startDate.addDays(-(searchCriteria.getNoOfWeeks() * 7)).getJavaDate());
-//			
-//			markers.add("endDate");
-//			values.add(new DateTime().getJavaDate());
-//	
-//			andStr = " and ";
-//			rttValidationAdded = true;
-//		}
-//		
-//		if (hqlConditions != null && hqlConditions.length() > 0)
-//		{
-//			hqlConditions.insert(0, " where ");
-//		}
-//		
-//		if (Boolean.TRUE.equals(validationDateAdded))
-//		{
-//			hqlConditions.append(" order by pathways.nextValidationDate desc");	
-//		}
-//		else if (Boolean.TRUE.equals(rttValidationAdded))
-//		{
-//			hqlConditions.append(" order by crtts.statusDateTime desc");	
-//		}
-//
-//		List<?> list = getDomainFactory().find(hql.append(hqlConditions.toString()).toString(), markers, values);
-//		
-//		return PatientPathwaysAwaitingValidationWorklistVoAssembler.createPatientPathwaysAwaitingValidationWorklistVoCollectionFromPatientPathwayJourney(list);
 
-		
-		//WDEV-21431 Code below replaces commented out code above
 		// Note that HQL query has been vastly changed to accommodate new requirement to list referral service for selected pathways
 		
 		String serviceIds = "";
@@ -267,14 +177,20 @@ public class PatientPathwaysAwaitingValidationImpl extends BasePatientPathwaysAw
 								"    	pathways.nextValidationDate is not null" +
 								"	and pathways.nextValidationDate >= :notValidatedStartDate" +
 								"	and pathways.nextValidationDate <= :notValidatedEndDate" +
-								"	and (pathways.isRIE = 0 or pathways.isRIE is null)" +
+
+								/* TODO MSSQL case - and (pathways.isRIE = 0 or pathways.isRIE is null) */
+								"	and (pathways.isRIE = FALSE or pathways.isRIE is null)" +
+
 								")"+
 								" or "+
 								"	(	 pathways.nextValidationDate is null "+
-								"	and  refdetails.end18WW  is not null" + //WDEV-22258
-								"	and  refdetails.end18WW >= :startDate" + //WDEV-22258
-								"	and refdetails.end18WW <= :endDate" +	//WDEV-22258								
-								"	and (pathways.isRIE = 0 or pathways.isRIE is null)"+
+								"	and  refdetails.end18WW  is not null" +
+								"	and  refdetails.end18WW >= :startDate" +
+								"	and refdetails.end18WW <= :endDate" +
+
+								/* TODO MSSQL case - and (pathways.isRIE = 0 or pathways.isRIE is null) */
+								"	and (pathways.isRIE = FALSE or pathways.isRIE is null)"+
+
 								"   )"+
 								") ");
 			

@@ -88,20 +88,17 @@ public class Logic extends BaseLogicDTO
 		for(int x=0; x<app.DataCollection.get(0).Appt_idCollection.count(); x++)
 		{
 			Date date = GetDateFromString(app.DataCollection.get(0).Appt_idCollection.get(x).Appt_dt);
-			//SqlDateTime date = DTOdate.IsNull ? SqlDateTime.Null : new SqlDateTime(DTOdate.Value);
-			//Display only future dates
+
+			// Display only future dates
 			if(date.compareTo(new Date()) >= 0)
 			{	
 				GenForm.MainGridRow row = form.MainGrid().getRows().newRow();	
 				row.setDate(date.toString(DateFormat.STANDARD));
 				Time appTm = GetTimeFromString(app.DataCollection.get(0).Appt_idCollection.get(x).App_stm);
-				//date = Dtodate.IsNull ? SqlDateTime.Null : new SqlDateTime(Dtodate.Value);
 				row.setAppointmentTime(appTm == null?"":appTm.toString(TimeFormat.DEFAULT));
 				Time attTm = GetTimeFromString(app.DataCollection.get(0).Appt_idCollection.get(x).Att_tm);
-				//date = Dtodate.IsNull ? SqlDateTime.Null : new SqlDateTime(Dtodate.Value);
-				row.setAttendanceTime(attTm==null?"":attTm.toString(TimeFormat.DEFAULT));//toString()Value.ToString("t");
+				row.setAttendanceTime(attTm==null?"":attTm.toString(TimeFormat.DEFAULT));
 				row.setTransport(getTransport(app.DataCollection.get(0).Appt_idCollection.get(x).Trans_typ));
-				//this.setMainGridTransportLookupValue(row, getIntFromString(app.DataCollection.get(0).Appt_idCollection.get(x).Trans_typ));
 				row.setValue(app.DataCollection.get(0).Appt_idCollection.get(x).Appt_id);
 			}
 		}
@@ -113,14 +110,14 @@ public class Logic extends BaseLogicDTO
 
 		if (form.MainGrid().getRows().size() > 0) 
 		{
-			//Equivalent to setCurrentSelection = 0;
+			// Equivalent to setCurrentSelection = 0;
 			form.MainGrid().setValue(form.MainGrid().getRows().get(0).getValue());
 			form.Save().setEnabled(true);
 		}
 		else
 			form.Save().setEnabled(false);
 
-		return 0; // replace this value with the number of records retrieved.
+		return 0; // Replace this value with the number of records retrieved.
 	}
 	
 	private boolean Save()
@@ -128,7 +125,7 @@ public class Logic extends BaseLogicDTO
 		if(form.getLocalContext().getapptDTOIsNotNull() == false)
 			return false;
 		
-		//Get For Update
+		// Get For Update
 		Sd_appt app = form.getLocalContext().getapptDTO();
 		Result result = app.getForUpdate();
 		if (result != null)

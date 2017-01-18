@@ -1738,8 +1738,9 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 		
 		DomainFactory factory = getDomainFactory();
 		String query = null;
-		
-		Long noConsultationActivityRequiredForReferral = factory.countWithHQL("select count(cats.id) from CatsReferral as cats where cats.id = :CatsReferralId and (cats.consultationActivityRequired = 0 or cats.consultationActivityRequired is null) ", new String[] {"CatsReferralId"}, new Object[] {catsReferral.getID_CatsReferral()});
+
+		/* TODO MSSQL case - Long noConsultationActivityRequiredForReferral = factory.countWithHQL("select count(cats.id) from CatsReferral as cats where cats.id = :CatsReferralId and (cats.consultationActivityRequired = 0 or cats.consultationActivityRequired is null) ", new String[] {"CatsReferralId"}, new Object[] {catsReferral.getID_CatsReferral()}); */
+		Long noConsultationActivityRequiredForReferral = factory.countWithHQL("select count(cats.id) from CatsReferral as cats where cats.id = :CatsReferralId and (cats.consultationActivityRequired = FALSE or cats.consultationActivityRequired is null) ", new String[] {"CatsReferralId"}, new Object[] {catsReferral.getID_CatsReferral()});
 		
 		if (noConsultationActivityRequiredForReferral == null || noConsultationActivityRequiredForReferral == 0)
 		{
@@ -2336,7 +2337,9 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 			return null;
 		
 		DomainFactory factory = getDomainFactory();
-		List lastOutpatientErod = factory.find("select outErod from CatsReferral as cats left join cats.outpatientEROD as outErod where cats.id = :CatsReferralId and (outErod.isRIE is null or outErod.isRIE = 0) and outErod.sequence = (select max(outErodSec.sequence) from CatsReferral as catsSec left join catsSec.outpatientEROD as outErodSec where catsSec.id = :CatsReferralId and (outErodSec.isRIE is null or outErodSec.isRIE = 0))", new String[] {"CatsReferralId"}, new Object[] {catsReferral.getID_CatsReferral()});
+
+		/* TODO MSSQL case - List lastOutpatientErod = factory.find("select outErod from CatsReferral as cats left join cats.outpatientEROD as outErod where cats.id = :CatsReferralId and (outErod.isRIE is null or outErod.isRIE = 0) and outErod.sequence = (select max(outErodSec.sequence) from CatsReferral as catsSec left join catsSec.outpatientEROD as outErodSec where catsSec.id = :CatsReferralId and (outErodSec.isRIE is null or outErodSec.isRIE = 0))", new String[] {"CatsReferralId"}, new Object[] {catsReferral.getID_CatsReferral()}); */
+		List lastOutpatientErod = factory.find("select outErod from CatsReferral as cats left join cats.outpatientEROD as outErod where cats.id = :CatsReferralId and (outErod.isRIE is null or outErod.isRIE = FALSE) and outErod.sequence = (select max(outErodSec.sequence) from CatsReferral as catsSec left join catsSec.outpatientEROD as outErodSec where catsSec.id = :CatsReferralId and (outErodSec.isRIE is null or outErodSec.isRIE = FALSE))", new String[] {"CatsReferralId"}, new Object[] {catsReferral.getID_CatsReferral()});
 			
 		if(lastOutpatientErod != null && lastOutpatientErod.size() > 0 && lastOutpatientErod.get(0) instanceof ReferralEROD)
 		{
@@ -2352,7 +2355,9 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 			return null;
 		
 		DomainFactory factory = getDomainFactory();
-		List<?> lastOutpatientErod = factory.find("select outErod from CatsReferral as cats left join cats.outpatientEROD as outErod where cats.id = :CatsReferralId and (outErod.isRIE is null or outErod.isRIE = 0) and outErod.sequence = (select max(outErodSec.sequence) from CatsReferral as catsSec left join catsSec.outpatientEROD as outErodSec where catsSec.id = :CatsReferralId and (outErodSec.isRIE is null or outErodSec.isRIE = 0))", new String[] {"CatsReferralId"}, new Object[] {catsReferralDO.getId()});
+
+		/* TODO MSSQL case - List<?> lastOutpatientErod = factory.find("select outErod from CatsReferral as cats left join cats.outpatientEROD as outErod where cats.id = :CatsReferralId and (outErod.isRIE is null or outErod.isRIE = 0) and outErod.sequence = (select max(outErodSec.sequence) from CatsReferral as catsSec left join catsSec.outpatientEROD as outErodSec where catsSec.id = :CatsReferralId and (outErodSec.isRIE is null or outErodSec.isRIE = 0))", new String[] {"CatsReferralId"}, new Object[] {catsReferralDO.getId()}); */
+		List<?> lastOutpatientErod = factory.find("select outErod from CatsReferral as cats left join cats.outpatientEROD as outErod where cats.id = :CatsReferralId and (outErod.isRIE is null or outErod.isRIE = FALSE) and outErod.sequence = (select max(outErodSec.sequence) from CatsReferral as catsSec left join catsSec.outpatientEROD as outErodSec where catsSec.id = :CatsReferralId and (outErodSec.isRIE is null or outErodSec.isRIE = FALSE))", new String[] {"CatsReferralId"}, new Object[] {catsReferralDO.getId()});
 			
 		if(lastOutpatientErod != null && lastOutpatientErod.size() > 0 && lastOutpatientErod.get(0) instanceof ReferralEROD)
 		{
@@ -2362,7 +2367,7 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 		return null;
 	}
 	
-	public synchronized Sch_BookingVo saveBooking(Sch_BookingVo voBooking,	CatsReferralRefVo catsRef,	Boolean isRebook, ReferralERODForBookAppointmentVoCollection outpatientERODCollection, Boolean isERODUpdatedOnBooking, BookingAppointmentForLinkedAppointmentsVoCollection linkApptsColl, Booking_AppointmentVoCollection linkMultipleBookingApptsColl) throws DomainInterfaceException, StaleObjectException  //WDEV-19543 //WDEV-20053
+	public synchronized Sch_BookingVo saveBooking(Sch_BookingVo voBooking,	CatsReferralRefVo catsRef,	Boolean isRebook, ReferralERODForBookAppointmentVoCollection outpatientERODCollection, Boolean isERODUpdatedOnBooking, BookingAppointmentForLinkedAppointmentsVoCollection linkApptsColl, Booking_AppointmentVoCollection linkMultipleBookingApptsColl) throws DomainInterfaceException, StaleObjectException
 	{
 		if (voBooking == null)
 			throw new CodingRuntimeException("voBooking is null in method saveBooking");
@@ -3388,7 +3393,7 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 
 	public SessionShortVoCollection listFlexibleSessions(Date startDate, Date endDate, ActivityVo activity, ServiceRefVo service, LocationRefVo location, HcpLiteVo listOwner, ServiceFunctionRefVo clinicType, LocationRefVoCollection locationList, ProfileListType listType, LookupInstVo urgency, Boolean isWardAttendance)
 	{
-		// all params must be set
+		// All params must be set
 		if (startDate == null || endDate == null || activity == null)
 			throw new DomainRuntimeException("Not all mandatory search params set in method listGenericSession");
 
@@ -3398,10 +3403,11 @@ public class BookAppointmentImpl extends BaseBookAppointmentImpl
 		ArrayList<Object> values = new ArrayList<Object>();
 		
 		StringBuffer condStr = new StringBuffer();
-		
-		condStr.append(" where (session.isFixed is null or session.isFixed = 0) and activity.id = :activityId and session.sessionDate >= :startDate and session.sessionDate <= :endDate and session.sessionStatus = :sessionStatus and session.sessionProfileType.id = :SESSION_TYPE and (session.isRIE is null or session.isRIE = 0)");
 
-		// mandatory fields
+		/* TODO MSSQL case - condStr.append(" where (session.isFixed is null or session.isFixed = 0) and activity.id = :activityId and session.sessionDate >= :startDate and session.sessionDate <= :endDate and session.sessionStatus = :sessionStatus and session.sessionProfileType.id = :SESSION_TYPE and (session.isRIE is null or session.isRIE = 0)"); */
+		condStr.append(" where (session.isFixed is null or session.isFixed = FALSE) and activity.id = :activityId and session.sessionDate >= :startDate and session.sessionDate <= :endDate and session.sessionStatus = :sessionStatus and session.sessionProfileType.id = :SESSION_TYPE and (session.isRIE is null or session.isRIE = FALSE)");
+
+		// Mandatory fields
 		markers.add("activityId");
 		values.add(activity.getID_Activity());
 		

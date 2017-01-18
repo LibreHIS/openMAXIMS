@@ -55,29 +55,8 @@ public class Logic extends BaseLogic
 	
 	protected void onFormOpen(Object[] args) throws ims.framework.exceptions.PresentationLogicException
 	{
-		//initalise();
 		open();
 	}
-
-//	private void initalise()
-//	{		
-//
-//		LookupService lookupService = domain.getLookupService();
-//		
-//		TreatmentSitesCollection lkpTreatmentSitesCollection =
-//				(TreatmentSitesCollection) lookupService.getLookupCollection(TreatmentSites.TYPE_ID, 
-//					TreatmentSitesCollection.class, TreatmentSites.class,true,false);
-//		
-//		form.cmbTreatmentSiteName().clear();
-//		for (int i = 0; lkpTreatmentSitesCollection != null && i < lkpTreatmentSitesCollection.size(); i++)
-//		{
-//			if (lkpTreatmentSitesCollection.get(i).isActive())
-//				form.cmbTreatmentSiteName().newRow(lkpTreatmentSitesCollection.get(i), lkpTreatmentSitesCollection.get(i).getText());
-//			else
-//				form.cmbTreatmentSiteName().newRow(lkpTreatmentSitesCollection.get(i), lkpTreatmentSitesCollection.get(i).getText(),Color.Red);
-//		}
-//		
-//	}
 	
 	private void open()
 	{

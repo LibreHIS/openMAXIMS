@@ -172,7 +172,9 @@ public class TransferDialogImpl extends BaseTransferDialogImpl
 		DomainFactory factory = getDomainFactory();
 
 		StringBuffer hql = new StringBuffer();
-		hql.append("select transfers from EDTransfer as transfers where transfers.attendance.id = :attID and transfers.acceptedDateTime is null and (transfers.notAccepted is null  or transfers.notAccepted = 0) order by transfers.referredDateTime desc ");
+
+		/* TODO MSSQL case - hql.append("select transfers from EDTransfer as transfers where transfers.attendance.id = :attID and transfers.acceptedDateTime is null and (transfers.notAccepted is null  or transfers.notAccepted = 0) order by transfers.referredDateTime desc "); */
+		hql.append("select transfers from EDTransfer as transfers where transfers.attendance.id = :attID and transfers.acceptedDateTime is null and (transfers.notAccepted is null  or transfers.notAccepted = FALSE) order by transfers.referredDateTime desc ");
 
 		List<?> list = factory.find(hql.toString(), new String[] { "attID" }, new Object[] { careContextID });
 

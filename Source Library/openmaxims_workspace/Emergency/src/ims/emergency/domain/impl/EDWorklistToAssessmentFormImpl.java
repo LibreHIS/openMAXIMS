@@ -68,14 +68,16 @@ public class EDWorklistToAssessmentFormImpl extends BaseEDWorklistToAssessmentFo
 
 	private static final long serialVersionUID = 1L;
 	
-	//WDEV-18001
 	public ims.emergency.vo.TrackingForDisplayClinicianAndTriageWorklistVoCollection listPatientWaitings(TrackingStatus status, ILocation edLocation, HcpRefVo allocatedHcp, TrackingAreaShortVo trackingArea, TriagePriority triagePriority)
 	{
 
 		DomainFactory factory = getDomainFactory();
-		
-		StringBuilder hqlJoins = new StringBuilder("select tr , (select count (alert.id) from PatientAlert as alert where ( alert.isRIE = false or alert.isRIE is null ) and alert.isCurrentlyActiveAlert = true and alert.patient.id = p.id), (select count (allergy.id) from PatientAllergy as allergy where ( allergy.isRIE = false or allergy.isRIE is null ) and allergy.isCurrentlyActiveAllergy = true and allergy.patient.id = p.id) from Tracking as tr left join tr.patient as p left join tr.attendance as att ");
-		StringBuilder hqlConditions = new StringBuilder(" where ((tr.isDischarged is null or tr.isDischarged = 0) and att.outcome is null) ");
+
+		/* TODO MSSQL case - StringBuilder hqlJoins = new StringBuilder("select tr , (select count (alert.id) from PatientAlert as alert where ( alert.isRIE = 0 or alert.isRIE is null ) and alert.isCurrentlyActiveAlert = 1 and alert.patient.id = p.id), (select count (allergy.id) from PatientAllergy as allergy where ( allergy.isRIE = 0 or allergy.isRIE is null ) and allergy.isCurrentlyActiveAllergy = 1 and allergy.patient.id = p.id) from Tracking as tr left join tr.patient as p left join tr.attendance as att "); */
+		StringBuilder hqlJoins = new StringBuilder("select tr , (select count (alert.id) from PatientAlert as alert where ( alert.isRIE = FALSE or alert.isRIE is null ) and alert.isCurrentlyActiveAlert = TRUE and alert.patient.id = p.id), (select count (allergy.id) from PatientAllergy as allergy where ( allergy.isRIE = FALSE or allergy.isRIE is null ) and allergy.isCurrentlyActiveAllergy = TRUE and allergy.patient.id = p.id) from Tracking as tr left join tr.patient as p left join tr.attendance as att ");
+
+		/* TODO MSSQL case - StringBuilder hqlConditions = new StringBuilder(" where ((tr.isDischarged is null or tr.isDischarged = 0) and att.outcome is null) "); */
+		StringBuilder hqlConditions = new StringBuilder(" where ((tr.isDischarged is null or tr.isDischarged = FALSE) and att.outcome is null) ");
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();
@@ -428,11 +430,9 @@ public class EDWorklistToAssessmentFormImpl extends BaseEDWorklistToAssessmentFo
 		miliseconds = endTime - startTime;
 		System.out.println("Time Assembler Collection: " + miliseconds);
 		
-		return coll;//WDEV-17757
+		return coll;
 	}
 
-
-	//wdev-17326
 	public TrackingAreaShortVoCollection listTrackingAreas(ILocation edloc)
 	{
 		
@@ -440,7 +440,10 @@ public class EDWorklistToAssessmentFormImpl extends BaseEDWorklistToAssessmentFo
 			throw new CodingRuntimeException("Cannot list Tracking Area for a null EDLocation Id.");
 		
 		DomainFactory factory = getDomainFactory();
-		String query = "select ta   from TrackingConfiguration as trc left join trc.areas as ta where ta.eDLocation.id = :EDLocationId and ta.status.id = :ActiveStatus and ta.isRegistrationArea = 0 order by index(ta)";//order by upper(ta.areaDisplayName)";
+
+		/* TODO MSSQL case - String query = "select ta   from TrackingConfiguration as trc left join trc.areas as ta where ta.eDLocation.id = :EDLocationId and ta.status.id = :ActiveStatus and ta.isRegistrationArea = 0 order by index(ta)"; */
+		String query = "select ta   from TrackingConfiguration as trc left join trc.areas as ta where ta.eDLocation.id = :EDLocationId and ta.status.id = :ActiveStatus and ta.isRegistrationArea = FALSE order by index(ta)";
+
 		List<?> list = factory.find(query, new String[] {"EDLocationId", "ActiveStatus"}, new Object[] {edloc.getID(), PreActiveActiveInactiveStatus.ACTIVE.getID()});
 		
 		if( list != null && list.size() > 0)
@@ -452,8 +455,6 @@ public class EDWorklistToAssessmentFormImpl extends BaseEDWorklistToAssessmentFo
 		
 	}
 
-
-	//WDEV-18001
 	public TrackingForClinicianWorklistAndTriageVo getTrackingForClinicianWorklistAndTriage(TrackingRefVo trackingRef)
 	{
 		if(trackingRef == null || trackingRef.getID_Tracking() == null)

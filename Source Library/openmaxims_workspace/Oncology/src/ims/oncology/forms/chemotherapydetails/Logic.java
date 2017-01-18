@@ -273,9 +273,6 @@ public class Logic extends BaseLogic
 	@Override
 	protected void onDyngrdCyclesDaysRowSelectionChanged(DynamicGridRow row)
 	{
-		// Refresh controls state
-		//updateControlsState();
-		//wdev-12819
 		if (FormMode.VIEW.equals(form.getMode()))
 		{
 			form.btnUpdate().setVisible(form.grdChemotherapy().getValue() != null);
@@ -284,32 +281,10 @@ public class Logic extends BaseLogic
 		showHideCCOControls(form.getMode());
 
 		showHideSaveAndCancelButtons(form.getMode());
-		
-		//if ( ! ConfigFlag.UI.USE_GENERIC_CHEMOTHERAPY_CYCLE_AND_DRUG_DETAILS.getValue() )
-		
+
 		updateContextMenuState();
 		//----------
 	}
-
-	/*@Override
-	protected void onQmbHospitalTextSubmited(String value) throws PresentationLogicException
-	{
-		//wdev-12819
-		LookupInstanceCollection voColl = domain.getHospitals(value,form.lyrDetails().tabDetails().qmbHospital().getValue());
-		form.lyrDetails().tabDetails().qmbHospital().clear();
-		for (int i = 0; voColl != null && i < voColl.size(); i++)
-		{
-			form.lyrDetails().tabDetails().qmbHospital().newRow((TreatmentHospital)voColl.getIndex(i), voColl.getIndex(i).toString());
-			if (i == 0 && voColl.size() == 1)
-				form.lyrDetails().tabDetails().qmbHospital().setValue((TreatmentHospital)voColl.getIndex(i));
-
-		}
-
-		if (form.lyrDetails().tabDetails().qmbHospital().getValues().size() > 1)
-			form.lyrDetails().tabDetails().qmbHospital().showOpened();
-
-	}*/
-
 	
 	@Override
 	protected void onContextMenuItemClick(int menuItemID, Control sender) throws PresentationLogicException

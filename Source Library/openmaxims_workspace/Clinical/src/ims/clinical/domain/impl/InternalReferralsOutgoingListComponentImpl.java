@@ -296,7 +296,8 @@ public class InternalReferralsOutgoingListComponentImpl extends BaseInternalRefe
 			}
 		}
 
-		hqlConditions.insert(0, " where (clinicReferral.isRIE is null or clinicReferral.isRIE = 0) and ");
+		/* TODO MSSQL case - hqlConditions.insert(0, " where (clinicReferral.isRIE is null or clinicReferral.isRIE = 0) and "); */
+		hqlConditions.insert(0, " where (clinicReferral.isRIE is null or clinicReferral.isRIE = FALSE) and ");
 
 		DomainFactory factory = getDomainFactory();
 

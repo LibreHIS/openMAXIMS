@@ -188,11 +188,12 @@ public class EDConfigImpl extends BaseEDConfigImpl
 		return ReferToSpecialtyConfigVoAssembler.create(doReferToSpecialtyConfig);
 	}
 
-	//wdev-22313
 	public ReferToSpecialtyConfigVo getReferToSpecialtyConfigVo()
 	{
 		DomainFactory factory = getDomainFactory();
-		List<?> refertospec =  factory.find("select r1_1 from ReferToSpecialtyConfig as r1_1 where (r1_1.isRIE = 0 or r1_1.isRIE is null ) ");
+
+		/* TODO MSSQL case - List<?> refertospec =  factory.find("select r1_1 from ReferToSpecialtyConfig as r1_1 where (r1_1.isRIE = 0 or r1_1.isRIE is null ) "); */
+		List<?> refertospec =  factory.find("select r1_1 from ReferToSpecialtyConfig as r1_1 where (r1_1.isRIE = FALSE or r1_1.isRIE is null ) ");
 		
 		if( refertospec != null && refertospec.size() > 0 )
 		{

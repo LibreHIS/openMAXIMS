@@ -859,31 +859,7 @@ public class Logic extends BaseLogic
 			col.setWidth((800 - FIRST_COL_WIDTH - 20) / MAX_COL);
 			
 		}
-		
-		/*
-		if(pgafVo.getStageIsNotNull())
-		{
-			for (int i = 0; i < pgafVo.getStage().size(); i++)
-			{
-				PatientGraphicalAssessmentStageVo pgasVo = pgafVo.getStage().get(i);
-				
-				if(pgasVo.getStage().getAssessmentStage().equals(gasVo))
-				{
-					if(pgasVo.getFindingQuestionIsNotNull())
-					{
-						for (int j = 0; j < pgasVo.getFindingQuestion().size(); j++)
-						{
-							PatientGraphicAssessmentFindingQuestionAnswerVo pgafqaVo = pgasVo.getFindingQuestion().get(j);
 
-							col = grid.getColumns().newColumn(" ", pgafqaVo.getID_PatientGraphicAssessmentFindingQuestionAnswer());
-							col.setWidth(60);
-						}
-					}
-					break;
-				}
-			}
-		}
-		*/
 	}
 	protected void onBtnUpdateAnswerClick() throws PresentationLogicException
 	{

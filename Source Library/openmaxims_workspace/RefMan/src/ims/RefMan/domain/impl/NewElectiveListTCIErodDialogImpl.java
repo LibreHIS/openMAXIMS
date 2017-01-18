@@ -181,8 +181,10 @@ public class NewElectiveListTCIErodDialogImpl extends BaseNewElectiveListTCIErod
 		{
 			throw new CodingRuntimeException("Cannot get SFSProcedure on null CareContextRefVo ");
 		}
-		
-		List list = getDomainFactory().find("select procedure from SuitableForSurgeryAssessment as sfs left join sfs.procedure as patProcedure left join patProcedure.procedure as procedure where sfs.careContext.id = :CareContext and sfs.procedure is not null and (sfs.isRIE is null or sfs.isRIE = 0)", 
+
+		/* TODO MSSQL case - List list = getDomainFactory().find("select procedure from SuitableForSurgeryAssessment as sfs left join sfs.procedure as patProcedure left join patProcedure.procedure as procedure where sfs.careContext.id = :CareContext and sfs.procedure is not null and (sfs.isRIE is null or sfs.isRIE = 0)",
+				new String[] {"CareContext"}, new Object[] {careContextRef.getID_CareContext()}); */
+		List list = getDomainFactory().find("select procedure from SuitableForSurgeryAssessment as sfs left join sfs.procedure as patProcedure left join patProcedure.procedure as procedure where sfs.careContext.id = :CareContext and sfs.procedure is not null and (sfs.isRIE is null or sfs.isRIE = FALSE)",
 				new String[] {"CareContext"}, new Object[] {careContextRef.getID_CareContext()});
 		
 		if (list!=null && list.size()>0)
@@ -568,7 +570,6 @@ public class NewElectiveListTCIErodDialogImpl extends BaseNewElectiveListTCIErod
 		return erod;
 	}
 
-	//wdev-18341
 	public Boolean isFitForSurgery(CareContextRefVo carecontextRef)
 	{
 		if( carecontextRef == null )
@@ -576,7 +577,9 @@ public class NewElectiveListTCIErodDialogImpl extends BaseNewElectiveListTCIErod
 		
 		DomainFactory factory = getDomainFactory();
 		StringBuffer hql = new StringBuffer();
-		hql.append("select count (f1_1.id) from FitForSurgeryAssesment as f1_1 left join f1_1.careContext as c1_1 where	(c1_1.id =:careContext  and (f1_1.isRIE = 0 or f1_1.isRIE is null)) ");
+
+		/* TODO MSSQL case - hql.append("select count (f1_1.id) from FitForSurgeryAssesment as f1_1 left join f1_1.careContext as c1_1 where	(c1_1.id =:careContext  and (f1_1.isRIE = 0 or f1_1.isRIE is null)) "); */
+		hql.append("select count (f1_1.id) from FitForSurgeryAssesment as f1_1 left join f1_1.careContext as c1_1 where	(c1_1.id =:careContext  and (f1_1.isRIE = FALSE or f1_1.isRIE is null)) ");
 
 		List <?> count = factory.find(hql.toString(), new String[] { "careContext" }, new Object[] { carecontextRef.getID_CareContext()});
 		if( count != null && count.size() > 0 )

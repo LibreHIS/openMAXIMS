@@ -191,38 +191,7 @@ public class V231A08NasMapper extends V231NasMapper
 		}		
 		nm.addPair("NTEL", pid.getPhoneNumberHome(0).getAnyText().getValue());
 		nm.addPair("DTEL", pid.getPhoneNumberBusiness(0).getAnyText().getValue());
-		
-		// Patient's GP and Surgery
-		/*
-		PD1 pd1 = (PD1) msg.get(SegName.PD1);		
-		
-		String tmpVal = "";
-		int intTmpVal;
-		//gp code first
-		//Don't know yet what's happening with Kodak and this kind of stuff
-		
-		if (pd1.getPatientPrimaryCareProviderNameIDNo() != null)
-		{
-			tmpVal = pd1.getPatientPrimaryCareProviderNameIDNo(0).getIDNumber().getValue();
-			if (tmpVal != null && tmpVal.length() > 0)
-			{			
-				intTmpVal = this.getResourceByNationalCode(tmpVal,"MOS");
-				if (intTmpVal <= 0)
-					throw new HL7Exception("PD1.04 - Doctor's code cannot be mapped");
-				else
-					nm.addPair("GPCD",Integer.toString(intTmpVal));
-			}
-		}
-		
-		nm.addPair("LPDSTAT", "1");
-		if (updNm != null)
-		{
-			updNm.append(nm);
-			updNm.append(getIDUpdateMsg(msg,pkey.toString()));
-			return updNm;
-		}
-		else	
-			return nm;*/
+
 		return nm;
 	}
 	

@@ -1659,14 +1659,15 @@ public class SessionAdminImpl extends DomainImpl implements ims.scheduling.domai
 			}
 		}
 	}	
-	//WDEV-19046
+
 	public  List<?> getApptsValidForCancellation(Sch_Session sessionDO) throws DomainInterfaceException
 	{
 		if (sessionDO == null || sessionDO.getId() == null)
 			throw new DomainInterfaceException ("Session parameter cannot be null.");
 		StringBuilder hqlMain = new StringBuilder();
-		
-		hqlMain.append("select appts from Sch_Booking as bookingSession left join bookingSession.appointments as appts left join appts.session as schedSession where schedSession.id = :SESSIONID and (appts.isRIE is null OR appts.isRIE = 0) order by appts.apptStartTime asc");
+
+		/* TODO MSSQL case - hqlMain.append("select appts from Sch_Booking as bookingSession left join bookingSession.appointments as appts left join appts.session as schedSession where schedSession.id = :SESSIONID and (appts.isRIE is null OR appts.isRIE = 0) order by appts.apptStartTime asc"); */
+		hqlMain.append("select appts from Sch_Booking as bookingSession left join bookingSession.appointments as appts left join appts.session as schedSession where schedSession.id = :SESSIONID and (appts.isRIE is null OR appts.isRIE = FALSE) order by appts.apptStartTime asc");
 		
 		DomainFactory domainFactory = getDomainFactory();
 		
@@ -1682,7 +1683,7 @@ public class SessionAdminImpl extends DomainImpl implements ims.scheduling.domai
 	{
 		DomainFactory factory = getDomainFactory();
 		PatientEventVo voEvent = null;
-		//WDEV-19772 - start
+
 		if (ConfigFlag.DOM.PATHWAY_ENTITY_EVENT_FUNCTIONALITY.getValue() && isCancel && doAppt.getActivity() != null && doAppt.getActivity().isFirstAppointment())			
 		{
 			CatsReferral catsReferral = getCatsReferralForAppointmentID(doAppt);

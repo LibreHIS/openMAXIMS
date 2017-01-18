@@ -1178,31 +1178,6 @@ public class Logic extends BaseLogic
 		setRemoveMenuVisibility();
 	}
 
-	/*
-	private void bindColType(grdIdentifiersRow row, boolean isNew)
-	{
-		row.getcolIdType().clear();
-		PatIdTypeCollection collTypes = LookupHelper.getPatIdType(domain.getLookupService());
-		if(ConfigFlag.DOM.USE_PATIENT_NUMBER.getValue())
-		{
-			collTypes.remove(PatIdType.PATNUM);
-		}
-
-		for (int i = 0; i < collTypes.size(); i++)
-		{
-			if (ConfigFlag.DOM.HEARTS_REPLICATE_PATIENTS.getValue())
-			{
-				if (isNew)
-				{
-					if (collTypes.get(i).equals(PatIdType.HOSPNUM) || collTypes.get(i).equals(PatIdType.PKEY))
-						continue;
-				}
-			}
-			if(!(collTypes.get(i).equals(PatIdType.PATNUM)&&isNew))
-				row.getcolIdType().newRow(collTypes.get(i), collTypes.get(i).getText());
-		}
-	}
-*/
 	private void bindColType(PatIdType selectedPatIdType, grdIdentifiersRow row)
 	{
 		row.getcolIdType().clear();
@@ -1212,7 +1187,7 @@ public class Logic extends BaseLogic
 		
 		for (int i = 0; i<collTypes.size(); i++)
 		{
-			if(selectedPatIdType == null) //new
+			if(selectedPatIdType == null) // New
 			{
 				if(ConfigFlag.DOM.HEARTS_REPLICATE_PATIENTS.getValue())
 				{
@@ -1224,16 +1199,16 @@ public class Logic extends BaseLogic
 				
 				row.getcolIdType().newRow(collTypes.get(i), collTypes.get(i).getText());
 			}
-			else //not new
+			else // Not new
 			{
 				if(ConfigFlag.DOM.HEARTS_REPLICATE_PATIENTS.getValue())
 				{
-					//if we are displaying a previously saved hospnum or pkey
+					// If we are displaying a previously saved hospnum or pkey
 					if(selectedPatIdType.equals(PatIdType.HOSPNUM) || selectedPatIdType.equals(PatIdType.PKEY) || selectedPatIdType.equals(PatIdType.PATNUM))
 						row.getcolIdType().newRow(collTypes.get(i), collTypes.get(i).getText());
 					else
 					{
-						//we are displaying a previous saved any other patidtype - dont add the pkey and hospnum or patnum
+						// We are displaying a previous saved any other patidtype - dont add the pkey and hospnum or patnum
 						if(!collTypes.get(i).equals(PatIdType.HOSPNUM) && !collTypes.get(i).equals(PatIdType.PKEY)  && !collTypes.get(i).equals(PatIdType.PATNUM))
 							row.getcolIdType().newRow(collTypes.get(i), collTypes.get(i).getText());
 					}		

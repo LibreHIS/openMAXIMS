@@ -56,7 +56,8 @@ public class SessionSlotDialogImpl extends BaseSessionSlotDialogImpl
 			DomainFactory factory = getDomainFactory();
 			String query = null;
 
-			Long noConsultationActivityRequiredForReferral = factory.countWithHQL("select count(cats.id) from CatsReferral as cats where cats.id = :CatsReferralId and (cats.consultationActivityRequired = 0 or cats.consultationActivityRequired is null) ", new String[] {"CatsReferralId"}, new Object[] {catsReferralRef.getID_CatsReferral()});
+			/* TODO MSSQL case - 	Long noConsultationActivityRequiredForReferral = factory.countWithHQL("select count(cats.id) from CatsReferral as cats where cats.id = :CatsReferralId and (cats.consultationActivityRequired = 0 or cats.consultationActivityRequired is null) ", new String[] {"CatsReferralId"}, new Object[] {catsReferralRef.getID_CatsReferral()}); */
+			Long noConsultationActivityRequiredForReferral = factory.countWithHQL("select count(cats.id) from CatsReferral as cats where cats.id = :CatsReferralId and (cats.consultationActivityRequired = FALSE or cats.consultationActivityRequired is null) ", new String[] {"CatsReferralId"}, new Object[] {catsReferralRef.getID_CatsReferral()});
 
 			if (noConsultationActivityRequiredForReferral == null || noConsultationActivityRequiredForReferral == 0)
 			{

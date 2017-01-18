@@ -2639,60 +2639,14 @@ public class Logic extends BaseLogic
 				form.ctnReferringConsultant().ccReferringConsultant().setEnabled(FormMode.EDIT.equals(form.getMode()) && !form.chkRespConsultant().getValue());
 				form.btnIPT().setVisible(false);
 				form.txtRefPracticeCode().setRequired(false);
-				form.txtRefPracticeCode().setEnabled(false);		//wdev-20417
-				
-//				if (form.getGlobalContext().Core.getPatientShortIsNotNull() && isReferralTypeChanged)
-//				{
-//					if(Boolean.FALSE.equals(ConfigFlag.DOM.GP_USE_SURGERIES.getValue()))
-//					{
-//						LocSiteVo voSurgery = domain.getPatientSurgery(form.getGlobalContext().Core.getPatientShort());
-//						if (voSurgery != null)
-//						{
-//							form.getLocalContext().setCCGCode(voSurgery.getAddressIsNotNull() ? voSurgery.getAddress().getPCT() : null); //WDEV-20756
-//
-//							if (form.getLocalContext().getCCGCode() == null		//WDEV-20756
-//								&& voSurgery.getAddressIsNotNull()
-//								&& voSurgery.getAddress().getPostCodeIsNotNull())	
-//								form.getLocalContext().setCCGCode(domain.getCCGCodeFromPostCode(voSurgery.getAddress().getPostCode()));
-//						}
-//					}
-//					else
-//					{
-//						if (form.getGlobalContext().RefMan.getPatientsGPIsNotNull())
-//						{
-//							for (int i = 0 ; form.getGlobalContext().RefMan.getPatientsGP().getPracticesIsNotNull() && i < form.getGlobalContext().RefMan.getPatientsGP().getPractices().size() ; i++)
-//							{
-//								GpToPracticesVo voPractice = form.getGlobalContext().RefMan.getPatientsGP().getPractices().get(i);
-//								if (voPractice.getIsPrimaryPractice())
-//								{
-//									form.getLocalContext().setCCGCode(voPractice.getPracticeIsNotNull() ? voPractice.getPractice().getPctCode() : null);	//WDEV-20756
-//
-//									if (form.getLocalContext().getCCGCode() == null	//WDEV-20756
-//										&& voPractice.getPracticeIsNotNull()
-//										&& voPractice.getPractice().getAddressIsNotNull()
-//										&& voPractice.getPractice().getAddress().getPostCodeIsNotNull())	
-//										form.getLocalContext().setCCGCode(domain.getCCGCodeFromPostCode(voPractice.getPractice().getAddress().getPostCode())); //WDEV-20756
-//								}
-//							}
-//						}
-//					}
-//					
-//					if (form.getLocalContext().getCCGCode() == null)
-//					{
-//						form.getLocalContext().setCCGCode(form.getGlobalContext().Core.getPatientShort().getAddressIsNotNull() ?form.getGlobalContext().Core.getPatientShort().getAddress().getPctCode() : "Q99"); //WDEV-20756
-//						if (form.getLocalContext().getCCGCode() == null	//WDEV-20756
-//							&& form.getGlobalContext().Core.getPatientShort().getAddressIsNotNull()
-//							&& form.getGlobalContext().Core.getPatientShort().getAddress().getPostCodeIsNotNull())	
-//							form.getLocalContext().setCCGCode(domain.getCCGCodeFromPostCode(form.getGlobalContext().Core.getPatientShort().getAddress().getPostCode())); //WDEV-20756
-//					}
-//				}
-				//WDEV-20756
+				form.txtRefPracticeCode().setEnabled(false);
+
 				if (form.getGlobalContext().Core.getPatientShortIsNotNull())
 				{
 					if (isReferralTypeChanged)
 						form.getLocalContext().setCCGCode(form.getGlobalContext().Core.getPatientShort().getAddressIsNotNull() ?form.getGlobalContext().Core.getPatientShort().getAddress().getPctCode() : "Q99"); 
 				}
-				//WDEV-20756 ends ere
+
 			}
 			else if (form.cmbSOR().getValue().equals(SourceOfReferral.TRANSFER))
 			{

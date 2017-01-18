@@ -420,19 +420,6 @@ public class Logic extends BaseLogic
 		return result;
 	}
 
-	/*private boolean checkOtherDiathermyPlate()
-	{
-		for (int i = 0; i < form.lyr1().tabDetails().ctn1().grdDiathermyPlate().getRows().size(); i++)
-		{
-			if (DiathermyType.OTHER.equals(form.lyr1().tabDetails().ctn1().grdDiathermyPlate().getRows().get(i).getValue()) && form.lyr1().tabDetails().ctn1().grdDiathermyPlate().getRows().get(i).getcolSelect() && (form.lyr1().tabDetails().ctn1().grdDiathermyPlate().getRows().get(i).getcolOther() == null || form.lyr1().tabDetails().ctn1().grdDiathermyPlate().getRows().get(i).getcolOther().length() == 0))
-
-				return true;
-		}
-
-		return false;
-	}*/
-	
-
 	private boolean checkOtherTable()
 	{
 		for (int i = 0; i < form.lyr1().tabDetails().ctn1().grdTable().getRows().size(); i++)

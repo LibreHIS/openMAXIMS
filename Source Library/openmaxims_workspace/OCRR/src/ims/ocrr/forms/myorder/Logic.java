@@ -4979,24 +4979,6 @@ public class Logic extends BaseLogic
 		}
 	}
 
-
-
-//	private String getInvestigationNames(OrderInvestigationVoCollection orderInvestigations)
-//	{
-//		if (orderInvestigations == null)
-//			return null;
-//		
-//		StringBuilder investigationNames = new StringBuilder();
-//		for (int i = 0; i < orderInvestigations.size(); i++)
-//		{
-//			OrderInvestigationVo investigation = orderInvestigations.get(i);
-//			investigationNames.append(investigation.getInvestigation().getInvestigationIndex().getName());
-//			if (i < orderInvestigations.size() - 1)
-//				investigationNames.append(", ");
-//		}
-//		return investigationNames.toString();
-//	}
-
 	private boolean canbeScheduled(OrderInvestigationVo voOrderInv)
 	{
 		if (voOrderInv != null && voOrderInv.getInvestigationIsNotNull() && voOrderInv.getInvestigation().getProviderServiceIsNotNull() && voOrderInv.getInvestigation().getProviderService().getLocationServiceIsNotNull() && voOrderInv.getInvestigation().getProviderService().getLocationService().getServiceIsNotNull() && voOrderInv.getInvestigation().getProviderService().getLocationService().getService().getCanBeScheduledIsNotNull())

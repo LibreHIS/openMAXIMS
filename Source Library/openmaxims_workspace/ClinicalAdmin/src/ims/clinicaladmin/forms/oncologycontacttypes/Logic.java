@@ -308,15 +308,10 @@ public class Logic extends BaseLogic
 		ContactTypesByDisciplineVo voContact = form.getLocalContext().getSelectedRecord();
 		voContact.setDiscipline(form.ctnDetails().cmbDiscipline().getValue());
 		
-		//ContactTypesByDisciplineItemVoCollection voColl = new ContactTypesByDisciplineItemVoCollection();
-		ContactTypesByDisciplineItemVoCollection voColl = voContact.getContactTypes(); //wdev-15707
-		ContactTypesByDisciplineItemVoCollection voColl1 = new ContactTypesByDisciplineItemVoCollection(); //wdev-15707
+		ContactTypesByDisciplineItemVoCollection voColl = voContact.getContactTypes();
+		ContactTypesByDisciplineItemVoCollection voColl1 = new ContactTypesByDisciplineItemVoCollection();
 		TreeNode treeBranch = form.treList().getNodeByValue(voContact);
-		/*for (int i = 0 ; i < treeBranch.getNodes().size() ; i++)
-		{
-			addChildNodes(voColl, treeBranch.getNodes().get(i));
-		}*/
-		//wdev-15707
+
 		for (int i = 0 ; i < treeBranch.getNodes().size() ; i++)
 		{
 			addChildNodes(voColl1, treeBranch.getNodes().get(i));
@@ -333,7 +328,7 @@ public class Logic extends BaseLogic
 		}
 		voContact.setContactTypes(voColl);
 		
-		//validate Vo
+		// Validate Vo
 		String[] arrErrors = voContact.validate(validateUIRules());
 		if (arrErrors != null)
 		{	

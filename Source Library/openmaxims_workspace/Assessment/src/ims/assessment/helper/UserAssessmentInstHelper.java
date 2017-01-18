@@ -456,24 +456,6 @@ public class UserAssessmentInstHelper
 			return calculateScores(getAnswersHierarchical(groupColl));		
 		}
 	}
-
-	//-------------------- Filter the ANSWERED questions -------------------------------------------------
-/*	private PatientAssessmentGroupVoCollection filterUnanswered(PatientAssessmentGroupVoCollection answers)
-	{
-		if(answers == null)
-			return null;
-		
-		for (int i = 0; i < answers.size(); i++)
-		{
-			for (int j = 0; j < answers.get(i).getAssessmentAnswers().size(); j++)
-			{
-				PatientAssessmentQuestionVo q = answers.get(i).getAssessmentAnswers().get(j);
-				
-				q.setIsAnswered(isAnswered(q) ? AnswerStatus.ANSWERED : AnswerStatus.NOTANSWERED);
-			}
-		}
-		return answers;
-	}*/
 	
 	private boolean isAnswered(PatientAssessmentQuestionVo questionAnswer)
 	{
@@ -5161,19 +5143,16 @@ public class UserAssessmentInstHelper
 						//TODO - this works for Graphical Assessment and Graphical Assessment with questions where we have
 						// 1:1 relationship between GraphicAssessmentFinding and FindingStageQuestions
 						// need to review for the third type of assessment
-						//if(voGraphicAssessmentFinding.getAssociatedQuestionsIsNotNull())
+
 						if(voGraphicAssessmentFinding.getFindingStageIsNotNull() && voGraphicAssessmentFinding.getFindingStage().size() > 0 && voGraphicAssessmentFinding.getFindingStage().get(0).getAssociatedQuestionsIsNotNull())
 						{
-							//voPatientGraphicAssessmentFinding.setFindingQuestion(new PatientGraphicAssessmentFindingQuestionAnswerVoCollection());
 							voPatientGraphicAssessmentFinding.setStage(new Patient_GraphicalAssessmentStageVoCollection());
-							//for(int l = 0; l < voGraphicAssessmentFinding.getAssociatedQuestions().size(); l++)
 							for(int l = 0; l < voGraphicAssessmentFinding.getFindingStage().get(0).getAssociatedQuestions().size(); l++)
 							{
-								//GraphicAssessmentFindingQuestionVo graphicAssessmentFindingQuestionVo = voGraphicAssessmentFinding.getAssociatedQuestions().get(l);
 								Graphic_AssessmentFindingQuestionVo graphicAssessmentFindingQuestionVo = voGraphicAssessmentFinding.getFindingStage().get(0).getAssociatedQuestions().get(l);
 								
 								PreActiveActiveInactiveStatus findingQuestionStatus = graphicAssessmentFindingQuestionVo.getActiveStatus();
-								//WDEV-1211 - Check finding Question to be active
+								// Check finding Question to be active
 								if(findingQuestionStatus != null && findingQuestionStatus.equals(PreActiveActiveInactiveStatus.ACTIVE))
 								{
 									Patient_GraphicAssessmentFindingQuestionAnswerVo vpPGAFindingQA = new Patient_GraphicAssessmentFindingQuestionAnswerVo();

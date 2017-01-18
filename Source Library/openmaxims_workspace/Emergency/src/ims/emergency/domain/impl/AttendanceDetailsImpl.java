@@ -393,8 +393,7 @@ public class AttendanceDetailsImpl extends BaseAttendanceDetailsImpl
 		return null;
 	}
 
-	//wdev-14420
-	public AttendanceDetailsVo getLastAttendance(PatientRefVo patientRef) 
+	public AttendanceDetailsVo getLastAttendance(PatientRefVo patientRef)
 	{
 		if (patientRef == null)
 			throw new CodingRuntimeException("Patient not provided");
@@ -404,16 +403,18 @@ public class AttendanceDetailsImpl extends BaseAttendanceDetailsImpl
 		// Query to list back the latest 
 		StringBuilder query = new StringBuilder("SELECT erAttend ");
 		query.append("FROM EmergencyEpisode AS erEp LEFT JOIN erEp.patient AS pat LEFT JOIN erEp.emergencyAttendances AS erAttend ");
-		query.append("WHERE (erAttend.isRIE is null OR erAttend.isRIE = 0) AND pat.id = :PATIENT_ID AND ");
+
+		/* TODO MSSQL case - query.append("WHERE (erAttend.isRIE is null OR erAttend.isRIE = 0) AND pat.id = :PATIENT_ID AND "); */
+		query.append("WHERE (erAttend.isRIE is null OR erAttend.isRIE = FALSE) AND pat.id = :PATIENT_ID AND ");
+
 		query.append("(erAttend.arrivalDateTime = ");
-			query.append("(SELECT MAX(erAttend2.arrivalDateTime) FROM EmergencyEpisode AS erEp2 LEFT JOIN erEp2.patient AS patient2 LEFT JOIN erEp2.emergencyAttendances AS erAttend2 ");
-			query.append(" WHERE patient2.id = :PATIENT_ID)) ");
+		query.append("(SELECT MAX(erAttend2.arrivalDateTime) FROM EmergencyEpisode AS erEp2 LEFT JOIN erEp2.patient AS patient2 LEFT JOIN erEp2.emergencyAttendances AS erAttend2 ");
+		query.append(" WHERE patient2.id = :PATIENT_ID)) ");
 
 		return	AttendanceDetailsVoAssembler.create((EmergencyAttendance) factory.findFirst(query.toString(), "PATIENT_ID", patientRef.getID_Patient()));
 	}
 
-	//wdev-14420
-	public EpisodeDetailsVo getEmergencyEpisode(EmergencyEpisodeRefVo episodeId) 
+	public EpisodeDetailsVo getEmergencyEpisode(EmergencyEpisodeRefVo episodeId)
 	{
 		if(	episodeId == null)
 			throw new CodingRuntimeException("EmergencyEpisodeRefVo not provided");
@@ -602,15 +603,15 @@ public class AttendanceDetailsImpl extends BaseAttendanceDetailsImpl
 		return null;
 	}
 
-	//wdev-19363
 	public Integer countCareContextByEpisodeOfcare(EpisodeOfCareRefVo episodeRef)
 	{
 		if( episodeRef == null || !episodeRef.getID_EpisodeOfCareIsNotNull())
 			return null;
 		
 		DomainFactory factory = getDomainFactory();
-		
-		String hsql = 	"select count (c1_1.id)	from CareContext as c1_1 left join c1_1.episodeOfCare as e1_1 where	(e1_1.id = :episodeId and ( c1_1.isRIE = null or c1_1.isRIE = 0)) group by c1_1.id ";
+
+		/* TODO MSSQL case - String hsql = 	"select count (c1_1.id)	from CareContext as c1_1 left join c1_1.episodeOfCare as e1_1 where	(e1_1.id = :episodeId and ( c1_1.isRIE = null or c1_1.isRIE = 0)) group by c1_1.id "; */
+		String hsql = "select count (c1_1.id)	from CareContext as c1_1 left join c1_1.episodeOfCare as e1_1 where	(e1_1.id = :episodeId and ( c1_1.isRIE = null or c1_1.isRIE = FALSE)) group by c1_1.id ";
 					
 		List carecontexts = factory.find(hsql, new String[] {"episodeId"}, new Object[] {episodeRef.getID_EpisodeOfCare()});
 		if( carecontexts != null && carecontexts.size() > 0)
@@ -618,19 +619,19 @@ public class AttendanceDetailsImpl extends BaseAttendanceDetailsImpl
 			return ((Long)carecontexts.get(0)).intValue();
 		}
 		
-		return 0;//WDEV-19392
+		return 0;
 		
 	}
 
-	//wdev-19363
 	public Integer countEpisodeOfCareByCareSpell(CareSpellRefVo careSpellRef)
 	{
 		if( careSpellRef == null || !careSpellRef.getID_CareSpellIsNotNull())
 			return null;
 		
 		DomainFactory factory = getDomainFactory();
-		
-		String hsql = "select count (e1_1.id) from EpisodeOfCare as e1_1 left join e1_1.careSpell as c1_1 where (c1_1.id = :careSpellId and (e1_1.isRIE = null or e1_1.isRIE = 0)) group by e1_1.id";
+
+		/* TODO MSSQL case - String hsql = "select count (e1_1.id) from EpisodeOfCare as e1_1 left join e1_1.careSpell as c1_1 where (c1_1.id = :careSpellId and (e1_1.isRIE = null or e1_1.isRIE = 0)) group by e1_1.id"; */
+		String hsql = "select count (e1_1.id) from EpisodeOfCare as e1_1 left join e1_1.careSpell as c1_1 where (c1_1.id = :careSpellId and (e1_1.isRIE = null or e1_1.isRIE = FALSE)) group by e1_1.id";
 					
 		List carecontexts = factory.find(hsql, new String[] {"careSpellId"}, new Object[] {careSpellRef.getID_CareSpell()});
 		if( carecontexts != null && carecontexts.size() > 0)
@@ -638,7 +639,7 @@ public class AttendanceDetailsImpl extends BaseAttendanceDetailsImpl
 			return ((Long)carecontexts.get(0)).intValue();
 		}
 		
-		return 0;//WDEV-19392
+		return 0;
 		
 	}
 }

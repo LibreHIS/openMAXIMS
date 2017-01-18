@@ -488,7 +488,8 @@ public class ClinicViewImpl extends BaseClinicViewImpl
 		markers.add("episode");
 		values.add(episode.getID_EpisodeOfCare());
 
-		hql.append(" and (p.isRIE is null or p.isRIE = 0 ) and p.endDate is null");
+		/* TODO MSSLQ case - hql.append(" and (p.isRIE is null or p.isRIE = 0 ) and p.endDate is null"); */
+		hql.append(" and (p.isRIE is null or p.isRIE = FALSE ) and p.endDate is null");
 
 		List l = factory.find(hql.toString(), markers,values);
 		if (l != null && l.size() > 0) 
@@ -497,7 +498,7 @@ public class ClinicViewImpl extends BaseClinicViewImpl
 			return null;
 	}
 
-	/*** WDEV-13756
+	/**
 	 * List all patient appointments for the patient
 	 */
 	public PatientApptDiaryVoCollection listPatientAppts(PatientRefVo patient, Date fromDate, Date toDate, Boolean activeOnly) 

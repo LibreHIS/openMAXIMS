@@ -159,15 +159,14 @@ public class OrdersRequiringAuthorisationImpl extends BaseOrdersRequiringAuthori
 			throw new CodingRuntimeException("Hospital parameter value not supplied for method :listUserEnteredLocationsForHospitalNyNameLite");
 
 		DomainFactory factory = getDomainFactory();
-		List locs = factory.find("from Location loc where loc.parentLocation.id = :hospId and loc.upperName like :name and loc.type.id >= 0 and loc.isActive = true and loc.isVirtual = false", new String[]{"hospId", "name"}, new Object[] {hosp.getID_Location(), name.toUpperCase() + "%"});
+		List locs = factory.find("from Location loc where loc.parentLocation.id = :hospId and loc.upperName like :name and loc.type.id >= 0 and loc.isActive = TRUE and loc.isVirtual = FALSE", new String[]{"hospId", "name"}, new Object[] {hosp.getID_Location(), name.toUpperCase() + "%"});
 		if(locs != null && locs.size() > 0)
 			return LocationLiteVoAssembler.createLocationLiteVoCollectionFromLocation(locs);
 
 		return null;
 	}
 
-	//WDEV-17494
-	public LocationLiteVo getCurrentHospital(ILocation currentLocation) 
+	public LocationLiteVo getCurrentHospital(ILocation currentLocation)
 	{
 		if(currentLocation == null)
 			return null;

@@ -1312,10 +1312,8 @@ public class Logic extends BaseLogic
 			return;
 		}
 			
-		for (SessionSlotCatsReferralClinicListWrapperVo slot: voCollSessionSlots)//for(int i=0;i<voCollSessionSlots.size();i++)
+		for (SessionSlotCatsReferralClinicListWrapperVo slot: voCollSessionSlots)
 		{
-			//voSessionSlot = voCollSessionSlots.get(i);
-			
 			row = form.grdSlots().getRows().newRow();
 			CatsReferralClinicListListVo cats = slot.getReferral();
 			

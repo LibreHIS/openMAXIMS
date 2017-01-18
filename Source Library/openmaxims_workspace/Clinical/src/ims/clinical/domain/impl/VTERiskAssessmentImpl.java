@@ -461,8 +461,10 @@ public class VTERiskAssessmentImpl extends BaseVTERiskAssessmentImpl
 		ArrayList<String> markers = new ArrayList<String>();
 		ArrayList<Object> values = new ArrayList<Object>();
 
+		/* TODO MSSQL case - String hql = " select pea from PendingElectiveAdmission as pea left join pea.pasEvent as pasEv left join pasEv.patient as pat where pat.id = :patientId and pea.tCIDate = :tciDate " +
+			   "and (pea.isRIE is null or pea.isRIE = 0)"; */
 		String hql = " select pea from PendingElectiveAdmission as pea left join pea.pasEvent as pasEv left join pasEv.patient as pat where pat.id = :patientId and pea.tCIDate = :tciDate " +
-			   "and (pea.isRIE is null or pea.isRIE = 0)";
+			   "and (pea.isRIE is null or pea.isRIE = FALSE)";
 
 		markers.add("patientId");
 		values.add(patient.getID_Patient());
@@ -512,9 +514,11 @@ public class VTERiskAssessmentImpl extends BaseVTERiskAssessmentImpl
 		{
 			today.addDay(-1*vteConfig.getPreOpAssessmentValidPeriod());
 		}
-		
+
+		/* TODO MSSQL case - List list = getDomainFactory().find("select preOpVte from PatientSummaryRecord as summaryRecord left join summaryRecord.patient as pat left join summaryRecord.preOpVTEAssessment as preOpVte where pat.id = :patientID and " +
+				" (preOpVte.isRIE is null or preOpVte.isRIE = 0) and summaryRecord.preOpVTECompletedDate >= :invalidDate and summaryRecord.preOpVTEValidationDate is null", new String[] {"patientID", "invalidDate"}, new Object[] {patientRef.getID_Patient(), today.getDate()}); */
 		List list = getDomainFactory().find("select preOpVte from PatientSummaryRecord as summaryRecord left join summaryRecord.patient as pat left join summaryRecord.preOpVTEAssessment as preOpVte where pat.id = :patientID and " +
-				" (preOpVte.isRIE is null or preOpVte.isRIE = 0) and summaryRecord.preOpVTECompletedDate >= :invalidDate and summaryRecord.preOpVTEValidationDate is null", new String[] {"patientID", "invalidDate"}, new Object[] {patientRef.getID_Patient(), today.getDate()});
+				" (preOpVte.isRIE is null or preOpVte.isRIE = FALSE) and summaryRecord.preOpVTECompletedDate >= :invalidDate and summaryRecord.preOpVTEValidationDate is null", new String[] {"patientID", "invalidDate"}, new Object[] {patientRef.getID_Patient(), today.getDate()});
 		
 		if (list == null || list.size() == 0 || list.get(0) == null)
 			return null;

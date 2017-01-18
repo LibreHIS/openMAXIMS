@@ -50,7 +50,8 @@ public class TrackingWorkflowStatusConfigImpl extends BaseTrackingWorkflowStatus
 		
 		DomainFactory factory = getDomainFactory();
 
-		String hsql = "select twc from TrackingWorkflowConfig as twc left join twc.trackingStatus as ts where (ts.id = :idStatus and (twc.isRIE is null  or twc.isRIE = 0)) ";
+		/* TODO MSSQL case - String hsql = "select twc from TrackingWorkflowConfig as twc left join twc.trackingStatus as ts where (ts.id = :idStatus and (twc.isRIE is null  or twc.isRIE = 0)) "; */
+		String hsql = "select twc from TrackingWorkflowConfig as twc left join twc.trackingStatus as ts where (ts.id = :idStatus and (twc.isRIE is null  or twc.isRIE = FALSE)) ";
 		 	
 		List twsRecords = factory.find(hsql, new String[] {"idStatus"}, new Object[] {trackingStatus.getID()});
 		if(twsRecords!= null && twsRecords.size() > 0)

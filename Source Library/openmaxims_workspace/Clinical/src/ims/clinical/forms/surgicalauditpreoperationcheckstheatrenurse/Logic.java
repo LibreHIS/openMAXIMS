@@ -569,21 +569,6 @@ public class Logic extends BaseLogic
 				form.cmbTheatreNameNumber().newRow(collLoc.get(i), collLoc.get(i).getName());
 			}
 		}
-		
-		/*
-		if( tempLocVo != null)
-		{
-			LocationLiteVoCollection tempVoColl = domain.getTheatre(tempLocVo);
-			if( tempVoColl != null && tempVoColl.size() > 0)
-			{
-				tempVoColl.sort(new LocComparator(SortOrder.ASCENDING));
-				for(int i = 0; i < tempVoColl.size();i++)
-				{
-					form.cmbTheatreNameNumber().newRow(tempVoColl.get(i), tempVoColl.get(i).getName());
-				}
-			}
-		}
-		*/
 	}
 	
 	public class LocComparator implements Comparator

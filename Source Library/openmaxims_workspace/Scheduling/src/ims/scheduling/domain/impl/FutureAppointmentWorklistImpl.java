@@ -308,16 +308,15 @@ public class FutureAppointmentWorklistImpl extends BaseFutureAppointmentWorklist
 			}
 			
 		}
-		
-		condStr.append(andStr + " ( futureApp.isRIE = 0 or futureApp.isRIE is null) and source.id = :sourceID and referralStatus.id <> :EndOfTreatmentId ");
+
+		/* TODO MSSQL case - condStr.append(andStr + " ( futureApp.isRIE = 0 or futureApp.isRIE is null) and source.id = :sourceID and referralStatus.id <> :EndOfTreatmentId "); */
+		condStr.append(andStr + " ( futureApp.isRIE = FALSE or futureApp.isRIE is null) and source.id = :sourceID and referralStatus.id <> :EndOfTreatmentId ");
 		
 		markers.add("sourceID");
 		values.add(FutureAppointmentSource.APPOINTMENT_OUTCOME.getID());
 		
 		markers.add("EndOfTreatmentId");
 		values.add(ReferralApptStatus.END_OF_CARE.getID());
-		
-		//condStr.append(" order by sess.sessionDate asc ");
 
 		hql += condStr.toString();
 

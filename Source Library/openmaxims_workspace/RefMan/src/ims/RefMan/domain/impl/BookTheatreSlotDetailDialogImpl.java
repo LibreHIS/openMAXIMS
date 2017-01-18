@@ -523,66 +523,13 @@ public class BookTheatreSlotDetailDialogImpl extends BaseBookTheatreSlotDetailDi
 				doCatsReferral.getElectiveEROD().add(doReferralEROD);
 			}
 
-			/*
-			 * if(patientElectiveListToSave != null &&
-			 * patientElectiveListToSave.getTCIDetails() != null &&
-			 * patientElectiveListToSave.getTCIDetails().getTCIDate() != null) {
-			 * if(doCatsReferral.getJourney() != null &&
-			 * doCatsReferral.getJourney().getCurrentClock() != null &&
-			 * doCatsReferral.getJourney().getCurrentClock().getCurrentPause()
-			 * != null) { PauseDetails currentPause =
-			 * doCatsReferral.getJourney().getCurrentClock().getCurrentPause();
-			 * 
-			 * if(doCatsReferral.getJourney().getCurrentClock().getPauseDetails()
-			 * != null) { for(int i=0;
-			 * i<doCatsReferral.getJourney().getCurrentClock
-			 * ().getPauseDetails().size(); i++) { PauseDetails pause =
-			 * (PauseDetails)
-			 * doCatsReferral.getJourney().getCurrentClock().getPauseDetails
-			 * ().get(i); if(currentPause.equals(pause) &&
-			 * Boolean.TRUE.equals(pause.isActive())) {
-			 * doCatsReferral.getJourney
-			 * ().getCurrentClock().getPauseDetails().remove(i); break; } } }
-			 * 
-			 * currentPause.setPauseStop(patientElectiveListToSave.getTCIDetails(
-			 * ).getTCIDate().getDate());
-			 * 
-			 * if(doCatsReferral.getJourney().getCurrentClock().getPauseDetails()
-			 * == null)
-			 * doCatsReferral.getJourney().getCurrentClock().setPauseDetails(new
-			 * java.util.ArrayList());
-			 * 
-			 * doCatsReferral.getJourney().getCurrentClock().getPauseDetails().add
-			 * (currentPause); } }
-			 */
-
 			factory.save(doCatsReferral);
-
-			/*
-			 * if(currentClock != null) { String patientElectiveListQuery =
-			 * "select electiveList from PatientElectiveList as electiveList left join electiveList.referral as cats left join electiveList.pathwayClock as pc where cats.id = :CatsId and pc.id = :PathwayClock"
-			 * ; List<?> electiveList = factory.find(patientElectiveListQuery,
-			 * new String[] {"CatsId", "PathwayClock"}, new Object[]
-			 * {catsRef.getID_CatsReferral(), currentClock.getId()});
-			 * 
-			 * if(electiveList != null && electiveList.size() > 0 &&
-			 * electiveList.get(0) instanceof PatientElectiveList) {
-			 * PatientElectiveList doPatientElectiveList = (PatientElectiveList)
-			 * electiveList.get(0);
-			 * doPatientElectiveList.setEROD(doReferralEROD);
-			 * 
-			 * factory.save(doPatientElectiveList); } }
-			 */
-			// WDEV-12157
-			// Update the CatsReferral status (hasCancelled appointments field)
-			//SessionAdmin impl = (SessionAdmin) getDomainImpl(SessionAdminImpl.class);//WDEV-23545 - this method should not be called for theatre appoitments
-			//impl.updateCatsReferralAdditionalInvStatus(catsRef, null);
 
 			BookTheatre implBT = (BookTheatre) getDomainImpl(BookTheatreImpl.class);
 			implBT.updateActiveMonitoring(catsRef);
 		}
 
-		// WDEV-7528 - maintain SessionAppointmentOrder
+		// Maintain SessionAppointmentOrder
 		if (doTheatreSession != null)
 		{
 			Sch_Session_Appointment_Order doSessApptOrder = Sch_Session_Appointment_Order.getSch_Session_Appointment_OrderFromSession(factory, doTheatreSession.getId());
@@ -597,7 +544,6 @@ public class BookTheatreSlotDetailDialogImpl extends BaseBookTheatreSlotDetailDi
 			{
 				Booking_Appointment doAppt = (Booking_Appointment) it1.next();
 
-				// WDEV-8271
 				BookTheatre impl = (BookTheatre) getDomainImpl(BookTheatreImpl.class);
 				impl.removeApptFromExistingSessionApptOrder(doAppt);
 
@@ -1031,7 +977,7 @@ public class BookTheatreSlotDetailDialogImpl extends BaseBookTheatreSlotDetailDi
 		DomainFactory factory = getDomainFactory();
 
 		/* TODO MSSQL case - Object[] count = factory.find("select count(theaErod.id) from CatsReferral as cats left join cats.electiveEROD as theaErod where cats.id = :CatsReferralId and theaErod.isActive = 1 and (theaErod.isRIE is null or theaErod.isRIE = 0)", new String[] { "CatsReferralId" }, new Object[] { catsReferral.getID_CatsReferral() }).toArray(); */
-		Object[] count = factory.find("select count(theaErod.id) from CatsReferral as cats left join cats.electiveEROD as theaErod where cats.id = :CatsReferralId and theaErod.isActive = true and (theaErod.isRIE is null or theaErod.isRIE = false)", new String[] { "CatsReferralId" }, new Object[] { catsReferral.getID_CatsReferral() }).toArray();
+		Object[] count = factory.find("select count(theaErod.id) from CatsReferral as cats left join cats.electiveEROD as theaErod where cats.id = :CatsReferralId and theaErod.isActive = TRUE and (theaErod.isRIE is null or theaErod.isRIE = FALSE)", new String[] { "CatsReferralId" }, new Object[] { catsReferral.getID_CatsReferral() }).toArray();
 
 		if (count != null && count.length > 0)
 			return ((Long) count[0]).intValue() > 0;

@@ -1499,28 +1499,6 @@ public class Logic extends BaseLogic
 			&& voCatsToFind.getCatsReferralId().equals(voCatsRef.getCatsReferralId()))
 			form.dyngrdReferrals().setSelectedRow(newRow);
 	}
-	
-	//wdev-19673
-	/*private ReferralListKPIColorItemVo getReferralListKPIColorItemVofromCollByWorklistType(ReferralListKPIColorConfVo record, ReferralWorklistStatus refWorkType)
-	{
-		if( record == null || record.getWorklistConfiguration() == null || record.getWorklistConfiguration().size() == 0 )
-			return null;
-		
-		for( int i = 0; i < record.getWorklistConfiguration().size();i++ )
-		{
-			ReferralListKPIColorItemVo tempVo = record.getWorklistConfiguration().get(i);
-			if( tempVo != null )
-			{
-				if( tempVo.getWorklist() == null && refWorkType == null )
-					return tempVo;
-				else if(tempVo.getWorklist() != null && refWorkType != null && tempVo.getWorklist().equals(refWorkType))
-					return tempVo;
-			}
-		}
-		
-		return null;
-	}*/
-	//-----end
 
 	private void initializeDynamicGrid()
 	{
@@ -1531,22 +1509,22 @@ public class Logic extends BaseLogic
 		{
 			DynamicGridColumn icpColumn = form.dyngrdReferrals().getColumns().newColumn("", COLICP);
 			icpColumn.setWidth(27);	
-			icpColumn.setHeaderTooltip("ICP"); //WDEV-19665
+			icpColumn.setHeaderTooltip("ICP");
 		}	
 
 		DynamicGridColumn cabColumn = form.dyngrdReferrals().getColumns().newColumn("", COLCAB);
 		cabColumn.setWidth(24);	
-		cabColumn.setHeaderTooltip("CAB Referral"); //WDEV-19665
+		cabColumn.setHeaderTooltip("CAB Referral");
 
 		DynamicGridColumn serviceColumn = null;
-//		wdev-12682
-		if(form.getGlobalContext().RefMan.getDiagnosticReferralForApplicationIsNotNull()
+
+		if (form.getGlobalContext().RefMan.getDiagnosticReferralForApplicationIsNotNull()
 				&& form.getGlobalContext().RefMan.getDiagnosticReferralForApplication())
 		{
 			DynamicGridColumn locColumn = form.dyngrdReferrals().getColumns().newColumn("Location", COLLOC);
 			locColumn.setWidth(75);	
 			locColumn.setSortMode(SortMode.AUTOMATIC);
-			locColumn.setHeaderTooltip("Location");//WDEV-19665
+			locColumn.setHeaderTooltip("Location");
 			locColumn.setCanGrow(true);
 
 			serviceColumn = form.dyngrdReferrals().getColumns().newColumn("Service", COLSERVICE);

@@ -122,47 +122,7 @@ public class PatientsOutpatientAppointmentsImpl extends BasePatientsOutpatientAp
 		
 		hql += condStr.toString();
 		List ops = factory.find(hql, markers, values);
-	
-//		if (ops.size() > 0)
-//		{
-//			String hql2;
-//			boolean bListClinics = false;
-//			StringBuffer clinicIDS = new StringBuffer();
-//			clinicIDS.append("select clin from Clinic clin left join clin.codeMappings as tax left join tax.taxonomyName as taxTyp where taxTyp = :taxonomyType and tax.taxonomyCode in (");
-//			for (int i = 0 ; i < ops.size() ; i++)
-//			{
-//				PatientEvent domPE = (PatientEvent)ops.get(i);
-//				if (domPE.getClinicCode() != null
-//					&& domPE.getClinicCode() != "")
-//				{
-//					clinicIDS.append("'" + domPE.getClinicCode() + "',");
-//					bListClinics = true;
-//				}
-//			}
-//
-//			if (clinicIDS.toString().endsWith(","))
-//				hql2 = clinicIDS.toString().substring(0, clinicIDS.length() - 1);
-//			else
-//				hql2 = clinicIDS.toString();
-//
-//			hql2 += " )";
-//
-//			ClinicVoCollection voClinics = null;
-//			if (bListClinics)
-//				voClinics = ClinicVoAssembler.createClinicVoCollectionFromClinic(factory.find(hql2,new String[]{"taxonomyType"},new Object[]{getDomLookup(TaxonomyType.PAS)}));
-//			
-//			for (int x = 0 ; voClinics != null && x < voClinics.size() ; x++)
-//			{
-//				for (int y = 0 ; y < ops.size() ; y++)
-//				{
-//					PatientEvent domPE = (PatientEvent)ops.get(y);
-//					if (domPE.getClinicCode()!= null
-//						&& voClinics.get(x).getMapping(TaxonomyType.PAS) != null
-//						&& domPE.getClinicCode().equals(voClinics.get(x).getMapping(TaxonomyType.PAS).toString()))
-//						domPE.setClinicCode(voClinics.get(x).getClinicName());
-//				}
-//			}
-//		}
+
 		return PatientApptDiaryVoAssembler.createPatientApptDiaryVoCollectionFromPatientApptDiary(ops).sort();
 	}
 

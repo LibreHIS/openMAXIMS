@@ -1358,22 +1358,9 @@ public class Logic extends BaseLogic
 	{
 		if (form.ctnDetails().chkResolved().getValue())
 		{
-		//	form.ctnDetails().customControlResolved().setValue((HcpLiteVo) domain.getHcpLiteUser());
 			form.ctnDetails().dteResolved().setValue(new Date());
 		}
 	}
-
-	/*
-	 * protected void onQmbResolvedByTextSubmited(String value) throws PresentationLogicException { form.ctnDetails().qmbResolvedBy().clear(); HcpCollection coll = getMedics(value);
-	 * 
-	 * for (int i = 0; i < coll.size(); i++) { Hcp med = coll.get(i); form.ctnDetails().qmbResolvedBy().newRow(med, med.toString()); } if (coll.size() == 1) { form.ctnDetails().qmbResolvedBy().setValue(coll.get(0)); } else if (coll.size() > 1) { form.ctnDetails().qmbResolvedBy().showOpened(); } }
-	 */
-
-	/*
-	 * private HcpCollection getMedics(String value) { HcpFilter filter = new HcpFilter(); PersonName name = new PersonName(); name.setSurname(value); filter.setQueryName(name);
-	 * 
-	 * return domain.listMedics(filter); }
-	 */
 
 	// Check if PMH is not saved
 	private Boolean isPMHToBeSaved()

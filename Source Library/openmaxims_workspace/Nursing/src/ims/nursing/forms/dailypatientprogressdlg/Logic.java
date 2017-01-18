@@ -537,210 +537,25 @@ public class Logic extends BaseLogic
 		return true;
 	}
 
-	/*//Set the Authoring Info for an answered record and when the answered changed
-	private void setAuthoringInformation(PatientAssessmentGroupVoCollection previousAnswer, PatientAssessmentGroupVoCollection currentAnswer)
-	{
-		for (int i = 0; currentAnswer != null && i < currentAnswer.size(); i++)
-		{
-			for (int j = 0; j < currentAnswer.get(i).getAssessmentAnswers().size(); j++)
-			{
-				PatientAssessmentQuestionVo voAssQuestion = currentAnswer.get(i).getAssessmentAnswers().get(j);
-				boolean isAnswered = voAssQuestion.getIsAnsweredIsNotNull() && voAssQuestion.getIsAnswered().equals(AnswerStatus.ANSWERED);
-				if (isAnswered)
-				{
-					boolean answerChanged = answerChanged(previousAnswer, voAssQuestion);
-					AuthoringInformationVo previousAuthoringInfo = getPreviousAuthoringInformation(previousAnswer, voAssQuestion);
-
-					for (int k = 0; k < voAssQuestion.getPatientAnswers().size(); k++)
-					{
-						PatientAssessmentAnswerVo voAssAnswer = voAssQuestion.getPatientAnswers().get(k);
-						if (previousAuthoringInfo != null)
-						{
-							if (answerChanged)
-								voAssAnswer.setAuthoringInfo(getLoggedInUserAuthoringInformation());
-							else
-								voAssAnswer.setAuthoringInfo(previousAuthoringInfo);
-						}
-						else
-						{
-							voAssAnswer.setAuthoringInfo(getLoggedInUserAuthoringInformation());
-						}
-					}
-				}
-			}
-		}
-	}
-	//Set the Confirming Info when the Confirm checkbox is checked or when the Answer changed 
-	private boolean answerChanged(PatientAssessmentGroupVoCollection previousAnswer, PatientAssessmentQuestionVo currentAssessmentQuestion)
-	{
-		if (currentAssessmentQuestion != null && currentAssessmentQuestion.getAssessmentQuestionIsNotNull() && currentAssessmentQuestion.getAssessmentQuestion().getQuestionIsNotNull())
-		{
-			QuestionInformationVo question = currentAssessmentQuestion.getAssessmentQuestion().getQuestion();
-			for (int i = 0; previousAnswer != null && i < previousAnswer.size(); i++)
-			{
-				for (int j = 0; j < previousAnswer.get(i).getAssessmentAnswers().size(); j++)
-				{
-					PatientAssessmentQuestionVo voPrevAssessQuestion = previousAnswer.get(i).getAssessmentAnswers().get(j);
-					if (voPrevAssessQuestion.getAssessmentQuestionIsNotNull() && voPrevAssessQuestion.getAssessmentQuestion().getQuestionIsNotNull())
-					{
-						if (voPrevAssessQuestion.getAssessmentQuestion().getQuestion().equals(question))
-						{
-							AnswerDetailsVo prevAnswer = getAnswer(voPrevAssessQuestion);
-							AnswerDetailsVo currentAnswer = getAnswer(currentAssessmentQuestion);
-							// Check to see it they have the same answers
-							if (sameAnswer(prevAnswer, currentAnswer) == false)
-								return true;
-						}
-					}
-				}
-			}
-		}
-
-		return false;
-	}
-	
-	private AuthoringInformationVo getPreviousConfirmingInformation(PatientAssessmentGroupVoCollection previousAnswers, PatientAssessmentQuestionVo voAssQuestion)
-	{
-		return getPreviousAuthoringInformation(previousAnswers, voAssQuestion, true);
-	}
-	
-	private AuthoringInformationVo getPreviousAuthoringInformation(PatientAssessmentGroupVoCollection previousAnswer, PatientAssessmentQuestionVo voAssQuestion)
-	{
-		return getPreviousAuthoringInformation(previousAnswer, voAssQuestion, false);
-	}
-	private AuthoringInformationVo getPreviousAuthoringInformation(PatientAssessmentGroupVoCollection previousAnswer, PatientAssessmentQuestionVo voAssQuestion, boolean returnConfirming)
-	{
-		if(voAssQuestion != null && voAssQuestion.getAssessmentQuestionIsNotNull() && voAssQuestion.getAssessmentQuestion().getQuestionIsNotNull())
-		{
-			QuestionInformationVo question = voAssQuestion.getAssessmentQuestion().getQuestion();
-			
-			for (int i = 0; previousAnswer != null && i < previousAnswer.size(); i++)
-			{
-				for (int j = 0; j < previousAnswer.get(i).getAssessmentAnswers().size(); j++)
-				{
-					PatientAssessmentQuestionVo voPrevAssessQuestion = previousAnswer.get(i).getAssessmentAnswers().get(j);
-					if(voPrevAssessQuestion.getAssessmentQuestionIsNotNull() && voPrevAssessQuestion.getAssessmentQuestion().getQuestionIsNotNull())
-					{
-						if (voPrevAssessQuestion.getAssessmentQuestion().getQuestion().equals(question))
-						{
-							if(returnConfirming)
-								return voPrevAssessQuestion.getPatientAnswers().size() > 0 ? voPrevAssessQuestion.getPatientAnswers().get(0).getConfirmingInfo() : null;
-							else
-								return voPrevAssessQuestion.getPatientAnswers().size() > 0 ? voPrevAssessQuestion.getPatientAnswers().get(0).getAuthoringInfo() : null;
-						}
-					}
-				}
-			}
-		}
-
-		return null;
-	}
-
-	private boolean sameAnswer(AnswerDetailsVo prevAnswer, AnswerDetailsVo currentAnswer)
-	{
-		if (prevAnswer == null || prevAnswer.getMultiSelectAnswers() == null || currentAnswer == null || currentAnswer.getMultiSelectAnswers() == null)
-			return false;
-
-		AnswerOptionVoCollection prevAnswersOptions = prevAnswer.getMultiSelectAnswers();
-		AnswerOptionVoCollection currentAnswerOptions = currentAnswer.getMultiSelectAnswers();
-
-		return haveTheSameAnswers(prevAnswersOptions, currentAnswerOptions);
-	}
-
-	//Check to see if the collections have the same items
-	private boolean haveTheSameAnswers(AnswerOptionVoCollection prevAnswersOptions, AnswerOptionVoCollection currentAnswerOptions)
-	{
-		if(prevAnswersOptions.size() != currentAnswerOptions.size())
-			return false;
-		
-		//Check against the currentAnswer collection
-		for (int i = 0; i < currentAnswerOptions.size(); i++)
-		{
-			if (prevAnswersOptions.indexOf(currentAnswerOptions.get(i)) < 0)
-				return false;
-		}
-		
-		//Check against the prevAnswers collection
-		for (int i = 0; i < prevAnswersOptions.size(); i++)
-		{
-			if (currentAnswerOptions.indexOf(prevAnswersOptions.get(i)) < 0)
-				return false;
-		}
-
-		return true;
-	}
-
-	//Get the answer for the first (and should be only one Answer Detail against a Question - as assumed in the spec)
-	private AnswerDetailsVo getAnswer(PatientAssessmentQuestionVo voAssessQuestion)
-	{
-		if(voAssessQuestion == null)
-			return null;
-		
-		for (int i = 0; i < voAssessQuestion.getPatientAnswers().size(); i++)
-		{
-			for (int j = 0; j < voAssessQuestion.getPatientAnswers().get(i).getAnswerDetails().size(); j++)
-			{
-				return voAssessQuestion.getPatientAnswers().get(i).getAnswerDetails().get(0);
-			}
-		}
-		
-		return null;
-	}
-
-	private void setConfirmingInformation(PatientAssessmentGroupVoCollection previousAnswers, PatientAssessmentGroupVoCollection currentAnswer)
-	{
-		for (int i = 0; currentAnswer != null && i < currentAnswer.size(); i++)
-		{
-			for (int j = 0; j < currentAnswer.get(i).getAssessmentAnswers().size(); j++)
-			{
-				PatientAssessmentQuestionVo voAssQuestion = currentAnswer.get(i).getAssessmentAnswers().get(j);
-				boolean isAnswered = voAssQuestion.getIsAnsweredIsNotNull() && voAssQuestion.getIsAnswered().equals(AnswerStatus.ANSWERED);
-				boolean isConfirmed = voAssQuestion.getIsConfirmedIsNotNull() && voAssQuestion.getIsConfirmed().booleanValue();
-				if (isAnswered && isConfirmed)
-				{
-					boolean answerChanged = answerChanged(previousAnswers, voAssQuestion);
-					AuthoringInformationVo previousConfirmingInfo = getPreviousConfirmingInformation(previousAnswers, voAssQuestion);
-
-					for (int k = 0; k < voAssQuestion.getPatientAnswers().size(); k++)
-					{
-						PatientAssessmentAnswerVo voAssAnswer = voAssQuestion.getPatientAnswers().get(k);
-						if (previousConfirmingInfo != null)
-						{
-							if(answerChanged)
-								voAssAnswer.setConfirmingInfo(getLoggedInUserAuthoringInformation());
-							else
-								voAssAnswer.setConfirmingInfo(previousConfirmingInfo);
-						}
-						else
-						{
-							voAssAnswer.setConfirmingInfo(getLoggedInUserAuthoringInformation());
-						}
-					}
-				}
-			}
-		}
-	
-	}*/
-
 	private PatientAssessmentGroupVoCollection getAnswerGroups(PatientAssessmentGroupVoCollection currentAnswer, PatientAssessmentGroupVoCollection notAvailableAnswColl)
 	{
 		if(currentAnswer != null && currentAnswer.size() > 0)
 		{
 			for (int i = 0; notAvailableAnswColl != null && i < notAvailableAnswColl.size(); i++)
 			{
-				//Get the first group and add those questions.....
+				// Get the first group and add those questions
 				PatientAssessmentGroupVo voPatAssGroup = notAvailableAnswColl.get(i);
-				//Add all Patient Assessment Question to existing Answers
+				// Add all Patient Assessment Question to existing Answers
 				for (int j = 0; j < voPatAssGroup.getAssessmentAnswers().size(); j++)
 				{
 					PatientAssessmentQuestionVo patientAssessmentQuestionVo = voPatAssGroup.getAssessmentAnswers().get(j);
-					//Clear the id of the record or we will get a Flush Dirty error - TODO Please check if it can be done differently...
-					if(patientAssessmentQuestionVo.getID_PatientAssessmentQuestionIsNotNull())
+					// Clear the id of the record or we will get a Flush Dirty error - TODO Please check if it can be done differently...
+					if (patientAssessmentQuestionVo.getID_PatientAssessmentQuestionIsNotNull())
 						patientAssessmentQuestionVo.setID_PatientAssessmentQuestion(null);
 					for (int k = 0; patientAssessmentQuestionVo.getPatientAnswersIsNotNull() && k < patientAssessmentQuestionVo.getPatientAnswers().size(); k++)
 					{
 						patientAssessmentQuestionVo.getPatientAnswers().get(k).setID_PatientAssessmentAnswer(null);
-						if(patientAssessmentQuestionVo.getPatientAnswers().get(k).getAnswerDetailsIsNotNull())
+						if (patientAssessmentQuestionVo.getPatientAnswers().get(k).getAnswerDetailsIsNotNull())
 						{
 							for (int index = 0; index < patientAssessmentQuestionVo.getPatientAnswers().get(k).getAnswerDetails().size(); index++)
 							{

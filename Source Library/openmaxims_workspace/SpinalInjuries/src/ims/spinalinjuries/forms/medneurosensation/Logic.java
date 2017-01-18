@@ -481,9 +481,10 @@ public class Logic extends BaseLogic
 	{
 		//TODO: need to calculate scores out of 50? and add to array returned
 		NeuroSensationRootValueVo voCollFinding;
-		//Variables used as counters (if >=0) or as flags (if == -1) 
+		// Variables used as counters (if >=0) or as flags (if == -1)
 		int left  = -1, right = -1;
-		//Variables mutually exclusive - for promoting reuse and for an easier debug
+
+		// Variables mutually exclusive - for promoting reuse and for an easier debug
 		boolean bLightTouch, bGreenPrick;
 		
 		for(int i=0;i<voCollFindings.size();i++)

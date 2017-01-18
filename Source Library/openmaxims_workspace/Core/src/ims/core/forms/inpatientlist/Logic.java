@@ -436,57 +436,29 @@ public class Logic extends BaseLogic
 		form.getGlobalContext().Correspondence.setGenerateFormMode(null);
 		form.getGlobalContext().Core.setPasEvent(null);
 		form.getGlobalContext().Core.setPatientShort(null);
-		form.getGlobalContext().Core.setPatientToBeDisplayed(null);//WDEV-16020
+		form.getGlobalContext().Core.setPatientToBeDisplayed(null);
 	}
 
 	private void setContextVariablesForSelection() 
 	{
 		clearContextVariables();
 		InpatientEpisodeVo voInpatientListRow = null;
-		//PatientShort voPatientShort = null;
-		//PasContactVo voPasContact = null;
+
 		PASEventRefVo voRefPasEvent = null;
 
-		//if (form.grdInpatients().getSelectedRowIndex() >= 0 && form.grdInpatients().getRows().get(form.grdInpatients().getSelectedRowIndex()).getValue() != null) 					
-		if( form.dyngrdInpatients().getSelectedRow().getValue() != null)			//wdev-18784
+		if( form.dyngrdInpatients().getSelectedRow().getValue() != null)
 		{
-			//voInpatientListRow = form.grdInpatients().getSelectedRow().getValue();
 			voInpatientListRow = (InpatientEpisodeVo)form.dyngrdInpatients().getSelectedRow().getValue();
-			//voPasContact = voInpatientListRow.getPasContact();
-			//voPatientShort = voInpatientListRow.getPasEvent().getPatient();
+
 			voRefPasEvent = voInpatientListRow.getPasEvent();
-					
-			/*
-			if (voRefPasEvent == null && voPasContact != null)
-			{
-				voRefPasEvent = getOrCreatePasEventForPasContact(voPasContact, voPatient, patientListType);			
-	
-				if (patientListType.equals(PatientListType.INPATIENTLIST))
-				{
-					voInpatientListRow.setPasContact(voPasContact);
-					voInpatientListRow.setPasEvent(voRefPasEvent);
-					form.grdInpatients().setValue(voInpatientListRow);					
-				}
-				else
-				{
-					voOutPatientListRow.setPasContact(voPasContact);
-					voOutPatientListRow.setPasEvent(voRefPasEvent);
-					form.lyrPatientLists().tabOutpatientList().grdOPList().setValue(voOutPatientListRow);
-				}
-	
-				form.getGlobalContext().Core.setPasEvent(voRefPasEvent);			
-	
-			}
-			else
-			*/
-			
+
 			form.getGlobalContext().Core.setPasEvent(voRefPasEvent);
-			//wdev-16427
-			if( voRefPasEvent != null)
+
+			if ( voRefPasEvent != null )
 				form.getGlobalContext().Core.setCurrentCareContext(domain.getCareContextShortVoByPasEventId(voRefPasEvent));
 			if (form.getGlobalContext().Core.getPatientShort() == null)
 				form.getGlobalContext().Core.setPatientShort(voInpatientListRow.getPasEvent().getPatient());
-			//----------
+
 			form.getLocalContext().setSelectedCorrespondenceInstance(domain.getCorrespondenceDetailsByPasEvent(voRefPasEvent));
 			form.getGlobalContext().Correspondence.setCorrespondenceDetails(form.getLocalContext().getSelectedCorrespondenceInstance());
 	
@@ -497,8 +469,7 @@ public class Logic extends BaseLogic
 	private void setPatientFilterDetails()
 	{		
 		PatientFilter voPatFilter = new PatientFilter();		
-		//PatientShort patient = form.grdInpatients().getValue().getPasEvent().getPatient();
-		PatientShort patient = ((InpatientEpisodeVo)form.dyngrdInpatients().getValue()).getPasEvent().getPatient();		//wdev-18784
+		PatientShort patient = ((InpatientEpisodeVo)form.dyngrdInpatients().getValue()).getPasEvent().getPatient();
 		voPatFilter.setForename(patient.getNameIsNotNull() ? patient.getName().getForename() : null);
 		voPatFilter.setSurname(patient.getNameIsNotNull() ? patient.getName().getSurname() : null);
 		voPatFilter.setSex(patient.getSex());

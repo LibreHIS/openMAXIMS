@@ -1529,17 +1529,9 @@ public class HL7EngineOutbound extends Thread implements IHL7InterfaceComponent
 			{
 				LOG.error("Exception occurred during outbound register check - " + e.getMessage(), e);
 
-				// wdev-2737 If it is a connection issue, we want to retry
-				// establish the connection
+				// If it is a connection issue, we want to retry establish the connection
 				if (e instanceof DomainRuntimeException)
 				{
-//					String msg = e.getMessage();
-					// Can't necessarily rely on content of exception, different
-					// platforms etc. Safer to just reconnect anyway.
-					// if (msg.indexOf("connection") >= 0) // DB Connection
-					// issue - try again
-					// {
-					// WDEV-8923
 					try
 					{
 						sleep(30000); // Sleep and try again later
@@ -1550,7 +1542,6 @@ public class HL7EngineOutbound extends Thread implements IHL7InterfaceComponent
 						LOG.warn("InterruptedException occurred in HL7 Outbound Interface. - " + e2.getMessage());
 					}
 					continue;
-					// }
 				}
 			}
 

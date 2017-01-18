@@ -1394,31 +1394,6 @@ public class Logic extends BaseLogic
 		if (value == null)
 			return;
 
-//		if (PaymentType.AMO.equals(value))
-//		{
-//			try
-//			{
-//				HcpLiteVoCollection hcpList = domain.listMembersOfStaff(null);
-//
-//				if (hcpList == null)
-//					return;
-//
-//				for (int i = 0; i < hcpList.size(); i++)
-//				{
-//					HcpLiteVo hcp = hcpList.get(i);
-//					if (hcp != null)
-//					{
-//						form.ctnVaccineDetails().qmbDeliveredBy().newRow(hcp, hcp.getName() == null ? null : hcp.getName().toShortForm());
-//					}
-//				}
-//			}
-//			catch (DomainInterfaceException e)
-//			{
-//				engine.showMessage(e.getMessage());
-//				return;
-//			}
-//		}
-
 		ClientImmunisationScheduleVo clientImmunisationSchedule = form.getGlobalContext().PCI.getClientImmunisationSchedule();
 		if (PaymentType.NONPAYGP.equals(value))
 		{

@@ -1048,7 +1048,7 @@ public class Logic extends BaseLogic
 		}
 		if(form.getLocalContext().getidSaveDOBChangedMessageBoxIsNotNull() && form.getLocalContext().getidSaveDOBChangedMessageBox() == messageBoxId)
 		{
-			//save a parent with DOB < 16 years
+			// Save a parent with DOB < 16 years
 			if(result.equals(DialogResult.YES))
 			{
 				if(save(null))
@@ -1061,49 +1061,7 @@ public class Logic extends BaseLogic
 				return;
 			}
 		}
-		// WDEV-5534
-		// Warning when updating an address to a family member
-		// Will no longer modify the address of the family members - uncomment the code if the address must be updated
-//		if(form.getLocalContext().getidUpdateFamilyAddressIsNotNull() && form.getLocalContext().getidUpdateFamilyAddress() == messageBoxId)
-//		{
-//			if(result.equals(DialogResult.YES))
-//			{
-//				if(save(form.getLocalContext().getCurrentClient()))
-//				{
-//					open();
-////					//WDEV-5300
-////					/*if(form.getLocalContext().getCurrentClient().getClientParentIsNotNull() && form.getGlobalContext().PCI.getIsChildAddressUpdatedIsNotNull() && form.getGlobalContext().PCI.getIsChildAddressUpdated())
-////					{
-////						form.getLocalContext().setidUpdateFamilyAddress(engine.showMessage("Update address of linked family members?", "", MessageButtons.YESNO, MessageIcon.QUESTION));
-////					}
-////					form.getGlobalContext().PCI.setIsChildAddressUpdated(null);*/
-//				}
-////				Integer numberOfPersonUpdated = 0;
-////				try 
-////				{
-////					numberOfPersonUpdated = domain.updateFamilyAddress(form.getLocalContext().getCurrentClient(), form.getLocalContext().getFamilyAddress());
-////				} 
-////				catch (StaleObjectException e) 
-////				{
-////					engine.showMessage("Data has been modified by another user - screen will be refreshed");
-////					open();
-////				} 
-////				catch (UniqueKeyViolationException e) 
-////				{
-////					engine.showMessage(e.getMessage());
-////				}
-////				
-////				if(numberOfPersonUpdated > 0)
-////				{
-////					engine.showMessage("Address updated for " + numberOfPersonUpdated + " clients", "",MessageButtons.OK,MessageIcon.INFORMATION);
-////				}
-//			}
-//			else if(result.equals(DialogResult.NO))
-//			{
-//				open();
-//				return;
-//			}
-//		}
+
 		updateControlsState();
 	}
 

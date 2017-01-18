@@ -76,7 +76,7 @@ public class EPrescribingImpl extends BaseEPrescribingImpl
 
 	public CareContextShortVo getCareContextMin(CareContextRefVo refCareContext) 
 	{
-		if(refCareContext == null)
+		if (refCareContext == null)
 			return null;
 		DomainFactory factory = getDomainFactory();
 		CareContext doCareContext = (CareContext)factory.getDomainObject(CareContext.class, refCareContext.getID_CareContext());
@@ -89,7 +89,6 @@ public class EPrescribingImpl extends BaseEPrescribingImpl
 		return vitalImpl.getLastMetrics(refCarContext);
 	}
 
-	//http://jira/browse/WDEV-14402
 	public VSMetrics getLatestMetricsForPatient(PatientRefVo patient)
 			throws DomainInterfaceException 
 	{
@@ -98,8 +97,9 @@ public class EPrescribingImpl extends BaseEPrescribingImpl
 
 		DomainFactory factory = getDomainFactory();
 		List metrics = factory.find("from Metrics metric where metric.patient.id = :idPatient " +
-				" and (rie is null or rie = 0) order by metric.systemInformation.creationDateTime desc",new String[] {"idPatient"},new Object[] {patient.getID_Patient()});		
-		if(metrics != null && metrics.size() > 0)
+				/* TODO MSSQL case - " and (rie is null or rie = 0) order by metric.systemInformation.creationDateTime desc",new String[] {"idPatient"},new Object[] {patient.getID_Patient()}); */
+				" and (rie is null or rie = FALSE) order by metric.systemInformation.creationDateTime desc",new String[] {"idPatient"},new Object[] {patient.getID_Patient()});
+		if (metrics != null && metrics.size() > 0)
 			return (VSMetricsAssembler.create((Metrics)metrics.get(0)));
 		
 		return null;

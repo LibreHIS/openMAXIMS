@@ -74,17 +74,17 @@ public class DocumentCategoryToFormConfigImpl extends BaseDocumentCategoryToForm
 		DomainFactory factory = getDomainFactory();
 		DocumentCategoryToFormCfg doConfig = DocumentCategoryToFormCfgVoAssembler.extractDocumentCategoryToFormCfg(factory, record);
 		
-		//WDEV-18905  - start
 		if (!record.getID_DocumentCategoryToFormCfgIsNotNull())
 		{
-			StringBuilder hqlBuilder = new StringBuilder("select dc from DocumentCategoryToFormCfg as dc left join dc.appForm as af where af.id = :formID and (dc.isRIE is null  or dc.isRIE = 0) ");		
+			/* TODO MSSQL case - StringBuilder hqlBuilder = new StringBuilder("select dc from DocumentCategoryToFormCfg as dc left join dc.appForm as af where af.id = :formID and (dc.isRIE is null  or dc.isRIE = 0) "); */
+			StringBuilder hqlBuilder = new StringBuilder("select dc from DocumentCategoryToFormCfg as dc left join dc.appForm as af where af.id = :formID and (dc.isRIE is null  or dc.isRIE = FALSE) ");
+
 			List <?> list = factory.find(hqlBuilder.toString(),"formID", record.getAppForm().getID_AppForm());
 			
 			if (list != null && list.size() > 0)
 				throw new StaleObjectException(doConfig);
 		}
-		//WDEV-18905  - end
-		
+
 		factory.save(doConfig);
 		
 		return DocumentCategoryToFormCfgVoAssembler.create(doConfig);
@@ -93,12 +93,13 @@ public class DocumentCategoryToFormConfigImpl extends BaseDocumentCategoryToForm
 	public DocumentCategoryToFormCfgVoCollection listDocumentCategoryToFormConfigs() 
 	{
 		DomainFactory factory = getDomainFactory();
-		//WDEV-18898 - excluding RIE records from list domain call
-		String hql = " select dc from DocumentCategoryToFormCfg as dc left join dc.appForm as f where dc.isRIE is null or dc.isRIE = 0 order by f.name asc ";
+		// Excluding RIE records from list domain call
+		/* TODO MSSQL case - String hql = " select dc from DocumentCategoryToFormCfg as dc left join dc.appForm as f where dc.isRIE is null or dc.isRIE = 0 order by f.name asc "; */
+		String hql = " select dc from DocumentCategoryToFormCfg as dc left join dc.appForm as f where dc.isRIE is null or dc.isRIE = FALSE order by f.name asc ";
 		
 		return DocumentCategoryToFormCfgVoAssembler.createDocumentCategoryToFormCfgVoCollectionFromDocumentCategoryToFormCfg(factory.find(hql));
 	}
-	//WDEV-18898
+
 	public Boolean isStale(DocumentCategoryToFormCfgRefVo documentCategoryToFormRef)
 	{
 		if(documentCategoryToFormRef == null)

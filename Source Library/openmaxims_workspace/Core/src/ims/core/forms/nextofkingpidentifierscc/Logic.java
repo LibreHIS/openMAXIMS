@@ -125,46 +125,6 @@ public class Logic extends BaseLogic
 
 		}
 		
-//		//wdev-19232 //WDEV-19302 
-//		if( ConfigFlag.UI.SVUH_MANDATORY_DEMOGRAPHIC_ATTRIBUTES.getValue() == true )
-//		{
-//			boolean createMobilePhoneRow = true;
-//			
-//			if( voCommChannelColl != null)
-//			{
-//				for (int i = 0; i < voCommChannelColl.size(); i++)
-//				{
-//					CommChannelVo voCommChannel = voCommChannelColl.get(i);
-//
-//					if( voCommChannel.getChannelTypeIsNotNull() && voCommChannel.getChannelType().equals(ims.core.vo.lookups.ChannelType.MOBILE))
-//					{
-//						createMobilePhoneRow = false;
-//					}
-//					
-//				}
-//
-//			}
-//			
-//			if (FormMode.VIEW.equals(form.getMode()) &&  (voCommChannelColl == null || voCommChannelColl.size() == 0))
-//			{
-//				createMobilePhoneRow = false;
-//			}
-//			
-//			if( createMobilePhoneRow == true)
-//			{
-//				CommChannelVo temp = new CommChannelVo();
-//				temp.setChannelType(ChannelType.MOBILE);
-//				temp.setCommValue("Unknown");
-//				rowCommChannel = form.grdCommChannels().getRows().newRow();
-//				rowCommChannel.setcolType(temp.getChannelType());
-//				rowCommChannel.setcolContactValue(temp.getCommValue());
-//				rowCommChannel.setValue(temp);
-//				
-//			}
-//			
-//		}
-//		//----------------------
-		
 		if (pat.getCommChannelsIsNotNull() && pat.getWorkPhoneNumber() != null)
 		{
 			szTelephone += "Work Telephone: ";
@@ -173,7 +133,7 @@ public class Logic extends BaseLogic
 
 				
 		form.cmbPreferedLanguage().setValue(pat.getPrefCommLanguage());
-		//WDEV-15957
+
 		form.dteEffectiveFromDate().setValue(pat.getCopyPatientOnCorrespondenceDate());
 		if(pat.getCopyPatientOnCorrespondenceIsNotNull())
 		{

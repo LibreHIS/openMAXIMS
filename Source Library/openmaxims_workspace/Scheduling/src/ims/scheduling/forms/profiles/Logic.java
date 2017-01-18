@@ -879,68 +879,13 @@ public class Logic extends BaseLogic
 								 pcRow.setColActive(true);
 								 pcRow.setValue(voParentChildSlot);
 								 pcRow.setReadOnly(true);
-								 pcRow.setSelectable(true); //WDEV-13224
+								 pcRow.setSelectable(true);
 							 }
 						 }
 					}
 				}	
 			}
 		}
-		//WDEV-19518
-		/*form.getGlobalContext().Admin.setProfileLocation(voProfile.getSchLocation());
-		form.getGlobalContext().Admin.setProfileCaseNoteFoldersLocation(voProfile.getCaseNoteFolderLocation());
-		form.lyrDetails().tabGeneralDetails().chkCaseNotesNotRequired().setValue(voProfile.getCaseNoteFolderNotRequired());
-		setLocation(voProfile.getSchLocation());
-		setCaseNoteFolderLocation(voProfile.getCaseNoteFolderLocation(), true); //WDEV-19631
-		//WDEV-19518 ----ends here
-
-		form.lyrDetails().tabGeneralDetails().cmbSpeciality().setValue(voProfile.getService());
-		//wdev-20074
-		if( form.lyrDetails().tabGeneralDetails().cmbSpeciality().getValues() != null && !form.lyrDetails().tabGeneralDetails().cmbSpeciality().getValues().contains(voProfile.getService()))
-		{
-			if( voProfile.getService() != null )
-			{
-				form.lyrDetails().tabGeneralDetails().cmbSpeciality().newRow(voProfile.getService(), voProfile.getService().getServiceName());
-				form.lyrDetails().tabGeneralDetails().cmbSpeciality().setValue(voProfile.getService());
-			}
-		}
-		//---------
-		
-		cmbSpecialityValueChanged(); */
-		
-		//wdev-20074
-		//form.lyrDetails().tabGeneralDetails().grdServiceFunctions().getRows().clear();
-		//form.lyrDetails().tabGeneralDetails().grdServiceFunctions().setVisible(false);
-		/*if( GroupProfileTypeEnumeration.rdoOutpatient.equals(form.lyrDetails().tabGeneralDetails().GroupProfileType().getValue()) || GroupProfileTypeEnumeration.rdoWardAttendance.equals(form.lyrDetails().tabGeneralDetails().GroupProfileType().getValue()))
-		{
-    		if( voProfile.getFunctionIsNotNull() && voProfile.getFunction().size() > 0)
-    		{
-    			form.lyrDetails().tabGeneralDetails().grdServiceFunctions().setVisible(true);
-    			for( int k = 0; k < voProfile.getFunction().size();k++ )
-    			{
-    				
-
-    				ServiceFunction tempLk =  voProfile.getFunction().get(k); 
-    				if( tempLk != null )
-    				{
-    					if( setColSelectTrueIfGridContainFunction(tempLk) == false)
-    					{
-        					grdServiceFunctionsRow row = form.lyrDetails().tabGeneralDetails().grdServiceFunctions().getRows().newRow();
-        					row.setColumnFunctions(tempLk.getText());
-        					row.setColumnSelect(true);
-        					row.setBackColor(Color.LightYellow);
-        					row.setValue(tempLk);
-    					}
-    					
-    				}
-    			}
-    			//wdsev-20448
-    			if( form.lyrDetails().tabGeneralDetails().chkProfileHasChooseAndBookActivity().isVisible() && form.lyrDetails().tabGeneralDetails().chkProfileHasChooseAndBookActivity().getValue() == true)
-    				loadDos(form.lyrDetails().tabGeneralDetails().cmbSpeciality().getValue(), false);
-    			//---------
-    		}
-		}*/
-		//----------- end of wdev-20074
 
 		// Populate the Booking Rights Grid
 		form.lyrDetails().tabBookingRights().grdBookingRights().getRows().clear();
@@ -955,10 +900,8 @@ public class Logic extends BaseLogic
 			bRow.setReadOnly(true);
 			bRow.setSelectable(false);
 		}
-		//wdev-19419
+
 		form.lyrDetails().tabListOwners().cmbListType().setValue(voProfile.getListType());
-		//form.lyrDetails().tabListOwners().ccConsultant().setValue(voProfile.getResponsibleHCP());		//wdev-20074
-		//----------
 
 		// List Owners
 		form.lyrDetails().tabListOwners().grdListOwner().getRows().clear();
@@ -1217,25 +1160,7 @@ public class Logic extends BaseLogic
 						ProfileParentChildSlotVo voParentChildSlot = tRow.getValue();
 						voCollParentChildSlots.add(voParentChildSlot);
 					}
-					
-					/*
-					//add the inactivated (removed) items to the collection
-					if(form.getLocalContext().getParentChildSlotsIsNotNull())
-					{
-						for(ProfileParentChildSlotVo voSlot : form.getLocalContext().getParentChildSlots())
-						{
-							//WDEV-18216 check if the slot id is not null
-							for (int i=0; i < voCollParentChildSlots.size(); i++)
-							{
-								if (voCollParentChildSlots.get(i).getID_ProfileParentChildSlot() != null && !voCollParentChildSlots.get(i).equals(voSlot)) 
-								{
-									voSlot.setIsActive(false);
-									voCollParentChildSlots.add(voSlot);
-								}
-							}
-						}
-					}
-					*/
+
 					profile.setParentChildSlots(voCollParentChildSlots);
 				}
 				
@@ -1261,9 +1186,9 @@ public class Logic extends BaseLogic
 				profile.setProfileSlots(coll);
 			}
 		}
-		else if( GroupProfileTypeEnumeration.rdoTheatre.equals(form.lyrDetails().tabGeneralDetails().GroupProfileType().getValue()) /*form.lyrDetails().tabGeneralDetails().chkTheatre().getValue()*/)
+		else if( GroupProfileTypeEnumeration.rdoTheatre.equals(form.lyrDetails().tabGeneralDetails().GroupProfileType().getValue())
 		{
-			profile.setIsFixed(true);	//wdev-20074
+			profile.setIsFixed(true);
 			
 			//WDEV-12918
 			if(form.lyrDetails().tabGeneralDetails().chklistAnaesthetictype().getValues() != null && form.lyrDetails().tabGeneralDetails().chklistAnaesthetictype().getValues().length > 0)

@@ -1572,17 +1572,17 @@ public class DemographicsImpl extends DTODomainImplementation implements ims.cor
 		return rttSTatusDO;
 	}
 	
-	private boolean isInpatient(ims.core.patient.domain.objects.Patient patient) ///WDEV-23292
+	private boolean isInpatient(ims.core.patient.domain.objects.Patient patient)
 	{
-		if(patient!=null&& patient.getWard()!=null)
+		if (patient!=null&& patient.getWard()!=null)
 			return true;
 		return false;
 	}
 
-	private  List<?> getCatsReferralsforPatient(Patient patient) //now get all referrals not EOC  -WDEV-20060
+	private  List<?> getCatsReferralsforPatient(Patient patient) // Now get all referrals not EOC
 	{
-		//WDEV-18497 removed from query "and cclock.stopDate is null"
-		String hql = "select ref from CatsReferral as ref left join ref.currentStatus as cstatus left join ref.patient as pat where (ref.isRIE is null or ref.isRIE = 0) AND pat.id = :patientID AND cstatus.referralStatus.id <> :EOC";
+		/* TODO MSSQL case - String hql = "select ref from CatsReferral as ref left join ref.currentStatus as cstatus left join ref.patient as pat where (ref.isRIE is null or ref.isRIE = 0) AND pat.id = :patientID AND cstatus.referralStatus.id <> :EOC"; */
+		String hql = "select ref from CatsReferral as ref left join ref.currentStatus as cstatus left join ref.patient as pat where (ref.isRIE is null or ref.isRIE = FALSE) AND pat.id = :patientID AND cstatus.referralStatus.id <> :EOC";
 
 		DomainFactory factory = getDomainFactory();
 

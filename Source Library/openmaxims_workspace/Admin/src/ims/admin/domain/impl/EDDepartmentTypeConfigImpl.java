@@ -53,7 +53,7 @@ public class EDDepartmentTypeConfigImpl extends BaseEDDepartmentTypeConfigImpl
 		StringBuffer hql = new StringBuffer();
 
 		/* TODO MSSQL case - hql.append(" select l1_1 from Location as l1_1 left join l1_1.type as l2_1 where l2_1.id = :idloctype and l1_1.isActive = 1 and l1_1.isVirtual = 0 order by l1_1.upperName asc "); */
-		hql.append(" select l1_1 from Location as l1_1 left join l1_1.type as l2_1 where l2_1.id = :idloctype and l1_1.isActive = true and l1_1.isVirtual = false order by l1_1.upperName asc "); //WDEV-19532  WDEV-20219
+		hql.append(" select l1_1 from Location as l1_1 left join l1_1.type as l2_1 where l2_1.id = :idloctype and l1_1.isActive = true and l1_1.isVirtual = FALSE order by l1_1.upperName asc ");
 
 		List<?> list = factory.find(hql.toString(), new String[] { "idloctype" }, new Object[] { LocationType.ANE.getID() });
 
@@ -95,16 +95,18 @@ public class EDDepartmentTypeConfigImpl extends BaseEDDepartmentTypeConfigImpl
 		DomainFactory factory = getDomainFactory();
 		for( DefaultEDLocationDeptTypeVo record: records)
 		{
-			//wdev-19431
 			if( record != null && !record.getID_DefaultEDLocationDeptTypeIsNotNull() && record.getLocationIsNotNull())
 			{
 				StringBuffer hql = new StringBuffer();
-				hql.append("select d1_1	from DefaultEDLocationDeptType as d1_1 left join d1_1.location as l1_1 where (l1_1.id = :loc and (d1_1.isRIE = null or d1_1.isRIE = 0))");
+
+				/* TODO MSSQL case - hql.append("select d1_1	from DefaultEDLocationDeptType as d1_1 left join d1_1.location as l1_1 where (l1_1.id = :loc and (d1_1.isRIE = null or d1_1.isRIE = 0))"); */
+				hql.append("select d1_1	from DefaultEDLocationDeptType as d1_1 left join d1_1.location as l1_1 where (l1_1.id = :loc and (d1_1.isRIE = null or d1_1.isRIE = FALSE))");
+
 				java.util.List list = getDomainFactory().find(hql.toString(), "loc",record.getLocation().getID_Location());
 				if (list != null && list.size() > 0)
 					throw new StaleObjectException(null);
 			}
-			//-----------
+
 			DefaultEDLocationDeptType doDefaultEDLocationDeptType = DefaultEDLocationDeptTypeVoAssembler.extractDefaultEDLocationDeptType(factory, record);
 			factory.save(doDefaultEDLocationDeptType);
 		}

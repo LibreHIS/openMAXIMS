@@ -78,8 +78,8 @@ public class SurgicalAuditPreOperationChecksImpl extends BaseSurgicalAuditPreOpe
 
 	public Boolean areNoSurgicalAuditOperationDetail(CareContextRefVo careContextRef)
 	{
-		//method used to return true if for a specific Care Context a new record could be created.
-		//the method will return false if for a specific care context, there are records with currentStatus: Left Holding Bay, Left Operating Theatre and Entered Operating Theatre. In this cases New Button should be hidden
+		// Method used to return true if for a specific Care Context a new record could be created.
+		// the method will return false if for a specific care context, there are records with currentStatus: Left Holding Bay, Left Operating Theatre and Entered Operating Theatre. In this cases New Button should be hidden
 		if (careContextRef == null || careContextRef.getID_CareContext() == null)
 		{
 			throw new CodingRuntimeException("Cannot get SurgicalAuditOperationDetailVoCollection on null Id for CareContext ");
@@ -88,7 +88,6 @@ public class SurgicalAuditPreOperationChecksImpl extends BaseSurgicalAuditPreOpe
 		DomainFactory factory = getDomainFactory();
 
 		StringBuffer hql = new StringBuffer();
-		//hql.append("select count(surgAudit.id) from SurgicalAuditOperationDetail as surgAudit where surgAudit.careContext.id = :careContextID and (surgAudit.operationCancelled is null or surgAudit.operationCancelled = 0) ");
 		hql.append("select count(surgAudit.id) from SurgicalAuditOperationDetail as surgAudit left join surgAudit.currentStatus as currentStatus  where surgAudit.careContext.id = :careContextID and (currentStatus.operationStatus.id = -2383 or currentStatus.operationStatus.id = -2384 or currentStatus.operationStatus.id = -2389) ");
 
 		Object[] count = factory.find(hql.toString(), new String[] { "careContextID" }, new Object[] { careContextRef.getID_CareContext()}).toArray();

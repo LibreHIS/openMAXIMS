@@ -251,17 +251,7 @@ public class Logic extends BaseLogic
 		
 		updateControlsState();
 	}
-	/*private int getMaximumSelectionAllowed()
-	{
-		int maximum = ConfigFlag.UI.MAX_NO_SELECTED_LOCATIONS_STORED.getValue();
-		
-		ILocation[] locations = getLocations();
-		maximum -= locations.length;
-		if(maximum < 0)
-			maximum = 0;
-		
-		return maximum;
-	}*/
+
 	private void setNoteMessage() 
 	{
 		form.lblNote().setValue("Note: The maximum number of stored locations is " + ConfigFlag.UI.MAX_NO_SELECTED_LOCATIONS_STORED.getValue() + ".");			

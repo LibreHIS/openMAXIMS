@@ -74,8 +74,9 @@ public class DementiaAssessmentFormImpl extends BaseDementiaAssessmentFormImpl
 	{
 		if (patient == null || patient.getID_Patient() == null)
 			return null;
-		
-		String query = "SELECT dem FROM Dementia AS dem LEFT JOIN dem.patient AS pat LEFT JOIN dem.currentWorklistStatus AS curStatus LEFT JOIN curStatus.status AS status WHERE pat.id = :PAT_ID AND (dem.isRIE is null OR dem.isRIE = 0) AND status.id <> :EXCLUDED";
+
+		/* TODO MSSQL case - String query = "SELECT dem FROM Dementia AS dem LEFT JOIN dem.patient AS pat LEFT JOIN dem.currentWorklistStatus AS curStatus LEFT JOIN curStatus.status AS status WHERE pat.id = :PAT_ID AND (dem.isRIE is null OR dem.isRIE = 0) AND status.id <> :EXCLUDED"; */
+		String query = "SELECT dem FROM Dementia AS dem LEFT JOIN dem.patient AS pat LEFT JOIN dem.currentWorklistStatus AS curStatus LEFT JOIN curStatus.status AS status WHERE pat.id = :PAT_ID AND (dem.isRIE is null OR dem.isRIE = FALSE) AND status.id <> :EXCLUDED";
 		
 		ArrayList<String> paramNames = new ArrayList<String>();
 		ArrayList<Object> paramValues = new ArrayList<Object>();

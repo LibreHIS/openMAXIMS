@@ -257,22 +257,6 @@ public class Logic extends BaseLogic
 				client.addSeed(new SeedValue("STATUS_ID",  new Integer(OrderInvStatus.SENT.getID()), Integer.class));
 				client.addSeed(new SeedValue("CATEGORY_ID",  new Integer(Category.CLINICALIMAGING.getId()), Integer.class));
 				client.addSeed(new SeedValue("DISPLAY_PATID_TYPE",  getPatIdentifier(), Integer.class));
-				
-				/*// Pass the CLINIC_ID and CLINIC_NAME
-				for (int i = 0; i < form.grdResults().getRows().size(); i++)
-				{
-					RadilogyOrderVo newResult = form.grdResults().getRows().get(i).getValue();
-
-					// Clinic Name seeds collection
-					if (newResult.getOrderDetailsIsNotNull() && newResult.getOrderDetails().getClinicalInfoIsNotNull())
-					{
-						String clinic_name = MyOrderQuestionsPopulation.getTextualQuestionAndAnswers(newResult.getOrderDetails().getClinicalInfo());
-						if (newResult.getOrderDetails().getAdditClinNotesIsNotNull())
-							clinic_name += "\n" + newResult.getOrderDetails().getAdditClinNotes();
-						client.addSeed(new SeedValue("CLINIC_ID", newResult.getOrderDetails().getID_OcsOrder(), Integer.class));
-						client.addSeed(new SeedValue("CLINIC_NAME", clinic_name, String.class));
-					}
-				}*/
 								
 				String resultUrl = "";
 				try

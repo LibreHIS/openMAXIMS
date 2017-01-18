@@ -498,10 +498,6 @@ public class R01NasMapper extends NasMapper
 		ArrayList nmList = new ArrayList();
 		
 		int ptr = 0;
-		//int nSeqNo = 0;
-		//tmp
-		//attrSeqno = "TXT_SEQNO";
-		//attrTxt = "RES_TEXT";
 
 		if (resVal.length() <= 0 )
 			return null;
@@ -645,27 +641,6 @@ public class R01NasMapper extends NasMapper
 					rgPairs.add(new ImsNasPair("CMNT_SRC",cmntSrc));
 					rgPairs.add(new ImsNasPair("CMNT_TYPE_CD",typeCode));
 					nmList.addAll(getTextInfo(chunk,"RESCOMM_SEQNO","RESCOMM_TXT",rgPairs,nSeqNo));
-
-					//nSeqNo = 0;
-					//nmList.add(new ImsNasPair("RESCOMM_TXT",nte.getComment(j).getValue()));
-					//Nas Server handles RESCOMM_TXT in chunks of 255, whereas NTE comment is FT (up to 64k)
-					/*
-					while(chunk.length() > 255)
-					{						
-						
-						String txt = chunk.substring(0,255);
-						nmList.add(new ImsNasPair("RESCOMM_TXT",txt));						
-						nmList.add(new ImsNasPair("RESCOMM_SEQNO","" + ++nSeqNo));
-						nmList.add(new ImsNasPair("CMNT_SRC",cmntSrc));
-						nmList.add(new ImsNasPair("CMNT_TYPE_CD",typeCode));
-						
-						chunk = chunk.substring(255);						
-					}
-					nmList.add(new ImsNasPair("RESCOMM_TXT",chunk));						
-					nmList.add(new ImsNasPair("RESCOMM_SEQNO","" + ++nSeqNo));
-					nmList.add(new ImsNasPair("CMNT_SRC",cmntSrc));
-					nmList.add(new ImsNasPair("CMNT_TYPE_CD",typeCode));*/
-
 				}
 			}
 			

@@ -464,9 +464,12 @@ public class ReferralAppointmentDetailsComponentImpl extends BaseReferralAppoint
 	{
 		if (referral == null || referral.getID_CatsReferral() == null)
 			return null; 
-		
+
+		/* TODO MSSQL case - List<?> list = getDomainFactory().find("select futureApp from FutureAppointmentDetails as futureApp left join futureApp.referral as catsReferral left join futureApp.source as source " +
+				"where catsReferral.id = :referralID and source.id = :sourceID and (futureApp.isRIE = 0 or futureApp.isRIE is null)",
+				new String[] {"referralID", "sourceID"}, new Object[] {referral.getID_CatsReferral(), FutureAppointmentSource.APPOINTMENT_OUTCOME.getID()}); */
 		List<?> list = getDomainFactory().find("select futureApp from FutureAppointmentDetails as futureApp left join futureApp.referral as catsReferral left join futureApp.source as source " +
-				"where catsReferral.id = :referralID and source.id = :sourceID and (futureApp.isRIE = 0 or futureApp.isRIE is null)", 
+				"where catsReferral.id = :referralID and source.id = :sourceID and (futureApp.isRIE = FALSE or futureApp.isRIE is null)",
 				new String[] {"referralID", "sourceID"}, new Object[] {referral.getID_CatsReferral(), FutureAppointmentSource.APPOINTMENT_OUTCOME.getID()});
 		
 		if (list != null && list.size() > 0)

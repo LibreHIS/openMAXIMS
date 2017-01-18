@@ -58,8 +58,10 @@ public class ADTConsultantStaysDialogImpl extends BaseADTConsultantStaysDialogIm
 		if (inpatEpRef == null)
 			return null;
 		StringBuilder hql = new StringBuilder();
-		
-		hql.append("select stay from InpatientEpisode inpat left join inpat.consultantStays as stay WHERE (stay.isRIE is null or stay.isRIE = 0) and inpat.id = :ID ORDER BY stay.transferDateTime desc" );
+
+		/* TODO MSSQL case - hql.append("select stay from InpatientEpisode inpat left join inpat.consultantStays as stay WHERE (stay.isRIE is null or stay.isRIE = 0) and inpat.id = :ID ORDER BY stay.transferDateTime desc" ); */
+		hql.append("select stay from InpatientEpisode inpat left join inpat.consultantStays as stay WHERE (stay.isRIE is null or stay.isRIE = FALSE) and inpat.id = :ID ORDER BY stay.transferDateTime desc" );
+
 		ims.domain.DomainFactory factory = getDomainFactory();
 		
 		List<?> results = factory.find(hql.toString(),"ID",inpatEpRef.getID_InpatientEpisode());
@@ -76,8 +78,9 @@ public class ADTConsultantStaysDialogImpl extends BaseADTConsultantStaysDialogIm
 			throw new CodingRuntimeException("stay argument is not validated in method doRIE()");
 
 		DomainFactory domainFactory = getDomainFactory();
-		
-		String countStaysHql = "select count(stay.id) from InpatientEpisode as inpatepis left join inpatepis.consultantStays as stay where (stay.isRIE is null or stay.isRIE = 0) and inpatepis.id = :ID";
+
+		/* TODO MSSQL case - String countStaysHql = "select count(stay.id) from InpatientEpisode as inpatepis left join inpatepis.consultantStays as stay where (stay.isRIE is null or stay.isRIE = 0) and inpatepis.id = :ID"; */
+		String countStaysHql = "select count(stay.id) from InpatientEpisode as inpatepis left join inpatepis.consultantStays as stay where (stay.isRIE is null or stay.isRIE = FALSE) and inpatepis.id = :ID";
 		
 		Long count = domainFactory.countWithHQL(countStaysHql, new String[]{"ID"}, new Object[]{voInpat.getID_InpatientEpisode()});
 		if (count != null && count.intValue() == 1)

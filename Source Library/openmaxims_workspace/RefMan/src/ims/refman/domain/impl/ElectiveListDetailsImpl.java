@@ -459,39 +459,9 @@ public class ElectiveListDetailsImpl extends BaseElectiveListDetailsImpl
 							
 			domainPatElectiveList.getTCIHistory().add(newTCIDetails);
 		
-		} //WDEV-23350
+		}
 		
 		factory.save(domainPatElectiveList);
-		
-		/*if(domainPatElectiveList != null && !isDiagnostic && domainPatElectiveList.getTCIDetails() != null && domainPatElectiveList.getTCIDetails().getTCIDate() != null)
-		{
-			if(doCatsReferral.getJourney() != null && doCatsReferral.getJourney().getCurrentClock() != null && doCatsReferral.getJourney().getCurrentClock().getCurrentPause() != null)
-			{
-				PauseDetails currentPause = doCatsReferral.getJourney().getCurrentClock().getCurrentPause();
-				
-				if(doCatsReferral.getJourney().getCurrentClock().getPauseDetails() != null)
-				{
-					for(int i=0; i<doCatsReferral.getJourney().getCurrentClock().getPauseDetails().size(); i++)
-					{
-						PauseDetails pause = (PauseDetails) doCatsReferral.getJourney().getCurrentClock().getPauseDetails().get(i);
-						if(currentPause.equals(pause) && Boolean.TRUE.equals(pause.isActive()))
-						{
-							doCatsReferral.getJourney().getCurrentClock().getPauseDetails().remove(i);
-							break;
-						}
-					}
-				}
-				
-				currentPause.setPauseStop(domainPatElectiveList.getTCIDetails().getTCIDate());
-				
-				if(doCatsReferral.getJourney().getCurrentClock().getPauseDetails() == null)
-					doCatsReferral.getJourney().getCurrentClock().setPauseDetails(new java.util.ArrayList());
-				
-				doCatsReferral.getJourney().getCurrentClock().getPauseDetails().add(currentPause);	
-			}
-			
-			saveReferral = true;
-		}*/
 		
 		if (saveReferral)
 			factory.save(doCatsReferral);
