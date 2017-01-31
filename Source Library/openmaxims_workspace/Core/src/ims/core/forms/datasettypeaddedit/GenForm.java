@@ -233,6 +233,7 @@ public class GenForm extends FormBridge
 		ims.framework.utils.SizeInfo designSize = new ims.framework.utils.SizeInfo(392, 424);
 		if(runtimeSize == null)
 			runtimeSize = designSize;
+
 		form.setWidth(runtimeSize.getWidth());
 		form.setHeight(runtimeSize.getHeight());
 		super.setGlobalContext(ContextBridgeFlyweightFactory.getInstance().create(GlobalContextBridge.class, context, false));

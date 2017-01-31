@@ -576,15 +576,17 @@ public class Service extends ims.domain.DomainObject implements java.io.Serializ
 				continue;
 			}
 			
-			//Trying to avoid the hibernate collection being marked as dirty via its public interface methods. (like add)
+			// Trying to avoid the hibernate collection being marked as dirty via its public interface methods (like add)
 			if (!set.contains(domainObject)) 
 				set.add(domainObject);
+
 			newSet.add(domainObject);			
 		}
 		
 		java.util.Set removedSet = new java.util.HashSet();
 		java.util.Iterator iter = set.iterator();
-		//Find out which objects need to be removed
+
+		// Find out which objects need to be removed
 		while (iter.hasNext())
 		{
 			ims.domain.DomainObject o = (ims.domain.DomainObject)iter.next();			
@@ -632,8 +634,8 @@ public class Service extends ims.domain.DomainObject implements java.io.Serializ
 			}
 		}		
 		
-		//Remove all ones in domList where index > voCollection.size() as these should
-		//now represent the ones removed from the VO collection. No longer referenced.
+		// Remove all ones in domList where index > voCollection.size() as these should now represent the ones removed from the VO collection.
+		// No longer referenced.
 		int i1=list.size();
 		while (i1 > size)
 		{

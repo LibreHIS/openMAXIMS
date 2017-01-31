@@ -2866,18 +2866,18 @@ public class R01VoMapper extends VoMapper
 		resCompVo.setUnitOfMeasure(units);
 
 		String analyteExtCode = obx.getObservationIdentifier().getIdentifier().getValue();
-		//http://jira/browse/WDEV-15795
+
 		if (analyteExtCode==null||null==analyteExtCode.trim()||"".equals(analyteExtCode.trim()))
 		{
 			throw new HL7Exception("Observation Identifier OBX-3 is mandatory");
 		}
 		String analyteExtText = obx.getObservationIdentifier().getText().getValue();
 		
-		if (doAnalyteCheck(valueType)&&(analyteExtText==null||null==analyteExtText.trim()||"".equals(analyteExtText.trim()))) //http://jira/browse/WDEV-21674
+		if (doAnalyteCheck(valueType)&&(analyteExtText==null||null==analyteExtText.trim()||"".equals(analyteExtText.trim())))
 		{
-			throw new HL7Exception("Observation Identifier text OBX-3-2 is mandatory for Value Type:"+(valueType!=null?valueType:"")); //http://jira/browse/WDEV-21674
+			throw new HL7Exception("Observation Identifier text OBX-3-2 is mandatory for Value Type:"+(valueType!=null?valueType:""));
 		}
-		IfAnalyteVo analyteVo = ocsIfInbound.getAnalyte(analyteExtCode, analyteExtText, providerInvSearch, units,doAnalyteCheck(valueType)); //http://jira/browse/WDEV-21674
+		IfAnalyteVo analyteVo = ocsIfInbound.getAnalyte(analyteExtCode, analyteExtText, providerInvSearch, units,doAnalyteCheck(valueType));
 		if (analyteVo == null)
 			throw new HL7Exception("Analyte is null");
 		resCompVo.setAnalyte(analyteVo);

@@ -128,12 +128,7 @@ public class Logic extends BaseLogic
 		{
 			name = "%";
 		}
-		/*
-		if(form.cmbCategory().getValue() == null)
-		{
-			return;
-		}
-		*/
+
 		DataSetTypeVoCollection coll = domain.listDataSetType("%" + name + "%", form.cmbCategory().getValue(), null);
 		
 		displayDataSetType(coll);

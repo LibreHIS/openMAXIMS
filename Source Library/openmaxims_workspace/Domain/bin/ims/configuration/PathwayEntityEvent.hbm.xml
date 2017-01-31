@@ -1,14 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-mapping
-        PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+		PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+		"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="ims.configuration.PathwayEntityEvent" table="appentitievent" lazy="false">
+	<class name="ims.configuration.PathwayEntityEvent" table="appentityevent" lazy="false" >
 
-        <id name="id" access="field" type="integer" unsaved-value="null">
-            <!-- Workaround for DDL creation (works for Sybase only) -->
-            <column name="id" sql-type="numeric(10,0)"/>
-            <generator class="native"/>
-        </id>
+		<id name="id" access="field" type="integer" unsaved-value="null">
+			<!-- workaround for DDL creation (works for Sybase only) -->
+			<column name="id" sql-type="numeric(10,0)"/>
+			<generator class="native"/>
+		</id>
 
 		<version name="version" column="vstp" access="field"/>
 
@@ -40,5 +41,5 @@
 			<column name="targetMethod" length="200"/>
 		</property>
 
-    </class>
+	</class>
 </hibernate-mapping>

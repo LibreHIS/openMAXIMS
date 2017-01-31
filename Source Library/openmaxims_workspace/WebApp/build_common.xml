@@ -257,8 +257,8 @@
     </target>
 
     <!-- Compile WebAppSource -->
-    <target name="WebAppSource" depends="init" >
-        <javac debug="on" classpath="${ant_classpath};${soap_classpath};${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Core/bin;${workspace}Clinical/bin;${workspace}Scheduling/bin;${workspace}Admin/bin;${workspace}RefMan/bin" destdir="${workspace}WebApp/WEB-INF/classes" srcdir="${workspace}WebApp/src/" includes="**/*.java" />
+    <target name="WebAppSource" depends="init, Domain" >
+        <javac debug="on" classpath="${ant_classpath};${soap_classpath};${workspace}DomainObjects/bin/;${workspace}ValueObjects/bin/;${workspace}Core/bin;${workspace}Clinical/bin;${workspace}Scheduling/bin;${workspace}Admin/bin;${workspace}RefMan/bin;${worspace}Domain/bin/;" destdir="${workspace}WebApp/WEB-INF/classes" srcdir="${workspace}WebApp/src/" includes="**/*.java" />
     </target>
 
     <target name="GenerateDropScript" depends="init" >

@@ -630,18 +630,18 @@ public class ServiceImpl extends BaseServiceImpl
 	public ServiceLiteVoCollection listActiveServiceLiteByName(String name)
 	{
 		DomainFactory factory = getDomainFactory();
-		List services = factory.find("from Service s where s.upperName like :serviceName and s.isActive = :isActive", new String[]{"serviceName", "isActive"}, new Object[]{"%" + name.toUpperCase() + "%", Boolean.TRUE});
+		List services = factory.find("FROM Service s WHERE s.upperName LIKE :serviceName AND s.isActive = :isActive", new String[]{"serviceName", "isActive"}, new Object[]{"%" + name.toUpperCase() + "%", Boolean.TRUE});
 		return ServiceLiteVoAssembler.createServiceLiteVoCollectionFromService(services).sort();
 	}
 
 	public ServiceLiteVoCollection listActiveServiceLiteByNameAndCategories(String name, ServiceCategoryCollection categoryCollection)
 	{
 		DomainFactory factory = getDomainFactory();
-		StringBuffer query = new StringBuffer("from Service s where s.upperName like :serviceName and s.isActive = :isActive");
+		StringBuffer query = new StringBuffer("FROM Service s WHERE s.upperName LIKE :serviceName AND s.isActive = :isActive");
 		for (int i = 0; i < categoryCollection.size(); i++)
 		{
 			if (i == 0)
-				query.append(" and s.serviceCategory.id in(");
+				query.append(" AND s.serviceCategory.id in(");
 			query.append(categoryCollection.get(i).getID());
 
 			if (i < (categoryCollection.size() - 1))

@@ -1362,7 +1362,8 @@ public class Logic extends BaseLogic
 					if(isServiceQuestions())
 						title = "Service Questions - " + title;
 					engine.setCaption(title);
-					//WDEV-1161 - If this dialogue is activated from the category question form, can the second layer be called 'New Question' rather than 'Category Question' 
+
+					// If this dialogue is activated from the category question form, can the second layer be called 'New Question' rather than 'Category Question'
 					form.lyrTabs().tabNewQuestion().setCaption("New Question");
 					form.lyrTabs().tabSearchQuestion().setCaption("Search Questions");
 										

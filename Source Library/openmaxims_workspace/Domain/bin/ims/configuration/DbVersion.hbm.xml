@@ -4,16 +4,20 @@
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="ims.configuration.DbVersion" table="appdbversion" lazy="false" >
+
 		<id name="id" access="field" type="integer" unsaved-value="null">
 			<!-- workaround for DDL creation (works for Sybase only) -->
 			<column name="id" sql-type="numeric(10,0)"/>
 			<generator class="native"/>
 		</id>
+
 		<property name="appliedDateTime" type="timestamp" access="field" >
 			<column name="applied_datetime" not-null="true" />
-		</property>	
+		</property>
+
 		<property name="schemaVersionLabel" type="string" access="field" >
 			<column name="schema_version_label" length="30" not-null="true" />
-		</property>	
+		</property>
+
 	</class>
 </hibernate-mapping>

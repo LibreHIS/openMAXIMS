@@ -324,7 +324,7 @@ public class Logic extends BaseLogic
 		categories.add(ServiceCategory.PATHOLOGY_DISCIPLINE);
 		categories.add(ServiceCategory.RADIOLOGY_MODALITY);
 		
-		//WDEV-2798 - search should filter the Services having the Categories as "Pathology Discipline" and Radiology "Modality"
+		// Search should filter the Services having the Categories as "Pathology Discipline" and Radiology "Modality"
 		ServiceLiteVoCollection voCollService = domain.listActiveServiceLiteByNameAndCategories(value, categories);
 		if (voCollService != null && voCollService.size() > 0)
 		{
